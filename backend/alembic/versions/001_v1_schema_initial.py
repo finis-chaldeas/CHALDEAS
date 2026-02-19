@@ -31,36 +31,19 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     # ===========================================
-    # 1. Enable pgvector extension
+    # 1. Extensions - SKIPPED (need superuser)
     # ===========================================
-    op.execute('CREATE EXTENSION IF NOT EXISTS vector')
-    op.execute('CREATE EXTENSION IF NOT EXISTS pg_trgm')
+    # op.execute('CREATE EXTENSION IF NOT EXISTS vector')
+    # op.execute('CREATE EXTENSION IF NOT EXISTS pg_trgm')
+    pass  # Extensions skipped
 
     # ===========================================
     # 2. Create new tables
     # ===========================================
 
-    # 2.0 Periods table (dependency for historical_chains)
-    op.create_table(
-        'periods',
-        sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column('name', sa.String(200), nullable=False),
-        sa.Column('name_ko', sa.String(200)),
-        sa.Column('slug', sa.String(200), unique=True, index=True),
-        sa.Column('year_start', sa.Integer(), nullable=False),
-        sa.Column('year_end', sa.Integer()),
-        sa.Column('scale', sa.String(20), default='conjuncture'),
-        sa.Column('parent_id', sa.Integer(), sa.ForeignKey('periods.id')),
-        sa.Column('description', sa.Text()),
-        sa.Column('description_ko', sa.Text()),
-        sa.Column('is_manual', sa.Boolean(), default=True),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.func.now()),
-        sa.Column('updated_at', sa.DateTime(), server_default=sa.func.now(), onupdate=sa.func.now()),
-        sa.CheckConstraint(
-            "scale IN ('evenementielle', 'conjuncture', 'longue_duree')",
-            name='ck_periods_scale'
-        ),
-    )
+    # 2.0 Periods table (dependency for historical_chains) - SKIP if exists
+    # Already created manually, skip
+    pass
 
     # 2.1 Polities table
     op.create_table(
@@ -83,7 +66,7 @@ def upgrade() -> None:
         sa.Column('certainty', sa.String(20), default='fact'),
         sa.Column('description', sa.Text()),
         sa.Column('description_ko', sa.Text()),
-        sa.Column('embedding', Vector(1536)),
+        # sa.Column('embedding', Vector(1536)),  # Requires pgvector
         sa.Column('mention_count', sa.Integer(), default=0),
         sa.Column('avg_confidence', sa.Float(), default=0.0),
         sa.Column('image_url', sa.String(500)),

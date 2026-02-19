@@ -2,7 +2,7 @@
 Story API - Person/Place/Arc Story for immersive historical exploration.
 
 인물/장소/아크의 스토리를 지도 위 노드로 시각화하기 위한 API.
-기존 chains.py와 별개로, Story UI에 최적화된 응답 형식 제공.
+다중 소스 기반: event_connections → event_persons → entity_properties (fallback chain)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ class StoryLocation(BaseModel):
 class StoryNode(BaseModel):
     """스토리 노드 (지도 위 한 지점)"""
     order: int
-    event_id: int
+    event_id: Optional[int] = None  # None for synthetic nodes (birth/death)
     title: str
     title_ko: Optional[str] = None
     year: Optional[int] = None
@@ -36,6 +36,7 @@ class StoryNode(BaseModel):
     location: Optional[StoryLocation] = None
     node_type: str = "normal"  # birth, major, battle, political, death, normal
     description: Optional[str] = None
+    narrative: Optional[str] = None  # For synthetic nodes
 
 
 class StoryPerson(BaseModel):
@@ -123,6 +124,212 @@ def calculate_map_view(nodes: List[dict]) -> MapView:
     return MapView(center_lat=center_lat, center_lng=center_lng, zoom=zoom)
 
 
+def _fetch_from_event_connections(db: Session, person_id: int, min_strength: float) -> list:
+    """Source 1: event_connections 테이블에서 이벤트 조회"""
+    result = db.execute(text("""
+        WITH person_events AS (
+            SELECT DISTINCT
+                e.id as event_id,
+                e.title,
+                e.title_ko,
+                ed.description,
+                e.date_start as year,
+                e.date_end as year_end,
+                l.name as loc_name,
+                l.name_ko as loc_name_ko,
+                l.latitude as lat,
+                l.longitude as lng
+            FROM event_connections ec
+            JOIN events e ON ec.event_a_id = e.id
+            LEFT JOIN event_details ed ON ed.event_id = e.id
+            LEFT JOIN locations l ON e.primary_location_id = l.id
+            WHERE ec.layer_type = 'person'
+              AND ec.layer_entity_id = :person_id
+              AND ec.strength_score >= :min_strength
+
+            UNION
+
+            SELECT DISTINCT
+                e.id as event_id,
+                e.title,
+                e.title_ko,
+                ed.description,
+                e.date_start as year,
+                e.date_end as year_end,
+                l.name as loc_name,
+                l.name_ko as loc_name_ko,
+                l.latitude as lat,
+                l.longitude as lng
+            FROM event_connections ec
+            JOIN events e ON ec.event_b_id = e.id
+            LEFT JOIN event_details ed ON ed.event_id = e.id
+            LEFT JOIN locations l ON e.primary_location_id = l.id
+            WHERE ec.layer_type = 'person'
+              AND ec.layer_entity_id = :person_id
+              AND ec.strength_score >= :min_strength
+        )
+        SELECT DISTINCT event_id, title, title_ko, description, year, year_end,
+                        loc_name, loc_name_ko, lat, lng
+        FROM person_events
+        WHERE year IS NOT NULL
+        ORDER BY year
+    """), {"person_id": person_id, "min_strength": min_strength})
+
+    return [dict(row._mapping) for row in result]
+
+
+def _fetch_from_event_persons(db: Session, person_id: int) -> list:
+    """Source 2 (fallback): event_persons 테이블에서 직접 이벤트 참여 조회"""
+    result = db.execute(text("""
+        SELECT DISTINCT
+            e.id as event_id,
+            e.title,
+            e.title_ko,
+            ed.description,
+            e.date_start as year,
+            e.date_end as year_end,
+            l.name as loc_name,
+            l.name_ko as loc_name_ko,
+            l.latitude as lat,
+            l.longitude as lng
+        FROM event_persons ep
+        JOIN events e ON ep.event_id = e.id
+        LEFT JOIN event_details ed ON ed.event_id = e.id
+        LEFT JOIN locations l ON e.primary_location_id = l.id
+        WHERE ep.person_id = :person_id AND e.date_start IS NOT NULL
+        ORDER BY e.date_start
+        LIMIT 50
+    """), {"person_id": person_id})
+
+    return [dict(row._mapping) for row in result]
+
+
+def _build_birth_node(db: Session, person: StoryPerson) -> Optional[StoryNode]:
+    """합성 출생 노드 생성 (entity_properties P19 또는 person.birthplace_id)"""
+    if not person.birth_year:
+        return None
+
+    location = None
+
+    # Try entity_properties P19 first
+    loc_result = db.execute(text("""
+        SELECT l.name, l.name_ko, l.latitude, l.longitude
+        FROM entity_properties ep
+        JOIN locations l ON l.wikidata_id = ep.value_qid
+        WHERE ep.entity_type = 'person' AND ep.entity_id = :pid AND ep.property = 'P19'
+        LIMIT 1
+    """), {"pid": person.id}).fetchone()
+
+    if loc_result and loc_result[2] and loc_result[3]:
+        location = StoryLocation(
+            name=loc_result[0] or "Unknown",
+            name_ko=loc_result[1],
+            lat=float(loc_result[2]),
+            lng=float(loc_result[3])
+        )
+    else:
+        # Fallback: person.birthplace_id
+        bp_result = db.execute(text("""
+            SELECT l.name, l.name_ko, l.latitude, l.longitude
+            FROM persons p
+            JOIN locations l ON p.birthplace_id = l.id
+            WHERE p.id = :pid
+        """), {"pid": person.id}).fetchone()
+
+        if bp_result and bp_result[2] and bp_result[3]:
+            location = StoryLocation(
+                name=bp_result[0] or "Unknown",
+                name_ko=bp_result[1],
+                lat=float(bp_result[2]),
+                lng=float(bp_result[3])
+            )
+
+    loc_name = location.name if location else ""
+    narrative = f"Born in {person.birth_year}"
+    if person.birth_year < 0:
+        narrative = f"Born in {abs(person.birth_year)} BCE"
+    if loc_name:
+        narrative += f" in {loc_name}"
+
+    return StoryNode(
+        order=0,
+        event_id=None,
+        title=f"Birth of {person.name}",
+        year=person.birth_year,
+        location=location,
+        node_type="birth",
+        narrative=narrative
+    )
+
+
+def _build_death_node(db: Session, person: StoryPerson) -> Optional[StoryNode]:
+    """합성 사망 노드 생성 (entity_properties P20 또는 person.deathplace_id)"""
+    if not person.death_year:
+        return None
+
+    location = None
+
+    # Try entity_properties P20 first
+    loc_result = db.execute(text("""
+        SELECT l.name, l.name_ko, l.latitude, l.longitude
+        FROM entity_properties ep
+        JOIN locations l ON l.wikidata_id = ep.value_qid
+        WHERE ep.entity_type = 'person' AND ep.entity_id = :pid AND ep.property = 'P20'
+        LIMIT 1
+    """), {"pid": person.id}).fetchone()
+
+    if loc_result and loc_result[2] and loc_result[3]:
+        location = StoryLocation(
+            name=loc_result[0] or "Unknown",
+            name_ko=loc_result[1],
+            lat=float(loc_result[2]),
+            lng=float(loc_result[3])
+        )
+    else:
+        # Fallback: person.deathplace_id
+        dp_result = db.execute(text("""
+            SELECT l.name, l.name_ko, l.latitude, l.longitude
+            FROM persons p
+            JOIN locations l ON p.deathplace_id = l.id
+            WHERE p.id = :pid
+        """), {"pid": person.id}).fetchone()
+
+        if dp_result and dp_result[2] and dp_result[3]:
+            location = StoryLocation(
+                name=dp_result[0] or "Unknown",
+                name_ko=dp_result[1],
+                lat=float(dp_result[2]),
+                lng=float(dp_result[3])
+            )
+
+    loc_name = location.name if location else ""
+    narrative = f"Died in {person.death_year}"
+    if person.death_year < 0:
+        narrative = f"Died in {abs(person.death_year)} BCE"
+    if loc_name:
+        narrative += f" in {loc_name}"
+
+    return StoryNode(
+        order=0,
+        event_id=None,
+        title=f"Death of {person.name}",
+        year=person.death_year,
+        location=location,
+        node_type="death",
+        narrative=narrative
+    )
+
+
+def _merge_nodes(existing: list, new_rows: list, seen_event_ids: set) -> list:
+    """event_id 기준으로 중복 없이 병합"""
+    for row in new_rows:
+        eid = row["event_id"]
+        if eid not in seen_event_ids:
+            seen_event_ids.add(eid)
+            existing.append(row)
+    return existing
+
+
 # ============== API Endpoints ==============
 
 @router.get("/person/{person_id}", response_model=PersonStoryResponse)
@@ -134,8 +341,10 @@ async def get_person_story(
     """
     Get Person Story - 인물의 생애를 지도 노드로 반환.
 
-    event_connections 테이블에서 해당 인물과 연결된 이벤트들을
-    시간순으로 정렬하여 반환. 각 이벤트의 위치 좌표 포함.
+    다중 소스 기반:
+    1. event_connections (기존)
+    2. event_persons (fallback - 부족할 때)
+    3. 합성 birth/death 노드 (entity_properties + person fields)
     """
     # 1. Get person info
     person_result = db.execute(text("""
@@ -157,97 +366,75 @@ async def get_person_story(
         role=person_row[5]
     )
 
-    # 2. Get events from event_connections (person layer)
-    events_result = db.execute(text("""
-        WITH person_events AS (
-            -- event_a에서 가져온 이벤트
-            SELECT DISTINCT
-                e.id as event_id,
-                e.title,
-                e.title_ko,
-                e.description,
-                e.date_start as year,
-                e.date_end as year_end,
-                l.name as loc_name,
-                l.name_ko as loc_name_ko,
-                l.latitude as lat,
-                l.longitude as lng,
-                ec.strength_score
-            FROM event_connections ec
-            JOIN events e ON ec.event_a_id = e.id
-            LEFT JOIN locations l ON e.primary_location_id = l.id
-            WHERE ec.layer_type = 'person'
-              AND ec.layer_entity_id = :person_id
-              AND ec.strength_score >= :min_strength
+    # 2. Source 1: event_connections
+    ec_rows = _fetch_from_event_connections(db, person_id, min_strength)
+    seen_event_ids = {r["event_id"] for r in ec_rows}
+    all_rows = list(ec_rows)
 
-            UNION
+    # 3. Source 2 fallback: event_persons (if event_connections insufficient)
+    if len(all_rows) < 3:
+        ep_rows = _fetch_from_event_persons(db, person_id)
+        all_rows = _merge_nodes(all_rows, ep_rows, seen_event_ids)
 
-            -- event_b에서 가져온 이벤트
-            SELECT DISTINCT
-                e.id as event_id,
-                e.title,
-                e.title_ko,
-                e.description,
-                e.date_start as year,
-                e.date_end as year_end,
-                l.name as loc_name,
-                l.name_ko as loc_name_ko,
-                l.latitude as lat,
-                l.longitude as lng,
-                ec.strength_score
-            FROM event_connections ec
-            JOIN events e ON ec.event_b_id = e.id
-            LEFT JOIN locations l ON e.primary_location_id = l.id
-            WHERE ec.layer_type = 'person'
-              AND ec.layer_entity_id = :person_id
-              AND ec.strength_score >= :min_strength
-        )
-        SELECT DISTINCT event_id, title, title_ko, description, year, year_end,
-                        loc_name, loc_name_ko, lat, lng
-        FROM person_events
-        WHERE year IS NOT NULL
-        ORDER BY year
-    """), {"person_id": person_id, "min_strength": min_strength})
-
-    # 3. Build nodes
+    # 4. Build event-based nodes
     nodes = []
     node_locs = []
 
-    for idx, row in enumerate(events_result):
-        event_id, title, title_ko, description, year, year_end, loc_name, loc_name_ko, lat, lng = row
-
-        # Location (if available)
+    for row in all_rows:
         location = None
-        if lat and lng:
+        if row["lat"] and row["lng"]:
             location = StoryLocation(
-                name=loc_name or "Unknown",
-                name_ko=loc_name_ko,
-                lat=float(lat),
-                lng=float(lng)
+                name=row["loc_name"] or "Unknown",
+                name_ko=row["loc_name_ko"],
+                lat=float(row["lat"]),
+                lng=float(row["lng"])
             )
-            node_locs.append({"lat": float(lat), "lng": float(lng)})
+            node_locs.append({"lat": float(row["lat"]), "lng": float(row["lng"])})
 
-        # Determine node type
         node_type = determine_node_type(
-            title,
-            year,
+            row["title"],
+            row["year"],
             person.birth_year,
             person.death_year
         )
 
         nodes.append(StoryNode(
-            order=idx,
-            event_id=event_id,
-            title=title,
-            title_ko=title_ko,
-            year=year,
-            year_end=year_end,
+            order=0,
+            event_id=row["event_id"],
+            title=row["title"],
+            title_ko=row["title_ko"],
+            year=row["year"],
+            year_end=row["year_end"],
             location=location,
             node_type=node_type,
-            description=description[:200] if description else None
+            description=row["description"][:200] if row["description"] else None
         ))
 
-    # 4. Calculate map view
+    # 5. Synthetic birth/death nodes
+    birth_node = _build_birth_node(db, person)
+    death_node = _build_death_node(db, person)
+
+    # Inject if no existing birth/death node at the same year
+    existing_years = {n.year for n in nodes if n.year}
+    has_birth_node = any(n.node_type == "birth" for n in nodes)
+    has_death_node = any(n.node_type == "death" for n in nodes)
+
+    if birth_node and not has_birth_node:
+        nodes.append(birth_node)
+        if birth_node.location:
+            node_locs.append({"lat": birth_node.location.lat, "lng": birth_node.location.lng})
+
+    if death_node and not has_death_node:
+        nodes.append(death_node)
+        if death_node.location:
+            node_locs.append({"lat": death_node.location.lat, "lng": death_node.location.lng})
+
+    # 6. Sort by year and assign order
+    nodes.sort(key=lambda n: (n.year or 0, 0 if n.node_type == "birth" else 1))
+    for i, n in enumerate(nodes):
+        n.order = i
+
+    # 7. Calculate map view
     map_view = calculate_map_view(node_locs)
 
     return PersonStoryResponse(
@@ -266,29 +453,48 @@ async def check_person_story_available(
     """
     Check if Person Story is available.
 
-    인물에 대한 스토리 데이터가 있는지 빠르게 확인.
+    다중 소스 확인: event_connections + event_persons + person birth/death 정보.
     """
     # Check person exists
     person = db.execute(text("""
-        SELECT id, name FROM persons WHERE id = :person_id
+        SELECT id, name, birth_year, death_year FROM persons WHERE id = :person_id
     """), {"person_id": person_id}).fetchone()
 
     if not person:
         raise HTTPException(status_code=404, detail="Person not found")
 
-    # Count events in event_connections
-    count = db.execute(text("""
+    # Count from event_connections
+    ec_count = db.execute(text("""
         SELECT COUNT(DISTINCT CASE
             WHEN event_a_id IS NOT NULL THEN event_a_id
             ELSE event_b_id
         END)
         FROM event_connections
         WHERE layer_type = 'person' AND layer_entity_id = :person_id
-    """), {"person_id": person_id}).scalar()
+    """), {"person_id": person_id}).scalar() or 0
+
+    # Count from event_persons
+    ep_count = db.execute(text("""
+        SELECT COUNT(DISTINCT event_id)
+        FROM event_persons
+        WHERE person_id = :person_id
+    """), {"person_id": person_id}).scalar() or 0
+
+    # Synthetic nodes available?
+    has_birth = person[2] is not None  # birth_year
+    has_death = person[3] is not None  # death_year
+    synthetic_count = (1 if has_birth else 0) + (1 if has_death else 0)
+
+    total = ec_count + ep_count + synthetic_count
 
     return {
         "person_id": person_id,
         "person_name": person[1],
-        "has_story": count > 0,
-        "event_count": count
+        "has_story": total > 0,
+        "event_count": total,
+        "sources": {
+            "event_connections": ec_count,
+            "event_persons": ep_count,
+            "synthetic": synthetic_count
+        }
     }

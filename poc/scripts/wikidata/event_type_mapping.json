@@ -1,0 +1,173 @@
+{
+  "_meta": {
+    "description": "Wikidata 이벤트 타입 → CHALDEAS 카테고리 매핑",
+    "last_updated": "2026-02-01",
+    "usage": "P31 (instance of) 값을 이 매핑으로 변환",
+    "unknown_types_log": "unknown_event_types.json에 기록됨"
+  },
+
+  "military": {
+    "description": "군사/전쟁 관련",
+    "types": {
+      "Q178561": {"nature": "battle", "label": "battle"},
+      "Q1261499": {"nature": "naval_battle", "label": "naval battle"},
+      "Q2001676": {"nature": "land_battle", "label": "land battle"},
+      "Q198": {"nature": "war", "label": "war"},
+      "Q8465": {"nature": "civil_war", "label": "civil war"},
+      "Q1827102": {"nature": "religious_war", "label": "religious war"},
+      "Q180684": {"nature": "military_conflict", "label": "military conflict"},
+      "Q645883": {"nature": "military_operation", "label": "military operation"},
+      "Q188055": {"nature": "siege", "label": "siege"},
+      "Q2001679": {"nature": "skirmish", "label": "skirmish"},
+      "Q6056746": {"nature": "campaign", "label": "military campaign"},
+      "Q357104": {"nature": "military_exercise", "label": "military exercise"},
+      "Q1348623": {"nature": "aerial_battle", "label": "aerial battle"},
+      "Q3199915": {"nature": "massacre", "label": "massacre"}
+    }
+  },
+
+  "political": {
+    "description": "정치/외교 관련",
+    "types": {
+      "Q131569": {"nature": "treaty", "label": "treaty"},
+      "Q93288": {"nature": "peace_treaty", "label": "peace treaty"},
+      "Q625994": {"nature": "convention", "label": "convention/conference"},
+      "Q124734": {"nature": "rebellion", "label": "rebellion"},
+      "Q10931": {"nature": "revolution", "label": "revolution"},
+      "Q45382": {"nature": "coup", "label": "coup d'état"},
+      "Q209480": {"nature": "coronation", "label": "coronation"},
+      "Q3882219": {"nature": "assassination", "label": "assassination"},
+      "Q40231": {"nature": "election", "label": "election"},
+      "Q1371388": {"nature": "abdication", "label": "abdication"},
+      "Q201676": {"nature": "funeral", "label": "state funeral"},
+      "Q175331": {"nature": "demonstration", "label": "demonstration"},
+      "Q273120": {"nature": "protest", "label": "protest"}
+    }
+  },
+
+  "dynasty": {
+    "description": "왕조/국가/제국",
+    "types": {
+      "Q164950": {"nature": "dynasty", "label": "dynasty"},
+      "Q48349": {"nature": "empire", "label": "empire"},
+      "Q3024240": {"nature": "historical_country", "label": "historical country"},
+      "Q417175": {"nature": "caliphate", "label": "caliphate"},
+      "Q1250464": {"nature": "principality", "label": "principality"}
+    }
+  },
+
+  "religious": {
+    "description": "종교 관련",
+    "types": {
+      "Q111161": {"nature": "synod", "label": "synod/council"},
+      "Q173065": {"nature": "crusade", "label": "crusade"},
+      "Q2061186": {"nature": "religious_movement", "label": "religious movement"},
+      "Q9174": {"nature": "religion", "label": "religion"},
+      "Q1539016": {"nature": "reformation", "label": "reformation"},
+      "Q179461": {"nature": "religious_text", "label": "religious text"},
+      "Q66458810": {"nature": "witchcraft_trial", "label": "witchcraft investigation"}
+    }
+  },
+
+  "cultural": {
+    "description": "문화/예술 관련",
+    "types": {
+      "Q968159": {"nature": "art_movement", "label": "art movement"},
+      "Q2198855": {"nature": "cultural_movement", "label": "cultural movement"},
+      "Q3326717": {"nature": "literary_movement", "label": "literary movement"},
+      "Q2027521": {"nature": "music_genre", "label": "music genre/movement"},
+      "Q735": {"nature": "art", "label": "art/artwork"}
+    }
+  },
+
+  "intellectual": {
+    "description": "철학/사상/학문",
+    "types": {
+      "Q3235978": {"nature": "philosophical_movement", "label": "philosophical movement"},
+      "Q1387659": {"nature": "school_of_thought", "label": "school of thought"},
+      "Q7257": {"nature": "ideology", "label": "ideology"},
+      "Q11862829": {"nature": "academic_discipline", "label": "academic discipline"},
+      "Q35120": {"nature": "entity", "label": "concept/entity"}
+    }
+  },
+
+  "scientific": {
+    "description": "과학/발견",
+    "types": {
+      "Q12772": {"nature": "discovery", "label": "discovery"},
+      "Q17737": {"nature": "invention", "label": "invention"},
+      "Q2401485": {"nature": "expedition", "label": "expedition"},
+      "Q336798": {"nature": "exploration", "label": "exploration"}
+    }
+  },
+
+  "economic": {
+    "description": "경제 관련",
+    "types": {
+      "Q176494": {"nature": "economic_crisis", "label": "economic crisis"},
+      "Q622907": {"nature": "famine", "label": "famine"},
+      "Q8065": {"nature": "plague", "label": "epidemic/plague"}
+    }
+  },
+
+  "natural": {
+    "description": "자연재해/천재지변",
+    "types": {
+      "Q8065": {"nature": "epidemic", "label": "epidemic"},
+      "Q7944": {"nature": "earthquake", "label": "earthquake"},
+      "Q8068": {"nature": "flood", "label": "flood"},
+      "Q16531287": {"nature": "volcanic_eruption", "label": "volcanic eruption"}
+    }
+  },
+
+  "social": {
+    "description": "사회적 사건",
+    "types": {
+      "Q177626": {"nature": "migration", "label": "human migration"},
+      "Q8016240": {"nature": "trial", "label": "trial"},
+      "Q1150070": {"nature": "social_movement", "label": "social movement"}
+    }
+  },
+
+  "mythological": {
+    "description": "신화/전설",
+    "types": {
+      "Q9134": {"nature": "mythology", "label": "mythology"},
+      "Q4271324": {"nature": "mythological_figure", "label": "mythological figure"},
+      "Q132821": {"nature": "legend", "label": "legend"}
+    }
+  },
+
+  "period": {
+    "description": "시대/기간",
+    "types": {
+      "Q11514315": {"nature": "historical_period", "label": "historical period"},
+      "Q6428674": {"nature": "era", "label": "era"},
+      "Q17524420": {"nature": "age", "label": "age"},
+      "Q186081": {"nature": "century", "label": "century"}
+    }
+  },
+
+  "general": {
+    "description": "일반 역사적 사건",
+    "types": {
+      "Q13418847": {"nature": "historical_event", "label": "historical event"},
+      "Q1190554": {"nature": "occurrence", "label": "occurrence"},
+      "Q3839081": {"nature": "disaster", "label": "disaster"}
+    }
+  },
+
+  "_exclude": {
+    "description": "역사적으로 무관한 타입들 (가져오지 않음)",
+    "types": {
+      "Q16510064": "sporting event",
+      "Q43099500": "performing arts production",
+      "Q29023906": "temporary exhibition",
+      "Q22247": "gamma-ray burst",
+      "Q1260524": "time of day",
+      "Q110799181": "in-person event (generic)",
+      "Q15275719": "recurring event (generic)",
+      "Q27968055": "recurring event edition"
+    }
+  }
+}

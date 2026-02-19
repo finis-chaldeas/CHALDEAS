@@ -89,13 +89,13 @@ class LogosActor:
         if observation.related_events:
             for event in observation.related_events[:5]:
                 context_items.append(
-                    f"Event: {event.title} ({event.date_display}) - {event.description[:200] if event.description else 'No description'}"
+                    f"Event: {event.title} ({event.date_display}) - {event.details.description[:200] if event.details and event.details.description else 'No description'}"
                 )
 
         if observation.related_persons:
             for person in observation.related_persons[:3]:
                 context_items.append(
-                    f"Person: {person.name} ({person.lifespan_display}) - {person.biography[:200] if person.biography else 'No biography'}"
+                    f"Person: {person.name} ({person.lifespan_display}) - {person.details.biography[:200] if person.details and person.details.biography else 'No biography'}"
                 )
 
         # Generate response
@@ -140,14 +140,14 @@ class LogosActor:
         if observation.related_events:
             event = observation.related_events[0]
             parts.append(f"\n\n**{event.title}** ({event.date_display})")
-            if event.description:
-                parts.append(f"\n{event.description[:500]}")
+            if event.details and event.details.description:
+                parts.append(f"\n{event.details.description[:500]}")
 
         if observation.related_persons:
             person = observation.related_persons[0]
             parts.append(f"\n\n**{person.name}** ({person.lifespan_display})")
-            if person.biography:
-                parts.append(f"\n{person.biography[:500]}")
+            if person.details and person.details.biography:
+                parts.append(f"\n{person.details.biography[:500]}")
 
         return "".join(parts) if parts else "No relevant information found."
 

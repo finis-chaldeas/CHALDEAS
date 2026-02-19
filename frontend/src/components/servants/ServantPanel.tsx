@@ -50,11 +50,12 @@ interface ServantPanelProps {
   isOpen: boolean;
   onClose: () => void;
   onPersonClick?: (personId: number) => void;
+  onExploreEra?: (year: number) => void;
 }
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8100';
 
-export function ServantPanel({ isOpen, onClose, onPersonClick }: ServantPanelProps) {
+export function ServantPanel({ isOpen, onClose, onPersonClick, onExploreEra }: ServantPanelProps) {
   const [servants, setServants] = useState<Servant[]>([]);
   const [stats, setStats] = useState<ServantStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -207,6 +208,21 @@ export function ServantPanel({ isOpen, onClose, onPersonClick }: ServantPanelPro
                       </button>
                     )}
                   </div>
+                  {selectedServant.birth_year && onExploreEra && (
+                    <button
+                      className="explore-era-btn"
+                      onClick={() => {
+                        // Navigate to the middle of their active period
+                        const activeYear = selectedServant.death_year
+                          ? Math.round((selectedServant.birth_year! + selectedServant.death_year) / 2)
+                          : selectedServant.birth_year!;
+                        onExploreEra(activeYear);
+                        onClose();
+                      }}
+                    >
+                      Explore this Era ({formatYear(selectedServant.birth_year)})
+                    </button>
+                  )}
                 </div>
               </div>
             )}

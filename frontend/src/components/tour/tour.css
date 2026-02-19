@@ -1,0 +1,235 @@
+/* Tour Overlay - Guided episode exploration */
+
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tour-overlay > * {
+  pointer-events: auto;
+}
+
+/* Top bar */
+.tour-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+}
+
+.tour-episode-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tour-sheba-icon {
+  color: #00d4ff;
+  font-size: 18px;
+}
+
+.tour-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.tour-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Progress bar */
+.tour-progress-bar {
+  position: relative;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 20px;
+}
+
+.tour-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #ffd700);
+  transition: width 0.6s ease;
+}
+
+.tour-progress-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.tour-progress-dot.active {
+  border-color: #00d4ff;
+  background: #00d4ff;
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+.tour-progress-dot.passed {
+  border-color: #ffd700;
+  background: #ffd700;
+}
+
+/* Story card (bottom) */
+.tour-card {
+  margin: 0 auto 20px;
+  max-width: 600px;
+  width: calc(100% - 40px);
+  background: rgba(10, 14, 26, 0.92);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  backdrop-filter: blur(12px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.tour-card.transitioning {
+  opacity: 0.6;
+  transform: translateY(4px);
+}
+
+.tour-card-step-indicator {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.tour-card-year {
+  color: #00d4ff;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.tour-card-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  line-height: 1.3;
+}
+
+.tour-card-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.tour-card-servants {
+  color: #ffd700;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+/* Navigation */
+.tour-card-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.tour-nav-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tour-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tour-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.tour-nav-prev {
+  text-align: left;
+}
+
+.tour-nav-next {
+  text-align: right;
+  background: rgba(0, 212, 255, 0.15);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.tour-nav-next:hover {
+  background: rgba(0, 212, 255, 0.25) !important;
+}
+
+.tour-nav-finish {
+  text-align: center;
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+}
+
+.tour-nav-finish:hover {
+  background: rgba(255, 215, 0, 0.25) !important;
+}
+
+.tour-card-hint {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 11px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .tour-card {
+    margin-bottom: 10px;
+    padding: 16px;
+    max-width: 100%;
+    width: calc(100% - 20px);
+    border-radius: 8px;
+  }
+
+  .tour-card-title {
+    font-size: 16px;
+  }
+
+  .tour-card-description {
+    font-size: 13px;
+  }
+}

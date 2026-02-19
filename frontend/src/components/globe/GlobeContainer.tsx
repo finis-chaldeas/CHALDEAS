@@ -1,12 +1,12 @@
 import { useRef, useMemo, useEffect, useState, useCallback } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import Globe, { GlobeMethods } from 'react-globe.gl'
-import { useGlobeStore } from '../../store/globeStore'
+import { useGlobeStore, getZoomLevel } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFlyMode } from '../../hooks/useFlyMode'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { api, eventsApi, personsApi, locationsApi } from '../../api/client'
+import { api, eventsApi, personsApi, locationsApi, nodesApi } from '../../api/client'
 import type { Event } from '../../types'
 import { CameraModeToggle } from './CameraModeToggle'
 import './GlobeHeatmap.css'
@@ -24,6 +24,32 @@ interface GlobeMarker {
   description: string | null
   certainty: string | null
   color: string | null
+  importance: number | null
+}
+
+// Anchor location from API (always-visible cities)
+interface AnchorLocation {
+  id: number
+  name: string
+  name_ko: string | null
+  lat: number
+  lng: number
+  event_count: number
+  tier: number // 1=always, 2=regional, 3=local
+}
+
+// Location node from Node API
+interface LocationNode {
+  id: number
+  name: string
+  name_ko: string | null
+  lat: number
+  lng: number
+  event_count: number
+  active_event_count: number
+  tier: number
+  top_event: string | null
+  top_importance: number | null
 }
 
 // Globe arc from Historical Chain API
@@ -199,6 +225,12 @@ export function GlobeContainer({
     selectedEvent,
     highlightedLocations,
     cameraMode,
+    setViewportBounds,
+    setCameraPosition,
+    flyTarget,
+    clearFlyTarget,
+    setGlobeMarkers,
+    viewMode,
   } = useGlobeStore()
 
   // Fly mode controls (WASD navigation)
@@ -209,6 +241,7 @@ export function GlobeContainer({
   const [countries, setCountries] = useState<GeoJSONFeature[]>([])
   const [internalShowHeatmap, setInternalShowHeatmap] = useState(false)
   const [altitude, setAltitude] = useState(2.5) // Track zoom level for clustering
+  const currentZoomLevel = useMemo(() => getZoomLevel(altitude), [altitude])
   const [enableClustering, setEnableClustering] = useState(true)
   const [loadingMarkerId, setLoadingMarkerId] = useState<number | null>(null)
   const [clusterPopup, setClusterPopup] = useState<{
@@ -241,15 +274,29 @@ export function GlobeContainer({
     setEnableClustering(prev => !prev)
   }, [])
 
-  // Track altitude changes for clustering
+  // Track altitude changes for clustering + viewport bounds
   const handleZoom = useCallback(() => {
     if (globeRef.current) {
       const pov = globeRef.current.pointOfView()
       if (pov && typeof pov.altitude === 'number') {
         setAltitude(pov.altitude)
+
+        // Update camera position in store
+        setCameraPosition({ lat: pov.lat, lng: pov.lng, altitude: pov.altitude })
+
+        // Compute approximate viewport bounds from altitude and center point
+        // Rough: visible degrees ~ altitude * 40 (at altitude 2.5 ~ ±100 degrees)
+        const latSpan = Math.min(90, pov.altitude * 40)
+        const lngSpan = Math.min(180, pov.altitude * 50)
+        setViewportBounds({
+          north: Math.min(90, pov.lat + latSpan),
+          south: Math.max(-90, pov.lat - latSpan),
+          east: pov.lng + lngSpan,
+          west: pov.lng - lngSpan,
+        })
       }
     }
-  }, [])
+  }, [setCameraPosition, setViewportBounds])
 
   // Load countries GeoJSON only for HOLO mode (conditional load for performance)
   useEffect(() => {
@@ -298,6 +345,37 @@ export function GlobeContainer({
     placeholderData: undefined,
   })
 
+  // Fetch anchor locations (always-visible major cities)
+  const { data: anchorLocations } = useQuery<AnchorLocation[]>({
+    queryKey: ['anchor-locations'],
+    queryFn: async () => {
+      const res = await api.get('/globe/anchor-locations', {
+        params: { tier: 2, limit: 200 },
+      })
+      return res.data
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutes - locations don't change often
+  })
+
+  // Fetch location nodes for node-based display
+  const zoomParam = currentZoomLevel === 'cosmic' ? 'cosmic'
+    : currentZoomLevel === 'continental' ? 'continental'
+    : currentZoomLevel === 'regional' ? 'regional' : 'local'
+
+  const { data: locationNodes } = useQuery<LocationNode[]>({
+    queryKey: ['location-nodes', zoomParam, debouncedYear],
+    queryFn: async () => {
+      const res = await nodesApi.list({
+        zoom: zoomParam,
+        year_start: debouncedYear - 200,
+        year_end: debouncedYear + 200,
+        limit: zoomParam === 'cosmic' ? 200 : zoomParam === 'continental' ? 500 : 2000,
+      })
+      return res.data
+    },
+    staleTime: 30 * 1000, // 30s - changes with year
+  })
+
   // Fetch arcs for selected event (Historical Chain connections)
   const { data: eventArcs } = useQuery<GlobeArc[]>({
     queryKey: ['globe-arcs', selectedEvent?.id],
@@ -323,12 +401,14 @@ export function GlobeContainer({
     }
   }, [eventsData, setEvents])
 
-  // Auto-rotate globe (only in orbit mode)
+  // Auto-rotate globe (only in orbit mode + cosmic/continental zoom)
   useEffect(() => {
     if (globeRef.current) {
       const controls = globeRef.current.controls()
       if (cameraMode === 'orbit') {
-        controls.autoRotate = true
+        // Auto-rotate only at cosmic zoom
+        const shouldAutoRotate = currentZoomLevel === 'cosmic'
+        controls.autoRotate = shouldAutoRotate
         controls.autoRotateSpeed = 0.3
         controls.enableRotate = true
         controls.enableZoom = true
@@ -339,7 +419,22 @@ export function GlobeContainer({
         controls.enableZoom = false
       }
     }
-  }, [cameraMode])
+  }, [cameraMode, currentZoomLevel])
+
+  // Fly to location when flyTarget changes (from Navigator tabs, SHEBA episodes, etc.)
+  useEffect(() => {
+    if (flyTarget && globeRef.current) {
+      // Stop auto-rotate when flying to a location
+      if (cameraMode === 'orbit') {
+        globeRef.current.controls().autoRotate = false
+      }
+      globeRef.current.pointOfView(
+        { lat: flyTarget.lat, lng: flyTarget.lng, altitude: flyTarget.altitude },
+        1000
+      )
+      clearFlyTarget()
+    }
+  }, [flyTarget, cameraMode, clearFlyTarget])
 
   // Focus on selected event - rotate globe to that location
   useEffect(() => {
@@ -367,6 +462,30 @@ export function GlobeContainer({
       setFocusedLocation(null)
     }
   }, [selectedEvent, cameraMode])
+
+  // Sync globe markers to store (for Map view to consume)
+  useEffect(() => {
+    if (globeMarkers) setGlobeMarkers(globeMarkers)
+  }, [globeMarkers, setGlobeMarkers])
+
+  // Pause Three.js renderer when in map mode (performance)
+  useEffect(() => {
+    if (globeRef.current) {
+      const renderer = globeRef.current.renderer()
+      if (renderer) {
+        if (viewMode === 'map') {
+          renderer.setAnimationLoop(null)
+        } else {
+          // Re-enable - the globe library manages its own animation loop
+          // Just trigger a re-render by changing POV slightly
+          const pov = globeRef.current.pointOfView()
+          if (pov) {
+            globeRef.current.pointOfView(pov, 0)
+          }
+        }
+      }
+    }
+  }, [viewMode])
 
   // Filter globe markers for current time (from new API)
   const visibleMarkers = useMemo(() => {
@@ -406,6 +525,88 @@ export function GlobeContainer({
     return clusterMarkers(visibleMarkers, clusterRadius)
   }, [visibleMarkers, clusterRadius])
 
+  // Major event labels - filtered by zoom level
+  const majorEventLabels = useMemo(() => {
+    if (!visibleMarkers || visibleMarkers.length === 0) return []
+    // Zoom-based importance filter
+    const minImportance = currentZoomLevel === 'cosmic' ? 5
+      : currentZoomLevel === 'continental' ? 4
+      : currentZoomLevel === 'regional' ? 3
+      : 1
+    return visibleMarkers
+      .filter(m => m.type === 'event' && m.importance !== null && m.importance >= minImportance && m.year !== null)
+      .map(m => ({
+        ...m,
+        labelText: m.title,
+        yearStr: `${Math.abs(m.year!)} ${m.year! < 0 ? 'BCE' : 'CE'}`,
+      }))
+  }, [visibleMarkers, currentZoomLevel])
+
+  // Visible anchor locations filtered by zoom level (tier system)
+  const visibleAnchors = useMemo(() => {
+    if (!anchorLocations) return []
+    // Show tier 1 always, tier 2 only when zoomed in
+    const maxTier = altitude > 2.0 ? 1 : altitude > 0.8 ? 2 : 3
+    return anchorLocations.filter(loc => loc.tier <= maxTier)
+  }, [anchorLocations, altitude])
+
+  // Visible location nodes filtered by zoom + activity
+  const visibleNodes = useMemo(() => {
+    if (!locationNodes) return []
+    return locationNodes.filter(node => {
+      // At cosmic/continental zoom: only show nodes with events in current time range
+      if (currentZoomLevel === 'cosmic') {
+        return node.active_event_count > 0 && node.event_count >= 20
+      }
+      if (currentZoomLevel === 'continental') {
+        return node.active_event_count > 0 && node.event_count >= 5
+      }
+      // At regional zoom: show active nodes, plus inactive with many total events
+      if (currentZoomLevel === 'regional') {
+        if (node.active_event_count > 0) return node.event_count >= 1
+        return node.event_count >= 20 // Only show major inactive cities
+      }
+      // Local zoom: show all
+      return true
+    })
+  }, [locationNodes, currentZoomLevel])
+
+  // Merge anchor locations + nodes + SHEBA highlighted locations for htmlElementsData
+  const htmlElements = useMemo(() => {
+    // SHEBA highlights take priority
+    if (highlightedLocations.length > 0) {
+      return highlightedLocations.map(loc => ({
+        ...loc,
+        kind: 'highlight' as const,
+      }))
+    }
+
+    // Use location nodes as primary labels (with event counts)
+    if (visibleNodes.length > 0) {
+      return visibleNodes.map(node => ({
+        lat: node.lat,
+        lng: node.lng,
+        title: node.name,
+        event_count: node.event_count,
+        active_count: node.active_event_count,
+        tier: node.tier,
+        node_id: node.id,
+        top_event: node.top_event,
+        kind: 'node' as const,
+      }))
+    }
+
+    // Fallback to anchor locations
+    return visibleAnchors.map(loc => ({
+      lat: loc.lat,
+      lng: loc.lng,
+      title: loc.name,
+      event_count: loc.event_count,
+      tier: loc.tier,
+      kind: 'anchor' as const,
+    }))
+  }, [highlightedLocations, visibleNodes, visibleAnchors])
+
   // Helper to check if marker is a cluster
   const isCluster = (d: DisplayMarker): d is ClusterMarker => {
     return 'isCluster' in d && d.isCluster === true
@@ -433,7 +634,7 @@ export function GlobeContainer({
         showGlobe={true}
         showAtmosphere={true}
         atmosphereColor={atmosphereColor}
-        atmosphereAltitude={isHoloStyle ? 0.2 : 0.15}
+        atmosphereAltitude={isHoloStyle ? 0.25 : 0.22}
         // For holo: show graticule lines
         pathsData={isHoloStyle ? GRATICULES : []}
         pathPoints="coords"
@@ -665,6 +866,33 @@ export function GlobeContainer({
             return
           }
         }}
+        // Labels Layer - Major Events (importance 4-5) with text labels
+        labelsData={majorEventLabels}
+        labelLat={(d) => (d as (typeof majorEventLabels)[0]).lat}
+        labelLng={(d) => (d as (typeof majorEventLabels)[0]).lng}
+        labelText={(d) => {
+          const label = d as (typeof majorEventLabels)[0]
+          return label.yearStr ? `${label.labelText}\n${label.yearStr}` : label.labelText
+        }}
+        labelSize={(d) => {
+          const label = d as (typeof majorEventLabels)[0]
+          return (label.importance || 4) >= 5 ? 1.2 : 0.9
+        }}
+        labelDotRadius={(d) => {
+          const label = d as (typeof majorEventLabels)[0]
+          return (label.importance || 4) >= 5 ? 0.6 : 0.4
+        }}
+        labelColor={(d) => {
+          const label = d as (typeof majorEventLabels)[0]
+          const imp = label.importance || 3
+          if (imp >= 5) return 'rgba(255, 215, 0, 0.9)'
+          if (imp >= 4) return 'rgba(0, 212, 255, 0.85)'
+          if (imp >= 3) return 'rgba(180, 200, 210, 0.7)'
+          return 'rgba(120, 140, 150, 0.6)'
+        }}
+        labelResolution={2}
+        labelAltitude={0.01}
+        labelIncludeDot={true}
         onPointHover={(point) => {
           // Prefetch data on hover for faster click response
           if (!point) return
@@ -711,38 +939,118 @@ export function GlobeContainer({
         ringMaxRadius={(d: { type?: string }) => d.type === 'ambient' ? 90 : 8}
         ringPropagationSpeed={(d: { type?: string }) => d.type === 'ambient' ? 2 : 3}
         ringRepeatPeriod={(d: { type?: string }) => d.type === 'ambient' ? 2000 : 800}
-        // Custom HTML elements for highlighted location labels
-        htmlElementsData={highlightedLocations}
+        // Custom HTML elements for location anchors + SHEBA highlighted locations
+        htmlElementsData={htmlElements}
         htmlLat={(d) => (d as { lat: number }).lat}
         htmlLng={(d) => (d as { lng: number }).lng}
-        htmlAltitude={0.05}
+        htmlAltitude={0.02}
         htmlElement={(d) => {
-          const loc = d as { lat: number; lng: number; title: string }
+          const item = d as (typeof htmlElements)[0]
           const el = document.createElement('div')
-          el.innerHTML = `
-            <div style="
-              background: rgba(255, 215, 0, 0.9);
-              color: #000;
-              padding: 4px 8px;
-              border-radius: 4px;
-              font-size: 11px;
-              font-weight: bold;
-              white-space: nowrap;
-              cursor: pointer;
-              box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-              animation: pulse 1.5s infinite;
-            ">
-              📍 ${loc.title}
-            </div>
-          `
-          el.style.pointerEvents = 'auto'
-          el.onclick = () => {
-            // Find and click the event if it exists
-            const event = events.find(e =>
-              Math.abs((e.latitude || 0) - loc.lat) < 0.1 &&
-              Math.abs((e.longitude || 0) - loc.lng) < 0.1
-            )
-            if (event) onEventClick(event)
+
+          if (item.kind === 'highlight') {
+            // SHEBA search highlight (pulsing gold)
+            el.innerHTML = `
+              <div style="
+                background: rgba(255, 215, 0, 0.9);
+                color: #000;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: bold;
+                white-space: nowrap;
+                cursor: pointer;
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+                animation: pulse 1.5s infinite;
+              ">
+                ${item.title}
+              </div>
+            `
+            el.style.pointerEvents = 'auto'
+            el.onclick = () => {
+              const event = events.find(e =>
+                Math.abs((e.latitude || 0) - item.lat) < 0.1 &&
+                Math.abs((e.longitude || 0) - item.lng) < 0.1
+              )
+              if (event) onEventClick(event)
+            }
+          } else if (item.kind === 'node') {
+            // Location node with event count badge
+            const nodeItem = item as { tier: number; event_count: number; active_count: number; title: string; lat: number; lng: number; node_id: number; top_event: string | null; kind: 'node' }
+            const isTier1 = nodeItem.tier === 1
+            const hasActive = nodeItem.active_count > 0
+            const textColor = hasActive
+              ? (isTier1 ? 'rgba(0, 212, 255, 0.95)' : 'rgba(200, 220, 230, 0.85)')
+              : 'rgba(120, 140, 150, 0.5)'
+            const fontSize = isTier1 ? '11px' : '9px'
+            const badgeColor = hasActive ? '#00d4ff' : '#3a4a5a'
+            const countText = nodeItem.active_count > 0
+              ? nodeItem.active_count
+              : nodeItem.event_count
+            el.innerHTML = `
+              <div style="
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                white-space: nowrap;
+                pointer-events: auto;
+                cursor: pointer;
+                transform: translateY(-8px);
+              ">
+                <span style="
+                  color: ${textColor};
+                  font-size: ${fontSize};
+                  font-weight: ${isTier1 ? '700' : '500'};
+                  text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
+                  letter-spacing: 0.02em;
+                ">${nodeItem.title}</span>
+                <span style="
+                  background: ${badgeColor};
+                  color: ${hasActive ? '#000' : '#8a9ab0'};
+                  font-size: 9px;
+                  font-weight: 700;
+                  padding: 1px 5px;
+                  border-radius: 8px;
+                  min-width: 16px;
+                  text-align: center;
+                ">${countText}</span>
+              </div>
+            `
+            el.style.pointerEvents = 'auto'
+            el.onclick = () => {
+              if (onLocationClick) {
+                onLocationClick(nodeItem.node_id)
+              }
+            }
+          } else {
+            // Anchor location fallback (subtle, always-visible city label)
+            const anchorItem = item as { tier: number; event_count: number; title: string; lat: number; lng: number; kind: 'anchor' }
+            const isTier1 = anchorItem.tier === 1
+            const opacity = isTier1 ? 0.85 : 0.65
+            const fontSize = isTier1 ? '10px' : '9px'
+            el.innerHTML = `
+              <div style="
+                color: rgba(200, 220, 230, ${opacity});
+                font-size: ${fontSize};
+                font-weight: ${isTier1 ? '600' : '400'};
+                white-space: nowrap;
+                text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+                pointer-events: auto;
+                cursor: pointer;
+                letter-spacing: 0.02em;
+                transform: translateY(-6px);
+              ">
+                ${anchorItem.title}
+              </div>
+            `
+            el.style.pointerEvents = 'auto'
+            el.onclick = () => {
+              if (onLocationClick) {
+                // Find the location id from anchor data
+                const anchor = anchorLocations?.find(a => a.lat === anchorItem.lat && a.lng === anchorItem.lng)
+                if (anchor) onLocationClick(anchor.id)
+              }
+            }
           }
           return el
         }}
@@ -928,6 +1236,26 @@ export function GlobeContainer({
 
       {/* Camera Mode Toggle */}
       <CameraModeToggle className="globe-camera-toggle" />
+
+      {/* Zoom Level Indicator - shown at regional/local */}
+      {(currentZoomLevel === 'regional' || currentZoomLevel === 'local') && (
+        <div className="globe-zoom-indicator">
+          <span className="zoom-level-badge">
+            {currentZoomLevel === 'regional' ? 'REGIONAL VIEW' : 'LOCAL VIEW'}
+          </span>
+          <span className="zoom-hint">Drag to pan</span>
+          <button
+            className="zoom-back-btn"
+            onClick={() => {
+              if (globeRef.current) {
+                globeRef.current.pointOfView({ lat: 30, lng: 20, altitude: 3.0 }, 1000)
+              }
+            }}
+          >
+            Back to Globe
+          </button>
+        </div>
+      )}
 
       {/* Cluster Popup - Shows list of events when clicking a cluster */}
       {clusterPopup && (

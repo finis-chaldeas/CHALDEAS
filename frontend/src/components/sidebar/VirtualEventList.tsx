@@ -16,6 +16,7 @@ interface Props {
   onEventClick: (event: Event) => void
   onBookmarkToggle?: (eventId: number | string) => void
   bookmarkedIds?: Set<number | string>
+  importanceClass?: (importance: number) => string
 }
 
 const ITEM_HEIGHT = 88 // Estimated height of each event card
@@ -26,7 +27,8 @@ export function VirtualEventList({
   selectedEventId,
   onEventClick,
   onBookmarkToggle,
-  bookmarkedIds = new Set()
+  bookmarkedIds = new Set(),
+  importanceClass,
 }: Props) {
   const { t } = useTranslation()
   const parentRef = useRef<HTMLDivElement>(null)
@@ -61,7 +63,10 @@ export function VirtualEventList({
         {items.map((virtualRow) => {
           const event = events[virtualRow.index]
           const year = formatYear(event.date_start)
-          const cat = typeof event.category === 'string' ? event.category : 'general'
+          const catSlug = typeof event.category === 'string' ? event.category : event.category?.slug || 'general'
+          const catName = typeof event.category === 'object' && event.category?.name ? event.category.name : catSlug
+          const cat = catSlug
+          const impClass = importanceClass ? importanceClass(event.importance || 3) : ''
           const firstPerson = event.persons?.[0]
           const firstLocation = event.location || event.locations?.[0]
           const isSelected = selectedEventId === event.id
@@ -72,7 +77,7 @@ export function VirtualEventList({
               key={event.id}
               data-index={virtualRow.index}
               ref={virtualizer.measureElement}
-              className={`virtual-event-card ${isSelected ? 'selected' : ''}`}
+              className={`virtual-event-card ${isSelected ? 'selected' : ''} ${impClass}`}
               style={{
                 position: 'absolute',
                 top: 0,
@@ -89,7 +94,7 @@ export function VirtualEventList({
                   <span className="year-number">{year.number}</span>
                 </div>
                 <span className={`event-card-category ${cat}`}>
-                  {t(`categories.${cat}`, cat)}
+                  {catName}
                 </span>
                 {onBookmarkToggle && (
                   <button
@@ -114,8 +119,8 @@ export function VirtualEventList({
                   <span className="event-card-who" title={firstPerson.name}>
                     <span className="meta-icon">👤</span>
                     <span className="meta-text">{firstPerson.name}</span>
-                    {event.persons && event.persons.length > 1 && (
-                      <span className="meta-more">+{event.persons.length - 1}</span>
+                    {((event.person_count ?? event.persons?.length ?? 0) > 1) && (
+                      <span className="meta-more">+{(event.person_count ?? event.persons?.length ?? 1) - 1}</span>
                     )}
                   </span>
                 )}

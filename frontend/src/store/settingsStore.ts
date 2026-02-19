@@ -4,6 +4,7 @@ import { trackEvent, AnalyticsEvents } from '../lib/analytics'
 
 export type PreferredLanguage = 'auto' | 'ko' | 'ja' | 'en'
 export type GlobeStyleOption = 'default' | 'holo' | 'night'
+export type ExperienceLevel = 'interest' | 'expert'
 
 interface SettingsState {
   // Language preferences
@@ -13,6 +14,9 @@ interface SettingsState {
   hideEmptyDescriptions: boolean
   globeStyle: GlobeStyleOption
 
+  // Experience level (Interest = casual/fun, Expert = data/analysis)
+  experienceLevel: ExperienceLevel
+
   // API settings
   shebaApiKey: string | null
 
@@ -20,6 +24,7 @@ interface SettingsState {
   setPreferredLanguage: (lang: PreferredLanguage) => void
   setHideEmptyDescriptions: (hide: boolean) => void
   setGlobeStyle: (style: GlobeStyleOption) => void
+  setExperienceLevel: (level: ExperienceLevel) => void
   setShebaApiKey: (key: string | null) => void
   clearShebaApiKey: () => void
   resetSettings: () => void
@@ -29,6 +34,7 @@ const defaultSettings = {
   preferredLanguage: 'auto' as PreferredLanguage,
   hideEmptyDescriptions: false,
   globeStyle: 'default' as GlobeStyleOption,
+  experienceLevel: 'interest' as ExperienceLevel,
   shebaApiKey: null,
 }
 
@@ -47,6 +53,8 @@ export const useSettingsStore = create<SettingsState>()(
       setHideEmptyDescriptions: (hide) => set({ hideEmptyDescriptions: hide }),
 
       setGlobeStyle: (style) => set({ globeStyle: style }),
+
+      setExperienceLevel: (level) => set({ experienceLevel: level }),
 
       setShebaApiKey: (key) => set({ shebaApiKey: key }),
 

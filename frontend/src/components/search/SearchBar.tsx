@@ -121,11 +121,6 @@ export function SearchBar() {
                       className="w-full text-left px-3 py-2 hover:bg-white/10 rounded"
                     >
                       <div className="text-white text-sm">{location.name}</div>
-                      {location.modern_name && (
-                        <div className="text-xs text-gray-400">
-                          {location.modern_name}
-                        </div>
-                      )}
                     </button>
                   ))}
                 </div>

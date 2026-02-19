@@ -14,8 +14,11 @@ def get_locations(
     """Get locations with optional filtering."""
     query = db.query(Location)
 
+    # Only show locations with wikidata_id
+    query = query.filter(Location.wikidata_id.isnot(None))
+
     if location_type:
-        query = query.filter(Location.type == location_type)
+        query = query.filter(Location.location_type == location_type)
 
     total = query.count()
     locations = query.offset(offset).limit(limit).all()

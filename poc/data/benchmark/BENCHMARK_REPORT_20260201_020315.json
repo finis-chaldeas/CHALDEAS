@@ -1,0 +1,141 @@
+{
+  "timestamp": "2026-02-01T02:03:15.982500",
+  "models_tested": 5,
+  "results": [
+    {
+      "model": "phi3:mini",
+      "success": true,
+      "elapsed_seconds": 422.2519655227661,
+      "metrics": {
+        "entity_extraction": {
+          "count": 34,
+          "avg_f1": 0.06498280984940338,
+          "success_rate": 0.058823529411764705
+        },
+        "nature_classification": {
+          "count": 26,
+          "accuracy": 0.6538461538461539
+        },
+        "date_parsing": {
+          "count": 33,
+          "avg_accuracy": 0.12626262626262624,
+          "success_rate": 0.06060606060606061
+        },
+        "overall": {
+          "total_samples": 93,
+          "total_success": 21,
+          "overall_accuracy": 0.22580645161290322
+        }
+      },
+      "output_file": "C:\\Projects\\Chaldeas\\poc\\scripts\\benchmark\\..\\..\\data\\benchmark\\benchmark_phi3_mini_20260201_004002.json"
+    },
+    {
+      "model": "mistral:7b-instruct-q4_0",
+      "success": true,
+      "elapsed_seconds": 405.033673286438,
+      "metrics": {
+        "entity_extraction": {
+          "count": 34,
+          "avg_f1": 0.0052630115466664,
+          "success_rate": 0.0
+        },
+        "nature_classification": {
+          "count": 26,
+          "accuracy": 0.8461538461538461
+        },
+        "date_parsing": {
+          "count": 33,
+          "avg_accuracy": 0.4752886002886003,
+          "success_rate": 0.2727272727272727
+        },
+        "overall": {
+          "total_samples": 93,
+          "total_success": 31,
+          "overall_accuracy": 0.3333333333333333
+        }
+      },
+      "output_file": "C:\\Projects\\Chaldeas\\poc\\scripts\\benchmark\\..\\..\\data\\benchmark\\benchmark_mistral_7b-instruct-q4_0_20260201_004647.json"
+    },
+    {
+      "model": "llama3.1:8b-instruct-q4_0",
+      "success": true,
+      "elapsed_seconds": 532.5851638317108,
+      "metrics": {
+        "entity_extraction": {
+          "count": 34,
+          "avg_f1": 0.01767406246679669,
+          "success_rate": 0.0
+        },
+        "nature_classification": {
+          "count": 26,
+          "accuracy": 0.8076923076923077
+        },
+        "date_parsing": {
+          "count": 33,
+          "avg_accuracy": 0.4015151515151515,
+          "success_rate": 0.18181818181818182
+        },
+        "overall": {
+          "total_samples": 93,
+          "total_success": 27,
+          "overall_accuracy": 0.2903225806451613
+        }
+      },
+      "output_file": "C:\\Projects\\Chaldeas\\poc\\scripts\\benchmark\\..\\..\\data\\benchmark\\benchmark_llama3.1_8b-instruct-q4_0_20260201_005539.json"
+    },
+    {
+      "model": "qwen3:8b",
+      "success": true,
+      "elapsed_seconds": 3087.659316301346,
+      "metrics": {
+        "entity_extraction": {
+          "count": 34,
+          "avg_f1": 0.000489176959765195,
+          "success_rate": 0.0
+        },
+        "nature_classification": {
+          "count": 26,
+          "accuracy": 0.6923076923076923
+        },
+        "date_parsing": {
+          "count": 33,
+          "avg_accuracy": 0.46464646464646464,
+          "success_rate": 0.42424242424242425
+        },
+        "overall": {
+          "total_samples": 93,
+          "total_success": 32,
+          "overall_accuracy": 0.34408602150537637
+        }
+      },
+      "output_file": "C:\\Projects\\Chaldeas\\poc\\scripts\\benchmark\\..\\..\\data\\benchmark\\benchmark_qwen3_8b_20260201_014707.json"
+    },
+    {
+      "model": "gemma2:9b-instruct-q4_0",
+      "success": true,
+      "elapsed_seconds": 968.2617218494415,
+      "metrics": {
+        "entity_extraction": {
+          "count": 34,
+          "avg_f1": 0.043890179240771356,
+          "success_rate": 0.029411764705882353
+        },
+        "nature_classification": {
+          "count": 26,
+          "accuracy": 0.8076923076923077
+        },
+        "date_parsing": {
+          "count": 33,
+          "avg_accuracy": 0.7047258297258296,
+          "success_rate": 0.5454545454545454
+        },
+        "overall": {
+          "total_samples": 93,
+          "total_success": 40,
+          "overall_accuracy": 0.43010752688172044
+        }
+      },
+      "output_file": "C:\\Projects\\Chaldeas\\poc\\scripts\\benchmark\\..\\..\\data\\benchmark\\benchmark_gemma2_9b-instruct-q4_0_20260201_020315.json"
+    }
+  ]
+}

@@ -15,33 +15,45 @@
 
 ## 관련 문서
 
+> **전체 인덱스**: [INDEX.md](INDEX.md) | **종합 분석**: [PROJECT_ANALYSIS.md](PROJECT_ANALYSIS.md)
+
 | 문서 | 설명 | 상태 |
 |------|------|------|
+| **핵심** |||
+| [FINAL_SCHEMA.md](FINAL_SCHEMA.md) | DB 구조 정의 (13개 테이블, 확정) | ✅ 확정 |
+| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | 구현 진행 (Phase 1~3 완료) | 🔥 진행중 |
 | **이번 대개선 (Event Hierarchy)** |||
 | [event_hierarchy/INDEX.md](event_hierarchy/INDEX.md) | 이벤트 계층화 인덱스 | 🔥 진행중 |
 | **파이프라인** |||
-| [PIPELINE_GUIDE.md](PIPELINE_GUIDE.md) | 책 추가 파이프라인 (LLM 기반) | ✅ 운영 |
-| [SOURCE_BOOK_MANAGEMENT.md](SOURCE_BOOK_MANAGEMENT.md) | 소스/책 관리 | ✅ 운영 |
-| [BOOK_CONTEXT_TRACKING_PLAN.md](BOOK_CONTEXT_TRACKING_PLAN.md) | 책 Context 역추적 | 📋 계획 |
-| [BOOK_INTEGRATION_STATUS.md](BOOK_INTEGRATION_STATUS.md) | 책 통합 현황 | ✅ 운영 |
+| [pipeline/PIPELINE_GUIDE.md](pipeline/PIPELINE_GUIDE.md) | 책 추가 파이프라인 (LLM 기반) | ✅ 운영 |
+| [pipeline/SOURCE_BOOK_MANAGEMENT.md](pipeline/SOURCE_BOOK_MANAGEMENT.md) | 소스/책 관리 | ✅ 운영 |
+| [pipeline/BOOK_CONTEXT_TRACKING_PLAN.md](pipeline/BOOK_CONTEXT_TRACKING_PLAN.md) | 책 Context 역추적 | 📋 계획 |
+| [pipeline/BOOK_INTEGRATION_STATUS.md](pipeline/BOOK_INTEGRATION_STATUS.md) | 책 통합 현황 | ✅ 운영 |
+| **배경** |||
+| [data_model/](data_model/) | 데이터 모델 배경 (→ FINAL_SCHEMA에 통합) | 📝 참고 |
+| [wikidata/](wikidata/) | Wikidata 관련 (→ IMPLEMENTATION_PLAN에 반영) | 📝 참고 |
+| [classification/](classification/) | 분류/가중치 체계 | 📋 설계 |
 | **미래 계획** |||
-| [future_plan/INDEX.md](future_plan/INDEX.md) | V3, 큐레이션, FGO 등 미래 계획 | 📋 계획 |
+| [next_phase/INDEX.md](next_phase/INDEX.md) | ★ 통합 미래 계획 (UX + FGO + 데이터) | 🔥 진행중 |
+| [future_plan/INDEX.md](future_plan/INDEX.md) | 장기 계획 (일부 → next_phase 통합) | 📋 계획 |
 | **참고** |||
 | [JOAN_OF_ARC_SHOWCASE.md](JOAN_OF_ARC_SHOWCASE.md) | 잔다르크 쇼케이스 예제 | 📝 참고 |
 | [GPU_THERMAL_MANAGEMENT.md](GPU_THERMAL_MANAGEMENT.md) | GPU 온도 관리 | 📝 참고 |
 
 ---
 
-## 현재 상황 (2026-01-27 업데이트)
+## 현재 상황 (2026-02-14 업데이트)
 
-### DB 상태 (정리 후)
-- persons: **275,343개** (이전: 286,566개, -11,223개)
-- QID 있는 것: **91,596개** (33%)
-- QID 없는 것: 183,747개 (67%)
-- 중복 QID: **0개** (해결됨)
-- 한글명 있는 것: **1,000개** (Wikidata 보강 시작)
-- locations: 40,613개
-- events: 46,704개
+### DB 상태 (Unified 파이프라인 실행 후)
+- persons: **12,987,361개** (QID 100%, Wikidata 전체 임포트)
+- locations: **2,387,834개**
+- events: **28,331개** (계층화 0%, 위치 연결 16%)
+- groups: **590,284개**
+- territories: **9,516개**
+- sources: **18,512,216개** (Wikidata 16M + Wikipedia 2.5M)
+- mentions: **400,516개** (엔티티 대비 극소량)
+- entity_properties: **112,791,499개** (Wikidata 속성)
+- links: **7,201,807개** (Wikipedia 하이퍼링크)
 
 ### 완료된 정리 작업
 - ✅ QID 중복 합치기 (10,329개 합침)
@@ -267,34 +279,20 @@ def match_entity(extracted: dict) -> MatchResult:
 
 ```
 docs/planning/
-├── MASTER_PLAN.md               ← 이 문서 (최상위)
+├── PROJECT_ANALYSIS.md          ← 종합 분석
+├── INDEX.md                     ← 마스터 인덱스
+├── MASTER_PLAN.md               ← 이 문서 (현황 스냅샷)
+├── FINAL_SCHEMA.md              ← DB 구조 (확정)
+├── IMPLEMENTATION_PLAN.md       ← 구현 진행
 │
-├── event_hierarchy/             ← 🔥 이번 대개선
-│   ├── INDEX.md                 ← 인덱스
-│   ├── 00_OVERVIEW.md           ← 마스터 플랜
-│   ├── 01_SCHEMA.md             ← DB 스키마
-│   ├── 02_WARS.md ~ 06_RELIGION.md  ← 카테고리별 이벤트
-│   ├── 07_EVENT_RELATIONS.md    ← 이벤트 간 관계
-│   ├── 08_VECTOR_MODEL.md       ← 벡터 기반 역사 모델
-│   └── 09_RELATION_PIPELINE.md  ← 관계 후처리 파이프라인
-│
-├── curation/                    ← ⏸️ 보류 (대규모 작업)
-│   ├── CURATION_AND_FGO_MASTER_PLAN.md
-│   ├── CURATION_SYSTEM.md
-│   └── OPEN_CURATION_VISION.md
-│
-├── [파이프라인]
-│   ├── PIPELINE_GUIDE.md
-│   ├── SOURCE_BOOK_MANAGEMENT.md
-│   ├── BOOK_CONTEXT_TRACKING_PLAN.md
-│   └── BOOK_INTEGRATION_STATUS.md
-│
-├── [참고]
-│   ├── JOAN_OF_ARC_SHOWCASE.md
-│   └── GPU_THERMAL_MANAGEMENT.md
-│
-├── deprecated/                   ← 완료/대체된 문서 (40+)
-└── completed/                    ← 완료된 Phase 보고서
+├── event_hierarchy/             ← 🔥 이벤트 계층화 (21개 문서)
+├── data_model/                  ← 데이터 모델 배경 (→ FINAL_SCHEMA)
+├── wikidata/                    ← Wikidata 관련 (→ IMPLEMENTATION_PLAN)
+├── pipeline/                    ← 파이프라인 (책 추출, 소스 관리)
+├── classification/              ← 분류/가중치 체계
+├── future_plan/                 ← V3+ 미래 계획
+├── completed/                   ← 완료된 Phase 보고서
+└── deprecated/                  ← 대체된 문서 (60+)
 ```
 
 ---

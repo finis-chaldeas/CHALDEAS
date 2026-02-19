@@ -11,13 +11,15 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.models.base import Base
 
-# Event <-> Location (with role)
+# Event <-> Location (with role and matching metadata)
 event_locations = Table(
     "event_locations",
     Base.metadata,
     Column("event_id", Integer, ForeignKey("events.id", ondelete="CASCADE"), primary_key=True),
     Column("location_id", Integer, ForeignKey("locations.id", ondelete="CASCADE"), primary_key=True),
     Column("role", String(50), primary_key=True, default="location"),  # location, origin, destination
+    Column("match_method", String(30)),  # p276_direct, name_match, coord_nearest, manual
+    Column("distance_km", Float),  # Distance from original coords (for coord_nearest)
 )
 
 # Event <-> Person (with role)

@@ -20,7 +20,7 @@ interface StoryLocation {
 
 interface StoryNode {
   order: number
-  event_id: number
+  event_id: number | null  // null for synthetic nodes (birth/death)
   title: string
   title_ko?: string
   year: number | null
@@ -28,6 +28,7 @@ interface StoryNode {
   location: StoryLocation | null
   node_type: string
   description?: string
+  narrative?: string  // For synthetic nodes
 }
 
 interface StoryPerson {
@@ -175,7 +176,7 @@ export function StoryModal({ isOpen, personId, onClose, onEventClick }: Props) {
         {storyData && storyData.nodes.length === 0 && (
           <div className="story-empty">
             <p>No story data available for this person.</p>
-            <p className="story-empty-hint">Event connections may not have been generated yet.</p>
+            <p className="story-empty-hint">This person may not have enough linked events or birth/death data yet.</p>
           </div>
         )}
 
@@ -236,14 +237,18 @@ export function StoryModal({ isOpen, personId, onClose, onEventClick }: Props) {
                       <div className="node-title-ko">{currentNode.title_ko}</div>
                     )}
 
-                    {currentNode.description && (
+                    {currentNode.narrative && (
+                      <p className="node-narrative">{currentNode.narrative}</p>
+                    )}
+
+                    {currentNode.description && !currentNode.narrative && (
                       <p className="node-description">{currentNode.description}</p>
                     )}
 
-                    {onEventClick && (
+                    {onEventClick && currentNode.event_id && (
                       <button
                         className="node-detail-btn"
-                        onClick={() => onEventClick(currentNode.event_id)}
+                        onClick={() => onEventClick(currentNode.event_id!)}
                       >
                         View Event Details →
                       </button>
@@ -297,7 +302,7 @@ export function StoryModal({ isOpen, personId, onClose, onEventClick }: Props) {
             <div className="story-timeline-dots">
               {storyData.nodes.map((node, idx) => (
                 <button
-                  key={node.event_id}
+                  key={node.event_id ?? `synthetic-${idx}`}
                   className={`timeline-dot ${idx === currentNodeIndex ? 'active' : ''} ${idx < currentNodeIndex ? 'visited' : ''}`}
                   onClick={() => handleNodeClick(idx)}
                   title={`${formatYear(node.year)}: ${node.title}`}

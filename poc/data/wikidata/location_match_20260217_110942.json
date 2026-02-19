@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-02-17T11:09:42.679354",
+  "dry_run": true,
+  "limit": 50,
+  "max_distance_km": 500,
+  "stats": {
+    "events_already_linked": 4474,
+    "events_need_location": 50,
+    "wikidata_entities_found": 50,
+    "p625_direct": 21,
+    "p276_db_direct": 0,
+    "p17_db_direct": 0,
+    "p276_coord": 26,
+    "p17_coord": 2,
+    "matched": 49,
+    "no_location_info": 1,
+    "not_in_wikidata": 0,
+    "source_breakdown": {
+      "P625": 21,
+      "P276": 26,
+      "P17": 2
+    }
+  }
+}

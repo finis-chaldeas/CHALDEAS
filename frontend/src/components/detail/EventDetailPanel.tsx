@@ -18,6 +18,7 @@ interface Props {
   onAskSheba: (query: string) => void
   onPersonClick?: (personId: number) => void
   onLocationClick?: (locationId: number) => void
+  onOpenHierarchy?: (rootEventId?: number) => void
 }
 
 interface Connection {
@@ -72,7 +73,8 @@ export function EventDetailPanel({
   onEventClick,
   onAskSheba,
   onPersonClick,
-  onLocationClick
+  onLocationClick,
+  onOpenHierarchy,
 }: Props) {
   const { t } = useTranslation()
   const { preferredLanguage } = useSettingsStore()
@@ -93,6 +95,14 @@ export function EventDetailPanel({
   })
   const [showAllPersons, setShowAllPersons] = useState(false)
   const [showAllSources, setShowAllSources] = useState(false)
+
+  // Fetch full event detail (includes parent, children, sources)
+  const { data: eventDetail } = useQuery({
+    queryKey: ['event-detail', event?.id],
+    queryFn: () => api.get(`/events/${event?.id}`),
+    enabled: !!event?.id,
+    select: (res) => res.data,
+  })
 
   // Fetch connections for current event
   const { data: connectionsData, isLoading: connectionsLoading } = useQuery({
@@ -158,6 +168,16 @@ export function EventDetailPanel({
     if (typeof event.category === 'string') return event.category
     return event.category?.slug || 'general'
   }, [event])
+
+  // Persons: prefer detail API (has full list) over list API (first 3 from batch query)
+  const persons = useMemo((): Array<{ id: number; name: string; role?: string }> => {
+    return eventDetail?.persons ?? event?.persons ?? []
+  }, [eventDetail, event])
+
+  // Sources: detail API has full sources, list API only has source_count
+  const sources = useMemo((): Array<{ id: number; name?: string; title?: string; type?: string; url?: string; content?: string; page_reference?: string; reliability?: number; quote?: string }> => {
+    return eventDetail?.sources ?? event?.sources ?? []
+  }, [eventDetail, event])
 
   // Get connection type color
   const getTypeColor = (type: string | null) => {
@@ -287,6 +307,33 @@ export function EventDetailPanel({
     })
   }
 
+  // Hierarchy level labels
+  const getHierarchyLabel = (level?: number) => {
+    switch (level) {
+      case 0: return 'Era'
+      case 1: return 'Mega'
+      case 2: return 'Aggregate'
+      case 3: return 'Major'
+      case 4: return 'Minor'
+      default: return null
+    }
+  }
+
+  // Handle clicking a child event
+  const handleChildEventClick = async (childId: number) => {
+    const fullEvent = allEvents.find(e => e.id === childId)
+    if (fullEvent) {
+      onEventClick(fullEvent)
+      return
+    }
+    try {
+      const res = await api.get(`/events/${childId}`)
+      if (res.data) onEventClick(res.data)
+    } catch (err) {
+      console.error('Failed to fetch child event:', childId, err)
+    }
+  }
+
   // Get the "other" event in the connection
   const getOtherEvent = (conn: Connection) => {
     if (!event) return null
@@ -346,9 +393,9 @@ export function EventDetailPanel({
       {/* Header with Year */}
       <div className="detail-header">
         <div className="detail-meta">
-          {event.sources && event.sources.length > 0 ? (
-            <span className="source-ref" title={event.sources[0].name}>
-              📜 {event.sources[0].type === 'primary' ? t('detail.primary') : t('detail.secondary')}: {event.sources[0].name?.slice(0, 30)}{event.sources[0].name && event.sources[0].name.length > 30 ? '...' : ''}
+          {sources.length > 0 ? (
+            <span className="source-ref" title={sources[0].name || sources[0].title}>
+              📜 {sources[0].type === 'primary' ? t('detail.primary') : t('detail.secondary')}: {(sources[0].name || sources[0].title || '')?.slice(0, 30)}{(sources[0].name || sources[0].title || '').length > 30 ? '...' : ''}
             </span>
           ) : (
             <span className="source-ref">📚 {t('detail.archiveId', { id: event.id })}</span>
@@ -431,6 +478,66 @@ export function EventDetailPanel({
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <>
+            {/* Hierarchy Info */}
+            {(event.hierarchy_level !== undefined || eventDetail?.parent || (eventDetail?.children && eventDetail.children.length > 0)) && (
+              <div className="hierarchy-section">
+                {/* Level badge + aggregate type */}
+                <div className="hierarchy-badges">
+                  {getHierarchyLabel(event.hierarchy_level) && (
+                    <span className={`hierarchy-badge level-${event.hierarchy_level}`}>
+                      {getHierarchyLabel(event.hierarchy_level)}
+                    </span>
+                  )}
+                  {event.aggregate_type && (
+                    <span className="hierarchy-badge aggregate-type">
+                      {event.aggregate_type}
+                    </span>
+                  )}
+                </div>
+
+                {/* Parent breadcrumb */}
+                {eventDetail?.parent && (
+                  <div className="hierarchy-breadcrumb">
+                    <span
+                      className="hierarchy-breadcrumb-link"
+                      onClick={() => handleChildEventClick(eventDetail.parent.id)}
+                    >
+                      {eventDetail.parent.title}
+                    </span>
+                    <span className="hierarchy-breadcrumb-sep">{'\u203a'}</span>
+                    <span className="hierarchy-breadcrumb-current">{event.title}</span>
+                  </div>
+                )}
+
+                {/* Child events */}
+                {eventDetail?.children && eventDetail.children.length > 0 && (
+                  <div className="hierarchy-children">
+                    <div className="hierarchy-children-header">
+                      Sub-events ({eventDetail.child_count || eventDetail.children.length})
+                    </div>
+                    {eventDetail.children.slice(0, 5).map((child: { id: number; title: string; date_start: number }) => (
+                      <div
+                        key={child.id}
+                        className="hierarchy-child-item"
+                        onClick={() => handleChildEventClick(child.id)}
+                      >
+                        <span className="hierarchy-child-year">{formatYear(child.date_start)}</span>
+                        <span className="hierarchy-child-title">{child.title}</span>
+                      </div>
+                    ))}
+                    {(eventDetail.child_count || eventDetail.children.length) > 5 && (
+                      <button
+                        className="hierarchy-browse-all"
+                        onClick={() => onOpenHierarchy?.(event.id as number)}
+                      >
+                        Browse all {eventDetail.child_count || eventDetail.children.length} sub-events
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* 4 Elements Grid: WHO / WHERE / WHEN / WHAT */}
             <div className="four-elements-grid">
               {/* WHEN */}
@@ -470,18 +577,6 @@ export function EventDetailPanel({
                         📍 {event.location?.name || event.locations?.[0]?.name}
                       </span>
                     </div>
-                    {/* Modern name if different */}
-                    {(event.location?.modern_name || event.locations?.[0]?.modern_name) && (
-                      <div className="element-extra" style={{ fontStyle: 'italic' }}>
-                        {t('detail.modernName', 'Today')}: {event.location?.modern_name || event.locations?.[0]?.modern_name}
-                      </div>
-                    )}
-                    {/* Country/Region */}
-                    {(event.location?.country || event.locations?.[0]?.country) && (
-                      <div className="element-extra">
-                        {event.location?.country || event.locations?.[0]?.country}
-                      </div>
-                    )}
                     {/* Coordinates (small) */}
                     {(event.latitude && event.longitude) && (
                       <div className="element-coords">
@@ -499,30 +594,30 @@ export function EventDetailPanel({
               {/* WHO */}
               <div className="element-card who">
                 <div className="element-label">WHO</div>
-                {event.persons && event.persons.length > 0 ? (
+                {persons.length > 0 ? (
                   <>
                     <div className="element-value">
                       <span
                         className="element-main element-clickable"
                         onClick={() => {
                           if (onPersonClick) {
-                            onPersonClick(event.persons![0].id)
+                            onPersonClick(persons[0].id)
                           } else {
-                            startChainNav('person', event.persons![0].id, event.persons![0].name)
+                            startChainNav('person', persons[0].id, persons[0].name)
                           }
                         }}
                         title={t('detail.followPersonChain', 'Follow this person\'s story')}
                       >
-                        {getRoleIcon(event.persons[0].role)} {event.persons[0].name}
+                        {getRoleIcon(persons[0].role)} {persons[0].name}
                       </span>
                     </div>
-                    {event.persons.length > 1 && (
+                    {persons.length > 1 && (
                       <div
                         className="element-extra element-clickable"
                         onClick={() => setShowAllPersons(!showAllPersons)}
                         style={{ cursor: 'pointer' }}
                       >
-                        {showAllPersons ? '▼ Hide' : `+${event.persons.length - 1} ${t('detail.others', 'others')} ▶`}
+                        {showAllPersons ? '▼ Hide' : `+${persons.length - 1} ${t('detail.others', 'others')} ▶`}
                       </div>
                     )}
                   </>
@@ -545,12 +640,12 @@ export function EventDetailPanel({
             </div>
 
             {/* Expanded Persons List */}
-            {showAllPersons && event.persons && event.persons.length > 1 && (
+            {showAllPersons && persons.length > 1 && (
               <div className="expanded-persons-list">
                 <div className="expanded-list-header">
-                  {t('detail.allParticipants', 'All Participants')} ({event.persons.length})
+                  {t('detail.allParticipants', 'All Participants')} ({persons.length})
                 </div>
-                {event.persons.map((person) => (
+                {persons.map((person) => (
                   <div
                     key={person.id}
                     className="expanded-person-item"
@@ -579,14 +674,27 @@ export function EventDetailPanel({
               <p className="detail-description">
                 {getLocalizedText(event as unknown as Record<string, unknown>, 'description', preferredLanguage) || t('detail.pendingDescription')}
               </p>
-              {(event as unknown as { description_source?: string; description_source_url?: string }).description_source && (
-                <div className="description-source">
-                  <SourceBadge
-                    source={(event as unknown as { description_source?: string }).description_source}
-                    sourceUrl={(event as unknown as { description_source_url?: string }).description_source_url}
-                  />
-                </div>
-              )}
+              <div className="description-meta">
+                {event.details?.description_source && (
+                  <div className="description-source">
+                    <SourceBadge
+                      source={event.details.description_source}
+                      sourceUrl={event.details.description_source_url}
+                    />
+                  </div>
+                )}
+                {(event.details?.wikipedia_url || event.wikipedia_url) && (
+                  <a
+                    href={event.details?.wikipedia_url || event.wikipedia_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="wikipedia-link"
+                  >
+                    <span className="wikipedia-icon">W</span>
+                    Wikipedia
+                  </a>
+                )}
+              </div>
             </div>
 
             {/* Ask SHEBA Button */}
@@ -680,13 +788,13 @@ export function EventDetailPanel({
             )}
 
             {/* Persons Section (if available) */}
-            {event.persons && event.persons.length > 0 && (
+            {persons.length > 0 && (
               <div className="detail-section">
                 <div className="detail-section-header">
                   {t('detail.keyFigures')}
                 </div>
                 <div className="related-persons">
-                  {event.persons.map((person) => (
+                  {persons.map((person) => (
                     <span key={person.id} className="person-tag">
                       {person.name}
                       {person.role && <span style={{ opacity: 0.6 }}> ({person.role})</span>}
@@ -697,19 +805,19 @@ export function EventDetailPanel({
             )}
 
             {/* Sources Section (if available) */}
-            {event.sources && event.sources.length > 0 && (
+            {sources.length > 0 && (
               <div className="detail-section">
                 <div className="detail-section-header">
-                  {t('detail.historicalSources')} ({event.sources.length})
+                  {t('detail.historicalSources')} ({sources.length})
                 </div>
                 <div className="sources-list enhanced">
-                  {event.sources.slice(0, showAllSources ? event.sources.length : 2).map((source) => (
+                  {sources.slice(0, showAllSources ? sources.length : 2).map((source) => (
                     <div key={source.id} className="source-item enhanced">
                       <div className="source-header">
                         <span className="source-icon">
                           {source.type === 'primary' ? '📜' : '📚'}
                         </span>
-                        <span className="source-name">{source.name}</span>
+                        <span className="source-name">{source.name || source.title}</span>
                         {source.reliability && (
                           <span className="source-reliability">
                             {'★'.repeat(source.reliability)}{'☆'.repeat(5 - source.reliability)}
@@ -743,14 +851,14 @@ export function EventDetailPanel({
                       )}
                     </div>
                   ))}
-                  {event.sources.length > 2 && (
+                  {sources.length > 2 && (
                     <button
                       className="show-more-sources"
                       onClick={() => setShowAllSources(!showAllSources)}
                     >
                       {showAllSources
                         ? t('detail.showLess', 'Show less')
-                        : t('detail.showMore', `Show ${event.sources.length - 2} more sources`)}
+                        : t('detail.showMore', `Show ${sources.length - 2} more sources`)}
                     </button>
                   )}
                 </div>

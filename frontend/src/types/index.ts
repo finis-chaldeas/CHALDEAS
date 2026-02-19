@@ -14,29 +14,81 @@ export interface Location {
   id: number
   name: string
   name_ko?: string
-  name_original?: string
+  name_ja?: string
   latitude: number
   longitude: number
-  type: 'city' | 'region' | 'landmark' | 'battle_site'
-  modern_name?: string
+  location_type: 'point' | 'natural' | 'sea'
+  wikidata_id?: string
+  parent_location_id?: number
   country?: string
-  region?: string
+  details?: LocationDetailInfo
+  names?: LocationNameEntry[]
+  territories?: TerritoryInfo[]
+}
+
+export interface LocationDetailInfo {
   description?: string
   description_ko?: string
+  description_ja?: string
+  description_source?: string
+  description_source_url?: string
+  wikipedia_url?: string
+}
+
+export interface LocationNameEntry {
+  id: number
+  name: string
+  name_ko?: string
+  name_ja?: string
+  language: string
+  is_primary: boolean
+  valid_from?: number
+  valid_until?: number
+}
+
+export interface TerritoryInfo {
+  id: number
+  name: string
+  name_ko?: string
+  territory_type: string
+  founded_year?: number
+  dissolved_year?: number
+}
+
+export interface TerritoryLocation {
+  territory: TerritoryInfo
+  valid_from?: number
+  valid_until?: number
+  relation_type: string
+}
+
+export interface EventDetailInfo {
+  slug?: string
+  description?: string
+  description_ko?: string
+  description_ja?: string
+  description_source?: string
+  description_source_url?: string
+  image_url?: string
+  wikipedia_url?: string
+  date_start_month?: number
+  date_start_day?: number
+  date_end_month?: number
+  date_end_day?: number
 }
 
 export interface Event {
   id: number | string
   title: string
   title_ko?: string
-  slug?: string
-  description?: string
-  description_ko?: string
+  wikidata_id?: string
   date_start: number // Negative for BCE
   date_end?: number
   date_display?: string // "490 BCE"
   date_precision?: 'exact' | 'year' | 'decade' | 'century'
   importance: number
+  certainty?: string
+  temporal_scale?: string
   category?: Category | string
   // Direct coordinates (from API)
   latitude?: number
@@ -44,32 +96,98 @@ export interface Event {
   // Or nested location object
   location?: Location // Primary location
   locations?: LocationRole[]
+  // Hierarchy
+  parent_event_id?: number
+  is_aggregate?: boolean
+  hierarchy_level?: number      // 0=Era, 1=Mega, 2=Aggregate, 3=Major, 4=Minor
+  aggregate_type?: string       // war, movement, dynasty, ...
+  parent_status?: string
+  child_count?: number          // computed
+  // Relations
   persons?: PersonRole[]
+  person_count?: number    // Total person count (from batch query in list API)
   sources?: SourceReference[]
-  image_url?: string
+  source_count?: number    // Total source count (from batch query in list API)
+  // Details (from event_details, populated on detail view)
+  details?: EventDetailInfo
+  // Backward-compat fields (also populated from details by API)
+  description?: string
+  description_ko?: string
   wikipedia_url?: string
+  image_url?: string
 }
 
 export interface LocationRole extends Location {
   role: 'location' | 'origin' | 'destination'
 }
 
+export interface PersonDetailInfo {
+  slug?: string
+  biography?: string
+  biography_ko?: string
+  biography_ja?: string
+  biography_source?: string
+  biography_source_url?: string
+  image_url?: string
+  wikipedia_url?: string
+  birth_date_precision?: string
+  death_date_precision?: string
+  era?: string
+}
+
+export interface PersonNameEntry {
+  id: number
+  name: string
+  name_ko?: string
+  name_ja?: string
+  language: string
+  name_type: string
+  is_primary: boolean
+  valid_from?: number
+  valid_until?: number
+}
+
 export interface Person {
   id: number
   name: string
   name_ko?: string
-  name_original?: string
-  slug: string
+  name_ja?: string
+  wikidata_id?: string
   birth_year?: number
   death_year?: number
-  lifespan_display: string
-  biography?: string
-  biography_ko?: string
-  category?: Category
+  floruit_start?: number
+  floruit_end?: number
+  lifespan_display?: string
+  role?: string
+  certainty?: string
   birthplace?: Location
   deathplace?: Location
-  image_url?: string
-  wikipedia_url?: string
+  details?: PersonDetailInfo
+  names?: PersonNameEntry[]
+}
+
+export interface FlowEvent {
+  event_id: number
+  title: string
+  title_ko?: string
+  year?: number
+  year_end?: number
+  location?: string
+  lat?: number
+  lng?: number
+  role?: string
+}
+
+export interface PersonFlow {
+  person_id: number
+  name: string
+  name_ko?: string
+  birth_year?: number
+  death_year?: number
+  birthplace?: { id: number; name: string; lat?: number; lng?: number }
+  deathplace?: { id: number; name: string; lat?: number; lng?: number }
+  flow: FlowEvent[]
+  total_events: number
 }
 
 export interface PersonRole extends Person {
@@ -116,6 +234,45 @@ export interface PersonSourceList {
   person_id: number
   sources: SourceWithMentions[]
   total: number
+}
+
+// Feed item (unified event/person card)
+export interface FeedItem {
+  type: 'event' | 'person'
+  id: number
+  title: string
+  title_ko?: string
+  date_start?: number
+  date_end?: number
+  date_display?: string
+  importance: number
+  connection_count?: number
+  context?: string
+  // Event-specific
+  category?: string
+  category_name?: string
+  location_name?: string
+  latitude?: number
+  longitude?: number
+  description?: string
+  participants?: string[]
+  participant_count?: number
+  parent_event_id?: number
+  // Person-specific
+  name?: string
+  name_ko?: string
+  birth_year?: number
+  death_year?: number
+  role?: string
+  biography?: string  // From person_details via feed API
+  event_count?: number
+  birthplace_name?: string
+}
+
+export interface FeedResponse {
+  items: FeedItem[]
+  events_total: number
+  persons_total: number
 }
 
 // API Response types
@@ -260,4 +417,85 @@ export interface AgentResponse {
   analysis: AgentAnalysis
   search_results: AgentSearchResult[]
   response: AgentResponseData
+}
+
+// Timeline / Period Types
+export interface PeriodSummary {
+  period_start: number
+  period_end: number
+  era_id?: string
+  headline?: string
+  headline_ko?: string
+  event_count: number
+  person_count: number
+  region_count: number
+  has_narrative: boolean
+  date_display?: string
+}
+
+export interface PeriodEvent {
+  id: number
+  title: string
+  title_ko?: string
+  date_start: number
+  date_end?: number
+  date_display?: string
+  importance_score?: number
+  description?: string
+  wikipedia_url?: string
+  location_name?: string
+  latitude?: number
+  longitude?: number
+  narrative?: string
+  significance?: string
+}
+
+export interface PeriodPerson {
+  id: number
+  name: string
+  name_ko?: string
+  birth_year?: number
+  death_year?: number
+  date_display?: string
+  role?: string
+  domain?: string
+  score?: number
+  wikipedia_url?: string
+  image_url?: string
+  narrative?: string
+  significance?: string
+}
+
+export interface RegionNarrative {
+  region: string
+  region_name: string
+  headline?: string
+  narrative?: string
+  keywords?: string[]
+  quote?: string
+  quote_source?: string
+  event_count: number
+  person_count: number
+  top_events?: { title: string; date: string; score: number }[]
+  top_persons?: { name: string; domain?: string; score: number }[]
+  narrative_id?: number
+}
+
+export interface PeriodDetail {
+  period_start: number
+  period_end: number
+  era_id?: string
+  // Global overview
+  headline?: string
+  headline_ko?: string
+  narrative?: string
+  narrative_ko?: string
+  defining_moment?: string
+  curated_status?: string
+  narrative_id?: number
+  // Regional breakdowns
+  regions: RegionNarrative[]
+  // Flat event/person lists
+  events: PeriodEvent[]
+  persons: PeriodPerson[]
 }

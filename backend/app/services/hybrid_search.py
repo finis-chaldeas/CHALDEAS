@@ -197,11 +197,11 @@ class HybridSearchService:
         )
         self.person_index.build(
             self._persons,
-            text_fields=["name", "name_ko", "biography", "description"]
+            text_fields=["name", "name_ko", "description"]
         )
         self.location_index.build(
             self._locations,
-            text_fields=["name", "name_ko", "modern_name", "description"]
+            text_fields=["name", "name_ko"]
         )
 
         self._indexed = True

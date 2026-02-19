@@ -13,6 +13,7 @@ import './showcase.css'
 interface Props {
   onSelectContent: (content: ShowcaseContent) => void
   onOpenServantPanel?: () => void
+  alwaysOpen?: boolean
 }
 
 type MainTab = 'fgo' | 'panHuman'
@@ -65,10 +66,10 @@ function transformApiItem(item: Record<string, unknown>, lang: string): Showcase
   }
 }
 
-export function ShowcaseMenu({ onSelectContent, onOpenServantPanel }: Props) {
+export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen = false }: Props) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(alwaysOpen)
   const [mainTab, setMainTab] = useState<MainTab>('fgo')
   const [fgoSubTab, setFgoSubTab] = useState<FgoSubTab>('singularity')
   const [panHumanSubTab, setPanHumanSubTab] = useState<PanHumanSubTab>('history')

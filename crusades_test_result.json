@@ -1,0 +1,1288 @@
+{
+  "total": 39,
+  "complete": 36,
+  "events": [
+    {
+      "qid": "Q2472795",
+      "name": "1113–1115 Balearic Islands expedition",
+      "name_ko": null,
+      "description": "1114 expedition to the Balearic Islands",
+      "start_year": 1113,
+      "end_year": 1115,
+      "locations": [
+        {
+          "qid": "Q3315525",
+          "name": "Taifa of Majorca",
+          "name_ko": null,
+          "latitude": 39.6331,
+          "longitude": 2.74667,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q51657",
+      "name": "Albigensian Crusade",
+      "name_ko": "알비 십자군",
+      "description": "1209 military campaigns against Catharism in southern France",
+      "start_year": 1209,
+      "end_year": 1229,
+      "locations": [
+        {
+          "qid": "Q18678265",
+          "name": "Occitania",
+          "name_ko": "옥시타니",
+          "latitude": 43.7,
+          "longitude": 1.05,
+          "type": "place"
+        },
+        {
+          "qid": "Q142",
+          "name": "France",
+          "name_ko": "프랑스",
+          "latitude": 47.0,
+          "longitude": 2.0,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q1788506",
+      "name": "Alexandrian Crusade",
+      "name_ko": null,
+      "description": "14ht-century crusade",
+      "start_year": 1365,
+      "end_year": 1365,
+      "locations": [
+        {
+          "qid": "Q87",
+          "name": "Alexandria",
+          "name_ko": "알렉산드리아",
+          "latitude": 31.1975,
+          "longitude": 29.8925,
+          "type": "place"
+        },
+        {
+          "qid": "Q79",
+          "name": "Egypt",
+          "name_ko": "이집트",
+          "latitude": 27.0,
+          "longitude": 29.0,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q104664744",
+      "name": "Barbary Crusades",
+      "name_ko": null,
+      "description": null,
+      "start_year": null,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q501768",
+          "name": "Barbary Coast",
+          "name_ko": "바르바리",
+          "latitude": null,
+          "longitude": null,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q109285058",
+      "name": "Battle at Gaza",
+      "name_ko": null,
+      "description": "battle in 1239",
+      "start_year": 1239,
+      "end_year": null,
+      "locations": [],
+      "participants": [],
+      "part_of_qid": "Q1788485",
+      "part_of_name": "The Barons' Crusade"
+    },
+    {
+      "qid": "Q28553907",
+      "name": "Battle of Adramyttion",
+      "name_ko": null,
+      "description": "battle (1334)",
+      "start_year": 1334,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1089476",
+          "name": "Edremit Gulf",
+          "name_ko": null,
+          "latitude": 39.476666666,
+          "longitude": 26.693055555,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q97516098",
+          "name": "Holy League of 1332",
+          "name_ko": null,
+          "role": null
+        },
+        {
+          "qid": "Q941887",
+          "name": "Beylik of Karasi",
+          "name_ko": null,
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q622184",
+      "name": "Battle of Ager Sanguinis",
+      "name_ko": "아제르 상귀니스 전투",
+      "description": "near Sarmada in Syria on June 28, 1119",
+      "start_year": 1119,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q7424272",
+          "name": "Sarmada",
+          "name_ko": null,
+          "latitude": 36.183333333,
+          "longitude": 36.716666666,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q235030",
+          "name": "Principality of Antioch",
+          "name_ko": "안티오키아 공국",
+          "role": null
+        },
+        {
+          "qid": "Q1133431",
+          "name": "Artuqids",
+          "name_ko": "아르투크 왕조",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q4870234",
+      "name": "Battle of Aintab",
+      "name_ko": null,
+      "description": "battle in the Holy Land in 1150",
+      "start_year": 1150,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q93338",
+          "name": "Gaziantep",
+          "name_ko": "가지안테프",
+          "latitude": 37.062777777,
+          "longitude": 37.379166666,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q52145976",
+      "part_of_name": "Crusader battles between 1149 and 1189"
+    },
+    {
+      "qid": "Q9172715",
+      "name": "Battle of Akkum",
+      "name_ko": null,
+      "description": "1108 battle",
+      "start_year": 1108,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q26273567",
+          "name": "Akkum",
+          "name_ko": null,
+          "latitude": 34.5175,
+          "longitude": 36.367778,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q272033",
+          "name": "County of Tripoli",
+          "name_ko": "트리폴리 백국",
+          "role": null
+        },
+        {
+          "qid": "Q2294218",
+          "name": "Burid dynasty",
+          "name_ko": null,
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q2246708",
+      "name": "Battle of Al-Fule",
+      "name_ko": null,
+      "description": "1183 battle in the Holy Land",
+      "start_year": 1183,
+      "end_year": 1183,
+      "locations": [
+        {
+          "qid": "Q152462",
+          "name": "Afula",
+          "name_ko": "아풀라",
+          "latitude": 32.607777777,
+          "longitude": 35.289722222,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145976",
+      "part_of_name": "Crusader battles between 1149 and 1189"
+    },
+    {
+      "qid": "Q4525673",
+      "name": "Battle of Al-Sannabra",
+      "name_ko": null,
+      "description": "battle in 1113",
+      "start_year": 1113,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q4703258",
+          "name": "Al-Sinnabra",
+          "name_ko": null,
+          "latitude": 32.717958,
+          "longitude": 35.571864,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q2236796",
+      "name": "Battle of Altenesch",
+      "name_ko": null,
+      "description": "1234 battle",
+      "start_year": 1234,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q676883",
+          "name": "Lemwerder",
+          "name_ko": null,
+          "latitude": 53.166666666,
+          "longitude": 8.616666666,
+          "type": "place"
+        },
+        {
+          "qid": "Q183",
+          "name": "Germany",
+          "name_ko": "독일",
+          "latitude": 51.0,
+          "longitude": 10.0,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q875526",
+      "part_of_name": "Crusade against the Stedinger"
+    },
+    {
+      "qid": "Q28555185",
+      "name": "Battle of Amorgos",
+      "name_ko": null,
+      "description": "1312 naval battle",
+      "start_year": 1312,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q208587",
+          "name": "Amorgos",
+          "name_ko": "아모르고스섬",
+          "latitude": 36.840277777,
+          "longitude": 25.8875,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q187549",
+          "name": "Knights Hospitaller",
+          "name_ko": "구호기사단",
+          "role": null
+        },
+        {
+          "qid": "Q1400572",
+          "name": "Menteşe",
+          "name_ko": null,
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q40037480",
+      "name": "Battle of Antioch",
+      "name_ko": null,
+      "description": "1098 battle, part of the First Crusade",
+      "start_year": 1098,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q200441",
+          "name": "Antioch",
+          "name_ko": "안티오키아",
+          "latitude": 36.204722222,
+          "longitude": 36.181666666,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51649",
+      "part_of_name": "First Crusade"
+    },
+    {
+      "qid": "Q940026",
+      "name": "Battle of Arsuf",
+      "name_ko": null,
+      "description": "1191 Christian Crusader victory against Saladin",
+      "start_year": 1191,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1024886",
+          "name": "Arsuf",
+          "name_ko": null,
+          "latitude": 32.1952,
+          "longitude": 34.8068,
+          "type": "place"
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "latitude": null,
+          "longitude": null,
+          "type": "country"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        },
+        {
+          "qid": "Q70972",
+          "name": "Kingdom of France",
+          "name_ko": "프랑스 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q41300",
+          "name": "Knights Templar",
+          "name_ko": "성전기사단",
+          "role": null
+        },
+        {
+          "qid": "Q187549",
+          "name": "Knights Hospitaller",
+          "name_ko": "구호기사단",
+          "role": null
+        },
+        {
+          "qid": "Q179876",
+          "name": "Kingdom of England",
+          "name_ko": "잉글랜드 왕국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q51655",
+      "part_of_name": "Third Crusade"
+    },
+    {
+      "qid": "Q1374114",
+      "name": "Battle of Artah",
+      "name_ko": null,
+      "description": "1105 middle ages battle",
+      "start_year": 1105,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q13415123",
+          "name": "Syria",
+          "name_ko": "시리아",
+          "latitude": 34.0,
+          "longitude": 36.0,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q3708255",
+          "name": "Seljuk dynasty",
+          "name_ko": "셀주크 왕조",
+          "role": null
+        },
+        {
+          "qid": "Q235030",
+          "name": "Principality of Antioch",
+          "name_ko": "안티오키아 공국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q827472",
+      "name": "Battle of Ascalon",
+      "name_ko": "아스칼론 전투",
+      "description": "1099 middle ages battle",
+      "start_year": 1099,
+      "end_year": 1099,
+      "locations": [
+        {
+          "qid": "Q60956",
+          "name": "Ashkelon",
+          "name_ko": "아슈켈론",
+          "latitude": 31.665833333,
+          "longitude": 34.566388888,
+          "type": "place"
+        },
+        {
+          "qid": "Q160307",
+          "name": "Fatimid Caliphate",
+          "name_ko": "파티마 왕조",
+          "latitude": null,
+          "longitude": null,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51649",
+      "part_of_name": "First Crusade"
+    },
+    {
+      "qid": "Q1787589",
+      "name": "Battle of Aussig",
+      "name_ko": null,
+      "description": "1426 battle of the Hussite Wars",
+      "start_year": 1426,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q156974",
+          "name": "Ústí nad Labem",
+          "name_ko": "우스티나트라벰",
+          "latitude": 50.659166666,
+          "longitude": 14.041666666,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q49683",
+          "name": "Grand Duchy of Lithuania",
+          "name_ko": "리투아니아 대공국",
+          "role": null
+        },
+        {
+          "qid": "Q131372",
+          "name": "Hussites",
+          "name_ko": "후스파",
+          "role": null
+        },
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q478301",
+      "part_of_name": "Hussite Wars"
+    },
+    {
+      "qid": "Q55504",
+      "name": "Battle of Azaz",
+      "name_ko": null,
+      "description": "crusaders battle in 1125",
+      "start_year": 1125,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q277674",
+          "name": "Azaz",
+          "name_ko": "아자즈",
+          "latitude": 36.586111111,
+          "longitude": 37.044722222,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q2294218",
+          "name": "Burid dynasty",
+          "name_ko": null,
+          "role": null
+        },
+        {
+          "qid": "Q3708094",
+          "name": "Seljuk Empire",
+          "name_ko": "셀주크 제국",
+          "role": null
+        },
+        {
+          "qid": "Q232806",
+          "name": "County of Edessa",
+          "name_ko": "에데사 백국",
+          "role": null
+        },
+        {
+          "qid": "Q4224856",
+          "name": "Armenian Principality of Cilicia",
+          "name_ko": null,
+          "role": null
+        },
+        {
+          "qid": "Q235030",
+          "name": "Principality of Antioch",
+          "name_ko": "안티오키아 공국",
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q1133431",
+          "name": "Artuqids",
+          "name_ko": "아르투크 왕조",
+          "role": null
+        },
+        {
+          "qid": "Q272033",
+          "name": "County of Tripoli",
+          "name_ko": "트리폴리 백국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q3511112",
+      "name": "Battle of Ba'rin",
+      "name_ko": null,
+      "description": "1137 su that",
+      "start_year": 1137,
+      "end_year": 1137,
+      "locations": [
+        {
+          "qid": "Q1407210",
+          "name": "Ba'rin",
+          "name_ko": null,
+          "latitude": 34.950006,
+          "longitude": 36.41589,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q189545",
+          "name": "Zengid dynasty",
+          "name_ko": "장기 왕조",
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q272033",
+          "name": "County of Tripoli",
+          "name_ko": "트리폴리 백국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q124570895",
+      "name": "Battle of Banias",
+      "name_ko": null,
+      "description": "12th century battle",
+      "start_year": 1179,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q606295",
+          "name": "Banias",
+          "name_ko": null,
+          "latitude": 33.247222222,
+          "longitude": 35.693333333,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145976",
+      "part_of_name": "Crusader battles between 1149 and 1189"
+    },
+    {
+      "qid": "Q134238639",
+      "name": "Battle of Beirut",
+      "name_ko": null,
+      "description": "1520 battle",
+      "start_year": 1520,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q3820",
+          "name": "Beirut",
+          "name_ko": "베이루트",
+          "latitude": 33.886944444,
+          "longitude": 35.513055555,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q70972",
+          "name": "Kingdom of France",
+          "name_ko": "프랑스 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q12560",
+          "name": "Ottoman Empire",
+          "name_ko": "오스만 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q132528607",
+      "name": "Battle of Beirut",
+      "name_ko": null,
+      "description": "1126 battle",
+      "start_year": 1126,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q3820",
+          "name": "Beirut",
+          "name_ko": "베이루트",
+          "latitude": 33.886944444,
+          "longitude": 35.513055555,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q160307",
+          "name": "Fatimid Caliphate",
+          "name_ko": "파티마 왕조",
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q1836863",
+      "name": "Battle of Belvoir Castle",
+      "name_ko": null,
+      "description": "1182 military campaign involving that Fortress",
+      "start_year": 1182,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1010980",
+          "name": "Belvoir Fortress",
+          "name_ko": null,
+          "latitude": 32.595556,
+          "longitude": 35.521389,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145976",
+      "part_of_name": "Crusader battles between 1149 and 1189"
+    },
+    {
+      "qid": "Q4870532",
+      "name": "Battle of Bosra",
+      "name_ko": null,
+      "description": "1147 battle during the Second Crusade",
+      "start_year": 1147,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q272680",
+          "name": "Bosra",
+          "name_ko": "부스라",
+          "latitude": 32.516666666,
+          "longitude": 36.483333333,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51654",
+      "part_of_name": "Second Crusade"
+    },
+    {
+      "qid": "Q264911",
+      "name": "Battle of Brüx",
+      "name_ko": null,
+      "description": "Hussite Wars battle in 1421",
+      "start_year": 1421,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q12019885",
+          "name": "Hněvín",
+          "name_ko": null,
+          "latitude": 50.5203,
+          "longitude": 13.6331,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q478301",
+      "part_of_name": "Hussite Wars"
+    },
+    {
+      "qid": "Q109935116",
+      "name": "Battle of Budyně nad Ohří",
+      "name_ko": null,
+      "description": null,
+      "start_year": null,
+      "end_year": null,
+      "locations": [],
+      "participants": [],
+      "part_of_qid": "Q478301",
+      "part_of_name": "Hussite Wars"
+    },
+    {
+      "qid": "Q137756527",
+      "name": "Battle of Ceyhan River",
+      "name_ko": null,
+      "description": "1130 battle",
+      "start_year": 1130,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1057961",
+          "name": "Ceyhan River",
+          "name_ko": null,
+          "latitude": 36.565165,
+          "longitude": 35.559597,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q235030",
+          "name": "Principality of Antioch",
+          "name_ko": "안티오키아 공국",
+          "role": null
+        },
+        {
+          "qid": "Q846670",
+          "name": "Danishmendid dynasty",
+          "name_ko": "다니슈멘드",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    },
+    {
+      "qid": "Q978823",
+      "name": "Battle of Civetot",
+      "name_ko": null,
+      "description": "1096 battle",
+      "start_year": 1096,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q217125",
+          "name": "İznik",
+          "name_ko": "이즈니크",
+          "latitude": 40.428888888,
+          "longitude": 29.719444444,
+          "type": "place"
+        },
+        {
+          "qid": "Q43",
+          "name": "Turkey",
+          "name_ko": "튀르키예",
+          "latitude": 39.0,
+          "longitude": 36.0,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51650",
+      "part_of_name": "People's Crusade"
+    },
+    {
+      "qid": "Q17986643",
+      "name": "Battle of Constantinople",
+      "name_ko": null,
+      "description": "1147 battle between the Byzantines and German crusaders",
+      "start_year": 1147,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q16869",
+          "name": "Constantinople",
+          "name_ko": "콘스탄티노플",
+          "latitude": 41.0125,
+          "longitude": 28.98,
+          "type": "place"
+        },
+        {
+          "qid": "Q12544",
+          "name": "Byzantine Empire",
+          "name_ko": "동로마 제국",
+          "latitude": 41.0125,
+          "longitude": 28.98,
+          "type": "country"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        },
+        {
+          "qid": "Q12544",
+          "name": "Byzantine Empire",
+          "name_ko": "동로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q51654",
+      "part_of_name": "Second Crusade"
+    },
+    {
+      "qid": "Q577190",
+      "name": "Battle of Cresson",
+      "name_ko": null,
+      "description": "1187 battle",
+      "start_year": 1187,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q430776",
+          "name": "Nazareth",
+          "name_ko": "나사렛",
+          "latitude": 32.702102777,
+          "longitude": 35.29785,
+          "type": "place"
+        },
+        {
+          "qid": "Q2109946",
+          "name": "Principality of Galilee",
+          "name_ko": null,
+          "latitude": null,
+          "longitude": null,
+          "type": "country"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q41300",
+          "name": "Knights Templar",
+          "name_ko": "성전기사단",
+          "role": null
+        },
+        {
+          "qid": "Q187549",
+          "name": "Knights Hospitaller",
+          "name_ko": "구호기사단",
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145976",
+      "part_of_name": "Crusader battles between 1149 and 1189"
+    },
+    {
+      "qid": "Q38977",
+      "name": "Battle of Deutschbrod",
+      "name_ko": null,
+      "description": "1422 battle",
+      "start_year": 1422,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q954596",
+          "name": "Havlíčkův Brod",
+          "name_ko": "하블리치쿠프브로트",
+          "latitude": 49.607899638,
+          "longitude": 15.580727658,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q478301",
+      "part_of_name": "Hussite Wars"
+    },
+    {
+      "qid": "Q1968819",
+      "name": "Battle of Domažlice",
+      "name_ko": null,
+      "description": "1431 battle during the crusades",
+      "start_year": 1431,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q986068",
+          "name": "Domažlice",
+          "name_ko": "도마줄리체",
+          "latitude": 49.44060568,
+          "longitude": 12.929798039,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q478301",
+      "part_of_name": "Hussite Wars"
+    },
+    {
+      "qid": "Q12428",
+      "name": "Battle of Dorylaeum",
+      "name_ko": "도릴라이움 전투",
+      "description": "1097 Part of the First Crusade",
+      "start_year": 1097,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1250866",
+          "name": "Dorylaeum",
+          "name_ko": "도릴라이움",
+          "latitude": 39.783333333,
+          "longitude": 30.516666666,
+          "type": "place"
+        },
+        {
+          "qid": "Q975405",
+          "name": "Sultanate of Rum",
+          "name_ko": "룸 술탄국",
+          "latitude": null,
+          "longitude": null,
+          "type": "country"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51649",
+      "part_of_name": "First Crusade"
+    },
+    {
+      "qid": "Q1678637",
+      "name": "Battle of Dorylaeum",
+      "name_ko": null,
+      "description": "bataille de 1147",
+      "start_year": 1147,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q1250866",
+          "name": "Dorylaeum",
+          "name_ko": "도릴라이움",
+          "latitude": 39.783333333,
+          "longitude": 30.516666666,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q975405",
+          "name": "Sultanate of Rum",
+          "name_ko": "룸 술탄국",
+          "role": null
+        },
+        {
+          "qid": "Q12548",
+          "name": "Holy Roman Empire",
+          "name_ko": "신성 로마 제국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q51654",
+      "part_of_name": "Second Crusade"
+    },
+    {
+      "qid": "Q15983960",
+      "name": "Battle of Ephesus",
+      "name_ko": null,
+      "description": "1147 battle during the Second Crusade",
+      "start_year": 1147,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q47611",
+          "name": "Ephesus",
+          "name_ko": "에페소스",
+          "latitude": 37.939722,
+          "longitude": 27.348611,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51654",
+      "part_of_name": "Second Crusade"
+    },
+    {
+      "qid": "Q1148862",
+      "name": "Battle of Fariskur",
+      "name_ko": "파리스크르 전투",
+      "description": "1250 major battle of the Seventh Crusade",
+      "start_year": 1250,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q79",
+          "name": "Egypt",
+          "name_ko": "이집트",
+          "latitude": 27.0,
+          "longitude": 29.0,
+          "type": "place"
+        }
+      ],
+      "participants": [],
+      "part_of_qid": "Q51661",
+      "part_of_name": "Seventh Crusade"
+    },
+    {
+      "qid": "Q578201",
+      "name": "Battle of Forbie",
+      "name_ko": null,
+      "description": "1244 battle",
+      "start_year": 1244,
+      "end_year": 1244,
+      "locations": [
+        {
+          "qid": "Q5769818",
+          "name": "Hiribya",
+          "name_ko": null,
+          "latitude": 31.60576667,
+          "longitude": 34.54635833,
+          "type": "place"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q830796",
+          "name": "Order of Saint Lazarus",
+          "name_ko": null,
+          "role": null
+        },
+        {
+          "qid": "Q41300",
+          "name": "Knights Templar",
+          "name_ko": "성전기사단",
+          "role": null
+        },
+        {
+          "qid": "Q187549",
+          "name": "Knights Hospitaller",
+          "name_ko": "구호기사단",
+          "role": null
+        },
+        {
+          "qid": "Q180114",
+          "name": "Ayyubid dynasty",
+          "name_ko": "아이유브 왕조",
+          "role": null
+        },
+        {
+          "qid": "Q48189",
+          "name": "Teutonic Order",
+          "name_ko": "튜턴 기사단",
+          "role": null
+        },
+        {
+          "qid": "Q1375882",
+          "name": "Khwarazmian army between 1231 and 1246",
+          "name_ko": null,
+          "role": null
+        },
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q63135869",
+          "name": "Ayyubid Sultanate",
+          "name_ko": "아이유브 술탄국",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q12546",
+      "part_of_name": "Crusades"
+    },
+    {
+      "qid": "Q135903029",
+      "name": "Battle of Gerger",
+      "name_ko": null,
+      "description": "1123 battle",
+      "start_year": 1123,
+      "end_year": null,
+      "locations": [
+        {
+          "qid": "Q963493",
+          "name": "Gerger",
+          "name_ko": null,
+          "latitude": 38.028611111,
+          "longitude": 39.032777777,
+          "type": "place"
+        },
+        {
+          "qid": "Q232806",
+          "name": "County of Edessa",
+          "name_ko": "에데사 백국",
+          "latitude": null,
+          "longitude": null,
+          "type": "country"
+        }
+      ],
+      "participants": [
+        {
+          "qid": "Q55502",
+          "name": "Kingdom of Jerusalem",
+          "name_ko": "예루살렘 왕국",
+          "role": null
+        },
+        {
+          "qid": "Q1133431",
+          "name": "Artuqids",
+          "name_ko": "아르투크 왕조",
+          "role": null
+        }
+      ],
+      "part_of_qid": "Q52145365",
+      "part_of_name": "Crusader battles between 1101 and 1145"
+    }
+  ]
+}

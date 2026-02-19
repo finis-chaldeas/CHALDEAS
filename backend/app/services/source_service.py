@@ -23,20 +23,22 @@ def get_sources(
     """
     Get sources with optional filtering.
     Returns sources with mention counts.
+
+    Actual sources table columns:
+    id, source_type, title, author, year, chapter, chunk_index, content_raw, url, created_at
     """
     # Base query
     query = db.execute(text("""
         SELECT
             s.id,
-            s.name,
-            s.title,
-            s.type,
+            s.title as name,
+            s.source_type as type,
             s.author,
             COUNT(DISTINCT tm.id) as mention_count,
             COUNT(DISTINCT CASE WHEN tm.entity_type = 'person' THEN tm.entity_id END) as person_count
         FROM sources s
         LEFT JOIN text_mentions tm ON tm.source_id = s.id
-        WHERE (:source_type IS NULL OR s.type = :source_type)
+        WHERE (:source_type IS NULL OR s.source_type = :source_type)
         GROUP BY s.id
         HAVING COUNT(DISTINCT tm.id) > 0
         ORDER BY mention_count DESC
@@ -54,7 +56,7 @@ def get_sources(
         SELECT COUNT(DISTINCT s.id)
         FROM sources s
         JOIN text_mentions tm ON tm.source_id = s.id
-        WHERE (:source_type IS NULL OR s.type = :source_type)
+        WHERE (:source_type IS NULL OR s.source_type = :source_type)
     """), {"source_type": source_type})
 
     total = count_result.scalar() or 0
@@ -67,18 +69,18 @@ def get_source_by_id(db: Session, source_id: int) -> Optional[dict]:
     result = db.execute(text("""
         SELECT
             s.id,
-            s.name,
+            s.title as name,
             s.title,
-            s.type,
+            s.source_type as type,
             s.url,
             s.author,
-            s.archive_type,
-            COALESCE(s.reliability, 3) as reliability,
-            s.description,
-            s.publication_year,
-            s.original_year,
-            s.language,
-            s.document_id,
+            s.source_type as archive_type,
+            3 as reliability,
+            '' as description,
+            s.year as publication_year,
+            s.year as original_year,
+            'en' as language,
+            s.url as document_id,
             COUNT(DISTINCT tm.id) as mention_count,
             COUNT(DISTINCT CASE WHEN tm.entity_type = 'person' THEN tm.entity_id END) as person_count,
             COUNT(DISTINCT CASE WHEN tm.entity_type = 'location' THEN tm.entity_id END) as location_count,
@@ -158,9 +160,9 @@ def get_person_sources(
     query = db.execute(text("""
         SELECT
             s.id,
-            s.name,
-            s.title,
-            s.type,
+            s.title as name,
+            s.title as title,
+            s.source_type as type,
             s.author,
             COUNT(tm.id) as mention_count
         FROM sources s
@@ -277,21 +279,20 @@ def search_sources(
     query: str,
     limit: int = 20,
 ) -> List[dict]:
-    """Search sources by title or name."""
+    """Search sources by title."""
     search_pattern = f"%{query}%"
 
     result = db.execute(text("""
         SELECT
             s.id,
-            s.name,
+            s.title as name,
             s.title,
-            s.type,
+            s.source_type as type,
             s.author,
             COUNT(DISTINCT tm.id) as mention_count
         FROM sources s
         LEFT JOIN text_mentions tm ON tm.source_id = s.id
-        WHERE s.name ILIKE :pattern
-           OR s.title ILIKE :pattern
+        WHERE s.title ILIKE :pattern
            OR s.author ILIKE :pattern
         GROUP BY s.id
         ORDER BY mention_count DESC

@@ -44,11 +44,6 @@ export function WikiPanel({ isOpen, event, onClose }: WikiPanelProps) {
               Location
             </h3>
             <p className="text-white">{event.location.name}</p>
-            {event.location.modern_name && (
-              <p className="text-sm text-gray-400">
-                (Modern: {event.location.modern_name})
-              </p>
-            )}
           </div>
         )}
 

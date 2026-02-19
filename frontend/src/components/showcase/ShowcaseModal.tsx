@@ -1,9 +1,12 @@
 /**
- * ShowcaseModal - FGO Style Content Showcase
- * Displays curated content like Singularities, Lostbelts, Servant columns
+ * ShowcaseModal - Trismegistus Archive Content Showcase
+ * Displays curated content like Singularities, Lostbelts, Servant columns.
+ * When content is null, shows ShowcaseMenu for browsing.
  */
-import { useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ShowcaseMenu } from './ShowcaseMenu'
+import { ServantTab } from '../navigator/ServantTab'
 import './showcase.css'
 
 export interface ShowcaseContent {
@@ -40,15 +43,42 @@ interface Props {
   content: ShowcaseContent | null
   onClose: () => void
   onEventClick?: (eventId: number) => void
+  onPersonClick?: (personId: number) => void
+  onFlyToLocation?: (lat: number, lng: number) => void
+  onSetCurrentYear?: (year: number) => void
 }
 
-export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props) {
+type ShowcaseView = 'menu' | 'content' | 'servants'
+
+export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPersonClick, onFlyToLocation, onSetCurrentYear }: Props) {
   const { t } = useTranslation()
+  const [internalContent, setInternalContent] = useState<ShowcaseContent | null>(null)
+  const [view, setView] = useState<ShowcaseView>('menu')
+
+  // Sync external content prop
+  useEffect(() => {
+    if (isOpen) {
+      if (content) {
+        setInternalContent(content)
+        setView('content')
+      } else {
+        setInternalContent(null)
+        setView('menu')
+      }
+    }
+  }, [isOpen, content])
 
   // Close on Escape key
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose()
-  }, [onClose])
+    if (e.key === 'Escape') {
+      if (view === 'content' || view === 'servants') {
+        setView('menu')
+        setInternalContent(null)
+      } else {
+        onClose()
+      }
+    }
+  }, [onClose, view])
 
   useEffect(() => {
     if (isOpen) {
@@ -61,10 +91,87 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
     }
   }, [isOpen, handleKeyDown])
 
-  if (!isOpen || !content) return null
+  if (!isOpen) return null
+
+  const handleSelectContent = (selected: ShowcaseContent) => {
+    setInternalContent(selected)
+    setView('content')
+  }
+
+  const handleBack = () => {
+    setInternalContent(null)
+    setView('menu')
+  }
+
+  const handleClose = () => {
+    setInternalContent(null)
+    setView('menu')
+    onClose()
+  }
+
+  // Menu view - show ShowcaseMenu inline
+  if (view === 'menu') {
+    return (
+      <div className="showcase-overlay" onClick={handleClose}>
+        <div className="showcase-modal showcase-modal--menu" onClick={(e) => e.stopPropagation()}>
+          <button className="showcase-close" onClick={handleClose}>
+            {'\u2715'}
+          </button>
+          <div className="showcase-menu-header">
+            <h2 className="showcase-menu-title">{t('showcase.archiveTitle', 'TRISMEGISTUS')}</h2>
+          </div>
+          <div className="showcase-menu-body">
+            <ShowcaseMenu
+              onSelectContent={handleSelectContent}
+              onOpenServantPanel={() => setView('servants')}
+              alwaysOpen
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Servants browser view
+  if (view === 'servants') {
+    return (
+      <div className="showcase-overlay" onClick={handleClose}>
+        <div className="showcase-modal showcase-modal--servants" onClick={(e) => e.stopPropagation()}>
+          <div className="showcase-nav-bar">
+            <button className="showcase-back-btn" onClick={handleBack}>
+              {'\u2190'} Back
+            </button>
+            <span className="showcase-nav-title">Servant Archive</span>
+            <button className="showcase-close" onClick={handleClose}>
+              {'\u2715'}
+            </button>
+          </div>
+          <div className="showcase-servants-body">
+            <ServantTab
+              onPersonClick={(personId) => {
+                onPersonClick?.(personId)
+                handleClose()
+              }}
+              onFlyToLocation={onFlyToLocation}
+              onSetCurrentYear={onSetCurrentYear}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Content detail view
+  const displayContent = internalContent
+
+  if (!displayContent) {
+    // Shouldn't happen in 'content' view, but safety fallback
+    setView('menu')
+    return null
+  }
 
   const getTypeLabel = () => {
-    switch (content.type) {
+    switch (displayContent.type) {
       case 'singularity': return t('showcase.types.singularity')
       case 'lostbelt': return t('showcase.types.lostbelt')
       case 'servant': return t('showcase.types.servant')
@@ -74,7 +181,7 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
   }
 
   const getTypeColor = () => {
-    switch (content.type) {
+    switch (displayContent.type) {
       case 'singularity': return 'var(--chaldea-orange)'
       case 'lostbelt': return 'var(--chaldea-magenta)'
       case 'servant': return 'var(--chaldea-gold)'
@@ -88,32 +195,38 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
   }
 
   return (
-    <div className="showcase-overlay" onClick={onClose}>
+    <div className="showcase-overlay" onClick={handleClose}>
       <div className="showcase-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Close Button */}
-        <button className="showcase-close" onClick={onClose}>
-          ✕
-        </button>
+        {/* Nav Bar with Back + Close */}
+        <div className="showcase-nav-bar">
+          <button className="showcase-back-btn" onClick={handleBack}>
+            {'\u2190'} Back
+          </button>
+          <span className="showcase-nav-title">{getTypeLabel()}</span>
+          <button className="showcase-close" onClick={handleClose}>
+            {'\u2715'}
+          </button>
+        </div>
 
         {/* Header */}
         <div className="showcase-header" style={{ borderColor: getTypeColor() }}>
           <div className="showcase-type" style={{ color: getTypeColor() }}>
-            <span className="type-icon">◈</span>
+            <span className="type-icon">{'\u25C8'}</span>
             {getTypeLabel()}
-            {content.chapter && <span className="chapter-badge">{content.chapter}</span>}
+            {displayContent.chapter && <span className="chapter-badge">{displayContent.chapter}</span>}
           </div>
-          <h1 className="showcase-title">{content.title}</h1>
-          {content.subtitle && (
-            <div className="showcase-subtitle">{content.subtitle}</div>
+          <h1 className="showcase-title">{displayContent.title}</h1>
+          {displayContent.subtitle && (
+            <div className="showcase-subtitle">{displayContent.subtitle}</div>
           )}
           <div className="showcase-meta">
-            {content.era && <span className="meta-item">{content.era}</span>}
-            {content.year && (
+            {displayContent.era && <span className="meta-item">{displayContent.era}</span>}
+            {displayContent.year && (
               <span className="meta-item">
-                {content.year < 0 ? `${Math.abs(content.year)} BC` : `${content.year} AD`}
+                {displayContent.year < 0 ? `${Math.abs(displayContent.year)} BC` : `${displayContent.year} AD`}
               </span>
             )}
-            {content.location && <span className="meta-item">{content.location}</span>}
+            {displayContent.location && <span className="meta-item">{displayContent.location}</span>}
           </div>
         </div>
 
@@ -121,14 +234,14 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
         <div className="showcase-body">
           {/* Main Description */}
           <div className="showcase-description">
-            {content.description}
+            {displayContent.description}
           </div>
 
           {/* Sections */}
-          {content.sections?.map((section, idx) => (
+          {displayContent.sections?.map((section, idx) => (
             <div key={idx} className="showcase-section">
               <h3 className="section-title">
-                <span className="section-marker">▸</span>
+                <span className="section-marker">{'\u25B8'}</span>
                 {section.title}
               </h3>
               <div className="section-content">{section.content}</div>
@@ -136,25 +249,25 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
           ))}
 
           {/* Historical Basis */}
-          {content.historicalBasis && (
+          {displayContent.historicalBasis && (
             <div className="showcase-section historical">
               <h3 className="section-title">
-                <span className="section-marker">▸</span>
+                <span className="section-marker">{'\u25B8'}</span>
                 {t('showcase.historicalBasis')}
               </h3>
-              <div className="section-content">{content.historicalBasis}</div>
+              <div className="section-content">{displayContent.historicalBasis}</div>
             </div>
           )}
 
           {/* Related Servants */}
-          {content.relatedServants && content.relatedServants.length > 0 && (
+          {displayContent.relatedServants && displayContent.relatedServants.length > 0 && (
             <div className="showcase-section">
               <h3 className="section-title">
-                <span className="section-marker">▸</span>
+                <span className="section-marker">{'\u25B8'}</span>
                 {t('showcase.relatedServants')}
               </h3>
               <div className="servant-grid">
-                {content.relatedServants.map((servant, idx) => (
+                {displayContent.relatedServants.map((servant, idx) => (
                   <div key={idx} className="servant-card">
                     <div className="servant-class">{servant.class}</div>
                     <div className="servant-name">{servant.name}</div>
@@ -168,14 +281,14 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
           )}
 
           {/* Related Events */}
-          {content.relatedEvents && content.relatedEvents.length > 0 && (
+          {displayContent.relatedEvents && displayContent.relatedEvents.length > 0 && (
             <div className="showcase-section">
               <h3 className="section-title">
-                <span className="section-marker">▸</span>
+                <span className="section-marker">{'\u25B8'}</span>
                 {t('showcase.relatedEvents')}
               </h3>
               <div className="related-events-list">
-                {content.relatedEvents.map((event) => (
+                {displayContent.relatedEvents.map((event) => (
                   <button
                     key={event.id}
                     className="related-event-btn"
@@ -185,7 +298,7 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
                       {event.year < 0 ? `${Math.abs(event.year)} BC` : `${event.year} AD`}
                     </span>
                     <span className="event-title">{event.title}</span>
-                    <span className="event-arrow">→</span>
+                    <span className="event-arrow">{'\u2192'}</span>
                   </button>
                 ))}
               </div>
@@ -193,11 +306,11 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick }: Props)
           )}
 
           {/* Sources */}
-          {content.sources && content.sources.length > 0 && (
+          {displayContent.sources && displayContent.sources.length > 0 && (
             <div className="showcase-sources">
               <div className="sources-label">{t('showcase.sources')}</div>
               <div className="sources-list">
-                {content.sources.map((source, idx) => (
+                {displayContent.sources.map((source, idx) => (
                   <span key={idx} className="source-item">{source}</span>
                 ))}
               </div>

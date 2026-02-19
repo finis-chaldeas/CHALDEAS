@@ -33,6 +33,7 @@ class GlobeMarker(BaseModel):
     description: Optional[str] = None
     certainty: Optional[str] = None
     color: Optional[str] = None
+    importance: Optional[int] = None
 
 
 class GlobeConnection(BaseModel):
@@ -131,7 +132,7 @@ async def get_globe_markers(
 
     # Get event markers (join with locations via primary_location_id)
     if "event" in type_list:
-        conditions = ["l.latitude IS NOT NULL", "l.longitude IS NOT NULL"]
+        conditions = ["l.latitude IS NOT NULL", "l.longitude IS NOT NULL", "e.wikidata_id IS NOT NULL"]
         params = {"limit": limit}
         params.update(bounds_params)
 
@@ -152,9 +153,10 @@ async def get_globe_markers(
         result = db.execute(text(f"""
             SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
                    l.latitude, l.longitude,
-                   e.certainty, e.temporal_scale, e.description
+                   e.certainty, e.temporal_scale, ed.description, e.importance
             FROM events e
             JOIN locations l ON e.primary_location_id = l.id
+            LEFT JOIN event_details ed ON ed.event_id = e.id
             WHERE {where_clause}
             ORDER BY e.date_start NULLS LAST
             LIMIT :limit
@@ -172,23 +174,24 @@ async def get_globe_markers(
                 certainty=row[7],
                 category=row[8],  # temporal_scale as category for now
                 description=row[9],
-                color=get_marker_color("event", row[8], row[7])
+                color=get_marker_color("event", row[8], row[7]),
+                importance=row[10],
             ))
 
     # Get location markers
     if "location" in type_list:
-        conditions = ["latitude IS NOT NULL", "longitude IS NOT NULL"]
+        conditions = ["latitude IS NOT NULL", "longitude IS NOT NULL", "wikidata_id IS NOT NULL"]
         params = {"limit": limit}
         params.update(bounds_params)
 
         if category:
-            conditions.append("type = :loc_type")
+            conditions.append("location_type = :loc_type")
             params["loc_type"] = category
 
         where_clause = " AND ".join(conditions) + bounds_filter
 
         result = db.execute(text(f"""
-            SELECT id, name, name_ko, latitude, longitude, type, modern_name
+            SELECT id, name, name_ko, latitude, longitude, location_type
             FROM locations
             WHERE {where_clause}
             LIMIT :limit
@@ -202,13 +205,12 @@ async def get_globe_markers(
                 lat=float(row[3]),
                 lng=float(row[4]),
                 category=row[5],
-                description=row[6],  # modern_name as description
                 color=get_marker_color("location")
             ))
 
     # Get person markers (birth locations)
     if "person" in type_list:
-        conditions = ["p.birth_year IS NOT NULL"]
+        conditions = ["p.birth_year IS NOT NULL", "p.wikidata_id IS NOT NULL"]
         params = {"limit": limit}
 
         if year_start is not None:
@@ -232,7 +234,7 @@ async def get_globe_markers(
             LEFT JOIN locations l ON LOWER(l.name) LIKE '%' || LOWER(SPLIT_PART(p.name, ' of ', 2)) || '%'
             WHERE {where_clause}
             AND l.latitude IS NOT NULL
-            ORDER BY p.mention_count DESC NULLS LAST
+            ORDER BY p.birth_year ASC NULLS LAST
             LIMIT :limit
         """), params)
 
@@ -252,6 +254,63 @@ async def get_globe_markers(
                 ))
 
     return markers[:limit]
+
+
+class AnchorLocation(BaseModel):
+    id: int
+    name: str
+    name_ko: Optional[str] = None
+    lat: float
+    lng: float
+    event_count: int
+    tier: int  # 1=always visible, 2=regional zoom, 3=local zoom
+
+
+@router.get("/anchor-locations", response_model=List[AnchorLocation])
+async def get_anchor_locations(
+    tier: int = Query(1, ge=1, le=3, description="Max tier to include (1=top cities, 2=regional, 3=all)"),
+    limit: int = Query(200, ge=1, le=1000),
+    db: Session = Depends(get_db),
+):
+    """
+    Get major locations that should always be visible on the globe.
+    Tier system based on event count:
+    - Tier 1: event_count > 50 (always visible, ~50-100 cities)
+    - Tier 2: event_count > 10 (regional zoom, ~200 cities)
+    - Tier 3: event_count > 2 (local zoom, all significant)
+    """
+    tier_thresholds = {1: 15, 2: 5, 3: 2}
+    min_events = tier_thresholds.get(tier, 15)
+
+    result = db.execute(text("""
+        SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+               COUNT(e.id) as event_count
+        FROM locations l
+        JOIN events e ON e.primary_location_id = l.id
+        WHERE l.latitude IS NOT NULL
+          AND l.longitude IS NOT NULL
+          AND l.location_type = 'point'
+        GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+        HAVING COUNT(e.id) >= :min_events
+        ORDER BY COUNT(e.id) DESC
+        LIMIT :limit
+    """), {"min_events": min_events, "limit": limit})
+
+    locations = []
+    for row in result:
+        ec = row[5]
+        t = 1 if ec >= 15 else (2 if ec >= 5 else 3)
+        locations.append(AnchorLocation(
+            id=row[0],
+            name=row[1] or "Unknown",
+            name_ko=row[2],
+            lat=float(row[3]),
+            lng=float(row[4]),
+            event_count=ec,
+            tier=t,
+        ))
+
+    return locations
 
 
 @router.get("/markers/stats", response_model=MarkerStats)
@@ -624,4 +683,238 @@ async def get_marker_clusters(
         "grid_size": grid_size,
         "clusters": clusters,
         "total_clusters": len(clusters)
+    }
+
+
+# ============== Node System ==============
+
+class LocationNode(BaseModel):
+    """로케이션 노드: 이벤트가 할당된 고정 지리 노드."""
+    id: int
+    name: str
+    name_ko: Optional[str] = None
+    lat: float
+    lng: float
+    event_count: int          # 전체 이벤트 수
+    active_event_count: int   # 현재 연도 범위 내 이벤트 수
+    tier: int                 # 1=cosmic, 2=continental, 3=regional, 4=local
+    top_event: Optional[str] = None     # 가장 중요한 이벤트 제목
+    top_importance: Optional[int] = None
+
+
+class NodeEventsResponse(BaseModel):
+    """노드의 이벤트 리스트."""
+    location_id: int
+    location_name: str
+    lat: float
+    lng: float
+    total: int
+    events: list
+
+
+@router.get("/nodes", response_model=List[LocationNode])
+async def get_location_nodes(
+    year_start: Optional[int] = Query(None, description="시작 연도 (BCE=-값)"),
+    year_end: Optional[int] = Query(None, description="종료 연도"),
+    zoom: str = Query("cosmic", description="줌 레벨: cosmic/continental/regional/local"),
+    limit: int = Query(500, ge=1, le=5000),
+    db: Session = Depends(get_db),
+):
+    """
+    로케이션 노드 목록 반환.
+
+    노드 = locations 테이블의 레코드. 각 노드에 매칭된 이벤트 수를 집계.
+    줌 레벨에 따라 최소 이벤트 수 기준으로 필터링.
+
+    Tier 기준:
+    - Tier 1 (cosmic):       event_count >= 20
+    - Tier 2 (continental):  event_count >= 5
+    - Tier 3 (regional):     event_count >= 1
+    - Tier 4 (local):        모든 노드 (이벤트 0개 포함)
+    """
+    # 줌별 최소 이벤트 수
+    zoom_thresholds = {
+        "cosmic": 20,
+        "continental": 5,
+        "regional": 1,
+        "local": 0,
+    }
+    min_events = zoom_thresholds.get(zoom, 5)
+
+    # 연도 필터 조건
+    year_conditions = ""
+    params: dict = {"min_events": min_events, "limit": limit}
+
+    active_count_expr = "0"
+    if year_start is not None and year_end is not None:
+        year_conditions = """
+            AND e_active.date_start >= :year_start
+            AND e_active.date_start <= :year_end
+        """
+        active_count_expr = f"""
+            (SELECT COUNT(e_active.id)
+             FROM events e_active
+             WHERE e_active.primary_location_id = l.id
+             {year_conditions})
+        """
+        params["year_start"] = year_start
+        params["year_end"] = year_end
+    elif year_start is not None:
+        year_conditions = "AND e_active.date_start >= :year_start"
+        active_count_expr = f"""
+            (SELECT COUNT(e_active.id)
+             FROM events e_active
+             WHERE e_active.primary_location_id = l.id
+             {year_conditions})
+        """
+        params["year_start"] = year_start
+    elif year_end is not None:
+        year_conditions = "AND e_active.date_start <= :year_end"
+        active_count_expr = f"""
+            (SELECT COUNT(e_active.id)
+             FROM events e_active
+             WHERE e_active.primary_location_id = l.id
+             {year_conditions})
+        """
+        params["year_end"] = year_end
+
+    # min_events가 0이면 LEFT JOIN으로 이벤트 없는 노드도 포함
+    if min_events == 0:
+        result = db.execute(text(f"""
+            SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+                   COUNT(e.id) as event_count,
+                   {active_count_expr} as active_count,
+                   (SELECT e2.title FROM events e2
+                    WHERE e2.primary_location_id = l.id
+                    ORDER BY e2.importance DESC NULLS LAST, e2.id
+                    LIMIT 1) as top_event,
+                   (SELECT e2.importance FROM events e2
+                    WHERE e2.primary_location_id = l.id
+                    ORDER BY e2.importance DESC NULLS LAST, e2.id
+                    LIMIT 1) as top_importance
+            FROM locations l
+            LEFT JOIN events e ON e.primary_location_id = l.id
+            WHERE l.latitude IS NOT NULL
+              AND l.longitude IS NOT NULL
+            GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+            ORDER BY COUNT(e.id) DESC
+            LIMIT :limit
+        """), params)
+    else:
+        result = db.execute(text(f"""
+            SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+                   COUNT(e.id) as event_count,
+                   {active_count_expr} as active_count,
+                   (SELECT e2.title FROM events e2
+                    WHERE e2.primary_location_id = l.id
+                    ORDER BY e2.importance DESC NULLS LAST, e2.id
+                    LIMIT 1) as top_event,
+                   (SELECT e2.importance FROM events e2
+                    WHERE e2.primary_location_id = l.id
+                    ORDER BY e2.importance DESC NULLS LAST, e2.id
+                    LIMIT 1) as top_importance
+            FROM locations l
+            JOIN events e ON e.primary_location_id = l.id
+            WHERE l.latitude IS NOT NULL
+              AND l.longitude IS NOT NULL
+            GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+            HAVING COUNT(e.id) >= :min_events
+            ORDER BY COUNT(e.id) DESC
+            LIMIT :limit
+        """), params)
+
+    nodes = []
+    for row in result:
+        ec = row[5]
+        tier = 1 if ec >= 20 else (2 if ec >= 5 else (3 if ec >= 1 else 4))
+        nodes.append(LocationNode(
+            id=row[0],
+            name=row[1] or "Unknown",
+            name_ko=row[2],
+            lat=float(row[3]),
+            lng=float(row[4]),
+            event_count=ec,
+            active_event_count=row[6] or 0,
+            tier=tier,
+            top_event=row[7],
+            top_importance=row[8],
+        ))
+
+    return nodes
+
+
+@router.get("/nodes/{location_id}/events")
+async def get_node_events(
+    location_id: int,
+    year_start: Optional[int] = Query(None),
+    year_end: Optional[int] = Query(None),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    """
+    특정 노드의 이벤트 리스트 반환.
+    노드 클릭 시 해당 로케이션의 이벤트들을 보여줌.
+    """
+    # 로케이션 정보
+    loc = db.execute(text("""
+        SELECT id, name, name_ko, latitude, longitude FROM locations WHERE id = :id
+    """), {"id": location_id}).fetchone()
+
+    if not loc:
+        raise HTTPException(status_code=404, detail="Location not found")
+
+    # 이벤트 쿼리
+    conditions = ["e.primary_location_id = :location_id"]
+    params: dict = {"location_id": location_id, "limit": limit, "offset": offset}
+
+    if year_start is not None:
+        conditions.append("e.date_start >= :year_start")
+        params["year_start"] = year_start
+    if year_end is not None:
+        conditions.append("e.date_start <= :year_end")
+        params["year_end"] = year_end
+
+    where = " AND ".join(conditions)
+
+    # 전체 수
+    total = db.execute(text(f"""
+        SELECT COUNT(*) FROM events e WHERE {where}
+    """), params).scalar()
+
+    # 이벤트 리스트
+    events = db.execute(text(f"""
+        SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
+               e.importance, ed.description, e.category_id,
+               c.name as category_name
+        FROM events e
+        LEFT JOIN event_details ed ON ed.event_id = e.id
+        LEFT JOIN categories c ON e.category_id = c.id
+        WHERE {where}
+        ORDER BY e.importance DESC NULLS LAST, e.date_start ASC NULLS LAST
+        LIMIT :limit OFFSET :offset
+    """), params)
+
+    event_list = [
+        {
+            "id": row[0],
+            "title": row[1],
+            "title_ko": row[2],
+            "date_start": row[3],
+            "date_end": row[4],
+            "importance": row[5],
+            "description": row[6],
+            "category": row[8],
+        }
+        for row in events
+    ]
+
+    return {
+        "location_id": loc[0],
+        "location_name": loc[1],
+        "location_name_ko": loc[2],
+        "lat": float(loc[3]),
+        "lng": float(loc[4]),
+        "total": total,
+        "events": event_list,
     }

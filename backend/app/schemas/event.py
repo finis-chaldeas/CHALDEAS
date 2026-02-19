@@ -7,6 +7,25 @@ from app.schemas.location import Location
 from app.schemas.source import Source
 
 
+class EventDetailInfo(BaseModel):
+    """Event detail data (from event_details table)."""
+    slug: Optional[str] = None
+    wikipedia_url: Optional[str] = None
+    image_url: Optional[str] = None
+    description: Optional[str] = None
+    description_ko: Optional[str] = None
+    description_ja: Optional[str] = None
+    description_source: Optional[str] = None
+    description_source_url: Optional[str] = None
+    date_start_month: Optional[int] = None
+    date_start_day: Optional[int] = None
+    date_end_month: Optional[int] = None
+    date_end_day: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
 class EventBase(BaseModel):
     title: str
     title_ko: Optional[str] = None
@@ -14,6 +33,12 @@ class EventBase(BaseModel):
     date_end: Optional[int] = None
     date_display: str
     importance: int = 3
+    # Hierarchy fields
+    parent_event_id: Optional[int] = None
+    is_aggregate: bool = False
+    hierarchy_level: int = 3  # 0=Era, 1=Mega, 2=Aggregate, 3=Major, 4=Minor
+    aggregate_type: Optional[str] = None  # war, movement, dynasty, etc.
+    parent_status: Optional[str] = None
 
 
 class Event(EventBase):
@@ -39,19 +64,12 @@ class PersonBrief(BaseModel):
 
 class EventDetail(Event):
     """Full event details for wiki panel."""
-    slug: str
-    description: Optional[str] = None
-    description_ko: Optional[str] = None
     date_precision: str = "year"
-    date_start_month: Optional[int] = None
-    date_start_day: Optional[int] = None
-    date_end_month: Optional[int] = None
-    date_end_day: Optional[int] = None
     locations: list[Location] = []
     persons: list[PersonBrief] = []
     sources: list[Source] = []
-    image_url: Optional[str] = None
-    wikipedia_url: Optional[str] = None
+    # Details from event_details table
+    details: Optional[EventDetailInfo] = None
 
 
 class EventList(BaseModel):

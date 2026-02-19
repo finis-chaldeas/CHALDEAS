@@ -6,42 +6,48 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../api/client'
-import { ReportButton, SourceBadge } from '../common'
-import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { ReportButton } from '../common'
 import type { Event } from '../../types'
 import './EntityDetailView.css'
+
+interface LocationEvent {
+  id: number
+  title: string
+  date_start: number | null
+  date_end: number | null
+}
 
 interface LocationInfo {
   id: number
   name: string
   name_ko?: string
   name_ja?: string
-  modern_name?: string
-  country?: string
-  region?: string
   latitude?: number
   longitude?: number
-  type?: string
-  description?: string
-  description_ko?: string
-  description_ja?: string
-  description_source?: string
-  description_source_url?: string
-}
-
-interface ChainEvent {
-  id: number
-  title: string
-  year: number | null
-}
-
-interface ChainConnection {
-  id: number
-  event_a: ChainEvent
-  event_b: ChainEvent
-  direction: string
-  type: string | null
-  strength: number
+  location_type?: string
+  wikidata_id?: string
+  parent_location_id?: number
+  country?: string
+  event_count?: number
+  events?: LocationEvent[]
+  details?: {
+    description?: string
+    description_ko?: string
+    wikipedia_url?: string
+  }
+  names?: Array<{
+    name: string
+    language: string
+    valid_from?: number
+    valid_until?: number
+  }>
+  territories?: Array<{
+    name: string
+    name_ko?: string
+    territory_type: string
+    valid_from?: number
+    valid_until?: number
+  }>
 }
 
 interface Props {
@@ -54,49 +60,27 @@ interface Props {
 export function LocationDetailView({ locationId, onClose, onEventClick, onLocationClick: _onLocationClick }: Props) {
   // Note: _onLocationClick reserved for future connected locations navigation
   void _onLocationClick
-  const { preferredLanguage } = useSettingsStore()
 
-  // Fetch location details from DB
+  // Fetch location details from locations API
   const { data: location, isLoading: locationLoading } = useQuery<LocationInfo>({
     queryKey: ['location-detail', locationId],
     queryFn: async () => {
-      // Fetch location info from chain API
-      const dbRes = await api.get(`/chains/location/${locationId}`)
-      return dbRes.data?.location || { id: locationId, name: 'Unknown Location' }
-    },
-  })
-
-  // Fetch location chain (connections and events)
-  const { data: chainData, isLoading: chainLoading } = useQuery({
-    queryKey: ['location-chain', locationId],
-    queryFn: async () => {
-      const res = await api.get(`/chains/location/${locationId}`)
+      const res = await api.get(`/locations/${locationId}`)
       return res.data
     },
   })
 
-  // Extract unique events from chain, sorted by year
+  // Use events from location API (primary_location_id based), sorted by date
   const historyEvents = useMemo(() => {
-    if (!chainData?.connections) return []
-
-    const eventsMap = new Map<number, ChainEvent>()
-    for (const conn of chainData.connections as ChainConnection[]) {
-      if (!eventsMap.has(conn.event_a.id)) {
-        eventsMap.set(conn.event_a.id, conn.event_a)
-      }
-      if (!eventsMap.has(conn.event_b.id)) {
-        eventsMap.set(conn.event_b.id, conn.event_b)
-      }
-    }
-
-    return Array.from(eventsMap.values())
-      .sort((a, b) => (a.year || 0) - (b.year || 0))
-  }, [chainData])
+    if (!location?.events) return []
+    return [...location.events]
+      .sort((a, b) => (a.date_start || 0) - (b.date_start || 0))
+  }, [location])
 
   // Calculate time span
   const timeSpan = useMemo(() => {
     if (historyEvents.length === 0) return null
-    const years = historyEvents.filter(e => e.year !== null).map(e => e.year as number)
+    const years = historyEvents.filter(e => e.date_start !== null).map(e => e.date_start as number)
     if (years.length === 0) return null
     return {
       earliest: Math.min(...years),
@@ -121,7 +105,7 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
     }
   }
 
-  if (locationLoading || chainLoading) {
+  if (locationLoading) {
     return (
       <div className="entity-detail-view">
         <div className="entity-loading">Loading...</div>
@@ -136,10 +120,10 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
         <button className="entity-close" onClick={onClose}>✕</button>
         <div className="entity-icon location">📍</div>
         <div className="entity-title-section">
-          <h2 className="entity-name">{location?.name || chainData?.location?.name || 'Unknown'}</h2>
-          {(location?.name_ko || location?.modern_name) && (
+          <h2 className="entity-name">{location?.name || 'Unknown'}</h2>
+          {location?.name_ko && (
             <div className="entity-name-alt">
-              {location?.name_ko || location?.modern_name}
+              {location.name_ko}
             </div>
           )}
         </div>
@@ -147,26 +131,36 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
 
       {/* Location Info */}
       <div className="entity-location-info">
-        {(location?.country || location?.region) && (
-          <div className="location-geo">
-            {location?.region && <span className="geo-region">{location.region}</span>}
-            {location?.region && location?.country && <span className="geo-sep">, </span>}
-            {location?.country && <span className="geo-country">{location.country}</span>}
-          </div>
-        )}
-        {location?.type && <div className="location-type">{location.type}</div>}
+        {location?.location_type && <div className="location-type">{location.location_type}</div>}
+        {location?.country && <div className="location-type">{location.country}</div>}
       </div>
+
+      {/* Description */}
+      {location?.details?.description && (
+        <div className="entity-section">
+          <div className="entity-description">
+            {location.details.description}
+          </div>
+          {location.details.wikipedia_url && (
+            <a href={location.details.wikipedia_url} target="_blank" rel="noopener noreferrer" className="entity-wiki-link">
+              Wikipedia
+            </a>
+          )}
+        </div>
+      )}
 
       {/* Stats */}
       <div className="entity-stats">
         <div className="stat-item">
-          <span className="stat-value">{historyEvents.length}</span>
+          <span className="stat-value">{location?.event_count || historyEvents.length}</span>
           <span className="stat-label">Events</span>
         </div>
-        <div className="stat-item">
-          <span className="stat-value">{chainData?.total_connections || 0}</span>
-          <span className="stat-label">Links</span>
-        </div>
+        {location?.names && location.names.length > 0 && (
+          <div className="stat-item">
+            <span className="stat-value">{location.names.length}</span>
+            <span className="stat-label">Names</span>
+          </div>
+        )}
         {timeSpan && (
           <div className="stat-item span">
             <span className="stat-value">
@@ -187,23 +181,53 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
         </div>
       )}
 
-      {/* Description */}
-      {(() => {
-        const description = location ? getLocalizedText(location as unknown as Record<string, unknown>, 'description', preferredLanguage) : ''
-        return description ? (
-          <div className="entity-description">
-            <p>{description}</p>
-            {location?.description_source && (
-              <div className="description-source">
-                <SourceBadge
-                  source={location.description_source}
-                  sourceUrl={location.description_source_url}
-                />
-              </div>
-            )}
+
+      {/* Historical Names */}
+      {location?.names && location.names.length > 0 && (
+        <div className="entity-section">
+          <div className="section-header">
+            <span className="section-icon">🏷</span>
+            <span className="section-title">Historical Names</span>
           </div>
-        ) : null
-      })()}
+          <div className="timeline-list">
+            {location.names
+              .filter(n => n.valid_from || n.valid_until)
+              .sort((a, b) => (a.valid_from || -9999) - (b.valid_from || -9999))
+              .map((n, i) => (
+                <div key={i} className="timeline-item" style={{ cursor: 'default' }}>
+                  <div className="timeline-dot location" />
+                  <div className="timeline-year">
+                    {n.valid_from ? formatYear(n.valid_from) : '?'} ~ {n.valid_until ? formatYear(n.valid_until) : ''}
+                  </div>
+                  <div className="timeline-title">{n.name} <span style={{ opacity: 0.5, fontSize: '0.85em' }}>({n.language})</span></div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Territories */}
+      {location?.territories && location.territories.length > 0 && (
+        <div className="entity-section">
+          <div className="section-header">
+            <span className="section-icon">🏛</span>
+            <span className="section-title">Political History</span>
+          </div>
+          <div className="timeline-list">
+            {location.territories
+              .sort((a, b) => (a.valid_from || -9999) - (b.valid_from || -9999))
+              .map((t, i) => (
+                <div key={i} className="timeline-item" style={{ cursor: 'default' }}>
+                  <div className="timeline-dot" />
+                  <div className="timeline-year">
+                    {t.valid_from ? formatYear(t.valid_from) : '?'} ~ {t.valid_until ? formatYear(t.valid_until) : ''}
+                  </div>
+                  <div className="timeline-title">{t.name_ko || t.name} <span style={{ opacity: 0.5, fontSize: '0.85em' }}>({t.territory_type})</span></div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
 
       {/* History Timeline */}
       <div className="entity-section">
@@ -221,7 +245,7 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <div className="timeline-dot location" />
-                <div className="timeline-year">{formatYear(event.year)}</div>
+                <div className="timeline-year">{formatYear(event.date_start)}</div>
                 <div className="timeline-title">{event.title}</div>
               </div>
             ))

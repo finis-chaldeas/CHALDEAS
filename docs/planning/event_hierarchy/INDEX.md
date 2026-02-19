@@ -27,6 +27,14 @@
 | [15_FGO_MINI.md](./15_FGO_MINI.md) | FGO 미니 프로젝트 | 완료 |
 | [16_MULTIVERSE_MODEL.md](./16_MULTIVERSE_MODEL.md) | 역사+창작물 분리 (Universe) | 완료 |
 
+### 데이터 구축 전략
+| 파일 | 내용 | 상태 |
+|------|------|------|
+| [17_HIERARCHY_POPULATION.md](./17_HIERARCHY_POPULATION.md) | 계층 데이터 구축 전략 (개요) | 완료 |
+| [18_WIKIDATA_HIERARCHY.md](./18_WIKIDATA_HIERARCHY.md) | Wikidata P361 기반 계층화 | 완료 |
+| [19_LLM_CLASSIFIER.md](./19_LLM_CLASSIFIER.md) | LLM 기반 이벤트 분류기 | 완료 |
+| [20_MULTIPLE_PARENTS.md](./20_MULTIPLE_PARENTS.md) | 다중 상위 이벤트 (event_parents) | 완료 |
+
 ### 카테고리별 이벤트 목록
 | 파일 | 내용 | 상태 |
 |------|------|------|

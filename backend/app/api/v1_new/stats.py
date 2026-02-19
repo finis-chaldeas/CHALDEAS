@@ -59,7 +59,7 @@ async def get_overview_stats(db: Session = Depends(get_db)):
         "SELECT COUNT(*) FROM events WHERE date_start IS NOT NULL"
     )).scalar()
     events_enriched = db.execute(text(
-        "SELECT COUNT(*) FROM events WHERE enriched_by IS NOT NULL"
+        "SELECT COUNT(*) FROM event_details WHERE description IS NOT NULL"
     )).scalar()
 
     # Locations stats
@@ -76,11 +76,11 @@ async def get_overview_stats(db: Session = Depends(get_db)):
     persons_with_birth = db.execute(text(
         "SELECT COUNT(*) FROM persons WHERE birth_year IS NOT NULL"
     )).scalar()
-    persons_enriched = db.execute(text(
-        "SELECT COUNT(*) FROM persons WHERE enriched_by IS NOT NULL"
+    persons_with_details = db.execute(text(
+        "SELECT COUNT(*) FROM person_details"
     )).scalar()
-    persons_major = db.execute(text(
-        "SELECT COUNT(*) FROM persons WHERE mention_count >= 3"
+    persons_with_events = db.execute(text(
+        "SELECT COUNT(DISTINCT person_id) FROM event_persons"
     )).scalar()
 
     # Sources stats
@@ -104,8 +104,8 @@ async def get_overview_stats(db: Session = Depends(get_db)):
         persons={
             "total": persons_total,
             "with_birth_year": persons_with_birth,
-            "enriched": persons_enriched,
-            "major_figures": persons_major,
+            "with_details": persons_with_details,
+            "with_events": persons_with_events,
             "birth_coverage": round(persons_with_birth / persons_total * 100, 1) if persons_total else 0,
         },
         sources={
@@ -178,38 +178,39 @@ async def get_geography_stats(
     """
     Get event distribution by geography.
 
-    Returns event counts grouped by country.
+    Returns event counts grouped by location (top locations by event count).
     """
-    # Events by country (via locations)
     result = db.execute(text("""
         SELECT
-            COALESCE(l.country, 'Unknown') as country,
+            l.name as location_name,
+            l.location_type,
             COUNT(*) as count
         FROM events e
         JOIN locations l ON e.primary_location_id = l.id
-        WHERE l.country IS NOT NULL
-        GROUP BY l.country
+        WHERE l.latitude IS NOT NULL
+        GROUP BY l.id, l.name, l.location_type
         ORDER BY count DESC
         LIMIT :limit
     """), {"limit": limit})
 
-    countries = []
+    locations = []
     total = 0
     for row in result:
-        countries.append({
-            "country": row[0],
-            "count": row[1]
+        locations.append({
+            "location": row[0],
+            "location_type": row[1],
+            "count": row[2]
         })
-        total += row[1]
+        total += row[2]
 
     # Add percentage
-    for c in countries:
-        c["percentage"] = round(c["count"] / total * 100, 1) if total else 0
+    for loc in locations:
+        loc["percentage"] = round(loc["count"] / total * 100, 1) if total else 0
 
     return {
-        "countries": countries,
+        "locations": locations,
         "total_events": total,
-        "country_count": len(countries)
+        "location_count": len(locations)
     }
 
 
@@ -245,20 +246,20 @@ async def get_enrichment_stats(db: Session = Depends(get_db)):
     """
     Get enrichment pipeline statistics.
     """
-    # Events enrichment
+    # Events enrichment (based on event_details description_source)
     events_by_model = db.execute(text("""
-        SELECT enriched_by, COUNT(*)
-        FROM events
-        WHERE enriched_by IS NOT NULL
-        GROUP BY enriched_by
+        SELECT description_source, COUNT(*)
+        FROM event_details
+        WHERE description_source IS NOT NULL
+        GROUP BY description_source
     """)).fetchall()
 
-    # Persons enrichment
+    # Persons enrichment (enriched_by removed from persons, use biography source instead)
     persons_by_model = db.execute(text("""
-        SELECT enriched_by, COUNT(*)
-        FROM persons
-        WHERE enriched_by IS NOT NULL
-        GROUP BY enriched_by
+        SELECT biography_source, COUNT(*)
+        FROM person_details
+        WHERE biography_source IS NOT NULL
+        GROUP BY biography_source
     """)).fetchall()
 
     # Locations enrichment

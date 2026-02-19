@@ -1,0 +1,5609 @@
+[
+  {
+    "period_start": -3050,
+    "period_end": -3001,
+    "events": [
+      {
+        "id": 32163,
+        "name": "Early Dynastic Period of Egypt",
+        "date_start": -3032,
+        "date_end": -2707,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "period of ancient Egyptian history",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [],
+    "event_total": 1,
+    "person_total": 0,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -3000,
+    "period_end": -2951,
+    "events": [
+      {
+        "id": 31555,
+        "name": "Helladic period",
+        "date_start": -3000,
+        "date_end": -1100,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "dating system used in archaeology and art history",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 12997614,
+        "name": "Merneith",
+        "date_start": -3000,
+        "date_end": -3000,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "ancient Egyptian queen",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2900,
+    "period_end": -2851,
+    "events": [
+      {
+        "id": 28838,
+        "name": "Early Dynastic period",
+        "date_start": -2900,
+        "date_end": -2350,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "archaeological culture of Mesopotamia",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [],
+    "event_total": 1,
+    "person_total": 0,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2800,
+    "period_end": -2751,
+    "events": [],
+    "persons": [
+      {
+        "id": 11371434,
+        "name": "Djoser",
+        "date_start": -2800,
+        "date_end": -2700,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "ancient Egyptian pharaoh of the 3rd dynasty",
+        "role": ""
+      },
+      {
+        "id": 6501735,
+        "name": "Imhotep",
+        "date_start": -2800,
+        "date_end": -2700,
+        "importance_score": 70,
+        "importance": 5,
+        "description": "Egyptian polymath, later revered as a god",
+        "role": "occupation"
+      },
+      {
+        "id": 1634790,
+        "name": "Khasekhemwy",
+        "date_start": -2800,
+        "date_end": -2700,
+        "importance_score": 68,
+        "importance": 4,
+        "description": "final king of the Second dynasty of Egypt",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 3,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2700,
+    "period_end": -2651,
+    "events": [],
+    "persons": [
+      {
+        "id": 1630856,
+        "name": "Khufu",
+        "date_start": -2700,
+        "date_end": -2566,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "Fourth Dynasty ancient Egyptian pharaoh",
+        "role": "occupation"
+      },
+      {
+        "id": 4880237,
+        "name": "Sneferu",
+        "date_start": -2700,
+        "date_end": -2609,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "pharaoh and founder of the 4th dynasty of Ancient Egypt",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2650,
+    "period_end": -2601,
+    "events": [],
+    "persons": [
+      {
+        "id": 9748898,
+        "name": "Khafra",
+        "date_start": -2612,
+        "date_end": -2530,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "ancient Egyptian pharaoh of 4th dynasty",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2550,
+    "period_end": -2501,
+    "events": [],
+    "persons": [
+      {
+        "id": 12996903,
+        "name": "Menkaure",
+        "date_start": -2532,
+        "date_end": -2503,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "Egyptian pharaoh of the 4th dynasty",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2500,
+    "period_end": -2451,
+    "events": [],
+    "persons": [
+      {
+        "id": 9742042,
+        "name": "Hemiunu",
+        "date_start": -2500,
+        "date_end": -2501,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "ancient Egyptian prince and vizier",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2400,
+    "period_end": -2351,
+    "events": [],
+    "persons": [
+      {
+        "id": 11373290,
+        "name": "Unas",
+        "date_start": -2375,
+        "date_end": -2350,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "Egyptian pharaoh",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2350,
+    "period_end": -2301,
+    "events": [
+      {
+        "id": 19138,
+        "name": "Q102885246",
+        "date_start": -2334,
+        "date_end": null,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 12996879,
+        "name": "Sargon of Akkad",
+        "date_start": -2350,
+        "date_end": -2300,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founder of Akkadian Empire",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2300,
+    "period_end": -2251,
+    "events": [],
+    "persons": [
+      {
+        "id": 13012008,
+        "name": "Yu the Great",
+        "date_start": -2297,
+        "date_end": -2197,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Xia Dynasty king and founder",
+        "role": ""
+      },
+      {
+        "id": 1632594,
+        "name": "Enheduanna",
+        "date_start": -2300,
+        "date_end": -2300,
+        "importance_score": 60,
+        "importance": 4,
+        "description": "Akkadian princess; Sumerian high priestess of Nanna at Ur; poet and philosopher",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2100,
+    "period_end": -2051,
+    "events": [
+      {
+        "id": 29874,
+        "name": "pre-Qin period",
+        "date_start": -2100,
+        "date_end": -221,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "era in ancient Chinese history",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31846,
+        "name": "Three Dynasties",
+        "date_start": -2100,
+        "date_end": -256,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Xia, Shang, and Zhou dynasties in ancient China",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11375120,
+        "name": "Mentuhotep II",
+        "date_start": -2100,
+        "date_end": -2013,
+        "importance_score": 84,
+        "importance": 5,
+        "description": "Egyptian pharaoh of the 11th Dynasty",
+        "role": ""
+      }
+    ],
+    "event_total": 2,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2050,
+    "period_end": -2001,
+    "events": [
+      {
+        "id": 31942,
+        "name": "Old Assyrian Empire",
+        "date_start": -2025,
+        "date_end": -1378,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "historical period in Assyria",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [],
+    "event_total": 1,
+    "person_total": 0,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -2000,
+    "period_end": -1951,
+    "events": [
+      {
+        "id": 30576,
+        "name": "Middle Bronze Age",
+        "date_start": -2000,
+        "date_end": -1600,
+        "importance_score": 89,
+        "importance": 5,
+        "description": "a period in ancient history following the Stone Age, characterized by the discovery of bronze and advancements in civilization",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11375137,
+        "name": "Ur-Nammu",
+        "date_start": -2000,
+        "date_end": -2094,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Sumerian king",
+        "role": ""
+      },
+      {
+        "id": 4950443,
+        "name": "Vishvamitra",
+        "date_start": -2000,
+        "date_end": -2000,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Great Sage in Vedic Tradition",
+        "role": "occupation"
+      },
+      {
+        "id": 4897033,
+        "name": "Bharadwaja",
+        "date_start": -2000,
+        "date_end": -2000,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "one of the revered Vedic sages (maharishi) in Ancient India, who was a renowned scholar, economist and an eminent physician",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 1,
+    "person_total": 3,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1950,
+    "period_end": -1901,
+    "events": [],
+    "persons": [
+      {
+        "id": 9741193,
+        "name": "Senusret III",
+        "date_start": -1950,
+        "date_end": -1842,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Pharaoh of Egypt",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1900,
+    "period_end": -1851,
+    "events": [],
+    "persons": [
+      {
+        "id": 3249862,
+        "name": "Amenemhat III",
+        "date_start": -1900,
+        "date_end": -1806,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "pharaoh of the Twelfth Dynasty of Egypt",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1850,
+    "period_end": -1801,
+    "events": [],
+    "persons": [
+      {
+        "id": 8176531,
+        "name": "Ibrahim",
+        "date_start": -1813,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "forefather of the Abrahamic religions from the Islamic perspective",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1800,
+    "period_end": -1751,
+    "events": [],
+    "persons": [
+      {
+        "id": 13006619,
+        "name": "Ismail",
+        "date_start": -1800,
+        "date_end": -1800,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Abraham's first son, who was to be offered as a sacrifice; later, an ancestor to Muhammad",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1700,
+    "period_end": -1651,
+    "events": [],
+    "persons": [
+      {
+        "id": 8135467,
+        "name": "Tang",
+        "date_start": -1675,
+        "date_end": -1646,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "Legendary first king of the Shang dynasty in ancient China",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1600,
+    "period_end": -1551,
+    "events": [],
+    "persons": [
+      {
+        "id": 3256732,
+        "name": "Thutmose I",
+        "date_start": -1600,
+        "date_end": -1493,
+        "importance_score": 72,
+        "importance": 4,
+        "description": "Egyptian pharaoh of the 18th dynasty",
+        "role": "occupation"
+      },
+      {
+        "id": 3258836,
+        "name": "Ahmose-Nefertari",
+        "date_start": -1562,
+        "date_end": -1495,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "ancient Egyptian queen consort",
+        "role": "occupation"
+      },
+      {
+        "id": 6495008,
+        "name": "Ahmose I",
+        "date_start": -1560,
+        "date_end": -1525,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "Pharaoh of Ancient Egypt",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 5,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1550,
+    "period_end": -1501,
+    "events": [
+      {
+        "id": 30823,
+        "name": "New Kingdom of Egypt",
+        "date_start": -1550,
+        "date_end": -1070,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "period from 1550 to 1077 BC in ancient Egypt",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 12995440,
+        "name": "Hatshepsut",
+        "date_start": -1507,
+        "date_end": -1458,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "5th Pharaoh of the Eighteenth Dynasty of Egypt (c. 1479 BC - 1458 BC)",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1500,
+    "period_end": -1451,
+    "events": [
+      {
+        "id": 32171,
+        "name": "Vedic period",
+        "date_start": -1500,
+        "date_end": -500,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "ancient South Asian historical period",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29672,
+        "name": "Mesoamerican Preclassic period",
+        "date_start": -1500,
+        "date_end": 200,
+        "importance_score": 79,
+        "importance": 4,
+        "description": "historical period of Mesoamerica between 1200-400 BC.",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31558,
+        "name": "Iron Age India",
+        "date_start": -1500,
+        "date_end": -200,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "Iron Age historical period in the Indian subcontinent",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4879474,
+        "name": "Thutmose III",
+        "date_start": -1481,
+        "date_end": -1425,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "sixth Egyptian Pharaoh of the Eighteenth Dynasty",
+        "role": "occupation"
+      },
+      {
+        "id": 4891888,
+        "name": "Yuya",
+        "date_start": -1500,
+        "date_end": -1400,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "ancient Egyptian high priest of Min, father-in-law of Amenhotep III",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 3,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1400,
+    "period_end": -1351,
+    "events": [],
+    "persons": [
+      {
+        "id": 3252257,
+        "name": "Akhenaten",
+        "date_start": -1400,
+        "date_end": -1336,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "Egyptian pharaoh in 18th Dynasty",
+        "role": ""
+      },
+      {
+        "id": 4873160,
+        "name": "Amenhotep III",
+        "date_start": -1400,
+        "date_end": -1351,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "ninth Pharaoh of the Eighteenth dynasty of Egypt",
+        "role": "occupation"
+      },
+      {
+        "id": 8118217,
+        "name": "Nefertiti",
+        "date_start": -1370,
+        "date_end": -1330,
+        "importance_score": 76,
+        "importance": 4,
+        "description": "Egyptian queen and Great Royal Wife (chief consort) of Akhenaten, an Egyptian Pharaoh",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 6,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1350,
+    "period_end": -1301,
+    "events": [
+      {
+        "id": 29509,
+        "name": "Amarna Period",
+        "date_start": -1346,
+        "date_end": -1336,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "historical period of ancient Egypt",
+        "latitude": 27.6616667,
+        "longitude": 30.9055556
+      }
+    ],
+    "persons": [
+      {
+        "id": 12988667,
+        "name": "Ramesses II",
+        "date_start": -1303,
+        "date_end": -1213,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Egyptian third pharaoh of the Nineteenth Dynasty",
+        "role": ""
+      },
+      {
+        "id": 11370990,
+        "name": "Horemheb",
+        "date_start": -1350,
+        "date_end": -1292,
+        "importance_score": 67,
+        "importance": 4,
+        "description": "final pharaoh of the 18th dynasty of Egypt",
+        "role": ""
+      },
+      {
+        "id": 11370988,
+        "name": "Seti I",
+        "date_start": -1323,
+        "date_end": -1279,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "The second pharaoh of Ancient Egypt's 19th dynasty",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 3,
+    "latitude": 27.6616667,
+    "longitude": 30.9055556,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1300,
+    "period_end": -1251,
+    "events": [
+      {
+        "id": 28929,
+        "name": "Ramessides",
+        "date_start": -1292,
+        "date_end": -1070,
+        "importance_score": 73,
+        "importance": 4,
+        "description": "historical period constituting 19th and 20th Dynasties of Ancient Egypt",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 8127609,
+        "name": "Fu Hao",
+        "date_start": -1300,
+        "date_end": -1200,
+        "importance_score": 72,
+        "importance": 4,
+        "description": "Queen consort to Shang Dynasty emperor Wu Ding",
+        "role": "occupation"
+      },
+      {
+        "id": 11372267,
+        "name": "Nefertari",
+        "date_start": -1290,
+        "date_end": -1255,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "ancient Egyptian queen consort",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1250,
+    "period_end": -1201,
+    "events": [],
+    "persons": [
+      {
+        "id": 8117570,
+        "name": "Ramesses III",
+        "date_start": -1217,
+        "date_end": -1155,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "Egyptian pharaoh of the 20th dynasty",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1200,
+    "period_end": -1151,
+    "events": [
+      {
+        "id": 28811,
+        "name": "classical antiquity",
+        "date_start": -1199,
+        "date_end": 500,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "age of the ancient Greeks and Romans",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28764,
+        "name": "Ancient Greece",
+        "date_start": -1200,
+        "date_end": 600,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Greek civilization from 1200 BC to 600 AD",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8421,
+        "name": "Battle of Djahy",
+        "date_start": -1178,
+        "date_end": null,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "ancient battle between Egypt and the Sea Peoples",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [],
+    "event_total": 4,
+    "person_total": 0,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1150,
+    "period_end": -1101,
+    "events": [],
+    "persons": [
+      {
+        "id": 8152329,
+        "name": "King Wu of Zhou",
+        "date_start": -1150,
+        "date_end": -1043,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "founder of China's Zhou dynasty",
+        "role": "occupation"
+      },
+      {
+        "id": 1641580,
+        "name": "King Zhou of Shang",
+        "date_start": -1105,
+        "date_end": -1046,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "last king of Chinese Shang dynasty (r. 1075 BBCE-1046 BCE)",
+        "role": "occupation"
+      },
+      {
+        "id": 11389123,
+        "name": "Jiang Ziya",
+        "date_start": -1128,
+        "date_end": -1015,
+        "importance_score": 81,
+        "importance": 5,
+        "description": "military strategist of King Wen of Zhou and King Wu of Zhou",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 4,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1100,
+    "period_end": -1051,
+    "events": [],
+    "persons": [
+      {
+        "id": 8132279,
+        "name": "Psusennes I",
+        "date_start": -1100,
+        "date_end": -1001,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "Egyptian pharaoh of the 21st dynasty",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1050,
+    "period_end": -1001,
+    "events": [
+      {
+        "id": 6726,
+        "name": "Siege of Jebus",
+        "date_start": -1010,
+        "date_end": null,
+        "importance_score": 72,
+        "importance": 4,
+        "description": "According to the Bible, David besieged and conquered the Jebusite city of Jerusalem, then known as Jebus, from the native Canaanites",
+        "latitude": 31.7788889,
+        "longitude": 35.2255556
+      },
+      {
+        "id": 5627,
+        "name": "Battle of Muye",
+        "date_start": -1046,
+        "date_end": null,
+        "importance_score": 68,
+        "importance": 4,
+        "description": "battle in ancient China ending the Shang dynasty and beginning Zhou, tentatively dated to c. 1046 BCE",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3250215,
+        "name": "David",
+        "date_start": -1040,
+        "date_end": -969,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "king of Israel and Judah",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 2,
+    "person_total": 1,
+    "latitude": 31.7788889,
+    "longitude": 35.2255556,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -1000,
+    "period_end": -951,
+    "events": [
+      {
+        "id": 32969,
+        "name": "Woodland period",
+        "date_start": -1000,
+        "date_end": 1000,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "period of North American pre-Columbian cultures",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 12996759,
+        "name": "Ashurnasirpal II",
+        "date_start": -1000,
+        "date_end": -859,
+        "importance_score": 68,
+        "importance": 4,
+        "description": "Assyrian king",
+        "role": ""
+      },
+      {
+        "id": 11375613,
+        "name": "Jeroboam I",
+        "date_start": -1000,
+        "date_end": -910,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "First King of the Northern Kingdom of Israel (1 Kings 16)",
+        "role": ""
+      },
+      {
+        "id": 13006400,
+        "name": "Hiram I",
+        "date_start": -1000,
+        "date_end": -935,
+        "importance_score": 65,
+        "importance": 4,
+        "description": "Phoenician king",
+        "role": ""
+      }
+    ],
+    "event_total": 1,
+    "person_total": 4,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -950,
+    "period_end": -901,
+    "events": [],
+    "persons": [
+      {
+        "id": 11373014,
+        "name": "Ahab",
+        "date_start": -918,
+        "date_end": -852,
+        "importance_score": 75,
+        "importance": 4,
+        "description": "King of Israel, the son and successor of Omri, and the husband of Jezebel (1 Kings 16)",
+        "role": ""
+      },
+      {
+        "id": 3261280,
+        "name": "Omri",
+        "date_start": -940,
+        "date_end": -874,
+        "importance_score": 62,
+        "importance": 4,
+        "description": "Sixth King of Israel",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -900,
+    "period_end": -851,
+    "events": [],
+    "persons": [
+      {
+        "id": 6503367,
+        "name": "Shalmaneser III",
+        "date_start": -900,
+        "date_end": -824,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "Assyrian king",
+        "role": "occupation"
+      },
+      {
+        "id": 3249618,
+        "name": "Homer",
+        "date_start": -900,
+        "date_end": -800,
+        "importance_score": 76,
+        "importance": 5,
+        "description": "reputed author of the Iliad and the Odyssey",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 0,
+    "person_total": 2,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -850,
+    "period_end": -801,
+    "events": [],
+    "persons": [
+      {
+        "id": 12997191,
+        "name": "Amos",
+        "date_start": -814,
+        "date_end": -740,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "biblical prophet associated with the Book of Amos",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 1,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -800,
+    "period_end": -751,
+    "events": [
+      {
+        "id": 30097,
+        "name": "Spring and Autumn Warring States Period",
+        "date_start": -770,
+        "date_end": -221,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Chinese history that lasted for 550 years",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28115,
+        "name": "Archaic Greece",
+        "date_start": -800,
+        "date_end": -500,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "period of ancient Greek history",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31482,
+        "name": "Spring and Autumn period",
+        "date_start": -771,
+        "date_end": -476,
+        "importance_score": 73,
+        "importance": 4,
+        "description": "period in Chinese history from approximately 770 to 476 BCE",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 8125762,
+        "name": "Sargon II",
+        "date_start": -765,
+        "date_end": -705,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "king of Assyria (722-705 B.C)",
+        "role": "occupation"
+      },
+      {
+        "id": 4896437,
+        "name": "Hosea",
+        "date_start": -784,
+        "date_end": null,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "biblical figure associated with the Book of Hosea",
+        "role": "occupation"
+      },
+      {
+        "id": 6503108,
+        "name": "Numa Pompilius",
+        "date_start": -753,
+        "date_end": -671,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "legendary second king of Rome, succeeding Romulus",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 4,
+    "person_total": 9,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -750,
+    "period_end": -701,
+    "events": [
+      {
+        "id": 15818,
+        "name": "The War of Pekah and Ahaz",
+        "date_start": -733,
+        "date_end": -729,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 26924,
+        "name": "Messenian Wars",
+        "date_start": -743,
+        "date_end": -454,
+        "importance_score": 60,
+        "importance": 3,
+        "description": "series of wars between Sparta and Messenia",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6512048,
+        "name": "Guan Zhong",
+        "date_start": -720,
+        "date_end": -645,
+        "importance_score": 91,
+        "importance": 5,
+        "description": "Chinese chancellor and reformer (c. 720–645 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 1636333,
+        "name": "Deioces",
+        "date_start": -705,
+        "date_end": -675,
+        "importance_score": 68,
+        "importance": 4,
+        "description": "the founder of the Kingdom of Medes (700–678 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 8125742,
+        "name": "Sennacherib",
+        "date_start": -745,
+        "date_end": -681,
+        "importance_score": 68,
+        "importance": 4,
+        "description": "king of Assyria",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 2,
+    "person_total": 5,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -700,
+    "period_end": -651,
+    "events": [],
+    "persons": [
+      {
+        "id": 9748220,
+        "name": "Ashurbanipal",
+        "date_start": -685,
+        "date_end": -631,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Assyrian ruler",
+        "role": ""
+      },
+      {
+        "id": 11376491,
+        "name": "Psamtik I",
+        "date_start": -700,
+        "date_end": -610,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "first egyptian pharaoh of the 26th dynasty",
+        "role": ""
+      },
+      {
+        "id": 9762524,
+        "name": "Duke Wen of Jin",
+        "date_start": -697,
+        "date_end": -628,
+        "importance_score": 74,
+        "importance": 4,
+        "description": "22nd ruler of Jin from 636 to 628 BCE",
+        "role": ""
+      }
+    ],
+    "event_total": 0,
+    "person_total": 6,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -650,
+    "period_end": -601,
+    "events": [
+      {
+        "id": 24185,
+        "name": "Jewish–Babylonian War",
+        "date_start": -601,
+        "date_end": -586,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "war between the Kingdom of Judah and Babylonia, from 601 to 586 BCE, ending in the conquest of Judah",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 7496,
+        "name": "Fall of Tarbisu",
+        "date_start": -614,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "627 BC battle",
+        "latitude": 36.3833,
+        "longitude": 43.1167
+      },
+      {
+        "id": 14015,
+        "name": "Fall of Nineveh",
+        "date_start": -612,
+        "date_end": null,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "612 BC battle that saw the fall of the Assyrian capital, and the climax of the Conquest of Assyria",
+        "latitude": 36.366667,
+        "longitude": 43.15
+      }
+    ],
+    "persons": [
+      {
+        "id": 4873062,
+        "name": "Zoroaster",
+        "date_start": -628,
+        "date_end": -551,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founder of Zoroastrianism",
+        "role": "occupation"
+      },
+      {
+        "id": 9741088,
+        "name": "Nebuchadnezzar II",
+        "date_start": -642,
+        "date_end": -561,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "King of Babylon",
+        "role": ""
+      },
+      {
+        "id": 8117711,
+        "name": "Laozi",
+        "date_start": -604,
+        "date_end": -500,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "6th-century BC semi-legendary Chinese philosopher, founder of Taoism",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 10,
+    "person_total": 12,
+    "latitude": 36.3833,
+    "longitude": 43.1167,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -600,
+    "period_end": -551,
+    "events": [
+      {
+        "id": 14775,
+        "name": "Medo-Persian conflict",
+        "date_start": -553,
+        "date_end": -550,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "campaign led by Cyrus the Great in Persis against the Median Empire",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 22887,
+        "name": "Siege of Jerusalem",
+        "date_start": -589,
+        "date_end": -587,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "Nebuchadnezzar II laid siege to Jerusalem, culminating in the destruction of the city and its temple in the summer of 587 or 586 BC",
+        "latitude": 31.7788889,
+        "longitude": 35.2255556
+      },
+      {
+        "id": 22874,
+        "name": "Siege of Jerusalem",
+        "date_start": -597,
+        "date_end": null,
+        "importance_score": 72,
+        "importance": 4,
+        "description": "conflict in 597 BC",
+        "latitude": 31.7788889,
+        "longitude": 35.2255556
+      }
+    ],
+    "persons": [
+      {
+        "id": 11363828,
+        "name": "The Buddha",
+        "date_start": -563,
+        "date_end": -483,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "Indian philosopher and the founder of Buddhism (623 or 563 BCE – 543 or 483 BCE)",
+        "role": ""
+      },
+      {
+        "id": 4872596,
+        "name": "Cyrus the Great",
+        "date_start": -600,
+        "date_end": -530,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "founder of the Achaemenid Empire (559–529 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 12989180,
+        "name": "Ānanda",
+        "date_start": -600,
+        "date_end": -500,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Attendant of the Buddha and main figure in First Buddhist Council",
+        "role": ""
+      }
+    ],
+    "event_total": 3,
+    "person_total": 20,
+    "latitude": 31.7788889,
+    "longitude": 35.2255556,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -550,
+    "period_end": -501,
+    "events": [
+      {
+        "id": 28766,
+        "name": "Roman Republic",
+        "date_start": -509,
+        "date_end": -27,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "period of ancient Roman civilization (509 BC–27 BC)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28266,
+        "name": "Second Temple period",
+        "date_start": -530,
+        "date_end": 70,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "period in Jewish history lasting between 516 BCE and 70 CE",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30384,
+        "name": "Second Temple Judaism",
+        "date_start": -516,
+        "date_end": 70,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Jewish religion c. 516 BCE–70 CE",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11364418,
+        "name": "Darius I",
+        "date_start": -550,
+        "date_end": -486,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "The fourth and greatest Achaemenid emperor (522–486 BC)",
+        "role": ""
+      },
+      {
+        "id": 1630325,
+        "name": "Xerxes I",
+        "date_start": -519,
+        "date_end": -465,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "The fifth Achaemenid emperor (486–465 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 6503771,
+        "name": "Lucius Junius Brutus",
+        "date_start": -540,
+        "date_end": -509,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Semi-legendary 6th-century BC founder of Roman Republic",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 17,
+    "person_total": 22,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "ancient",
+    "era_name": "Ancient World",
+    "era_name_ko": "고대"
+  },
+  {
+    "period_start": -500,
+    "period_end": -451,
+    "events": [
+      {
+        "id": 17121,
+        "name": "Second Persian invasion of Greece",
+        "date_start": -480,
+        "date_end": -479,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "invasion during the Greco-Persian Wars",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30861,
+        "name": "Classical Greece",
+        "date_start": -490,
+        "date_end": -323,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "period of ancient Greece from 510 to 323 BC",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30288,
+        "name": "Fifth-century Athens",
+        "date_start": -480,
+        "date_end": -404,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "golden Age of Athens, 480–404 BCE",
+        "latitude": 37.9722222,
+        "longitude": 23.7222222
+      }
+    ],
+    "persons": [
+      {
+        "id": 4875114,
+        "name": "Pericles",
+        "date_start": -494,
+        "date_end": -429,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Athenian statesman, orator and general (c. 495 – 429 BC)",
+        "role": "politician"
+      },
+      {
+        "id": 3249495,
+        "name": "Socrates",
+        "date_start": -470,
+        "date_end": -399,
+        "importance_score": 89,
+        "importance": 5,
+        "description": "5th-century BCE Greek philosopher",
+        "role": "occupation"
+      },
+      {
+        "id": 1631037,
+        "name": "Protagoras",
+        "date_start": -486,
+        "date_end": -420,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "Pre-Socratic Greek philosopher (c.490–c.420 BC)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 16,
+    "person_total": 20,
+    "latitude": 37.9722222,
+    "longitude": 23.7222222,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -450,
+    "period_end": -401,
+    "events": [
+      {
+        "id": 22461,
+        "name": "Peloponnesian War",
+        "date_start": -431,
+        "date_end": -404,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "war fought between Athens and Sparta (431–404 BCE)",
+        "latitude": 37.5666667,
+        "longitude": 14.2666667
+      },
+      {
+        "id": 22461,
+        "name": "Peloponnesian War",
+        "date_start": -431,
+        "date_end": -404,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "war fought between Athens and Sparta (431–404 BCE)",
+        "latitude": 38.5,
+        "longitude": 25.3
+      },
+      {
+        "id": 28282,
+        "name": "Intertestamental period",
+        "date_start": -420,
+        "date_end": 10,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "period between the Old and New Testaments of the Bible",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1623560,
+        "name": "Plato",
+        "date_start": -427,
+        "date_end": -347,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "4th-century BCE Greek philosopher",
+        "role": "occupation"
+      },
+      {
+        "id": 1624792,
+        "name": "Diogenes of Sinope",
+        "date_start": -412,
+        "date_end": -323,
+        "importance_score": 79,
+        "importance": 5,
+        "description": "4th-century BC Greek Cynic philosopher",
+        "role": "occupation"
+      },
+      {
+        "id": 11371835,
+        "name": "Epaminondas",
+        "date_start": -418,
+        "date_end": -362,
+        "importance_score": 78,
+        "importance": 5,
+        "description": "Theban general and statesman (419/411–362 BC)",
+        "role": ""
+      }
+    ],
+    "event_total": 9,
+    "person_total": 17,
+    "latitude": 37.5666667,
+    "longitude": 14.2666667,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -400,
+    "period_end": -351,
+    "events": [
+      {
+        "id": 22595,
+        "name": "Battle of Leuctra",
+        "date_start": -371,
+        "date_end": null,
+        "importance_score": 66,
+        "importance": 4,
+        "description": "battle between Thebes and Sparta, 371 BCE",
+        "latitude": 38.2935,
+        "longitude": 23.1549
+      },
+      {
+        "id": 18661,
+        "name": "Siege of Methone",
+        "date_start": -355,
+        "date_end": -354,
+        "importance_score": 62,
+        "importance": 4,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 5625,
+        "name": "Third Sacred War",
+        "date_start": -356,
+        "date_end": -346,
+        "importance_score": 61,
+        "importance": 4,
+        "description": "356–346 BCE war with Phocians over Delphi",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6501728,
+        "name": "Philip II of Macedon",
+        "date_start": -385,
+        "date_end": -336,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "King of Macedon from 359 to 336 BC",
+        "role": "occupation"
+      },
+      {
+        "id": 3263029,
+        "name": "Shang Yang",
+        "date_start": -390,
+        "date_end": -338,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Qin State statesman, chancellor and reformer (c. 390–338 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 11363802,
+        "name": "Alexander the Great",
+        "date_start": -356,
+        "date_end": -323,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "king of Macedonia and conqueror of Achaemenid Persia (356–323 BC)",
+        "role": ""
+      }
+    ],
+    "event_total": 7,
+    "person_total": 27,
+    "latitude": 38.2935,
+    "longitude": 23.1549,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -350,
+    "period_end": -301,
+    "events": [
+      {
+        "id": 28128,
+        "name": "Hellenistic period",
+        "date_start": -323,
+        "date_end": -30,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "period of Mediterranean history from 323 to 31 BC",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30152,
+        "name": "Egyptian Hellenistic period",
+        "date_start": -323,
+        "date_end": -30,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Hellenistic kingdom in ancient Egypt, from Macedonian to Ptolemaic dynasty (from 323 to 30 BC)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 33418,
+        "name": "Macedonian Egypt",
+        "date_start": -332,
+        "date_end": -305,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "Egyptian era under Alexander the Great (332-305 a.C.)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6495042,
+        "name": "Ashoka",
+        "date_start": -304,
+        "date_end": -232,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Mauryan emperor from 268 to 232 BCE",
+        "role": "occupation"
+      },
+      {
+        "id": 3257530,
+        "name": "Chandragupta Maurya",
+        "date_start": -340,
+        "date_end": -297,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "founder of the Maurya Empire (350–295 BCE)",
+        "role": "occupation"
+      },
+      {
+        "id": 6495045,
+        "name": "Euclid",
+        "date_start": -333,
+        "date_end": -285,
+        "importance_score": 86,
+        "importance": 5,
+        "description": "ancient Greek mathematician (fl. 300 BC)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 33,
+    "person_total": 15,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -300,
+    "period_end": -251,
+    "events": [
+      {
+        "id": 8349,
+        "name": "Kalinga War",
+        "date_start": -262,
+        "date_end": -261,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "war fought by Ashoka",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 25925,
+        "name": "Battle of Messana",
+        "date_start": -264,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "first military conflict between the Roman Republic and Carthage, marking the start of the First Punic War",
+        "latitude": 38.1936111,
+        "longitude": 15.5541667
+      },
+      {
+        "id": 5219,
+        "name": "Punic Wars",
+        "date_start": -264,
+        "date_end": -146,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "series of three wars fought between Rome and Carthage from 264 BC to 146 BC, at the time probably the largest wars that had ever taken place",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 9740953,
+        "name": "Qin Shi Huang",
+        "date_start": -259,
+        "date_end": -210,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "first emperor of Qin Dynasty",
+        "role": ""
+      },
+      {
+        "id": 11370873,
+        "name": "Li Si",
+        "date_start": -280,
+        "date_end": -208,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "Chinese politician of the Qin Dynasty",
+        "role": ""
+      },
+      {
+        "id": 8161360,
+        "name": "Xiao He",
+        "date_start": -257,
+        "date_end": -193,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Han dynasty chancellor",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 16,
+    "person_total": 20,
+    "latitude": 38.1936111,
+    "longitude": 15.5541667,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -250,
+    "period_end": -201,
+    "events": [
+      {
+        "id": 31164,
+        "name": "Qin Han",
+        "date_start": -221,
+        "date_end": 220,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Qin and Han dynasties in Chinese history",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 22445,
+        "name": "Second Punic War",
+        "date_start": -218,
+        "date_end": -201,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "second war between the Roman Republic and Carthage, fought between 218 and 201 BCE",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 26576,
+        "name": "Battle of Wei River",
+        "date_start": -204,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "204 BCE battle between the Han and a combined force of Qi and Western Chu",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 5002108,
+        "name": "Hannibal",
+        "date_start": -250,
+        "date_end": -238,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Carthaginian general",
+        "role": "occupation"
+      },
+      {
+        "id": 6517200,
+        "name": "Han Xin",
+        "date_start": -231,
+        "date_end": -196,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Chinese military general and politician (231-196 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 8118145,
+        "name": "Hannibal",
+        "date_start": -247,
+        "date_end": -183,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Carthaginian general (247–183/181 BC)",
+        "role": "politician"
+      }
+    ],
+    "event_total": 42,
+    "person_total": 24,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -200,
+    "period_end": -151,
+    "events": [
+      {
+        "id": 22604,
+        "name": "Roman–Seleucid War",
+        "date_start": -192,
+        "date_end": -188,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "war between Rome and the Seleucid Empire, 192–188 BCE",
+        "latitude": 38.5,
+        "longitude": 25.3
+      },
+      {
+        "id": 16754,
+        "name": "Third Macedonian War",
+        "date_start": -171,
+        "date_end": -168,
+        "importance_score": 74,
+        "importance": 4,
+        "description": "war between the Roman Republic and King Perseus of Macedon",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 12689,
+        "name": "Siege of Corinth",
+        "date_start": -198,
+        "date_end": null,
+        "importance_score": 71,
+        "importance": 4,
+        "description": "198 BCE siege during the Second Macedonian War",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3249623,
+        "name": "Emperor Wu of Han",
+        "date_start": -156,
+        "date_end": -87,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "seventh emperor of the Han dynasty of China (157 BC–87 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 8125131,
+        "name": "Gaius Marius",
+        "date_start": -157,
+        "date_end": -86,
+        "importance_score": 87,
+        "importance": 5,
+        "description": "Roman general, statesman and military reformer (157-86 BC)",
+        "role": "occupation"
+      },
+      {
+        "id": 1630821,
+        "name": "Hipparchus",
+        "date_start": -190,
+        "date_end": -120,
+        "importance_score": 83,
+        "importance": 5,
+        "description": "2nd century Greek astronomer, geographer and mathematician",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 17,
+    "person_total": 13,
+    "latitude": 38.5,
+    "longitude": 25.3,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -150,
+    "period_end": -101,
+    "events": [
+      {
+        "id": 28918,
+        "name": "Roman Greece",
+        "date_start": -146,
+        "date_end": 330,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "historic period of Greece",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29657,
+        "name": "Late Roman Republic",
+        "date_start": -145,
+        "date_end": -27,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "historical period, around 145 to 27 BC",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8443,
+        "name": "Cimbrian War",
+        "date_start": -113,
+        "date_end": -101,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "war bewteen Rome and a union of Germanic and Celtic tribes, 113-101 BCE",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11363681,
+        "name": "Cicero",
+        "date_start": -106,
+        "date_end": -43,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Roman statesman, lawyer, orator, and philosopher (106–43 BC)",
+        "role": ""
+      },
+      {
+        "id": 9759104,
+        "name": "Sulla",
+        "date_start": -138,
+        "date_end": -78,
+        "importance_score": 87,
+        "importance": 5,
+        "description": "Roman dictator and general",
+        "role": ""
+      },
+      {
+        "id": 12995288,
+        "name": "Pompey",
+        "date_start": -106,
+        "date_end": -48,
+        "importance_score": 87,
+        "importance": 5,
+        "description": "Roman general and statesman (106–48 BC)",
+        "role": ""
+      }
+    ],
+    "event_total": 19,
+    "person_total": 13,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -100,
+    "period_end": -51,
+    "events": [
+      {
+        "id": 7006,
+        "name": "Siege of Uxellodunum",
+        "date_start": -51,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "last major military confrontation of the Gallic Wars, marking the pacification of Gaul under Roman rule",
+        "latitude": 44.95,
+        "longitude": 1.6972222
+      },
+      {
+        "id": 8524,
+        "name": "Battle of Vosges",
+        "date_start": -58,
+        "date_end": null,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "battle between the Germanic tribe of the Suebi under the leadership of Ariovistus against six Roman legions under the command of Gaius Julius Caesar in 58 BCE",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19736,
+        "name": "Sulla's Civil War",
+        "date_start": -83,
+        "date_end": -81,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "1st-century BCE internal conflict in the Roman Republic",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4872448,
+        "name": "Julius Caesar",
+        "date_start": -100,
+        "date_end": -44,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Roman general and dictator",
+        "role": "occupation"
+      },
+      {
+        "id": 8117562,
+        "name": "Augustus",
+        "date_start": -63,
+        "date_end": 14,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "first emperor of the Roman Empire and founder of the Julio-Claudian dynasty",
+        "role": "occupation"
+      },
+      {
+        "id": 8117546,
+        "name": "Cleopatra",
+        "date_start": -69,
+        "date_end": -30,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "queen of the Ptolemaic Kingdom of Egypt from 51 to 30 BCE",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 37,
+    "person_total": 27,
+    "latitude": 44.95,
+    "longitude": 1.6972222,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": -50,
+    "period_end": -1,
+    "events": [
+      {
+        "id": 25856,
+        "name": "Final War of the Roman Republic",
+        "date_start": -32,
+        "date_end": -30,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Last of the civil wars of the Roman Republic",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28758,
+        "name": "Roman Empire",
+        "date_start": -27,
+        "date_end": 395,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "period of ancient Rome following the Republic",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28773,
+        "name": "Pax Romana",
+        "date_start": -27,
+        "date_end": 180,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "roughly 200-year-long period in Roman history",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6494887,
+        "name": "Jesus Christ",
+        "date_start": -7,
+        "date_end": 30,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "central figure of Christianity (6 or 4 BC – AD 30 or 33)",
+        "role": "occupation"
+      },
+      {
+        "id": 12989262,
+        "name": "Saint Peter",
+        "date_start": -1,
+        "date_end": 65,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "apostle of Jesus Christ",
+        "role": ""
+      },
+      {
+        "id": 1624236,
+        "name": "John the Baptist",
+        "date_start": -6,
+        "date_end": 30,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "1st-century Jewish itinerant preacher (Bible)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 31,
+    "person_total": 20,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 0,
+    "period_end": 49,
+    "events": [
+      {
+        "id": 31474,
+        "name": "Early Christianity",
+        "date_start": 1,
+        "date_end": 325,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "period of church history beginning with the ministry of Jesus (c. 27-30) and ending with the First Council of Nicaea (325)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28868,
+        "name": "Eastern Han",
+        "date_start": 23,
+        "date_end": 220,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "second half of the Han dynasty of imperial China",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8561,
+        "name": "Lülin",
+        "date_start": 21,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "major agrarian rebellion movement against Wang Mang's Xin dynasty",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 13001176,
+        "name": "John the Evangelist",
+        "date_start": 10,
+        "date_end": 98,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "author of the Gospel of John; traditionally identified with John the Apostle of Jesus, John of Patmos (author of Revelation), and John the Presbyter",
+        "role": ""
+      },
+      {
+        "id": 6495057,
+        "name": "Paul the Apostle",
+        "date_start": 5,
+        "date_end": 66,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "Early Christian apostle and missionary (c. AD 5 – c. 64/65)",
+        "role": "occupation"
+      },
+      {
+        "id": 6495614,
+        "name": "Matthew the Apostle",
+        "date_start": 10,
+        "date_end": 74,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Christian evangelist and apostle",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 9,
+    "person_total": 20,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 50,
+    "period_end": 99,
+    "events": [
+      {
+        "id": 8422,
+        "name": "Siege of Jerusalem",
+        "date_start": 70,
+        "date_end": 70,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "siege of Jerusalem in 70 AD by the Roman army",
+        "latitude": 31.7788889,
+        "longitude": 35.2255556
+      },
+      {
+        "id": 21160,
+        "name": "Battle of Jerusalem",
+        "date_start": 66,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "66 battle during the First Jewish-Roman War",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19710,
+        "name": "Year of the Four Emperors",
+        "date_start": 69,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "battles for succession to rule the Roman Empire (AD 69)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11375450,
+        "name": "Akiva ben Joseph",
+        "date_start": 50,
+        "date_end": 135,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Jewish scholar and sage (c. 50 – c.135)",
+        "role": ""
+      },
+      {
+        "id": 4949986,
+        "name": "John of Patmos",
+        "date_start": 50,
+        "date_end": 100,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Christian saint and author of the Book of Revelation",
+        "role": "occupation"
+      },
+      {
+        "id": 6506516,
+        "name": "Kanishka",
+        "date_start": 78,
+        "date_end": 144,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "the fourth and greatest Kushan emperor (127–150)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 10,
+    "person_total": 19,
+    "latitude": 31.7788889,
+    "longitude": 35.2255556,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 100,
+    "period_end": 149,
+    "events": [
+      {
+        "id": 18395,
+        "name": "Siege of Betar",
+        "date_start": 132,
+        "date_end": 135,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "132 siege",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 25375,
+        "name": "Bar Kokhba revolt",
+        "date_start": 132,
+        "date_end": 136,
+        "importance_score": 77,
+        "importance": 4,
+        "description": "Jewish rebellion against Roman rule (132–136 CE)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 14930,
+        "name": "First Dacian War",
+        "date_start": 101,
+        "date_end": 102,
+        "importance_score": 75,
+        "importance": 4,
+        "description": "conflict between the Roman Empire and the Kingdom of Dacia (101-102)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3313380,
+        "name": "John Mark",
+        "date_start": 100,
+        "date_end": 100,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Biblical saint",
+        "role": "occupation"
+      },
+      {
+        "id": 4887017,
+        "name": "Judah ha-Nasi",
+        "date_start": 135,
+        "date_end": 219,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "2nd century rabbi and editor of the Mishnah",
+        "role": "occupation"
+      },
+      {
+        "id": 6587190,
+        "name": "James the Less",
+        "date_start": 100,
+        "date_end": 62,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Christian saint",
+        "role": ""
+      }
+    ],
+    "event_total": 7,
+    "person_total": 23,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 150,
+    "period_end": 199,
+    "events": [
+      {
+        "id": 32153,
+        "name": "end of the Han dynasty",
+        "date_start": 189,
+        "date_end": 220,
+        "importance_score": 84,
+        "importance": 5,
+        "description": "historical era of China (189-220)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 12764,
+        "name": "Rebellion of the Ten Attendants",
+        "date_start": 189,
+        "date_end": null,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19816,
+        "name": "Battle of Lugdunum",
+        "date_start": 197,
+        "date_end": null,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "197 battle between Septimius Severus and Clodius Albinus (197)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11378407,
+        "name": "Ardashir I",
+        "date_start": 180,
+        "date_end": 242,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founder of the Sassanid Empire (224–242)",
+        "role": ""
+      },
+      {
+        "id": 8131000,
+        "name": "Sima Yi",
+        "date_start": 179,
+        "date_end": 251,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Chinese general, politician and regent (179-251)",
+        "role": "politician"
+      },
+      {
+        "id": 11364847,
+        "name": "Diogenes Laërtius",
+        "date_start": 180,
+        "date_end": 240,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "3rd-century Roman biographer of Greek philosophers",
+        "role": ""
+      }
+    ],
+    "event_total": 11,
+    "person_total": 29,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 200,
+    "period_end": 249,
+    "events": [
+      {
+        "id": 28938,
+        "name": "Low Roman Empire",
+        "date_start": 235,
+        "date_end": 476,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "historical period (ca. 235 to 476 AD)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 32903,
+        "name": "Wei, Jin, Southern and Northern dynasties",
+        "date_start": 220,
+        "date_end": 589,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "period of Chinese history (220–589), beginning with the Three Kingdoms period, followed by the Western Jin dynasty, the Five Barbarians and Sixteen Kingdoms period, and the Northern and Southern Dynas",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 11740,
+        "name": "Battle of Hormozdgan",
+        "date_start": 224,
+        "date_end": null,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "battle between Parthian and Sasanian dynasties in 224 AD",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 8118252,
+        "name": "Diocletian",
+        "date_start": 244,
+        "date_end": 316,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "Augustus of the Eastern Roman Empire (244-311)",
+        "role": "politician"
+      },
+      {
+        "id": 11364516,
+        "name": "Aurelian",
+        "date_start": 214,
+        "date_end": 275,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Roman Emperor (C.E.214-275)",
+        "role": ""
+      },
+      {
+        "id": 4880534,
+        "name": "Mani",
+        "date_start": 216,
+        "date_end": 274,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "3rd century prophet and founder of Manichaeism",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 18,
+    "person_total": 22,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 250,
+    "period_end": 299,
+    "events": [
+      {
+        "id": 30752,
+        "name": "Later Roman Empire",
+        "date_start": 284,
+        "date_end": 641,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "timed period (ca. 284 to 641 AD)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30829,
+        "name": "Dominate",
+        "date_start": 284,
+        "date_end": 565,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "\"despotic\" phase of government in the ancient Roman Empire (ca. 284 to 565 AD)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31479,
+        "name": "Roman Tetrarchy",
+        "date_start": 284,
+        "date_end": 306,
+        "importance_score": 81,
+        "importance": 5,
+        "description": "division of power in the Roman Empire under Diocletian until Constantine the Great (ca. 293 to 324 AD)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1623714,
+        "name": "Constantine the Great",
+        "date_start": 272,
+        "date_end": 337,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Roman emperor from 306 to 337 and first to convert to Christianity (272–337)",
+        "role": "occupation"
+      },
+      {
+        "id": 9741605,
+        "name": "Saint Nicholas",
+        "date_start": 250,
+        "date_end": 350,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "4th-century Christian bishop and saint",
+        "role": ""
+      },
+      {
+        "id": 1628586,
+        "name": "Arius",
+        "date_start": 250,
+        "date_end": 336,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "Cyrenaic presbyter and founder of Arianism (died 336)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 13,
+    "person_total": 19,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 300,
+    "period_end": 349,
+    "events": [
+      {
+        "id": 14119,
+        "name": "Battle of Adrianople (324)",
+        "date_start": 324,
+        "date_end": null,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "324 battle",
+        "latitude": 41.67304,
+        "longitude": 26.57361
+      },
+      {
+        "id": 16831,
+        "name": "Battle of the Milvian Bridge",
+        "date_start": 312,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "4th-century battle for control of Rome",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 32244,
+        "name": "Diocletianic Persecution",
+        "date_start": 303,
+        "date_end": 313,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "(303-313) last and most severe persecution of Christians in the Roman Empire",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4873303,
+        "name": "Theodosius I",
+        "date_start": 347,
+        "date_end": 395,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Roman emperor from 379 to 395",
+        "role": "occupation"
+      },
+      {
+        "id": 4873198,
+        "name": "Jerome",
+        "date_start": 345,
+        "date_end": 420,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "4th and 5th-century Catholic and Eastern Orthodox saint and Doctor of the Church",
+        "role": "occupation"
+      },
+      {
+        "id": 8130248,
+        "name": "Kumārajīva",
+        "date_start": 344,
+        "date_end": 413,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Kuchan Buddhist monk and translator (344-413)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 14,
+    "person_total": 29,
+    "latitude": 41.67304,
+    "longitude": 26.57361,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 350,
+    "period_end": 399,
+    "events": [
+      {
+        "id": 7074,
+        "name": "Battle of Constantinople",
+        "date_start": 378,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "battle",
+        "latitude": 41.0125,
+        "longitude": 28.98
+      },
+      {
+        "id": 7131,
+        "name": "Siege of Adrianople",
+        "date_start": 378,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "siege in the year 378, in modern Turkey",
+        "latitude": 41.67304,
+        "longitude": 26.57361
+      },
+      {
+        "id": 8415,
+        "name": "Battle of the Frigidus",
+        "date_start": 394,
+        "date_end": 394,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "battle of the Frigidus, also called the Battle of the Frigid River, was fought on 5 and 6 September 394",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 12988793,
+        "name": "Augustine of Hippo",
+        "date_start": 354,
+        "date_end": 430,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "Christian theologian, philosopher, and saint (354–430)",
+        "role": ""
+      },
+      {
+        "id": 6502271,
+        "name": "Saint Patrick",
+        "date_start": 385,
+        "date_end": 461,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "5th-century Romano-British Christian missionary and bishop in Ireland",
+        "role": "occupation"
+      },
+      {
+        "id": 4877215,
+        "name": "Mesrop Mashtots",
+        "date_start": 362,
+        "date_end": 440,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Armenian theologian and linguist (362–440)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 14,
+    "person_total": 18,
+    "latitude": 41.0125,
+    "longitude": 28.98,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 400,
+    "period_end": 449,
+    "events": [
+      {
+        "id": 33152,
+        "name": "decline of Greco-Roman polytheism",
+        "date_start": 400,
+        "date_end": 600,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "trend in Ancient Roman history",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30828,
+        "name": "Early Middle Ages",
+        "date_start": 400,
+        "date_end": 1100,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "period of European history lasting from the 5th century to the 10th century",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 20320,
+        "name": "Battle of Mainz",
+        "date_start": 406,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "406 battle",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1653026,
+        "name": "Chandragupta II",
+        "date_start": 400,
+        "date_end": 500,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Ruler of Gupta Empire from c. 375 to c. 415",
+        "role": "occupation"
+      },
+      {
+        "id": 9745576,
+        "name": "Odoacer",
+        "date_start": 433,
+        "date_end": 493,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "5th-century Germanic soldier and monarch of Italy (476–493)",
+        "role": ""
+      },
+      {
+        "id": 9745482,
+        "name": "Alaric I",
+        "date_start": 400,
+        "date_end": 410,
+        "importance_score": 86,
+        "importance": 5,
+        "description": "King of the Visigoths",
+        "role": ""
+      }
+    ],
+    "event_total": 16,
+    "person_total": 13,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 450,
+    "period_end": 499,
+    "events": [
+      {
+        "id": 18549,
+        "name": "Battle of Pavia",
+        "date_start": 476,
+        "date_end": null,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "476 siege",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 18003,
+        "name": "Battle of Ravenna",
+        "date_start": 476,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "476 battle between the Heruli under their King Odoacer and the remnants of the Western Roman Army in Roman Italy",
+        "latitude": 44.4161111,
+        "longitude": 12.2016667
+      },
+      {
+        "id": 20672,
+        "name": "Deposition of Romulus Augustulus",
+        "date_start": 476,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "overthrow of the last Western Roman emperor",
+        "latitude": 44.4161111,
+        "longitude": 12.2016667
+      }
+    ],
+    "persons": [
+      {
+        "id": 12989379,
+        "name": "Justinian I",
+        "date_start": 482,
+        "date_end": 565,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Eastern Roman Emperor who ruled from 527 to 565 (482-565)",
+        "role": ""
+      },
+      {
+        "id": 12989429,
+        "name": "Benedict of Nursia",
+        "date_start": 480,
+        "date_end": 547,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founder of Christian monasticism, founder of the Benedictine order (480–547)",
+        "role": ""
+      },
+      {
+        "id": 12999157,
+        "name": "Dionysius Exiguus",
+        "date_start": 475,
+        "date_end": 550,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Byzantine saint",
+        "role": ""
+      }
+    ],
+    "event_total": 16,
+    "person_total": 19,
+    "latitude": 44.4161111,
+    "longitude": 12.2016667,
+    "era_id": "classical",
+    "era_name": "Classical Antiquity",
+    "era_name_ko": "고전 고대"
+  },
+  {
+    "period_start": 500,
+    "period_end": 549,
+    "events": [
+      {
+        "id": 10905,
+        "name": "Franco-Gothic War",
+        "date_start": 507,
+        "date_end": 511,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "507–511 war between the Franks and the Visigoths",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 32170,
+        "name": "Asuka period",
+        "date_start": 538,
+        "date_end": 710,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "historical period of Japan",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 22986,
+        "name": "Siege of Rome",
+        "date_start": 537,
+        "date_end": 538,
+        "importance_score": 75,
+        "importance": 4,
+        "description": "537–538 siege during the Gothic War of 535–554",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11364373,
+        "name": "Gregory I",
+        "date_start": 540,
+        "date_end": 604,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "64th Bishop of Rome, Head of the Roman Catholic Church from 590 to 604",
+        "role": ""
+      },
+      {
+        "id": 6503279,
+        "name": "Khosrow I",
+        "date_start": 501,
+        "date_end": 579,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "Shahanshah of the Sasanian Empire from 531 to 579",
+        "role": "occupation"
+      },
+      {
+        "id": 12997003,
+        "name": "Theodora",
+        "date_start": 500,
+        "date_end": 548,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "Byzantine empress from 527 to 548",
+        "role": ""
+      }
+    ],
+    "event_total": 11,
+    "person_total": 20,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 550,
+    "period_end": 599,
+    "events": [
+      {
+        "id": 28499,
+        "name": "smuggling of silkworm eggs into the Byzantine Empire",
+        "date_start": 552,
+        "date_end": 552,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "6th century event, in which two Nestorian monks smuggled silkworm from China into the Byzantine Empire, leading to the establishment of an indigenous Byzantine silk industry",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 22471,
+        "name": "Goguryeo–Sui War",
+        "date_start": 598,
+        "date_end": 614,
+        "importance_score": 84,
+        "importance": 5,
+        "description": "conflict between Sui dynasty of China and Goguryeo Kingdom of Korea",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29851,
+        "name": "Suiko period",
+        "date_start": 592,
+        "date_end": 628,
+        "importance_score": 75,
+        "importance": 4,
+        "description": "period of Japanese history",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1623738,
+        "name": "Muhammad",
+        "date_start": 571,
+        "date_end": 632,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Arabian political leader and the founder of Islam (c. 570–632)",
+        "role": "occupation"
+      },
+      {
+        "id": 3262437,
+        "name": "Abu Bakr",
+        "date_start": 573,
+        "date_end": 634,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "1st Rashidun Caliph and father-in-law of Muhammad",
+        "role": "occupation"
+      },
+      {
+        "id": 8118184,
+        "name": "Alī ibn Abī Ṭālib",
+        "date_start": 599,
+        "date_end": 661,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "4th Rashidun Caliph (r. 656–661) and first Shia Imam",
+        "role": "statesman"
+      }
+    ],
+    "event_total": 7,
+    "person_total": 61,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 600,
+    "period_end": 649,
+    "events": [
+      {
+        "id": 8763,
+        "name": "Battle of Yamama",
+        "date_start": 632,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "battle fought in 632",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 14901,
+        "name": "Muhammad's first revelation",
+        "date_start": 610,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "foundational event in the Islamic religion, traditionally dated to 610 CE at the Cave of Hira",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30378,
+        "name": "Muhammad in Medina",
+        "date_start": 622,
+        "date_end": 632,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "life of the founder of Islam from the Hijra until his death",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 8125226,
+        "name": "Mu'awiya I",
+        "date_start": 603,
+        "date_end": 680,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "founder and first caliph of the Umayyad Caliphate (r. 661–680)",
+        "role": "occupation"
+      },
+      {
+        "id": 9746368,
+        "name": "Husayn ibn Ali",
+        "date_start": 626,
+        "date_end": 680,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "grandson of Muhammad and the 3rd shia Imam (626–680)",
+        "role": ""
+      },
+      {
+        "id": 13113917,
+        "name": "Aisha",
+        "date_start": 605,
+        "date_end": 678,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Muhammad's third wife (c. 613/614 – 678)",
+        "role": ""
+      }
+    ],
+    "event_total": 91,
+    "person_total": 57,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 650,
+    "period_end": 699,
+    "events": [
+      {
+        "id": 20573,
+        "name": "Siege of Uthman",
+        "date_start": 656,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "event leading to Caliph Uthman's assassination",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29238,
+        "name": "assassination of Ali",
+        "date_start": 661,
+        "date_end": 661,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Fourth Rashidun and first Shia Imam caliph was assassinated by a Kharijite called Abd al-Rahman ibn 'Amr ibn Muljam al-Muradi on 26 January 661, at the Great Mosque of Kufah in present-day Iraq",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19797,
+        "name": "Battle of Karbala",
+        "date_start": 680,
+        "date_end": null,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "battle in October 680 between the army of Ubayd Allah ibn Ziyad and al-Husayn ibn Ali",
+        "latitude": 32.6166667,
+        "longitude": 44.0333333
+      }
+    ],
+    "persons": [
+      {
+        "id": 3250494,
+        "name": "John of Damascus",
+        "date_start": 675,
+        "date_end": 749,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Christian monk, priest, hymnographer and apologist (675/6-749)",
+        "role": "occupation"
+      },
+      {
+        "id": 3256773,
+        "name": "Saint Boniface",
+        "date_start": 675,
+        "date_end": 754,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "missionary who propagated Christianity in the Frankish Empire",
+        "role": "occupation"
+      },
+      {
+        "id": 11374709,
+        "name": "Al-Walid I",
+        "date_start": 668,
+        "date_end": 715,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "Umayyad caliph",
+        "role": ""
+      }
+    ],
+    "event_total": 26,
+    "person_total": 37,
+    "latitude": 32.6166667,
+    "longitude": 44.0333333,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 700,
+    "period_end": 749,
+    "events": [
+      {
+        "id": 17769,
+        "name": "succession to Muhammad",
+        "date_start": 700,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "7th century CE succession crisis following the death of Muhammad, causing the Sunni–Shia schism in Islam",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 26671,
+        "name": "Abbasid Revolution",
+        "date_start": 746,
+        "date_end": 750,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "overthrow of the Umayyad Caliphate by the Abbasids in 750",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 11473,
+        "name": "Umayyad conquest of Hispania",
+        "date_start": 711,
+        "date_end": 726,
+        "importance_score": 91,
+        "importance": 5,
+        "description": "war resulting in the destruction of the Visigothic Kingdom and the expansion of the Umayyad Caliphate (711–718)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6494944,
+        "name": "Charlemagne",
+        "date_start": 748,
+        "date_end": 814,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "king of Franks, regarded as the first Holy Roman Emperor (747–814)",
+        "role": "occupation"
+      },
+      {
+        "id": 6503927,
+        "name": "Padmasambhava",
+        "date_start": 717,
+        "date_end": 762,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "8th-century Buddhist Lama",
+        "role": "occupation"
+      },
+      {
+        "id": 8276172,
+        "name": "Hafs",
+        "date_start": 709,
+        "date_end": 796,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "primary transmitter of a canonical method of Qur'an recitation (706–796)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 30,
+    "person_total": 35,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 750,
+    "period_end": 799,
+    "events": [
+      {
+        "id": 19674,
+        "name": "Battle of the Zab",
+        "date_start": 750,
+        "date_end": null,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "750 battle in Iraq",
+        "latitude": 35.9911,
+        "longitude": 43.3436
+      },
+      {
+        "id": 25416,
+        "name": "Saxon Wars",
+        "date_start": 772,
+        "date_end": 804,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "campaigns and insurrections (772–804) between the Carolingian Empire and Saxons in what is now northwestern Germany; resulted in the incorporation of Saxony into the Frankish realm and their forcible ",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28790,
+        "name": "Viking Age",
+        "date_start": 793,
+        "date_end": 1066,
+        "importance_score": 82,
+        "importance": 5,
+        "description": "the period of European history characterised by Viking raids and trading",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11372665,
+        "name": "Kūkai",
+        "date_start": 774,
+        "date_end": 835,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Japanese Buddhist monk and calligrapher, the founder of the Shingon school (774–835)",
+        "role": ""
+      },
+      {
+        "id": 9747565,
+        "name": "Leo III",
+        "date_start": 750,
+        "date_end": 816,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "Pope of the Catholic Church from 795 to 816 (born 750–816)",
+        "role": ""
+      },
+      {
+        "id": 9747554,
+        "name": "Harun al-Rashid",
+        "date_start": 766,
+        "date_end": 809,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "5th Abbasid caliph (r. 786–809)",
+        "role": ""
+      }
+    ],
+    "event_total": 18,
+    "person_total": 27,
+    "latitude": 35.9911,
+    "longitude": 43.3436,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 800,
+    "period_end": 849,
+    "events": [
+      {
+        "id": 11469,
+        "name": "Battle of Fontenoy",
+        "date_start": 841,
+        "date_end": null,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "841 middle ages battle",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30459,
+        "name": "Iranian Intermezzo",
+        "date_start": 821,
+        "date_end": 1055,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "period in history which saw the rise of various Iranian dynasties in the Iranian plateau",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 17726,
+        "name": "Fourth Fitna",
+        "date_start": 811,
+        "date_end": 819,
+        "importance_score": 84,
+        "importance": 5,
+        "description": "conflict (811–813) between the brothers al-Amin and al-Ma'mun over the succession to the throne of the Abbasid Caliphate; provincial turmoil continued until the 830s",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11373196,
+        "name": "Muḥammad ibn Ismaeel al-Bukhārī",
+        "date_start": 810,
+        "date_end": 870,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Persian Islamic scholar (810-870)",
+        "role": ""
+      },
+      {
+        "id": 1637088,
+        "name": "Saint Cyril the Philosopher",
+        "date_start": 827,
+        "date_end": 869,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "Christian missionary to the Slavs (9th c.)",
+        "role": "occupation"
+      },
+      {
+        "id": 4879233,
+        "name": "Muslim ibn al-Ḥajjāj",
+        "date_start": 817,
+        "date_end": 875,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Arab Muslim hadith scholar (821–875)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 10,
+    "person_total": 43,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 850,
+    "period_end": 899,
+    "events": [
+      {
+        "id": 25475,
+        "name": "Huang Chao Rebellion",
+        "date_start": 875,
+        "date_end": 884,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "874–884 uprising against Tang rule in China",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28100,
+        "name": "The Occultation",
+        "date_start": 874,
+        "date_end": 874,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "in Shia Islam, the doctrine that a messianic figure (Mahdi) was born, has disappeared, and will one day return; according to Twelvers, this is the 12th Imam, going into Occultation in c. 874",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 14448,
+        "name": "Battle of Edington",
+        "date_start": 878,
+        "date_end": null,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "878 decisive battle between the Anglo-Saxons and the Vikings",
+        "latitude": 51.277,
+        "longitude": -2.106
+      }
+    ],
+    "persons": [
+      {
+        "id": 4884078,
+        "name": "Abu al-Hasan al-Ash'ari",
+        "date_start": 873,
+        "date_end": 935,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Muslim theologian (874–936)",
+        "role": "occupation"
+      },
+      {
+        "id": 10009004,
+        "name": "Abu Mansur al-Maturidi",
+        "date_start": 893,
+        "date_end": 944,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Persian Muslim theologian (853–944)",
+        "role": ""
+      },
+      {
+        "id": 13199215,
+        "name": "Muhammad al-Mahdi",
+        "date_start": 869,
+        "date_end": null,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "twelfth and last Imam in Shia Twelver of Islam",
+        "role": ""
+      }
+    ],
+    "event_total": 10,
+    "person_total": 30,
+    "latitude": 51.277,
+    "longitude": -2.106,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 900,
+    "period_end": 949,
+    "events": [
+      {
+        "id": 14071,
+        "name": "Battle of Pressburg",
+        "date_start": 907,
+        "date_end": null,
+        "importance_score": 78,
+        "importance": 4,
+        "description": "battle",
+        "latitude": 48.1447222,
+        "longitude": 17.1127778
+      },
+      {
+        "id": 8963,
+        "name": "Battle of Bach Dang River",
+        "date_start": 938,
+        "date_end": null,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "naval battle between Tĩnh Hải quân and Southern Han on the Bạch Đằng River",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 26721,
+        "name": "Siege of Chartres",
+        "date_start": 911,
+        "date_end": null,
+        "importance_score": 70,
+        "importance": 4,
+        "description": "911 Viking invasion in Burgundy – repelled by Frankish forces",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3250270,
+        "name": "Otto I the Great",
+        "date_start": 912,
+        "date_end": 973,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Holy Roman Emperor from 962 to 973",
+        "role": "occupation"
+      },
+      {
+        "id": 4939156,
+        "name": "Rajaraja I",
+        "date_start": 947,
+        "date_end": 1014,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Chola Emperor",
+        "role": ""
+      },
+      {
+        "id": 4879494,
+        "name": "Hugh Capet of France",
+        "date_start": 940,
+        "date_end": 996,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "King of the Franks",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 7,
+    "person_total": 42,
+    "latitude": 48.1447222,
+    "longitude": 17.1127778,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 950,
+    "period_end": 999,
+    "events": [
+      {
+        "id": 16233,
+        "name": "Fatimid conquest of Egypt",
+        "date_start": 969,
+        "date_end": 969,
+        "importance_score": 83,
+        "importance": 5,
+        "description": "10th-century conquest",
+        "latitude": 30.005,
+        "longitude": 31.2375
+      },
+      {
+        "id": 17728,
+        "name": "Rus'–Byzantine War",
+        "date_start": 988,
+        "date_end": 989,
+        "importance_score": 75,
+        "importance": 4,
+        "description": "988–989 war",
+        "latitude": 44.611349,
+        "longitude": 33.492508
+      },
+      {
+        "id": 25350,
+        "name": "Battle of Lechfeld",
+        "date_start": 955,
+        "date_end": null,
+        "importance_score": 73,
+        "importance": 4,
+        "description": "German war victory over Hungary in August, 955",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4879274,
+        "name": "Tughril I",
+        "date_start": 990,
+        "date_end": 1063,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Founder of the Seljuk Empire (1037–1063)",
+        "role": "occupation"
+      },
+      {
+        "id": 11363858,
+        "name": "Ibn al-Haytham",
+        "date_start": 965,
+        "date_end": 1038,
+        "importance_score": 86,
+        "importance": 5,
+        "description": "Persian physicist, mathematician and astronomer (c. 965 – c. 1040)",
+        "role": ""
+      },
+      {
+        "id": 1623840,
+        "name": "Vladimir the Great",
+        "date_start": 958,
+        "date_end": 1015,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Grand Prince of Kiev",
+        "role": "monarch"
+      }
+    ],
+    "event_total": 13,
+    "person_total": 40,
+    "latitude": 30.005,
+    "longitude": 31.2375,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1000,
+    "period_end": 1049,
+    "events": [
+      {
+        "id": 31782,
+        "name": "History of the papacy from 1048 to 1257",
+        "date_start": 1048,
+        "date_end": 1257,
+        "importance_score": 91,
+        "importance": 5,
+        "description": "era in the history of the papacy",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 30513,
+        "name": "Mesoamerican Postclassic period",
+        "date_start": 1000,
+        "date_end": 1600,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "historic period",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28108,
+        "name": "High Middle Ages",
+        "date_start": 1000,
+        "date_end": 1300,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "period in European history from 1000-1250 CE",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 8118009,
+        "name": "Rashi",
+        "date_start": 1040,
+        "date_end": 1105,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "French rabbi and commentator (1040–1105)",
+        "role": "occupation"
+      },
+      {
+        "id": 3250049,
+        "name": "Urban II",
+        "date_start": 1035,
+        "date_end": 1099,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "11th century pope and initiator of the Crusades",
+        "role": "occupation"
+      },
+      {
+        "id": 6506910,
+        "name": "Wang Anshi",
+        "date_start": 1021,
+        "date_end": 1086,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Song Dynasty chancellor and poet (1021-1086)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 12,
+    "person_total": 41,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1050,
+    "period_end": 1099,
+    "events": [
+      {
+        "id": 11026,
+        "name": "Battle of Hastings",
+        "date_start": 1066,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "battle which occurred on 14 October 1066",
+        "latitude": 50.9166667,
+        "longitude": 0.4833333
+      },
+      {
+        "id": 31215,
+        "name": "England in the High Middle Ages",
+        "date_start": 1066,
+        "date_end": 1216,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "period in English history",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 27403,
+        "name": "Battle of Antioch",
+        "date_start": 1098,
+        "date_end": null,
+        "importance_score": 86,
+        "importance": 5,
+        "description": "1098 battle, part of the First Crusade",
+        "latitude": 36.2047222,
+        "longitude": 36.1816667
+      }
+    ],
+    "persons": [
+      {
+        "id": 9752255,
+        "name": "Abdul Qadir Gilani",
+        "date_start": 1078,
+        "date_end": 1166,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "Sunni Muslim preacher, mystic and theologian (1078–1166)",
+        "role": ""
+      },
+      {
+        "id": 12988823,
+        "name": "Al-Ghazali",
+        "date_start": 1058,
+        "date_end": 1111,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Persian Sunni Muslim scholar and mystic (c.1058–1111)",
+        "role": ""
+      },
+      {
+        "id": 6506575,
+        "name": "Suryavarman II",
+        "date_start": 1094,
+        "date_end": 1150,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "Cambodian king (1094-1150)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 21,
+    "person_total": 37,
+    "latitude": 50.9166667,
+    "longitude": 0.4833333,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1100,
+    "period_end": 1149,
+    "events": [
+      {
+        "id": 17445,
+        "name": "Battle of São Mamede",
+        "date_start": 1128,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "1128 battle establishing Portugal's independence",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19191,
+        "name": "Almohad conquest of Marrakesh",
+        "date_start": 1146,
+        "date_end": 1147,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "1146–1147 siege",
+        "latitude": 31.62947,
+        "longitude": -7.98108
+      },
+      {
+        "id": 28174,
+        "name": "Proto-Renaissance",
+        "date_start": 1100,
+        "date_end": 1200,
+        "importance_score": 84,
+        "importance": 5,
+        "description": "cultural movement preceding the Italian Renaissance",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11371542,
+        "name": "Eleanor of Aquitaine",
+        "date_start": 1122,
+        "date_end": 1204,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "Queen consort of France; Queen consort of England; suo jure Duchess of Aquitaine; patroness",
+        "role": ""
+      },
+      {
+        "id": 11418751,
+        "name": "Muhammad of Ghor",
+        "date_start": 1144,
+        "date_end": 1206,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "ruler of Ghurid Sultanate from 1173 to 1206",
+        "role": ""
+      },
+      {
+        "id": 12998109,
+        "name": "Minamoto no Yoritomo",
+        "date_start": 1147,
+        "date_end": 1199,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "1st shogun of the Kamakura shogunate (1147–1199)",
+        "role": ""
+      }
+    ],
+    "event_total": 20,
+    "person_total": 54,
+    "latitude": 31.62947,
+    "longitude": -7.98108,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1150,
+    "period_end": 1199,
+    "events": [
+      {
+        "id": 24321,
+        "name": "Siege of Tiberias",
+        "date_start": 1187,
+        "date_end": 1187,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "1187 siege",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 25588,
+        "name": "Siege of Jerusalem",
+        "date_start": 1187,
+        "date_end": 1187,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "1187 siege that marks the end of Christian dominion over the Greater Jerusalem",
+        "latitude": 31.7788889,
+        "longitude": 35.2255556
+      },
+      {
+        "id": 29842,
+        "name": "Saladin in Egypt",
+        "date_start": 1171,
+        "date_end": 1193,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "reign of Saladin in Egypt",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 13012933,
+        "name": "Francis of Assisi",
+        "date_start": 1182,
+        "date_end": 1226,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Italian Catholic saint, friar, deacon and preacher and founder of the Franciscan Order (1181/2–1226)",
+        "role": ""
+      },
+      {
+        "id": 9747462,
+        "name": "Innocent III",
+        "date_start": 1160,
+        "date_end": 1216,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "Head of the Catholic Church from 1198 to 1216",
+        "role": ""
+      },
+      {
+        "id": 4879080,
+        "name": "Frederick II, Holy Roman Emperor",
+        "date_start": 1194,
+        "date_end": 1250,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "King of Sicily, Holy Roman Emperor (1194–1250, 1220–1250)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 31,
+    "person_total": 66,
+    "latitude": 31.7788889,
+    "longitude": 35.2255556,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1200,
+    "period_end": 1249,
+    "events": [
+      {
+        "id": 15294,
+        "name": "Q6151929",
+        "date_start": 1206,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 17784,
+        "name": "Mongol invasion of China",
+        "date_start": 1205,
+        "date_end": 1279,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "13th century conquest",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29549,
+        "name": "Mongol invasion of Europe",
+        "date_start": 1223,
+        "date_end": 1242,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "13th century conquests by the Mongol Empire",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1696059,
+        "name": "Nizamuddin Auliya",
+        "date_start": 1238,
+        "date_end": 1325,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "One of the most prominent Indian Sufi Saint, lived most of his life around Delhi. Spiritual guide to Amir Khusrau",
+        "role": "occupation"
+      },
+      {
+        "id": 12989829,
+        "name": "Edward I of England",
+        "date_start": 1239,
+        "date_end": 1307,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "King of England from 1272 to 1307",
+        "role": ""
+      },
+      {
+        "id": 12999791,
+        "name": "Al-Musta'sim",
+        "date_start": 1213,
+        "date_end": 1258,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "37th and last Abbasid Caliph (r. 1242–1258)",
+        "role": ""
+      }
+    ],
+    "event_total": 67,
+    "person_total": 58,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1250,
+    "period_end": 1299,
+    "events": [
+      {
+        "id": 31616,
+        "name": "rise of the Ottoman Empire",
+        "date_start": 1299,
+        "date_end": 1453,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Ottoman Empire from its start in 1299 to 1453",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 11420,
+        "name": "Battle of Xiangyang",
+        "date_start": 1267,
+        "date_end": 1273,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "battles during Mongol invasion of China (1267–1273)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 11100,
+        "name": "Siege of Baghdad",
+        "date_start": 1258,
+        "date_end": 1258,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "1258 Mongol conquest of the Abbasid Caliphate",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4883707,
+        "name": "Mansa Musa",
+        "date_start": 1280,
+        "date_end": 1337,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "14th-century ruler of the Mali Empire",
+        "role": "occupation"
+      },
+      {
+        "id": 9743584,
+        "name": "Osman I",
+        "date_start": 1258,
+        "date_end": 1326,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founder of the Ottoman Empire (died 1323/4)",
+        "role": ""
+      },
+      {
+        "id": 1642143,
+        "name": "Ibn Taymiyyah",
+        "date_start": 1263,
+        "date_end": 1328,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "Islamic scholar, jurist and philosopher (1263–1328)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 34,
+    "person_total": 49,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1300,
+    "period_end": 1349,
+    "events": [
+      {
+        "id": 12708,
+        "name": "Q11945460",
+        "date_start": 1348,
+        "date_end": null,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 21996,
+        "name": "Siege of Caffa",
+        "date_start": 1346,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "1346 siege of Genoese colony Caffa",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 29592,
+        "name": "Pax Mongolica",
+        "date_start": 1300,
+        "date_end": 1400,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "period of social, cultural, and economic stability after the conquests of the Mongol Empire in Eurasia during in the 13th and 14th centuries",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 13003357,
+        "name": "Taejo of Joseon",
+        "date_start": 1335,
+        "date_end": 1408,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "the first king of Joseon Dynasty in Korean history",
+        "role": ""
+      },
+      {
+        "id": 4872631,
+        "name": "Hongwu Emperor",
+        "date_start": 1328,
+        "date_end": 1398,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "founding emperor of China's Ming dynasty; ruled 1368–1398",
+        "role": "occupation"
+      },
+      {
+        "id": 3258462,
+        "name": "Catherine of Siena",
+        "date_start": 1347,
+        "date_end": 1380,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Italian Dominican saint (1347-1380)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 26,
+    "person_total": 52,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1350,
+    "period_end": 1399,
+    "events": [
+      {
+        "id": 24866,
+        "name": "Serbian–Ottoman Wars",
+        "date_start": 1352,
+        "date_end": 1913,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "part of the Ottoman wars in Europe",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 26686,
+        "name": "Treaty of Windsor",
+        "date_start": 1387,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16712,
+        "name": "Q136893006",
+        "date_start": 1354,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1624195,
+        "name": "Sejong the Great",
+        "date_start": 1397,
+        "date_end": 1450,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "fourth king of Joseon (Korea), creator of Hangul",
+        "role": "occupation"
+      },
+      {
+        "id": 8117726,
+        "name": "Yongle Emperor",
+        "date_start": 1360,
+        "date_end": 1424,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "emperor of Ming dynasty China from 1402 to 1424",
+        "role": "occupation"
+      },
+      {
+        "id": 4880751,
+        "name": "Pachacútec",
+        "date_start": 1380,
+        "date_end": 1460,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "11th Inca Emperor",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 35,
+    "person_total": 57,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1400,
+    "period_end": 1449,
+    "events": [
+      {
+        "id": 7966,
+        "name": "Battle of Orléans",
+        "date_start": 1429,
+        "date_end": null,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 17478,
+        "name": "Conquest of Ceuta",
+        "date_start": 1415,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Portuguese conquest of Ceuta (1415)",
+        "latitude": 35.8897557,
+        "longitude": -5.3064337
+      },
+      {
+        "id": 27601,
+        "name": "Hungarian–Ottoman War",
+        "date_start": 1437,
+        "date_end": 1444,
+        "importance_score": 80,
+        "importance": 4,
+        "description": "1437–1444 war",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4873048,
+        "name": "Mehmed II",
+        "date_start": 1432,
+        "date_end": 1481,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "seventh Sultan of the Ottoman Empire (1444–1446, 1451–1481)",
+        "role": "occupation"
+      },
+      {
+        "id": 11371528,
+        "name": "Lorenzo de' Medici",
+        "date_start": 1449,
+        "date_end": 1492,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Italian politician and humanist",
+        "role": ""
+      },
+      {
+        "id": 12993926,
+        "name": "Alexander VI",
+        "date_start": 1431,
+        "date_end": 1503,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "pope of the Catholic Church 1492–1503 from the Borgia family",
+        "role": ""
+      }
+    ],
+    "event_total": 33,
+    "person_total": 66,
+    "latitude": 35.8897557,
+    "longitude": -5.3064337,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1450,
+    "period_end": 1499,
+    "events": [
+      {
+        "id": 28179,
+        "name": "Spanish colonization of the Americas",
+        "date_start": 1493,
+        "date_end": 1898,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "overseas expansion under the Crown of Castile",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28984,
+        "name": "first voyage of Christopher Columbus",
+        "date_start": 1492,
+        "date_end": 1493,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "voyage that led to the discovery of America",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28239,
+        "name": "Tudor period",
+        "date_start": 1485,
+        "date_end": 1603,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "historical era in England coinciding with the rule of the Tudor dynasty",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3252296,
+        "name": "Guru Nanak",
+        "date_start": 1469,
+        "date_end": 1539,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "First Sikh Guru and founder of Sikhism",
+        "role": "occupation"
+      },
+      {
+        "id": 12988798,
+        "name": "Suleiman the Magnificent",
+        "date_start": 1494,
+        "date_end": 1566,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "the tenth and greatest Sultan of Ottoman Empire (1520–1566)",
+        "role": ""
+      },
+      {
+        "id": 13016711,
+        "name": "Babur",
+        "date_start": 1483,
+        "date_end": 1530,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "founder of the Mughal Empire (1526–1530)",
+        "role": ""
+      }
+    ],
+    "event_total": 44,
+    "person_total": 148,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "medieval",
+    "era_name": "Medieval Period",
+    "era_name_ko": "중세"
+  },
+  {
+    "period_start": 1500,
+    "period_end": 1549,
+    "events": [
+      {
+        "id": 28778,
+        "name": "Age of Discovery",
+        "date_start": 1500,
+        "date_end": 1800,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "period of European global exploration from early 15th century to 17th century",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 25745,
+        "name": "Battle of Cajamarca",
+        "date_start": 1532,
+        "date_end": null,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "1532 battle",
+        "latitude": -7.1575,
+        "longitude": -78.5175
+      },
+      {
+        "id": 19768,
+        "name": "Fall of Tenochtitlan",
+        "date_start": 1521,
+        "date_end": 1521,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "investment, capture and fall of Tenochtitlan by the Spanish Empire",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3250093,
+        "name": "Charles V",
+        "date_start": 1500,
+        "date_end": 1558,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Holy Roman Emperor from 1519 to 1556 (1500–1558)",
+        "role": "monarch"
+      },
+      {
+        "id": 6497514,
+        "name": "William the Silent",
+        "date_start": 1533,
+        "date_end": 1584,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Dutch statesman and revolt leader (1533–1584)",
+        "role": "occupation"
+      },
+      {
+        "id": 4872557,
+        "name": "Elizabeth I of England",
+        "date_start": 1533,
+        "date_end": 1603,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "Queen of England and Ireland from 1558 to 1603",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 113,
+    "person_total": 132,
+    "latitude": -7.1575,
+    "longitude": -78.5175,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1550,
+    "period_end": 1599,
+    "events": [
+      {
+        "id": 25316,
+        "name": "Dutch Revolt",
+        "date_start": 1568,
+        "date_end": 1648,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "1560s–80s revolt against Habsburg King Philip II of Spain",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8121,
+        "name": "Eighty Years' War",
+        "date_start": 1568,
+        "date_end": 1648,
+        "importance_score": 91,
+        "importance": 5,
+        "description": "16th- and 17th-century Dutch revolt against the Habsburgs",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19980,
+        "name": "Union of Lublin",
+        "date_start": 1569,
+        "date_end": null,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "1569 union of Poland and Lithuania",
+        "latitude": 51.25,
+        "longitude": 22.5666667
+      }
+    ],
+    "persons": [
+      {
+        "id": 3249980,
+        "name": "Armand-Jean du Plessis, duc de Richelieu",
+        "date_start": 1585,
+        "date_end": 1642,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "French clergyman, cardinal, noble and statesman (1585-1642)",
+        "role": "occupation"
+      },
+      {
+        "id": 4873418,
+        "name": "Gustavus Adolphus of Sweden",
+        "date_start": 1594,
+        "date_end": 1632,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Swedish king (regent 1611–1632) (1594–1632)",
+        "role": "occupation"
+      },
+      {
+        "id": 13000171,
+        "name": "Nurhaci",
+        "date_start": 1559,
+        "date_end": 1626,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Jurchen chieftain of Later Jin, founder of Qing Dynasty (1559 - 1626)",
+        "role": ""
+      }
+    ],
+    "event_total": 68,
+    "person_total": 123,
+    "latitude": 51.25,
+    "longitude": 22.5666667,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1600,
+    "period_end": 1649,
+    "events": [
+      {
+        "id": 11905,
+        "name": "transition from Ming to Qing",
+        "date_start": 1616,
+        "date_end": 1683,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "transition between two major dynasties in Chinese history between 1618 and 1683",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 17820,
+        "name": "Battle of Shanhai Pass",
+        "date_start": 1644,
+        "date_end": null,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "1644 battle in China",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31618,
+        "name": "Stuart period",
+        "date_start": 1603,
+        "date_end": 1714,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "period in British history coinciding with the reign of the House of Stuart",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6500134,
+        "name": "John Bunyan",
+        "date_start": 1628,
+        "date_end": 1688,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "English Christian writer and preacher (1628-1688)",
+        "role": "occupation"
+      },
+      {
+        "id": 3258834,
+        "name": "Shivaji",
+        "date_start": 1627,
+        "date_end": 1680,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Indian Maratha king and founder of the Maratha Empire",
+        "role": "occupation"
+      },
+      {
+        "id": 4872583,
+        "name": "Louis XIV of France",
+        "date_start": 1638,
+        "date_end": 1715,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "King of France from 1643 to 1715 (1638–1715)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 93,
+    "person_total": 110,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1650,
+    "period_end": 1699,
+    "events": [
+      {
+        "id": 13904,
+        "name": "Second Hundred Years' War",
+        "date_start": 1689,
+        "date_end": null,
+        "importance_score": 93,
+        "importance": 5,
+        "description": "series of military conflicts between Great Britain and France that occurred from 1689 to 1815",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8298,
+        "name": "French and Indian Wars",
+        "date_start": 1688,
+        "date_end": 1763,
+        "importance_score": 90,
+        "importance": 5,
+        "description": "1688-1763 series of military conflicts in North America",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16697,
+        "name": "Q136418240",
+        "date_start": 1688,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3254315,
+        "name": "Robert Walpole",
+        "date_start": 1676,
+        "date_end": 1745,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "British statesman and art collector, 1st Earl of Orford (1676–1745)",
+        "role": "occupation"
+      },
+      {
+        "id": 8129393,
+        "name": "Baal Shem Tov",
+        "date_start": 1698,
+        "date_end": 1760,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Polish founder of Hasidic Judaism (1698–1760)",
+        "role": "occupation"
+      },
+      {
+        "id": 8159256,
+        "name": "Muhammad bin Saud",
+        "date_start": 1679,
+        "date_end": 1765,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "Founder of the Emirate of Diriyah and the Al Saud dynasty (1687–1765)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 48,
+    "person_total": 79,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1700,
+    "period_end": 1749,
+    "events": [
+      {
+        "id": 29678,
+        "name": "modern period",
+        "date_start": 1700,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "era from ca. 1500 until present",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16944,
+        "name": "Treaty of Union",
+        "date_start": 1706,
+        "date_end": null,
+        "importance_score": 92,
+        "importance": 5,
+        "description": "agreement in 1707 uniting England and Scotland into the Kingdom of Great Britain",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 8116,
+        "name": "Battle of Poltava",
+        "date_start": 1709,
+        "date_end": null,
+        "importance_score": 88,
+        "importance": 5,
+        "description": "decisive battle in the Great Northern War between Tsardom Russia and the Swedish Empire in 1709",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 1623781,
+        "name": "Thomas Jefferson",
+        "date_start": 1743,
+        "date_end": 1826,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "president of the United States from 1801 to 1809",
+        "role": "occupation"
+      },
+      {
+        "id": 1624161,
+        "name": "Benjamin Franklin",
+        "date_start": 1706,
+        "date_end": 1790,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "American polymath and statesman (1706–1790)",
+        "role": "occupation"
+      },
+      {
+        "id": 1623547,
+        "name": "George Washington",
+        "date_start": 1732,
+        "date_end": 1799,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Founding Father and first U.S. president; soldier and slave owner (1732–1799)",
+        "role": "politician"
+      }
+    ],
+    "event_total": 46,
+    "person_total": 182,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1750,
+    "period_end": 1799,
+    "events": [
+      {
+        "id": 29686,
+        "name": "decline of the Ottoman Empire",
+        "date_start": 1789,
+        "date_end": 1922,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "Ottoman Empire from 1789 to 1908",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 31469,
+        "name": "Industrial Revolution",
+        "date_start": 1760,
+        "date_end": 1820,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "transition to new manufacturing processes in Europe and the United States, in the 18th-19th centuries",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 19596,
+        "name": "Seven Years' War",
+        "date_start": 1756,
+        "date_end": 1763,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "global war among European powers (1756–1763)",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 3249736,
+        "name": "James Madison",
+        "date_start": 1751,
+        "date_end": 1836,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "President of the United States from 1809 to 1817",
+        "role": "occupation"
+      },
+      {
+        "id": 11371551,
+        "name": "Alexander Hamilton",
+        "date_start": 1757,
+        "date_end": 1804,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "American Founding Father and statesman (1755/1757–1804)",
+        "role": ""
+      },
+      {
+        "id": 12988644,
+        "name": "Napoleon",
+        "date_start": 1769,
+        "date_end": 1821,
+        "importance_score": 94,
+        "importance": 5,
+        "description": "French military leader, French Emperor 1804–1814 and again in 1815 (1769–1821)",
+        "role": ""
+      }
+    ],
+    "event_total": 135,
+    "person_total": 284,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "early_modern",
+    "era_name": "Early Modern",
+    "era_name_ko": "근세"
+  },
+  {
+    "period_start": 1800,
+    "period_end": 1849,
+    "events": [
+      {
+        "id": 16755,
+        "name": "Napoleonic Wars",
+        "date_start": 1803,
+        "date_end": 1815,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "1803–1815 wars involving the French Empire",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28103,
+        "name": "Victorian era",
+        "date_start": 1837,
+        "date_end": 1901,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "period of British history encompassing Queen Victoria's reign (1837–1901)",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16949,
+        "name": "Haitian Revolution",
+        "date_start": 1804,
+        "date_end": null,
+        "importance_score": 96,
+        "importance": 5,
+        "description": "1791 slave revolt in the French colony of Saint-Domingue",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 4872432,
+        "name": "Abraham Lincoln",
+        "date_start": 1809,
+        "date_end": 1865,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "President of the United States from 1861 to 1865 (1809–1865)",
+        "role": "occupation"
+      },
+      {
+        "id": 8120290,
+        "name": "Ludwig Boltzmann",
+        "date_start": 1844,
+        "date_end": 1906,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "Austrian physicist and philosopher (1844–1906)",
+        "role": "occupation"
+      },
+      {
+        "id": 6495064,
+        "name": "Victoria",
+        "date_start": 1819,
+        "date_end": 1901,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Queen of the United Kingdom from 1837 to 1901, Empress of India from 1876 to 1901 (1819–1901)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 193,
+    "person_total": 504,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "modern",
+    "era_name": "Modern Era",
+    "era_name_ko": "근대"
+  },
+  {
+    "period_start": 1850,
+    "period_end": 1899,
+    "events": [
+      {
+        "id": 31493,
+        "name": "New Imperialism",
+        "date_start": 1880,
+        "date_end": 1920,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "period of colonial expansion by European powers, the United States and the Empire of Japan",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 25468,
+        "name": "Geneva Convention of 1864",
+        "date_start": 1864,
+        "date_end": null,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "First Geneva Convention governing the sick and wounded members of armed forces, adopted in 1864",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28110,
+        "name": "Second Industrial Revolution",
+        "date_start": 1860,
+        "date_end": 1890,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "phase of rapid industrialization in the final third of the 19th century and the beginning of the 20th",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 11363659,
+        "name": "Adolf Hitler",
+        "date_start": 1889,
+        "date_end": 1945,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "dictator of Germany from 1933 to 1945, main instigator of World War II and leader of the Holocaust (1889–1945)",
+        "role": ""
+      },
+      {
+        "id": 1623667,
+        "name": "Mao Zedong",
+        "date_start": 1893,
+        "date_end": 1976,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "1st chairman of the Chinese Communist Party and founder of the People's Republic of China (1893–1976)",
+        "role": "politician"
+      },
+      {
+        "id": 3249721,
+        "name": "Harry S. Truman",
+        "date_start": 1884,
+        "date_end": 1972,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "president of the United States from 1945 to 1953; politician (1884–1972)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 229,
+    "person_total": 959,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "modern",
+    "era_name": "Modern Era",
+    "era_name_ko": "근대"
+  },
+  {
+    "period_start": 1900,
+    "period_end": 1949,
+    "events": [
+      {
+        "id": 5226,
+        "name": "Tripartite Pact",
+        "date_start": 1940,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "treaty establishing the Axis Powers of World War Two",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 5233,
+        "name": "Second Thirty Years' War",
+        "date_start": 1914,
+        "date_end": 1945,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "periodization scheme encompassing European wars from 1914 to 1945",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16700,
+        "name": "Q136445094",
+        "date_start": 1945,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 6507608,
+        "name": "Winston Churchill",
+        "date_start": 1940,
+        "date_end": 2010,
+        "importance_score": 99,
+        "importance": 5,
+        "description": "British politician (1940–2010)",
+        "role": "occupation"
+      },
+      {
+        "id": 8118057,
+        "name": "Mikhail Gorbachev",
+        "date_start": 1931,
+        "date_end": 2022,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "leader of the Soviet Union from 1985 to 1991 (1931–2022)",
+        "role": "occupation"
+      },
+      {
+        "id": 3363975,
+        "name": "Georgy Zhukov",
+        "date_start": 1913,
+        "date_end": 1994,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "",
+        "role": ""
+      }
+    ],
+    "event_total": 726,
+    "person_total": 2063,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "modern",
+    "era_name": "Modern Era",
+    "era_name_ko": "근대"
+  },
+  {
+    "period_start": 1950,
+    "period_end": 1999,
+    "events": [
+      {
+        "id": 14362,
+        "name": "Cold War (1962–1979)",
+        "date_start": 1962,
+        "date_end": 1979,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "phase of the Cold War between 1962–1979",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28453,
+        "name": "Third Industrial Revolution",
+        "date_start": 1950,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "phase of digitalization since latter half of the 20th century onwards",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 28857,
+        "name": "Space Age",
+        "date_start": 1957,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "historical period started in 1957",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 7310433,
+        "name": "Katalin Karikó",
+        "date_start": 1955,
+        "date_end": null,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "Hungarian biochemist",
+        "role": "occupation"
+      },
+      {
+        "id": 3870064,
+        "name": "Albert Bourla",
+        "date_start": 1961,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "Greek-American pharmaceutical executive",
+        "role": "occupation"
+      },
+      {
+        "id": 4064165,
+        "name": "Drew Weissman",
+        "date_start": 1959,
+        "date_end": null,
+        "importance_score": 95,
+        "importance": 5,
+        "description": "American physician-scientist (born 1959)",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 451,
+    "person_total": 931,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "contemporary",
+    "era_name": "Contemporary",
+    "era_name_ko": "현대"
+  },
+  {
+    "period_start": 2000,
+    "period_end": 2049,
+    "events": [
+      {
+        "id": 32259,
+        "name": "Industry 4.0",
+        "date_start": 2000,
+        "date_end": null,
+        "importance_score": 100,
+        "importance": 5,
+        "description": "4th Industrial revolution or current trend of automation and data exchange in manufacturing technologies 4.0",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 16368,
+        "name": "full-scale Russo-Ukrainian war",
+        "date_start": 2022,
+        "date_end": null,
+        "importance_score": 98,
+        "importance": 5,
+        "description": "full-scale invasion of Ukraine by Russia starting on 24 February 2022 , part of Russo-Ukrainian War",
+        "latitude": null,
+        "longitude": null
+      },
+      {
+        "id": 33007,
+        "name": "redefinition of SI base units",
+        "date_start": 2018,
+        "date_end": 2018,
+        "importance_score": 97,
+        "importance": 5,
+        "description": "revised definitions of the SI base units, adopted at the 26th General Conference on Weights and Measures (CGPM), that came into force on 20 May 2019",
+        "latitude": null,
+        "longitude": null
+      }
+    ],
+    "persons": [
+      {
+        "id": 5293878,
+        "name": "Erling Haaland",
+        "date_start": 2000,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Norwegian association football player (born 2000)",
+        "role": "occupation"
+      },
+      {
+        "id": 13770371,
+        "name": "Carlos Alcaraz",
+        "date_start": 2003,
+        "date_end": null,
+        "importance_score": 85,
+        "importance": 5,
+        "description": "Spanish tennis player",
+        "role": ""
+      },
+      {
+        "id": 5283157,
+        "name": "Alex Krizhevsky",
+        "date_start": 2000,
+        "date_end": null,
+        "importance_score": 81,
+        "importance": 5,
+        "description": "Canadian machine learning scientist",
+        "role": "occupation"
+      }
+    ],
+    "event_total": 293,
+    "person_total": 11,
+    "latitude": null,
+    "longitude": null,
+    "era_id": "contemporary",
+    "era_name": "Contemporary",
+    "era_name_ko": "현대"
+  }
+]

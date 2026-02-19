@@ -2,7 +2,6 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from app.schemas.category import Category
 from app.schemas.location import Location
 from app.schemas.source import Source
 
@@ -13,13 +12,48 @@ class PersonBase(BaseModel):
     birth_year: Optional[int] = None
     death_year: Optional[int] = None
     lifespan_display: str
+    role: Optional[str] = None
 
 
 class Person(PersonBase):
     """Person for list view."""
     id: int
-    category: Optional[Category] = None
+    wikidata_id: Optional[str] = None
     birthplace: Optional[Location] = None
+
+    class Config:
+        from_attributes = True
+
+
+class PersonDetailInfo(BaseModel):
+    """Detail info from person_details table."""
+    slug: Optional[str] = None
+    biography: Optional[str] = None
+    biography_ko: Optional[str] = None
+    biography_ja: Optional[str] = None
+    biography_source: Optional[str] = None
+    biography_source_url: Optional[str] = None
+    image_url: Optional[str] = None
+    wikipedia_url: Optional[str] = None
+    birth_date_precision: Optional[str] = "year"
+    death_date_precision: Optional[str] = "year"
+    era: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class PersonName(BaseModel):
+    """Person alias/name entry."""
+    id: int
+    name: str
+    name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
+    language: str = "en"
+    name_type: str = "official"
+    is_primary: bool = False
+    valid_from: Optional[int] = None
+    valid_until: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -27,16 +61,17 @@ class Person(PersonBase):
 
 class PersonDetail(Person):
     """Full person details for wiki panel."""
-    slug: str
-    name_original: Optional[str] = None
-    biography: Optional[str] = None
-    biography_ko: Optional[str] = None
-    birth_date_precision: str = "year"
-    death_date_precision: str = "year"
+    name_ja: Optional[str] = None
+    certainty: Optional[str] = None
+    floruit_start: Optional[int] = None
+    floruit_end: Optional[int] = None
     deathplace: Optional[Location] = None
+    details: Optional[PersonDetailInfo] = None
+    names: list[PersonName] = []
     sources: list[Source] = []
-    image_url: Optional[str] = None
-    wikipedia_url: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 class PersonList(BaseModel):
@@ -66,3 +101,35 @@ class PersonRelationList(BaseModel):
     person_id: int
     relations: list[PersonRelation]
     total: int
+
+
+# Flow schemas
+class FlowEvent(BaseModel):
+    event_id: int
+    title: str
+    title_ko: Optional[str] = None
+    year: Optional[int] = None
+    year_end: Optional[int] = None
+    location: Optional[str] = None
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+    role: Optional[str] = None
+
+
+class FlowLocation(BaseModel):
+    id: int
+    name: str
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+
+
+class PersonFlow(BaseModel):
+    person_id: int
+    name: str
+    name_ko: Optional[str] = None
+    birth_year: Optional[int] = None
+    death_year: Optional[int] = None
+    birthplace: Optional[FlowLocation] = None
+    deathplace: Optional[FlowLocation] = None
+    flow: list[FlowEvent] = []
+    total_events: int = 0

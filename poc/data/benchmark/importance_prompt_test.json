@@ -1,0 +1,380 @@
+{
+  "A_simple": [
+    {
+      "event": "World War II",
+      "score": 98,
+      "reason": "World War II was a civilization-defining global conflict that caused unprecedented destruction, precipitated the Holocaust, the atomic age, and mass decolonization, led to the United Nations and the Cold War, and fundamentally reshaped the international political, economic, and social order.",
+      "full": {
+        "score": 98,
+        "reason": "World War II was a civilization-defining global conflict that caused unprecedented destruction, precipitated the Holocaust, the atomic age, and mass decolonization, led to the United Nations and the Cold War, and fundamentally reshaped the international political, economic, and social order."
+      }
+    },
+    {
+      "event": "French Revolution",
+      "score": 95,
+      "reason": "The French Revolution fundamentally transformed political order in Europe and beyond by overthrowing ancien régime monarchy, promoting republicanism, nationalism, secularism and modern concepts of rights and citizenship, and triggering the Napoleonic era and widespread social and legal reforms.",
+      "full": {
+        "score": 95,
+        "reason": "The French Revolution fundamentally transformed political order in Europe and beyond by overthrowing ancien régime monarchy, promoting republicanism, nationalism, secularism and modern concepts of rights and citizenship, and triggering the Napoleonic era and widespread social and legal reforms."
+      }
+    },
+    {
+      "event": "Fall of Constantinople",
+      "score": 94,
+      "reason": "The 1453 fall ended the Byzantine Empire, established Ottoman dominance in southeast Europe and the eastern Mediterranean, accelerated European search for new trade routes and helped catalyze the Renaissance through the migration of Greek scholars.",
+      "full": {
+        "score": 94,
+        "reason": "The 1453 fall ended the Byzantine Empire, established Ottoman dominance in southeast Europe and the eastern Mediterranean, accelerated European search for new trade routes and helped catalyze the Renaissance through the migration of Greek scholars."
+      }
+    },
+    {
+      "event": "Battle of Hastings",
+      "score": 95,
+      "reason": "The Norman victory led to the conquest of England, replacing Anglo-Saxon elites with Norman rule and transforming English language, law, governance and landholding while tying England more closely to continental Europe—changes that set the foundations for the later English/British state and its global impact.",
+      "full": {
+        "score": 95,
+        "reason": "The Norman victory led to the conquest of England, replacing Anglo-Saxon elites with Norman rule and transforming English language, law, governance and landholding while tying England more closely to continental Europe—changes that set the foundations for the later English/British state and its global impact."
+      }
+    },
+    {
+      "event": "American Revolution",
+      "score": 95,
+      "reason": "The American Revolution created the United States and a durable republican model that reshaped global politics, inspired subsequent revolutions, and had profound long-term effects on constitutional government and the decline of old imperial orders.",
+      "full": {
+        "score": 95,
+        "reason": "The American Revolution created the United States and a durable republican model that reshaped global politics, inspired subsequent revolutions, and had profound long-term effects on constitutional government and the decline of old imperial orders."
+      }
+    },
+    {
+      "event": "Battle of Thermopylae",
+      "score": 85,
+      "reason": "Although a tactical defeat, Thermopylae's heroic stand in 480 BCE galvanized Greek unity, delayed the Persian advance to enable Greek strategic victories (notably Salamis), and became a foundational symbol defending Greek autonomy and later Western identity.",
+      "full": {
+        "score": 85,
+        "reason": "Although a tactical defeat, Thermopylae's heroic stand in 480 BCE galvanized Greek unity, delayed the Persian advance to enable Greek strategic victories (notably Salamis), and became a foundational symbol defending Greek autonomy and later Western identity."
+      }
+    },
+    {
+      "event": "Siege of Hull",
+      "score": 60,
+      "reason": "As the first major action of the English Civil War, the 1642 Siege of Hull was a significant event that denied King Charles I access to a large arsenal and helped precipitate open conflict, shaping the early course of the war.",
+      "full": {
+        "score": 60,
+        "reason": "As the first major action of the English Civil War, the 1642 Siege of Hull was a significant event that denied King Charles I access to a large arsenal and helped precipitate open conflict, shaping the early course of the war."
+      }
+    },
+    {
+      "event": "Battle of Klyastitsy",
+      "score": 40,
+      "reason": "A tactically important Russian victory that checked Oudinot's advance toward St. Petersburg and had local strategic effects, but did not decisively alter the overall 1812 campaign or the course of the Napoleonic Wars.",
+      "full": {
+        "score": 40,
+        "reason": "A tactically important Russian victory that checked Oudinot's advance toward St. Petersburg and had local strategic effects, but did not decisively alter the overall 1812 campaign or the course of the Napoleonic Wars."
+      }
+    },
+    {
+      "event": "Battle of Waxhaws",
+      "score": 48,
+      "reason": "A localized but notorious engagement—Tarleton's alleged massacre at Waxhaws galvanized Patriot resistance and anti-British propaganda in the Southern colonies, but did not by itself change the overall course of the Revolutionary War.",
+      "full": {
+        "score": 48,
+        "reason": "A localized but notorious engagement—Tarleton's alleged massacre at Waxhaws galvanized Patriot resistance and anti-British propaganda in the Southern colonies, but did not by itself change the overall course of the Revolutionary War."
+      }
+    },
+    {
+      "event": "Battle of Kurowem (1831)",
+      "score": 20,
+      "reason": "A minor skirmish during the 1831 November Uprising with limited strategic impact and little long-term influence beyond local or regional consequences.",
+      "full": {
+        "score": 20,
+        "reason": "A minor skirmish during the 1831 November Uprising with limited strategic impact and little long-term influence beyond local or regional consequences."
+      }
+    },
+    {
+      "event": "Battle of Flint Creek",
+      "score": 15,
+      "reason": "The Battle of Flint Creek (1789) is an obscure, locally confined engagement with little evidence of lasting regional or global impact.",
+      "full": {
+        "score": 15,
+        "reason": "The Battle of Flint Creek (1789) is an obscure, locally confined engagement with little evidence of lasting regional or global impact."
+      }
+    },
+    {
+      "event": "Battle of Haram",
+      "score": 25,
+      "reason": "The Battle of Haram (1128) appears to have been an obscure, locally-focused military engagement with limited long-term consequences beyond its immediate regional context.",
+      "full": {
+        "score": 25,
+        "reason": "The Battle of Haram (1128) appears to have been an obscure, locally-focused military engagement with limited long-term consequences beyond its immediate regional context."
+      }
+    }
+  ],
+  "B_rubric": [
+    {
+      "event": "World War II",
+      "score": 100,
+      "reason": "World War II was a truly global conflict that caused unparalleled human loss, redrew borders, ended empires, spawned the UN and the Cold War, accelerated decolonization and technological and moral changes (including human-rights law and the nuclear age) whose effects continue to shape the world today.",
+      "full": {
+        "score": 100,
+        "g": 25,
+        "l": 25,
+        "s": 25,
+        "p": 25,
+        "reason": "World War II was a truly global conflict that caused unparalleled human loss, redrew borders, ended empires, spawned the UN and the Cold War, accelerated decolonization and technological and moral changes (including human-rights law and the nuclear age) whose effects continue to shape the world today."
+      }
+    },
+    {
+      "event": "French Revolution",
+      "score": 97,
+      "reason": "The French Revolution overthrew the ancien régime in France and, through the Napoleonic wars and the spread of revolutionary ideas, reshaped European politics, law, and notions of rights and nationalism with lasting global effects.",
+      "full": {
+        "score": 97,
+        "g": 23,
+        "l": 25,
+        "s": 24,
+        "p": 25,
+        "reason": "The French Revolution overthrew the ancien régime in France and, through the Napoleonic wars and the spread of revolutionary ideas, reshaped European politics, law, and notions of rights and nationalism with lasting global effects."
+      }
+    },
+    {
+      "event": "Fall of Constantinople",
+      "score": 91,
+      "reason": "The 1453 Ottoman capture ended the Byzantine Empire, shifted Mediterranean power to the Ottomans, prompted European search for new trade routes and intellectual migration to the West, and thus produced long-lasting political, cultural, and economic consequences across Europe and the Islamic world.",
+      "full": {
+        "score": 91,
+        "g": 22,
+        "l": 25,
+        "s": 20,
+        "p": 24,
+        "reason": "The 1453 Ottoman capture ended the Byzantine Empire, shifted Mediterranean power to the Ottomans, prompted European search for new trade routes and intellectual migration to the West, and thus produced long-lasting political, cultural, and economic consequences across Europe and the Islamic world."
+      }
+    },
+    {
+      "event": "Battle of Hastings",
+      "score": 80,
+      "reason": "The 1066 Battle of Hastings brought Norman rule to England, transforming its aristocracy, language, legal and administrative systems with effects lasting centuries and ultimately shaping English institutions and global Anglo-Norman influence.",
+      "full": {
+        "score": 80,
+        "g": 13,
+        "l": 24,
+        "s": 20,
+        "p": 23,
+        "reason": "The 1066 Battle of Hastings brought Norman rule to England, transforming its aristocracy, language, legal and administrative systems with effects lasting centuries and ultimately shaping English institutions and global Anglo-Norman influence."
+      }
+    },
+    {
+      "event": "American Revolution",
+      "score": 88,
+      "reason": "The American Revolution created the United States, directly affected millions in North America, and had long-lasting global effects by spreading republican and constitutional ideas that reshaped politics and inspired subsequent revolutions.",
+      "full": {
+        "score": 88,
+        "g": 22,
+        "l": 24,
+        "s": 18,
+        "p": 24,
+        "reason": "The American Revolution created the United States, directly affected millions in North America, and had long-lasting global effects by spreading republican and constitutional ideas that reshaped politics and inspired subsequent revolutions."
+      }
+    },
+    {
+      "event": "Battle of Thermopylae",
+      "score": 60,
+      "reason": "Though tactically a Persian victory with limited geographic reach, Thermopylae became an enduring symbol that helped galvanize Greek resistance, contributed indirectly to the survival of Greek civilization and its later cultural and political influence, and thus has long-lasting legacy beyond its immediate scale.",
+      "full": {
+        "score": 60,
+        "g": 12,
+        "l": 20,
+        "s": 12,
+        "p": 16,
+        "reason": "Though tactically a Persian victory with limited geographic reach, Thermopylae became an enduring symbol that helped galvanize Greek resistance, contributed indirectly to the survival of Greek civilization and its later cultural and political influence, and thus has long-lasting legacy beyond its immediate scale."
+      }
+    },
+    {
+      "event": "Siege of Hull",
+      "score": 37,
+      "reason": "A locally limited but politically symbolic opening action that precipitated the English Civil War and contributed to long-term constitutional changes in Britain, with little direct global impact.",
+      "full": {
+        "score": 37,
+        "g": 3,
+        "l": 15,
+        "s": 7,
+        "p": 12,
+        "reason": "A locally limited but politically symbolic opening action that precipitated the English Civil War and contributed to long-term constitutional changes in Britain, with little direct global impact."
+      }
+    },
+    {
+      "event": "Battle of Klyastitsy",
+      "score": 23,
+      "reason": "A localized 1812 engagement in the northern Russian theater that was a tactical Russian victory helping hinder French operations during the invasion but had limited global reach, long-term consequences, direct civilian impact, or paradigm-shifting effects.",
+      "full": {
+        "score": 23,
+        "g": 6,
+        "l": 8,
+        "s": 6,
+        "p": 3,
+        "reason": "A localized 1812 engagement in the northern Russian theater that was a tactical Russian victory helping hinder French operations during the invasion but had limited global reach, long-term consequences, direct civilian impact, or paradigm-shifting effects."
+      }
+    },
+    {
+      "event": "Battle of Waxhaws",
+      "score": 24,
+      "reason": "A localized 1780 engagement whose alleged massacre galvanized Patriot resistance in the Southern colonies and entered Revolutionary lore ('Tarleton's Quarter'), but had limited direct global reach, affected only hundreds, and did not by itself produce a major paradigm shift.",
+      "full": {
+        "score": 24,
+        "g": 4,
+        "l": 10,
+        "s": 4,
+        "p": 6,
+        "reason": "A localized 1780 engagement whose alleged massacre galvanized Patriot resistance in the Southern colonies and entered Revolutionary lore ('Tarleton's Quarter'), but had limited direct global reach, affected only hundreds, and did not by itself produce a major paradigm shift."
+      }
+    },
+    {
+      "event": "Battle of Kurowem (1831)",
+      "score": 15,
+      "reason": "A minor 1831 engagement (likely part of the Polish November Uprising) with chiefly regional effects, limited and short-lived consequences, relatively few directly affected, and no major shift in global politics or thought.",
+      "full": {
+        "score": 15,
+        "g": 3,
+        "l": 6,
+        "s": 4,
+        "p": 2,
+        "reason": "A minor 1831 engagement (likely part of the Polish November Uprising) with chiefly regional effects, limited and short-lived consequences, relatively few directly affected, and no major shift in global politics or thought."
+      }
+    },
+    {
+      "event": "Battle of Flint Creek",
+      "score": 7,
+      "reason": "An obscure 1789 frontier skirmish with primarily local impact, affecting few people and leaving no enduring or wide-ranging political, cultural, or global consequences.",
+      "full": {
+        "score": 7,
+        "g": 1,
+        "l": 2,
+        "s": 3,
+        "p": 1,
+        "reason": "An obscure 1789 frontier skirmish with primarily local impact, affecting few people and leaving no enduring or wide-ranging political, cultural, or global consequences."
+      }
+    },
+    {
+      "event": "Battle of Haram",
+      "score": 10,
+      "reason": "A minor 1128 engagement with mostly regional consequences within the Crusader–Muslim frontier, affecting relatively few people and producing no major long-term or civilizational shift.",
+      "full": {
+        "score": 10,
+        "g": 2,
+        "l": 3,
+        "s": 3,
+        "p": 2,
+        "reason": "A minor 1128 engagement with mostly regional consequences within the Crusader–Muslim frontier, affecting relatively few people and producing no major long-term or civilizational shift."
+      }
+    }
+  ],
+  "C_anchor": [
+    {
+      "event": "World War II",
+      "score": 97,
+      "reason": "Global conflict that reshaped the world order, caused unprecedented casualties, dismantled empires, and produced institutions and geopolitical dynamics (United Nations, decolonization, Cold War) that defined the modern era.",
+      "full": {
+        "score": 97,
+        "reason": "Global conflict that reshaped the world order, caused unprecedented casualties, dismantled empires, and produced institutions and geopolitical dynamics (United Nations, decolonization, Cold War) that defined the modern era."
+      }
+    },
+    {
+      "event": "French Revolution",
+      "score": 88,
+      "reason": "The French Revolution (1789–1799) dramatically ended the ancien régime, spread revolutionary ideals of liberty and equality across Europe, and fundamentally reshaped politics and society worldwide.",
+      "full": {
+        "score": 88,
+        "reason": "The French Revolution (1789–1799) dramatically ended the ancien régime, spread revolutionary ideals of liberty and equality across Europe, and fundamentally reshaped politics and society worldwide."
+      }
+    },
+    {
+      "event": "Fall of Constantinople",
+      "score": 90,
+      "reason": "The 1453 capture ended the Byzantine Empire and Roman continuity, vaulted the Ottoman Empire into a dominant Eurasian power, displaced Greek scholars westward fueling the Renaissance, and helped redirect trade routes that spurred the Age of Exploration, making it a major global turning point.",
+      "full": {
+        "score": 90,
+        "reason": "The 1453 capture ended the Byzantine Empire and Roman continuity, vaulted the Ottoman Empire into a dominant Eurasian power, displaced Greek scholars westward fueling the Renaissance, and helped redirect trade routes that spurred the Age of Exploration, making it a major global turning point."
+      }
+    },
+    {
+      "event": "Battle of Hastings",
+      "score": 72,
+      "reason": "The 1066 Battle of Hastings is scored 72 because William's victory decisively changed English governance, language, aristocracy, and ties to continental Europe, profoundly altering England's political and cultural trajectory.",
+      "full": {
+        "score": 72,
+        "reason": "The 1066 Battle of Hastings is scored 72 because William's victory decisively changed English governance, language, aristocracy, and ties to continental Europe, profoundly altering England's political and cultural trajectory."
+      }
+    },
+    {
+      "event": "American Revolution",
+      "score": 86,
+      "reason": "The American Revolution established the United States and, by proving that colonies could found a republic based on popular sovereignty, inspired later revolutions and significantly altered colonial and global political arrangements.",
+      "full": {
+        "score": 86,
+        "reason": "The American Revolution established the United States and, by proving that colonies could found a republic based on popular sovereignty, inspired later revolutions and significantly altered colonial and global political arrangements."
+      }
+    },
+    {
+      "event": "Battle of Thermopylae",
+      "score": 74,
+      "reason": "Though a tactical Persian victory, Thermopylae's heroic stand galvanized Greek resistance, became a foundational symbol of Western defense against imperial conquest, and helped enable subsequent Greek victories that preserved classical Greek culture.",
+      "full": {
+        "score": 74,
+        "reason": "Though a tactical Persian victory, Thermopylae's heroic stand galvanized Greek resistance, became a foundational symbol of Western defense against imperial conquest, and helped enable subsequent Greek victories that preserved classical Greek culture."
+      }
+    },
+    {
+      "event": "Siege of Hull",
+      "score": 68,
+      "reason": "As the first major action of the English Civil War, the 1642 Siege of Hull prevented royal control of a key arsenal and helped precipitate a conflict that reshaped English governance, making it an important national turning point though not a global one.",
+      "full": {
+        "score": 68,
+        "reason": "As the first major action of the English Civil War, the 1642 Siege of Hull prevented royal control of a key arsenal and helped precipitate a conflict that reshaped English governance, making it an important national turning point though not a global one."
+      }
+    },
+    {
+      "event": "Battle of Klyastitsy",
+      "score": 48,
+      "reason": "A notable tactical Russian victory in the 1812 campaign that boosted morale and hindered French operations in the northern theatre, but lacked the strategic decisiveness of battles like Borodino or events that reshaped Europe.",
+      "full": {
+        "score": 48,
+        "reason": "A notable tactical Russian victory in the 1812 campaign that boosted morale and hindered French operations in the northern theatre, but lacked the strategic decisiveness of battles like Borodino or events that reshaped Europe."
+      }
+    },
+    {
+      "event": "Battle of Waxhaws",
+      "score": 42,
+      "reason": "A regional but influential incident in the American Revolution—Tarleton's alleged massacre at Waxhaws galvanized Patriot resistance and served powerful propaganda in the Southern theater, yet had limited strategic or global impact compared with major epochal events.",
+      "full": {
+        "score": 42,
+        "reason": "A regional but influential incident in the American Revolution—Tarleton's alleged massacre at Waxhaws galvanized Patriot resistance and served powerful propaganda in the Southern theater, yet had limited strategic or global impact compared with major epochal events."
+      }
+    },
+    {
+      "event": "Battle of Kurowem (1831)",
+      "score": 20,
+      "reason": "An obscure 1831 engagement with primarily local significance and no lasting impact on national borders or the international order, far below major revolutionary or global turning points.",
+      "full": {
+        "score": 20,
+        "reason": "An obscure 1831 engagement with primarily local significance and no lasting impact on national borders or the international order, far below major revolutionary or global turning points."
+      }
+    },
+    {
+      "event": "Battle of Flint Creek",
+      "score": 12,
+      "reason": "A little-known 1789 engagement with primarily local consequences and no lasting geopolitical impact, placing it only slightly above a minor border skirmish.",
+      "full": {
+        "score": 12,
+        "reason": "A little-known 1789 engagement with primarily local consequences and no lasting geopolitical impact, placing it only slightly above a minor border skirmish."
+      }
+    },
+    {
+      "event": "Battle of Haram",
+      "score": 35,
+      "reason": "A little-known 1128 engagement whose effects appear confined to local/regional power dynamics rather than producing major or lasting global change.",
+      "full": {
+        "score": 35,
+        "reason": "A little-known 1128 engagement whose effects appear confined to local/regional power dynamics rather than producing major or lasting global change."
+      }
+    }
+  ]
+}

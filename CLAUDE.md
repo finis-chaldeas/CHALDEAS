@@ -126,7 +126,7 @@ python server.py
 
 ### Frontend (from `frontend/`)
 ```bash
-npm run dev -- --port 5200    # Dev server (MUST use port 5200)
+npm run dev -- --port 3000    # Dev server (MUST use port 3000)
 npm run build                  # Production build
 npm run lint                   # ESLint checks
 ```
@@ -137,15 +137,45 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8100    # Dev server (MUST use port 8100)
 ```
 
-### Database (Native PostgreSQL)
-```bash
-# 현재 네이티브 PostgreSQL 사용 (포트 5432)
-psql -U chaldeas -d chaldeas -h localhost -p 5432
+### Database (Dual PostgreSQL Setup)
+
+두 개의 PostgreSQL data directory를 전환하여 사용:
+
+| DB | 경로 | 크기 | 용도 |
+|----|------|------|------|
+| **Compact** | `C:\PostgreSQL\data` | ~150 MB | 개발/서빙 (light 데이터만, SSD) |
+| **Archive** | `E:\PostgreSQL\data` | 44 GB | 전체 데이터 (HDD, 느림) |
+
+같은 포트(5432), 같은 DATABASE_URL → **코드 변경 없음**.
+
+```powershell
+# DB 전환 (PowerShell)
+.\tools\switch-db.ps1 compact    # C: SSD compact DB (기본)
+.\tools\switch-db.ps1 archive    # E: HDD 전체 DB
+.\tools\switch-db.ps1 status     # 현재 상태 확인
+
+# 수동 시작/중지
+& "C:\Program Files\PostgreSQL\18\bin\pg_ctl.exe" start -D "C:\PostgreSQL\data" -l "C:\PostgreSQL\data\pg.log"
+& "C:\Program Files\PostgreSQL\18\bin\pg_ctl.exe" status -D "C:\PostgreSQL\data"
+& "C:\Program Files\PostgreSQL\18\bin\pg_ctl.exe" stop -D "C:\PostgreSQL\data"
+
+# psql 접속
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U chaldeas -d chaldeas -h localhost -p 5432
 
 # Alembic 마이그레이션
 cd backend
 python -m alembic upgrade head
 python -m alembic current  # 현재 버전 확인
+```
+
+**Compact DB 재구축** (archive에서 light 데이터 추출 후 임포트):
+```powershell
+.\tools\switch-db.ps1 archive           # E: DB 시작
+cd backend
+python scripts/export_compact.py         # CSV 추출 → data/compact_export/
+.\tools\switch-db.ps1 compact           # C: DB 시작
+python -m alembic upgrade head           # 스키마 생성
+python scripts/import_compact.py         # CSV 임포트
 ```
 
 ### Book Extractor (from `tools/book_extractor/`)
@@ -161,12 +191,20 @@ python update_person_relationship_strength.py  # 관계 강도 계산
 ```
 
 ## Fixed Ports (Hardcoded)
-- Frontend: 5200 (dev)
+- Frontend: 3000 (dev)
 - Backend API: 8100
-- **PostgreSQL: 5432** (네이티브, Docker 미사용)
+- **PostgreSQL: 5432** (Compact: `C:\PostgreSQL\data`, Archive: `E:\PostgreSQL\data`)
 - API Docs: http://localhost:8100/docs
 
-> **주의**: DATABASE_URL은 항상 `localhost:5432` 사용. Docker compose의 5433 포트는 더 이상 사용하지 않음.
+> **주의**: DATABASE_URL은 항상 `localhost:5432` 사용. `.\tools\switch-db.ps1`로 compact/archive 전환.
+
+## Data Paths
+```
+C:\PostgreSQL\data\     # Compact DB (SSD, ~150MB, light 데이터만)
+E:\PostgreSQL\data\     # Archive DB (HDD, 44GB, 전체 데이터)
+E:\wikidata\            # Wikidata 덤프 (1.6TB, 압축 해제됨)
+  └─ latest-all.json    # 전체 Wikidata JSON 덤프
+```
 
 ---
 
@@ -246,7 +284,7 @@ User Query → CHALDEAS (state) → SHEBA (observe) → LOGOS (propose) → PAPE
 - OpenAI (LLM integration)
 
 ### Database
-- PostgreSQL 16 with pgvector extension
+- PostgreSQL 18 with pgvector extension (E:\PostgreSQL\data)
 - BCE dates stored as negative integers (-490 = 490 BCE)
 
 ---
@@ -255,10 +293,19 @@ User Query → CHALDEAS (state) → SHEBA (observe) → LOGOS (propose) → PAPE
 
 ### V0 (현재 운영)
 ```
-GET  /api/v1/events                    # List events
+GET  /api/v1/events                    # List events (details nested)
+GET  /api/v1/events/{id}               # Event detail (with details, persons, sources)
+GET  /api/v1/events/{id}/locations     # Event locations (aggregate: recursive child locations)
 GET  /api/v1/persons                   # List historical figures
+GET  /api/v1/persons/{id}              # Person detail (with details, names)
+GET  /api/v1/persons/{id}/flow         # Person flow (chronological event chain)
+GET  /api/v1/persons/{id}/relations    # Related persons with strength
+GET  /api/v1/persons/{id}/properties   # Wikidata properties
+GET  /api/v1/persons/{id}/sources      # Books mentioning person
 GET  /api/v1/locations                 # List places
 GET  /api/v1/search?q=...&type=all     # Unified search
+GET  /api/v1/feed                      # Unified feed (events + persons, JOINs event_details)
+GET  /api/v1/featured                  # Featured content
 POST /api/v1/chat/agent                # Agent-based intelligent query
 ```
 
@@ -311,9 +358,9 @@ VITE_SENTRY_ENABLED=false
 ## Documentation
 
 ### 구현 완료 (Implemented)
-- `docs/implemented/ARCHITECTURE.md` - Full 7-layer design
-- `docs/implemented/API.md` - Complete API reference
-- `docs/implemented/DATABASE.md` - Schema and relationships
+- `docs/reference/ARCHITECTURE.md` - Full 7-layer design
+- `docs/reference/API.md` - Complete API reference (Person flow, relations, sources 포함)
+- `docs/reference/DATABASE.md` - Schema and relationships (Person system overhaul 반영)
 - `docs/guides/SETUP.md` - Development environment setup
 - `docs/DEPLOYMENT.md` - GCP Cloud Run deployment
 
@@ -323,14 +370,56 @@ VITE_SENTRY_ENABLED=false
 - `docs/planning/REDESIGN_PLAN.md` - V1 재설계 상세 계획
 - `docs/planning/COST_ESTIMATION.md` - AI 비용 산정
 - `docs/planning/MODELS.md` - 사용 AI 모델 목록
-- `docs/planning/V1_WORKPLAN.md` - 체크포인트별 작업 계획
+- `docs/planning/FINAL_SCHEMA.md` - 최종 스키마 (persons 슬림화 반영)
 
 ### 작업 로그
-- `docs/logs/V1_WORKLOG.md` - V1 개발 진행 로그
+- `docs/logs/sessions/` - 세션별 작업 로그 (타임스탬프 파일)
 
 ---
 
 ## Development Workflow
+
+### 필수 로깅 규칙 (절대 위반 금지!)
+
+**모든 작업에 대해 `docs/logs/sessions/`에 타임스탬프 파일 생성:**
+
+1. **작업 시작 시 파일 생성**: `YYYYMMDD_HHMMSS_작업명.md`
+2. **작업 중 계속 업데이트**: 뭐 했는지, 어떤 파일 변경했는지
+3. **작업 후 결과 기록**: 성공/실패, 목적 달성 여부
+4. **반성점과 다음 작업**: 뭘 잘못했고, 다음에 뭘 해야 하는지
+
+```markdown
+# 세션 로그: YYYY-MM-DD HH:MM
+
+## 세션 정보
+- **플랜 체크포인트**: CP-X.X
+- **목적**: 왜 이 작업을 하는가
+
+## 한 작업
+- 변경한 파일들
+- 생성한 데이터
+- 실행한 명령어
+
+## 결과
+- 성공/실패 여부
+- 목적 달성 여부
+
+## 반성
+- 뭘 잘못했는지
+- 어떻게 개선할지
+
+## 다음 작업
+- 이어서 할 것
+```
+
+### 플랜 준수 규칙 (절대 위반 금지!)
+
+1. **플랜 문서 먼저 확인**: 작업 전 반드시 플랜 파일 읽기
+2. **플랜에 없는 작업 금지**: 플랜에 명시된 작업만 수행
+3. **플랜 순서 준수**: CP-1.1 → CP-1.2 → CP-1.3 순서대로
+4. **V0 테이블 건드리지 않기**: V2 테이블에만 작업
+5. **지정된 모델만 사용**: llama3.1(T1), gpt-5-mini(T2), gpt-5.1-chat(T3)
+6. **로컬 데이터 우선**: API 호출 전 로컬 파일 먼저 확인
 
 ### 작업 체크리스트 규칙 (필수!)
 
@@ -349,13 +438,13 @@ VITE_SENTRY_ENABLED=false
 [ ] 프론트엔드 연동
 ```
 
-### V1 작업 시
+### V2 작업 시
 
-1. **체크포인트 확인**: `docs/planning/V1_WORKPLAN.md`에서 다음 CP 확인
-2. **작업 시작**: 해당 CP의 [ ] 체크박스를 [x]로 변경하며 진행
-3. **로그 기록**: `docs/logs/V1_WORKLOG.md`에 작업 내용 기록
-4. **테스트**: 각 CP 완료 시 관련 테스트 실행
-5. **커밋**: CP 단위로 커밋 (예: `feat(v1): CP-1.2 Period 모델 생성`)
+1. **플랜 확인**: `~/.claude/plans/` 또는 지정된 플랜 파일에서 다음 CP 확인
+2. **로그 작성**: `docs/logs/V2_WORKLOG.md`에 작업 시작 기록
+3. **작업 수행**: 플랜에 명시된 파일 경로, 테이블, 모델만 사용
+4. **결과 기록**: 작업 결과와 검증 내용 로그에 기록
+5. **커밋**: CP 단위로 커밋 (예: `feat(v2): CP-1.2 로깅 시스템 구축`)
 
 ### 커밋 메시지 형식
 
@@ -364,3 +453,68 @@ feat(v1): CP-X.X 작업 내용
 fix(v0): 버그 수정 내용
 docs: 문서 업데이트
 ```
+
+---
+
+## Platform Notes (Windows)
+
+### UTF-8 인코딩 필수
+
+Windows 환경에서 파일 읽기/쓰기 시 반드시 UTF-8 인코딩 명시:
+
+```python
+# Python 파일 처리
+with open(file_path, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# .env 파일은 BOM 마커 주의 (UTF-8-BOM → UTF-8로 저장)
+# stdout 설정 (Windows 콘솔)
+import sys
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+```
+
+### 경로 처리
+
+```python
+from pathlib import Path
+# 항상 Path 객체 사용 권장
+file_path = Path("C:/Projects/Chaldeas/data/file.json")
+```
+
+---
+
+## Code Quality Workflow
+
+### TypeScript 에러 수정 순서
+
+TypeScript 에러 수정 시 우선순위:
+1. **Type 에러** (타입 불일치, 누락)
+2. **Unused 변수/import**
+3. **Style 이슈**
+
+수정 후 반드시 검증:
+```bash
+cd frontend && npx tsc --noEmit
+```
+
+### 리팩토링 워크플로우
+
+다중 파일 리팩토링 시:
+1. 영향 받는 파일 목록 먼저 작성
+2. 파일 그룹별로 순차 수정
+3. 각 그룹 완료 후 커밋
+4. 전체 완료 후 통합 테스트
+
+```bash
+# 리팩토링 검증 스크립트
+cd backend && python -m pytest tests/ -v
+cd frontend && npm run lint && npx tsc --noEmit
+```
+
+### 커밋 체크포인트 전략
+
+대규모 작업 시 12세션마다 1커밋이 아닌, 논리적 단위마다 커밋:
+- 파일 그룹 수정 완료 시
+- 기능 단위 완료 시
+- 테스트 통과 확인 시

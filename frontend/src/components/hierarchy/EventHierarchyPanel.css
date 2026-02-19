@@ -1,0 +1,236 @@
+/* EventHierarchyPanel styles */
+
+.hierarchy-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.hierarchy-panel {
+  background: var(--bg-secondary, #1a1a2e);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hierarchy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hierarchy-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hierarchy-icon {
+  font-size: 24px;
+}
+
+.hierarchy-title h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--text-primary, #fff);
+}
+
+.hierarchy-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary, #888);
+}
+
+.hierarchy-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #888);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.hierarchy-close:hover {
+  color: var(--text-primary, #fff);
+}
+
+.hierarchy-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hierarchy-filter {
+  flex: 1;
+  max-width: 200px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary, #252538);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--text-primary, #fff);
+  font-size: 14px;
+}
+
+.hierarchy-expand-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.hierarchy-expand-controls button {
+  padding: 6px 12px;
+  background: var(--bg-tertiary, #252538);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: var(--text-secondary, #aaa);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hierarchy-expand-controls button:hover {
+  background: var(--accent-color, #4a9eff);
+  color: #fff;
+  border-color: var(--accent-color, #4a9eff);
+}
+
+.hierarchy-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.hierarchy-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 8px;
+}
+
+.hierarchy-loading,
+.hierarchy-error,
+.hierarchy-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-secondary, #888);
+}
+
+.hierarchy-error {
+  color: #ff6b6b;
+}
+
+.hierarchy-tree {
+  font-size: 14px;
+}
+
+/* Tree Node */
+.tree-node {
+  margin-bottom: 2px;
+}
+
+.tree-node-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tree-node-content:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tree-node-content.aggregate {
+  font-weight: 500;
+}
+
+.tree-expand-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #888);
+  font-size: 10px;
+  padding: 2px 4px;
+  cursor: pointer;
+  min-width: 16px;
+}
+
+.tree-expand-placeholder {
+  min-width: 16px;
+}
+
+.tree-icon {
+  font-size: 14px;
+}
+
+.tree-title {
+  flex: 1;
+  color: var(--text-primary, #fff);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-level-badge {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #000;
+}
+
+.tree-date {
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+  white-space: nowrap;
+}
+
+.tree-child-count {
+  font-size: 11px;
+  color: var(--text-tertiary, #666);
+}
+
+.tree-children {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 10px;
+  padding-left: 4px;
+}
+
+.hierarchy-footer {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  color: var(--text-secondary, #888);
+}

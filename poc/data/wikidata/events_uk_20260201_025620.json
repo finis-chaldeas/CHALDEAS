@@ -1,0 +1,14 @@
+{
+  "region": "uk",
+  "timestamp": "2026-02-01T02:56:20.502071",
+  "stats": {
+    "events_fetched": 0,
+    "events_inserted": 0,
+    "events_updated": 0,
+    "persons_fetched": 0,
+    "locations_fetched": 0,
+    "relations_created": 0,
+    "errors": 0
+  },
+  "events": []
+}

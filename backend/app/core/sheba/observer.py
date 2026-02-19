@@ -141,14 +141,17 @@ class ShebaObserver:
                     "latitude": float(loc.latitude),
                     "longitude": float(loc.longitude),
                 }
-            if loc.modern_name and loc.modern_name.lower() in query.lower():
-                return {
-                    "id": loc.id,
-                    "name": loc.name,
-                    "modern_name": loc.modern_name,
-                    "latitude": float(loc.latitude),
-                    "longitude": float(loc.longitude),
-                }
+            # Check time-varying names
+            if loc.names:
+                for loc_name in loc.names:
+                    if loc_name.name.lower() in query.lower():
+                        return {
+                            "id": loc.id,
+                            "name": loc.name,
+                            "matched_name": loc_name.name,
+                            "latitude": float(loc.latitude),
+                            "longitude": float(loc.longitude),
+                        }
 
         return None
 

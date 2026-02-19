@@ -141,3 +141,117 @@ async def get_source_mentions(
         "mentions": mentions,
         "total": total
     }
+
+
+@router.get("/wiki/{source_id}")
+async def get_wikipedia_content(
+    source_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    Get Wikipedia article content from local ZIM file.
+
+    Fetches the full article from the local Wikipedia ZIM archive.
+    Returns HTML and plain text content.
+    """
+    from pathlib import Path
+    from sqlalchemy import text
+
+    # Get source info
+    source = db.execute(text('''
+        SELECT wikidata_id, title FROM sources WHERE id = :id
+    '''), {"id": source_id}).fetchone()
+
+    if not source:
+        raise HTTPException(status_code=404, detail="Source not found")
+
+    wikidata_id = source[0]
+    title = source[1]
+
+    # Extract Wikipedia title from source title (remove " - Wikidata" suffix)
+    wiki_title = title.replace(" - Wikidata", "").strip() if title else None
+
+    if not wiki_title:
+        raise HTTPException(status_code=404, detail="No Wikipedia title found")
+
+    # Try to load from ZIM
+    ZIM_PATH = Path("E:/chaldeas_data/kiwix/wikipedia_en_nopic.zim")
+
+    if not ZIM_PATH.exists():
+        # Return wikidata URL as fallback
+        return {
+            "source_id": source_id,
+            "title": wiki_title,
+            "content_html": None,
+            "content_text": None,
+            "external_url": f"https://en.wikipedia.org/wiki/{wiki_title.replace(' ', '_')}",
+            "status": "zim_not_found"
+        }
+
+    try:
+        from libzim.reader import Archive
+        from bs4 import BeautifulSoup
+
+        zim = Archive(str(ZIM_PATH))
+
+        # Try different path formats
+        paths = [
+            f"A/{wiki_title.replace(' ', '_')}",
+            f"{wiki_title.replace(' ', '_')}",
+        ]
+
+        entry = None
+        for path in paths:
+            try:
+                entry = zim.get_entry_by_path(path)
+                break
+            except:
+                continue
+
+        if not entry:
+            return {
+                "source_id": source_id,
+                "title": wiki_title,
+                "content_html": None,
+                "content_text": None,
+                "external_url": f"https://en.wikipedia.org/wiki/{wiki_title.replace(' ', '_')}",
+                "status": "article_not_found"
+            }
+
+        html = entry.get_item().content.tobytes().decode('utf-8')
+        soup = BeautifulSoup(html, 'html.parser')
+
+        # Remove scripts, styles, navigation
+        for tag in soup(['script', 'style', 'nav', 'header', 'footer']):
+            tag.decompose()
+
+        text_content = soup.get_text(separator=' ', strip=True)
+
+        return {
+            "source_id": source_id,
+            "title": wiki_title,
+            "content_html": html[:50000],  # Limit to 50KB
+            "content_text": text_content[:10000],  # Limit to 10KB
+            "word_count": len(text_content.split()),
+            "external_url": f"https://en.wikipedia.org/wiki/{wiki_title.replace(' ', '_')}",
+            "status": "ok"
+        }
+
+    except ImportError:
+        return {
+            "source_id": source_id,
+            "title": wiki_title,
+            "content_html": None,
+            "content_text": None,
+            "external_url": f"https://en.wikipedia.org/wiki/{wiki_title.replace(' ', '_')}",
+            "status": "libzim_not_installed"
+        }
+    except Exception as e:
+        return {
+            "source_id": source_id,
+            "title": wiki_title,
+            "content_html": None,
+            "content_text": None,
+            "external_url": f"https://en.wikipedia.org/wiki/{wiki_title.replace(' ', '_')}",
+            "status": f"error: {str(e)}"
+        }

@@ -1,0 +1,912 @@
+[
+  {
+    "period": "3050 BCE ~ 3001 BCE",
+    "era": "고대",
+    "top_event": "Early Dynastic Period of Egypt",
+    "event_score": 80,
+    "top_person": null,
+    "person_score": null,
+    "event_total": 1,
+    "person_total": 0
+  },
+  {
+    "period": "3000 BCE ~ 2951 BCE",
+    "era": "고대",
+    "top_event": "Helladic period",
+    "event_score": 65,
+    "top_person": "Merneith",
+    "person_score": 70,
+    "event_total": 1,
+    "person_total": 1
+  },
+  {
+    "period": "2900 BCE ~ 2851 BCE",
+    "era": "고대",
+    "top_event": "Early Dynastic period",
+    "event_score": 85,
+    "top_person": null,
+    "person_score": null,
+    "event_total": 1,
+    "person_total": 0
+  },
+  {
+    "period": "2800 BCE ~ 2751 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Djoser",
+    "person_score": 95,
+    "event_total": 0,
+    "person_total": 3
+  },
+  {
+    "period": "2700 BCE ~ 2651 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Khufu",
+    "person_score": 80,
+    "event_total": 0,
+    "person_total": 2
+  },
+  {
+    "period": "2650 BCE ~ 2601 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Khafra",
+    "person_score": 85,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "2550 BCE ~ 2501 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Menkaure",
+    "person_score": 65,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "2500 BCE ~ 2451 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Hemiunu",
+    "person_score": 88,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "2400 BCE ~ 2351 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Unas",
+    "person_score": 60,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "2350 BCE ~ 2301 BCE",
+    "era": "고대",
+    "top_event": "Q102885246",
+    "event_score": 60,
+    "top_person": "Sargon of Akkad",
+    "person_score": 95,
+    "event_total": 1,
+    "person_total": 1
+  },
+  {
+    "period": "2300 BCE ~ 2251 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Yu the Great",
+    "person_score": 92,
+    "event_total": 0,
+    "person_total": 2
+  },
+  {
+    "period": "2100 BCE ~ 2051 BCE",
+    "era": "고대",
+    "top_event": "pre-Qin period",
+    "event_score": 93,
+    "top_person": "Mentuhotep II",
+    "person_score": 84,
+    "event_total": 2,
+    "person_total": 1
+  },
+  {
+    "period": "2050 BCE ~ 2001 BCE",
+    "era": "고대",
+    "top_event": "Old Assyrian Empire",
+    "event_score": 78,
+    "top_person": null,
+    "person_score": null,
+    "event_total": 1,
+    "person_total": 0
+  },
+  {
+    "period": "2000 BCE ~ 1951 BCE",
+    "era": "고대",
+    "top_event": "Middle Bronze Age",
+    "event_score": 89,
+    "top_person": "Ur-Nammu",
+    "person_score": 92,
+    "event_total": 1,
+    "person_total": 3
+  },
+  {
+    "period": "1950 BCE ~ 1901 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Senusret III",
+    "person_score": 90,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1900 BCE ~ 1851 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Amenemhat III",
+    "person_score": 65,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1850 BCE ~ 1801 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Ibrahim",
+    "person_score": 100,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1800 BCE ~ 1751 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Ismail",
+    "person_score": 90,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1700 BCE ~ 1651 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Tang",
+    "person_score": 93,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1600 BCE ~ 1551 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Thutmose I",
+    "person_score": 72,
+    "event_total": 0,
+    "person_total": 5
+  },
+  {
+    "period": "1550 BCE ~ 1501 BCE",
+    "era": "고대",
+    "top_event": "New Kingdom of Egypt",
+    "event_score": 92,
+    "top_person": "Hatshepsut",
+    "person_score": 92,
+    "event_total": 1,
+    "person_total": 1
+  },
+  {
+    "period": "1500 BCE ~ 1451 BCE",
+    "era": "고대",
+    "top_event": "Vedic period",
+    "event_score": 88,
+    "top_person": "Thutmose III",
+    "person_score": 90,
+    "event_total": 3,
+    "person_total": 2
+  },
+  {
+    "period": "1400 BCE ~ 1351 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Akhenaten",
+    "person_score": 88,
+    "event_total": 0,
+    "person_total": 6
+  },
+  {
+    "period": "1350 BCE ~ 1301 BCE",
+    "era": "고대",
+    "top_event": "Amarna Period",
+    "event_score": 82,
+    "top_person": "Ramesses II",
+    "person_score": 92,
+    "event_total": 1,
+    "person_total": 3
+  },
+  {
+    "period": "1300 BCE ~ 1251 BCE",
+    "era": "고대",
+    "top_event": "Ramessides",
+    "event_score": 73,
+    "top_person": "Fu Hao",
+    "person_score": 72,
+    "event_total": 1,
+    "person_total": 2
+  },
+  {
+    "period": "1250 BCE ~ 1201 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Ramesses III",
+    "person_score": 65,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1200 BCE ~ 1151 BCE",
+    "era": "고대",
+    "top_event": "classical antiquity",
+    "event_score": 97,
+    "top_person": null,
+    "person_score": null,
+    "event_total": 4,
+    "person_total": 0
+  },
+  {
+    "period": "1150 BCE ~ 1101 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "King Wu of Zhou",
+    "person_score": 96,
+    "event_total": 0,
+    "person_total": 4
+  },
+  {
+    "period": "1100 BCE ~ 1051 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Psusennes I",
+    "person_score": 60,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "1050 BCE ~ 1001 BCE",
+    "era": "고대",
+    "top_event": "Siege of Jebus",
+    "event_score": 72,
+    "top_person": "David",
+    "person_score": 95,
+    "event_total": 2,
+    "person_total": 1
+  },
+  {
+    "period": "1000 BCE ~ 951 BCE",
+    "era": "고대",
+    "top_event": "Woodland period",
+    "event_score": 78,
+    "top_person": "Ashurnasirpal II",
+    "person_score": 68,
+    "event_total": 1,
+    "person_total": 4
+  },
+  {
+    "period": "950 BCE ~ 901 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Ahab",
+    "person_score": 75,
+    "event_total": 0,
+    "person_total": 2
+  },
+  {
+    "period": "900 BCE ~ 851 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Shalmaneser III",
+    "person_score": 78,
+    "event_total": 0,
+    "person_total": 2
+  },
+  {
+    "period": "850 BCE ~ 801 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Amos",
+    "person_score": 82,
+    "event_total": 0,
+    "person_total": 1
+  },
+  {
+    "period": "800 BCE ~ 751 BCE",
+    "era": "고대",
+    "top_event": "Spring and Autumn Warring States Period",
+    "event_score": 95,
+    "top_person": "Sargon II",
+    "person_score": 88,
+    "event_total": 4,
+    "person_total": 9
+  },
+  {
+    "period": "750 BCE ~ 701 BCE",
+    "era": "고대",
+    "top_event": "The War of Pekah and Ahaz",
+    "event_score": 60,
+    "top_person": "Guan Zhong",
+    "person_score": 91,
+    "event_total": 2,
+    "person_total": 5
+  },
+  {
+    "period": "700 BCE ~ 651 BCE",
+    "era": "고대",
+    "top_event": null,
+    "event_score": null,
+    "top_person": "Ashurbanipal",
+    "person_score": 90,
+    "event_total": 0,
+    "person_total": 6
+  },
+  {
+    "period": "650 BCE ~ 601 BCE",
+    "era": "고대",
+    "top_event": "Jewish–Babylonian War",
+    "event_score": 92,
+    "top_person": "Zoroaster",
+    "person_score": 95,
+    "event_total": 10,
+    "person_total": 12
+  },
+  {
+    "period": "600 BCE ~ 551 BCE",
+    "era": "고대",
+    "top_event": "Medo-Persian conflict",
+    "event_score": 95,
+    "top_person": "The Buddha",
+    "person_score": 99,
+    "event_total": 3,
+    "person_total": 20
+  },
+  {
+    "period": "550 BCE ~ 501 BCE",
+    "era": "고대",
+    "top_event": "Roman Republic",
+    "event_score": 99,
+    "top_person": "Darius I",
+    "person_score": 96,
+    "event_total": 17,
+    "person_total": 22
+  },
+  {
+    "period": "500 BCE ~ 451 BCE",
+    "era": "고전 고대",
+    "top_event": "Second Persian invasion of Greece",
+    "event_score": 95,
+    "top_person": "Pericles",
+    "person_score": 95,
+    "event_total": 16,
+    "person_total": 20
+  },
+  {
+    "period": "450 BCE ~ 401 BCE",
+    "era": "고전 고대",
+    "top_event": "Peloponnesian War",
+    "event_score": 95,
+    "top_person": "Plato",
+    "person_score": 88,
+    "event_total": 9,
+    "person_total": 17
+  },
+  {
+    "period": "400 BCE ~ 351 BCE",
+    "era": "고전 고대",
+    "top_event": "Battle of Leuctra",
+    "event_score": 66,
+    "top_person": "Philip II of Macedon",
+    "person_score": 96,
+    "event_total": 7,
+    "person_total": 27
+  },
+  {
+    "period": "350 BCE ~ 301 BCE",
+    "era": "고전 고대",
+    "top_event": "Hellenistic period",
+    "event_score": 100,
+    "top_person": "Ashoka",
+    "person_score": 98,
+    "event_total": 33,
+    "person_total": 15
+  },
+  {
+    "period": "300 BCE ~ 251 BCE",
+    "era": "고전 고대",
+    "top_event": "Kalinga War",
+    "event_score": 90,
+    "top_person": "Qin Shi Huang",
+    "person_score": 97,
+    "event_total": 16,
+    "person_total": 20
+  },
+  {
+    "period": "250 BCE ~ 201 BCE",
+    "era": "고전 고대",
+    "top_event": "Qin Han",
+    "event_score": 100,
+    "top_person": "Hannibal",
+    "person_score": 95,
+    "event_total": 42,
+    "person_total": 24
+  },
+  {
+    "period": "200 BCE ~ 151 BCE",
+    "era": "고전 고대",
+    "top_event": "Roman–Seleucid War",
+    "event_score": 80,
+    "top_person": "Emperor Wu of Han",
+    "person_score": 90,
+    "event_total": 17,
+    "person_total": 13
+  },
+  {
+    "period": "150 BCE ~ 101 BCE",
+    "era": "고전 고대",
+    "top_event": "Roman Greece",
+    "event_score": 95,
+    "top_person": "Cicero",
+    "person_score": 95,
+    "event_total": 19,
+    "person_total": 13
+  },
+  {
+    "period": "100 BCE ~ 51 BCE",
+    "era": "고전 고대",
+    "top_event": "Siege of Uxellodunum",
+    "event_score": 90,
+    "top_person": "Julius Caesar",
+    "person_score": 100,
+    "event_total": 37,
+    "person_total": 27
+  },
+  {
+    "period": "50 BCE ~ 1 BCE",
+    "era": "고전 고대",
+    "top_event": "Final War of the Roman Republic",
+    "event_score": 100,
+    "top_person": "Jesus Christ",
+    "person_score": 100,
+    "event_total": 31,
+    "person_total": 20
+  },
+  {
+    "period": "0 CE ~ 49 CE",
+    "era": "고전 고대",
+    "top_event": "Early Christianity",
+    "event_score": 96,
+    "top_person": "John the Evangelist",
+    "person_score": 100,
+    "event_total": 9,
+    "person_total": 20
+  },
+  {
+    "period": "50 CE ~ 99 CE",
+    "era": "고전 고대",
+    "top_event": "Siege of Jerusalem",
+    "event_score": 90,
+    "top_person": "Akiva ben Joseph",
+    "person_score": 92,
+    "event_total": 10,
+    "person_total": 19
+  },
+  {
+    "period": "100 CE ~ 149 CE",
+    "era": "고전 고대",
+    "top_event": "Siege of Betar",
+    "event_score": 90,
+    "top_person": "John Mark",
+    "person_score": 98,
+    "event_total": 7,
+    "person_total": 23
+  },
+  {
+    "period": "150 CE ~ 199 CE",
+    "era": "고전 고대",
+    "top_event": "end of the Han dynasty",
+    "event_score": 84,
+    "top_person": "Ardashir I",
+    "person_score": 95,
+    "event_total": 11,
+    "person_total": 29
+  },
+  {
+    "period": "200 CE ~ 249 CE",
+    "era": "고전 고대",
+    "top_event": "Low Roman Empire",
+    "event_score": 100,
+    "top_person": "Diocletian",
+    "person_score": 93,
+    "event_total": 18,
+    "person_total": 22
+  },
+  {
+    "period": "250 CE ~ 299 CE",
+    "era": "고전 고대",
+    "top_event": "Later Roman Empire",
+    "event_score": 100,
+    "top_person": "Constantine the Great",
+    "person_score": 98,
+    "event_total": 13,
+    "person_total": 19
+  },
+  {
+    "period": "300 CE ~ 349 CE",
+    "era": "고전 고대",
+    "top_event": "Battle of Adrianople (324)",
+    "event_score": 96,
+    "top_person": "Theodosius I",
+    "person_score": 98,
+    "event_total": 14,
+    "person_total": 29
+  },
+  {
+    "period": "350 CE ~ 399 CE",
+    "era": "고전 고대",
+    "top_event": "Battle of Constantinople",
+    "event_score": 90,
+    "top_person": "Augustine of Hippo",
+    "person_score": 99,
+    "event_total": 14,
+    "person_total": 18
+  },
+  {
+    "period": "400 CE ~ 449 CE",
+    "era": "고전 고대",
+    "top_event": "decline of Greco-Roman polytheism",
+    "event_score": 95,
+    "top_person": "Chandragupta II",
+    "person_score": 92,
+    "event_total": 16,
+    "person_total": 13
+  },
+  {
+    "period": "450 CE ~ 499 CE",
+    "era": "고전 고대",
+    "top_event": "Battle of Pavia",
+    "event_score": 98,
+    "top_person": "Justinian I",
+    "person_score": 98,
+    "event_total": 16,
+    "person_total": 19
+  },
+  {
+    "period": "500 CE ~ 549 CE",
+    "era": "중세",
+    "top_event": "Franco-Gothic War",
+    "event_score": 80,
+    "top_person": "Gregory I",
+    "person_score": 90,
+    "event_total": 11,
+    "person_total": 20
+  },
+  {
+    "period": "550 CE ~ 599 CE",
+    "era": "중세",
+    "top_event": "smuggling of silkworm eggs into the Byzantine Empire",
+    "event_score": 90,
+    "top_person": "Muhammad",
+    "person_score": 100,
+    "event_total": 7,
+    "person_total": 61
+  },
+  {
+    "period": "600 CE ~ 649 CE",
+    "era": "중세",
+    "top_event": "Battle of Yamama",
+    "event_score": 100,
+    "top_person": "Mu'awiya I",
+    "person_score": 96,
+    "event_total": 91,
+    "person_total": 57
+  },
+  {
+    "period": "650 CE ~ 699 CE",
+    "era": "중세",
+    "top_event": "Siege of Uthman",
+    "event_score": 95,
+    "top_person": "John of Damascus",
+    "person_score": 90,
+    "event_total": 26,
+    "person_total": 37
+  },
+  {
+    "period": "700 CE ~ 749 CE",
+    "era": "중세",
+    "top_event": "succession to Muhammad",
+    "event_score": 100,
+    "top_person": "Charlemagne",
+    "person_score": 100,
+    "event_total": 30,
+    "person_total": 35
+  },
+  {
+    "period": "750 CE ~ 799 CE",
+    "era": "중세",
+    "top_event": "Battle of the Zab",
+    "event_score": 96,
+    "top_person": "Kūkai",
+    "person_score": 95,
+    "event_total": 18,
+    "person_total": 27
+  },
+  {
+    "period": "800 CE ~ 849 CE",
+    "era": "중세",
+    "top_event": "Battle of Fontenoy",
+    "event_score": 88,
+    "top_person": "Muḥammad ibn Ismaeel al-Bukhārī",
+    "person_score": 95,
+    "event_total": 10,
+    "person_total": 43
+  },
+  {
+    "period": "850 CE ~ 899 CE",
+    "era": "중세",
+    "top_event": "Huang Chao Rebellion",
+    "event_score": 90,
+    "top_person": "Abu al-Hasan al-Ash'ari",
+    "person_score": 95,
+    "event_total": 10,
+    "person_total": 30
+  },
+  {
+    "period": "900 CE ~ 949 CE",
+    "era": "중세",
+    "top_event": "Battle of Pressburg",
+    "event_score": 78,
+    "top_person": "Otto I the Great",
+    "person_score": 95,
+    "event_total": 7,
+    "person_total": 42
+  },
+  {
+    "period": "950 CE ~ 999 CE",
+    "era": "중세",
+    "top_event": "Fatimid conquest of Egypt",
+    "event_score": 83,
+    "top_person": "Tughril I",
+    "person_score": 90,
+    "event_total": 13,
+    "person_total": 40
+  },
+  {
+    "period": "1000 CE ~ 1049 CE",
+    "era": "중세",
+    "top_event": "History of the papacy from 1048 to 1257",
+    "event_score": 91,
+    "top_person": "Rashi",
+    "person_score": 97,
+    "event_total": 12,
+    "person_total": 41
+  },
+  {
+    "period": "1050 CE ~ 1099 CE",
+    "era": "중세",
+    "top_event": "Battle of Hastings",
+    "event_score": 95,
+    "top_person": "Abdul Qadir Gilani",
+    "person_score": 93,
+    "event_total": 21,
+    "person_total": 37
+  },
+  {
+    "period": "1100 CE ~ 1149 CE",
+    "era": "중세",
+    "top_event": "Battle of São Mamede",
+    "event_score": 90,
+    "top_person": "Eleanor of Aquitaine",
+    "person_score": 97,
+    "event_total": 20,
+    "person_total": 54
+  },
+  {
+    "period": "1150 CE ~ 1199 CE",
+    "era": "중세",
+    "top_event": "Siege of Tiberias",
+    "event_score": 88,
+    "top_person": "Francis of Assisi",
+    "person_score": 98,
+    "event_total": 31,
+    "person_total": 66
+  },
+  {
+    "period": "1200 CE ~ 1249 CE",
+    "era": "중세",
+    "top_event": "Q6151929",
+    "event_score": 100,
+    "top_person": "Nizamuddin Auliya",
+    "person_score": 92,
+    "event_total": 67,
+    "person_total": 58
+  },
+  {
+    "period": "1250 CE ~ 1299 CE",
+    "era": "중세",
+    "top_event": "rise of the Ottoman Empire",
+    "event_score": 100,
+    "top_person": "Mansa Musa",
+    "person_score": 95,
+    "event_total": 34,
+    "person_total": 49
+  },
+  {
+    "period": "1300 CE ~ 1349 CE",
+    "era": "중세",
+    "top_event": "Q11945460",
+    "event_score": 99,
+    "top_person": "Taejo of Joseon",
+    "person_score": 96,
+    "event_total": 26,
+    "person_total": 52
+  },
+  {
+    "period": "1350 CE ~ 1399 CE",
+    "era": "중세",
+    "top_event": "Serbian–Ottoman Wars",
+    "event_score": 95,
+    "top_person": "Sejong the Great",
+    "person_score": 97,
+    "event_total": 35,
+    "person_total": 57
+  },
+  {
+    "period": "1400 CE ~ 1449 CE",
+    "era": "중세",
+    "top_event": "Battle of Orléans",
+    "event_score": 92,
+    "top_person": "Mehmed II",
+    "person_score": 98,
+    "event_total": 33,
+    "person_total": 66
+  },
+  {
+    "period": "1450 CE ~ 1499 CE",
+    "era": "중세",
+    "top_event": "Spanish colonization of the Americas",
+    "event_score": 100,
+    "top_person": "Guru Nanak",
+    "person_score": 99,
+    "event_total": 44,
+    "person_total": 148
+  },
+  {
+    "period": "1500 CE ~ 1549 CE",
+    "era": "근세",
+    "top_event": "Age of Discovery",
+    "event_score": 100,
+    "top_person": "Charles V",
+    "person_score": 100,
+    "event_total": 113,
+    "person_total": 132
+  },
+  {
+    "period": "1550 CE ~ 1599 CE",
+    "era": "근세",
+    "top_event": "Dutch Revolt",
+    "event_score": 95,
+    "top_person": "Armand-Jean du Plessis, duc de Richelieu",
+    "person_score": 96,
+    "event_total": 68,
+    "person_total": 123
+  },
+  {
+    "period": "1600 CE ~ 1649 CE",
+    "era": "근세",
+    "top_event": "transition from Ming to Qing",
+    "event_score": 95,
+    "top_person": "John Bunyan",
+    "person_score": 95,
+    "event_total": 93,
+    "person_total": 110
+  },
+  {
+    "period": "1650 CE ~ 1699 CE",
+    "era": "근세",
+    "top_event": "Second Hundred Years' War",
+    "event_score": 93,
+    "top_person": "Robert Walpole",
+    "person_score": 92,
+    "event_total": 48,
+    "person_total": 79
+  },
+  {
+    "period": "1700 CE ~ 1749 CE",
+    "era": "근세",
+    "top_event": "modern period",
+    "event_score": 100,
+    "top_person": "Thomas Jefferson",
+    "person_score": 100,
+    "event_total": 46,
+    "person_total": 182
+  },
+  {
+    "period": "1750 CE ~ 1799 CE",
+    "era": "근세",
+    "top_event": "decline of the Ottoman Empire",
+    "event_score": 100,
+    "top_person": "James Madison",
+    "person_score": 95,
+    "event_total": 135,
+    "person_total": 284
+  },
+  {
+    "period": "1800 CE ~ 1849 CE",
+    "era": "근대",
+    "top_event": "Napoleonic Wars",
+    "event_score": 98,
+    "top_person": "Abraham Lincoln",
+    "person_score": 100,
+    "event_total": 193,
+    "person_total": 504
+  },
+  {
+    "period": "1850 CE ~ 1899 CE",
+    "era": "근대",
+    "top_event": "New Imperialism",
+    "event_score": 100,
+    "top_person": "Adolf Hitler",
+    "person_score": 100,
+    "event_total": 229,
+    "person_total": 959
+  },
+  {
+    "period": "1900 CE ~ 1949 CE",
+    "era": "근대",
+    "top_event": "Tripartite Pact",
+    "event_score": 100,
+    "top_person": "Winston Churchill",
+    "person_score": 99,
+    "event_total": 726,
+    "person_total": 2063
+  },
+  {
+    "period": "1950 CE ~ 1999 CE",
+    "era": "현대",
+    "top_event": "Cold War (1962–1979)",
+    "event_score": 100,
+    "top_person": "Katalin Karikó",
+    "person_score": 98,
+    "event_total": 451,
+    "person_total": 931
+  },
+  {
+    "period": "2000 CE ~ 2049 CE",
+    "era": "현대",
+    "top_event": "Industry 4.0",
+    "event_score": 100,
+    "top_person": "Erling Haaland",
+    "person_score": 85,
+    "event_total": 293,
+    "person_total": 11
+  }
+]

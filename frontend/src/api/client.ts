@@ -69,6 +69,14 @@ export const locationsApi = {
     api.get(`/locations/${id}/events`, { params }),
 }
 
+// Globe Node API (location node system)
+export const nodesApi = {
+  list: (params?: { year_start?: number; year_end?: number; zoom?: string; limit?: number }) =>
+    api.get('/globe/nodes', { params }),
+  getEvents: (locationId: number, params?: { year_start?: number; year_end?: number; limit?: number; offset?: number }) =>
+    api.get(`/globe/nodes/${locationId}/events`, { params }),
+}
+
 export const searchApi = {
   search: (q: string, params?: Record<string, unknown>) =>
     api.get('/search', { params: { q, ...params } }),
@@ -95,6 +103,40 @@ export const storyApi = {
     api.get(`/story/person/${personId}`, { params: minStrength ? { min_strength: minStrength } : undefined }),
   checkPersonStory: (personId: number) =>
     api.get(`/story/person/${personId}/check`),
+}
+
+// Featured Persons API (landing page)
+export const featuredApi = {
+  getPersons: (params?: { era?: string; limit?: number; offset?: number }) =>
+    api.get('/featured/persons', { params }),
+  getRandom: () => api.get('/featured/random'),
+}
+
+// Servants API (FGO ↔ Historical Figures)
+export const servantsApi = {
+  list: (params?: Record<string, unknown>) => api.get('/servants/', { params }),
+  get: (fgoName: string) => api.get(`/servants/${encodeURIComponent(fgoName)}`),
+  getByPerson: (personId: number) => api.get(`/servants/by-person/${personId}`),
+  getStats: () => api.get('/servants/stats'),
+}
+
+// Feed API (unified importance-ranked events + persons)
+export const feedApi = {
+  get: (params?: Record<string, unknown>) => api.get('/feed', { params }),
+}
+
+// Timeline API (period-based narrative exploration)
+export const timelineApi = {
+  listPeriods: (params?: { era_id?: string; min_score?: number; limit?: number; offset?: number }) =>
+    api.get('/timeline/periods', { params }),
+  getPeriodDetail: (periodStart: number, params?: { event_limit?: number; person_limit?: number }) =>
+    api.get(`/timeline/periods/${periodStart}`, { params }),
+  getPeriodEvents: (periodStart: number, params?: { limit?: number; offset?: number; min_score?: number }) =>
+    api.get(`/timeline/periods/${periodStart}/events`, { params }),
+  getPeriodPersons: (periodStart: number, params?: { limit?: number; offset?: number; min_score?: number; domain?: string }) =>
+    api.get(`/timeline/periods/${periodStart}/persons`, { params }),
+  submitFeedback: (data: { target_type: string; target_id: number; feedback_type: string; description?: string; suggested_fix?: string }) =>
+    api.post('/timeline/feedback', data),
 }
 
 // Showcase/Archive API

@@ -507,3 +507,83 @@
     max-height: 50vh;
   }
 }
+
+/* ==========================================
+   Globe Zoom Indicator
+   ========================================== */
+
+.globe-zoom-indicator {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: rgba(10, 14, 23, 0.92);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+
+  backdrop-filter: blur(8px);
+  animation: zoomIndicatorFadeIn 0.3s ease;
+}
+
+@keyframes zoomIndicatorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.zoom-level-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-cyan);
+}
+
+.zoom-hint {
+  font-size: 0.65rem;
+  color: var(--chaldea-text);
+  opacity: 0.6;
+}
+
+.zoom-back-btn {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 10px;
+
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 4px;
+
+  color: var(--chaldea-cyan);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.zoom-back-btn:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .globe-zoom-indicator {
+    top: 10px;
+    padding: 6px 12px;
+    gap: 8px;
+  }
+
+  .zoom-hint {
+    display: none;
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": 3721,
+    "title": "Illyro-Roman",
+    "description": "Illyro-Roman is a term used in historiography and anthropological studies for the Romanized Illyrians within the ancient Roman provinces of Illyricum, Dalmatia, Moesia, Pannonia and Dardania.",
+    "wikidata_id": "Q6000682",
+    "detected_type": "CONCEPT",
+    "llm_response": "CONCEPT"
+  },
+  {
+    "id": 4489,
+    "title": "Assassin's Creed Characters",
+    "description": "The Assassin's Creed media franchise, which primarily consists of a series of open-world action-adventure stealth video games published by Ubisoft, features an extensive cast of characters in its historical fiction and science fiction-based narratives. The series also encompasses a wide variety of media outside of video games, including novels, comic books, board games, animated films, a live-action film, and an upcoming Netflix television series. The series features original characters intertwined with real-world historical events and figures, and is centered on a fictional millennia-old struggle for peace between the Assassin Brotherhood, inspired by the real-life Order of Assassins, who fight for peace and free will and embody the concept of chaos; and the Templar Order, inspired by the real-life Knights Templar, who desire peace through control over all of humanity, and embody the concept of order. A convention established by the first game involves the player experiencing the lives of these characters as part of a simulation played by a protagonist from the modern day, using technology known as the Animus developed by Abstergo Industries, a corporate front of the Templar Order in the modern era.",
+    "wikidata_id": "Q2599910",
+    "detected_type": "CONCEPT",
+    "llm_response": "CONCEPT"
+  },
+  {
+    "id": 4597,
+    "title": "Novgorod Republic",
+    "description": "The Novgorod Republic, formally known as Lord Novgorod the Great, was a city-state that existed from the 12th to 15th centuries in northwestern Russia, stretching from the Gulf of Finland in the west to the Ural Mountains in the east. Its capital was the city of Novgorod. The republic prospered as the easternmost trading post of the Hanseatic League, and its people were much influenced by the culture of the Byzantines, with the Novgorod school of icon painting producing many fine works. For much of its history, Novgorod was the center of Russian art and culture.",
+    "wikidata_id": "Q151536",
+    "detected_type": "LOCATION",
+    "llm_response": "LOCATION"
+  },
+  {
+    "id": 5062,
+    "title": "Uckermark",
+    "description": "The Uckermark is a historical region in northeastern Germany, which currently straddles the Uckermark District of Brandenburg and the Vorpommern-Greifswald District of Mecklenburg-Vorpommern. Its traditional capital is Prenzlau.",
+    "wikidata_id": "Q338635",
+    "detected_type": "LOCATION",
+    "llm_response": "LOCATION"
+  },
+  {
+    "id": 5088,
+    "title": "Nesebar",
+    "description": "Nesebar is an ancient city and one of the major seaside resorts on the Bulgarian Black Sea Coast, located in Burgas Province. It is the administrative centre of the homonymous Nesebar Municipality. Often referred to as the \"Pearl of the Black Sea\", Nesebar is a rich city-museum defined by more than three millennia of ever-changing history. The small city exists in two parts separated by a narrow human-made isthmus with the ancient part of the settlement on the peninsula, and the more modern section on the mainland side. The older part bears evidence of occupation by a variety of different civilisations over the course of its existence.",
+    "wikidata_id": "Q193241",
+    "detected_type": "LOCATION",
+    "llm_response": "LOCATION"
+  }
+]

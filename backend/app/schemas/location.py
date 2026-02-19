@@ -6,25 +6,37 @@ from typing import Optional
 class LocationBase(BaseModel):
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     latitude: float
     longitude: float
-    type: str
-    modern_name: Optional[str] = None
+    location_type: str = 'point'
+    parent_location_id: Optional[int] = None
 
 
 class Location(LocationBase):
     id: int
+    wikidata_id: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class LocationName(BaseModel):
+    id: int
+    name: str
+    name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
+    valid_from: Optional[int] = None
+    valid_until: Optional[int] = None
+    is_primary: bool = False
+    name_type: str = 'official'
 
     class Config:
         from_attributes = True
 
 
 class LocationDetail(Location):
-    name_original: Optional[str] = None
-    country: Optional[str] = None
-    region: Optional[str] = None
-    description: Optional[str] = None
-    description_ko: Optional[str] = None
+    names: list[LocationName] = []
 
 
 class LocationList(BaseModel):

@@ -88,5 +88,420 @@
     ],
     "related_event_ids": [],
     "sources": ["Herodotus - Histories", "Plutarch - Parallel Lives", "Fate/Grand Order"]
+  },
+  {
+    "id": "servant-artoria",
+    "type": "servant",
+    "title": "Artoria Pendragon - The Once and Future King",
+    "title_ko": "아르토리아 펜드래건 - 다시 올 왕",
+    "title_ja": "アルトリア・ペンドラゴン - かつて来たりし王",
+    "subtitle": "The legendary ruler who united Britain",
+    "subtitle_ko": "브리튼을 통일한 전설의 왕",
+    "subtitle_ja": "ブリテンを統一した伝説の王",
+    "era": "Post-Roman Britain",
+    "year": 500,
+    "location": "Camelot, Britain",
+    "description": "Artoria Pendragon is Fate's reimagining of King Arthur as a young woman who hid her gender to unite Britain against Saxon invasions.",
+    "description_ko": "아르토리아 펜드래건은 색슨 침략에 맞서 브리튼을 통일하기 위해 성별을 숨긴 소녀왕으로서의 아서왕을 재해석한 캐릭터다.",
+    "description_ja": "アルトリア・ペンドラゴンは、サクソンの侵攻に対抗してブリテンを統一するために性別を隠した少女王としてアーサー王を再解釈したキャラクターだ。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "King Arthur is a legendary British leader from the 5th-6th century, first mentioned in Welsh literature. Geoffrey of Monmouth's 'Historia Regum Britanniae' (1136) established the framework for the Arthurian legend, including Excalibur, Camelot, and the Round Table.",
+        "content_ko": "아서왕은 5-6세기의 전설적인 브리튼 지도자로, 웨일스 문학에서 처음 언급되었다. 제프리 오브 몬머스의 '브리타니아 열왕사'(1136)가 엑스칼리버, 카멜롯, 원탁의 기사 등 아서 전설의 골격을 확립했다.",
+        "content_ja": "アーサー王は5-6世紀の伝説的なブリテンの指導者で、ウェールズ文学で初めて言及された。ジェフリー・オブ・モンマスの『ブリタニア列王史』（1136）がエクスカリバー、キャメロット、円卓の騎士などアーサー伝説の骨格を確立した。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "Fate's most radical change is making Arthur female. Artoria drew Caliburn to become king at 15, hiding her gender with Merlin's magic. She wielded Excalibur as her Noble Phantasm and led the Knights of the Round Table until her fall at Camlann against Mordred.",
+        "content_ko": "페이트의 가장 급진적 변경은 아서를 여성으로 설정한 것이다. 아르토리아는 15세에 칼리번을 뽑아 왕이 되었고, 멀린의 마법으로 성별을 숨겼다. 엑스칼리버를 보구로 사용하며 원탁의 기사를 이끌다 카믈란에서 모드레드와의 싸움으로 쓰러졌다.",
+        "content_ja": "Fateの最も急進的な変更はアーサーを女性にしたことだ。アルトリアは15歳でカリバーンを抜いて王となり、マーリンの魔術で性別を隠した。エクスカリバーを宝具として振るい円卓の騎士を率いたが、カムランでモードレッドとの戦いで倒れた。"
+      }
+    ],
+    "historical_basis": "Geoffrey of Monmouth's Historia, Thomas Malory's Le Morte d'Arthur, and Welsh Mabinogion provide the primary Arthurian sources.",
+    "related_servants": [
+      {"name": "Mordred", "class": "Saber", "rarity": 5},
+      {"name": "Merlin", "class": "Caster", "rarity": 5},
+      {"name": "Lancelot", "class": "Saber", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Geoffrey of Monmouth - Historia Regum Britanniae", "Thomas Malory - Le Morte d'Arthur", "Fate/stay night", "Fate/Grand Order"]
+  },
+  {
+    "id": "servant-jeanne",
+    "type": "servant",
+    "title": "Jeanne d'Arc - The Maid of Orleans",
+    "title_ko": "잔 다르크 - 오를레앙의 성녀",
+    "title_ja": "ジャンヌ・ダルク - オルレアンの乙女",
+    "subtitle": "The saint who saved France",
+    "subtitle_ko": "프랑스를 구한 성녀",
+    "subtitle_ja": "フランスを救った聖女",
+    "era": "Late Medieval Europe",
+    "year": 1429,
+    "location": "Orleans, France",
+    "description": "Jeanne d'Arc, a peasant girl who claimed divine guidance, led French forces to crucial victories during the Hundred Years' War before being burned at the stake at age 19.",
+    "description_ko": "잔 다르크는 신의 계시를 받았다고 주장한 농민 소녀로, 백년전쟁에서 프랑스군을 결정적 승리로 이끌었으나 19세에 화형당했다.",
+    "description_ja": "ジャンヌ・ダルクは神の啓示を受けたと主張した農民の少女で、百年戦争でフランス軍を決定的な勝利に導いたが、19歳で火刑に処された。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Born in 1412 in Domremy, Joan claimed visions from Saints Michael, Catherine, and Margaret. She convinced Charles VII to let her lead troops and lifted the Siege of Orleans in 1429. Captured by Burgundians, she was tried by an English-allied ecclesiastical court and burned in 1431. She was canonized in 1920.",
+        "content_ko": "1412년 돔레미에서 태어난 잔은 성 미카엘, 카타리나, 마르가리타의 환영을 보았다고 주장했다. 샤를 7세를 설득해 군대를 이끌고 1429년 오를레앙 포위를 돌파했다. 부르고뉴에 포로로 잡혀 영국 측 교회 법정에서 재판받고 1431년 화형당했다. 1920년 시성되었다.",
+        "content_ja": "1412年にドンレミで生まれたジャンヌは、聖ミカエル、聖カタリナ、聖マルガリタの幻視を見たと主張した。シャルル7世を説得して軍を率い、1429年にオルレアン包囲を突破した。ブルゴーニュに捕らえられ、イギリス側の教会法廷で裁判を受け、1431年に火刑に処された。1920年に列聖された。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's First Singularity 'Orleans', France is overrun by a dragon-riding Jeanne Alter, a twisted version created by Gilles de Rais's wish on the Holy Grail. The real Jeanne appears as a Ruler-class Servant, the only one who can stand against her dark counterpart. This mirrors the historical tension between Jeanne's sainthood and the charges of heresy that led to her execution.",
+        "content_ko": "FGO 제1특이점 '오를레앙'에서 프랑스는 용을 탄 잔 다르크 올터에게 유린된다. 이는 질 드 레가 성배에 소원한 뒤틀린 존재다. 진짜 잔은 룰러 클래스로 나타나 어둠의 분신에 맞선다. 이는 잔의 성녀화와 화형으로 이끈 이단 혐의 사이의 역사적 긴장을 반영한다.",
+        "content_ja": "FGO第一特異点『オルレアン』でフランスは竜に乗るジャンヌ・オルタに蹂躙される。これはジル・ド・レが聖杯に願った歪んだ存在だ。本物のジャンヌはルーラークラスのサーヴァントとして現れ、闇の分身に立ち向かう。これはジャンヌの聖女化と火刑に導いた異端の嫌疑の間の歴史的緊張を反映している。"
+      }
+    ],
+    "historical_basis": "Trial records from 1431 and the retrial of 1456 are the primary sources for Joan's life.",
+    "related_servants": [
+      {"name": "Gilles de Rais", "class": "Caster", "rarity": 3},
+      {"name": "Marie Antoinette", "class": "Rider", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Trial of Joan of Arc (1431)", "Jules Quicherat - Proces de Condamnation", "Fate/Grand Order - Orleans"]
+  },
+  {
+    "id": "servant-iskandar",
+    "type": "servant",
+    "title": "Iskandar - King of Conquerors",
+    "title_ko": "이스칸다르 - 정복왕",
+    "title_ja": "イスカンダル - 征服王",
+    "subtitle": "Alexander the Great, who reached the ends of the world",
+    "subtitle_ko": "세계의 끝에 도달한 알렉산드로스 대왕",
+    "subtitle_ja": "世界の果てに到達したアレクサンドロス大王",
+    "era": "Hellenistic Period",
+    "year": -334,
+    "location": "Macedonia to India",
+    "description": "Iskandar is Fate's portrayal of Alexander the Great, the Macedonian king who conquered the largest empire the ancient world had ever seen, stretching from Greece to the borders of India.",
+    "description_ko": "이스칸다르는 그리스에서 인도 국경까지 고대 세계 최대의 제국을 정복한 마케도니아 왕 알렉산드로스 대왕의 페이트 해석이다.",
+    "description_ja": "イスカンダルはギリシャからインド国境まで古代世界最大の帝国を征服したマケドニア王アレクサンドロス大王のFate解釈である。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Alexander III of Macedon (356-323 BC) was tutored by Aristotle, succeeded his father Philip II at 20, and conquered the Persian Empire, Egypt, and parts of India in just 13 years. Plutarch's Parallel Lives provides the most detailed biographical account of Alexander.",
+        "content_ko": "마케도니아의 알렉산드로스 3세(기원전 356-323)는 아리스토텔레스에게 교육받았고, 20세에 아버지 필립 2세를 이어받아 13년 만에 페르시아 제국, 이집트, 인도 일부를 정복했다. 플루타르크의 영웅전이 가장 상세한 전기적 기록을 제공한다.",
+        "content_ja": "マケドニアのアレクサンドロス3世（紀元前356-323）はアリストテレスに教育を受け、20歳で父フィリッポス2世を継いで13年でペルシア帝国、エジプト、インドの一部を征服した。プルタルコスの英雄伝が最も詳細な伝記的記録を提供する。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In Fate/Zero, Iskandar is summoned as a massive, boisterous Rider who seeks to relive his dream of reaching Okeanos, the edge of the world. His Noble Phantasm 'Ionioi Hetairoi' summons his entire army as a Reality Marble, reflecting the loyalty his soldiers bore him even after death.",
+        "content_ko": "Fate/Zero에서 이스칸다르는 오케아노스, 세계의 끝에 도달하려는 꿈을 다시 이루고자 하는 거구의 호쾌한 라이더로 소환된다. 그의 보구 '왕의 군세'는 리얼리티 마블로 전 군대를 소환하며, 이는 죽은 뒤에도 그를 따른 병사들의 충성을 반영한다.",
+        "content_ja": "Fate/Zeroでイスカンダルはオケアノス、世界の果てに到達する夢を再び果たそうとする巨体の豪快なライダーとして召喚される。彼の宝具「王の軍勢」はリアリティ・マーブルとして全軍を召喚し、これは死後も彼に従った兵士たちの忠誠を反映している。"
+      }
+    ],
+    "historical_basis": "Plutarch's Parallel Lives and Arrian's Anabasis of Alexander are the primary ancient sources.",
+    "related_servants": [
+      {"name": "Darius III", "class": "Berserker", "rarity": 3},
+      {"name": "Achilles", "class": "Rider", "rarity": 5}
+    ],
+    "related_event_ids": [],
+    "sources": ["Plutarch - Parallel Lives", "Arrian - Anabasis of Alexander", "Fate/Zero", "Fate/Grand Order"]
+  },
+  {
+    "id": "servant-cu-chulainn",
+    "type": "servant",
+    "title": "Cu Chulainn - Hound of Culann",
+    "title_ko": "쿠 훌린 - 쿨란의 사냥개",
+    "title_ja": "クー・フーリン - クランの猛犬",
+    "subtitle": "Ireland's greatest mythological warrior",
+    "subtitle_ko": "아일랜드 최고의 신화적 전사",
+    "subtitle_ja": "アイルランド最大の神話的戦士",
+    "era": "Celtic Iron Age",
+    "year": -100,
+    "location": "Ulster, Ireland",
+    "description": "Cu Chulainn is the central hero of the Ulster Cycle in Irish mythology, famous for his supernatural battle frenzy and the cursed spear Gae Bolg.",
+    "description_ko": "쿠 훌린은 아일랜드 신화 얼스터 사이클의 중심 영웅으로, 초자연적 전투 광란과 저주의 창 게 볼그로 유명하다.",
+    "description_ja": "クー・フーリンはアイルランド神話アルスターサイクルの中心的英雄で、超自然的な戦闘の狂乱と呪いの槍ゲイ・ボルグで有名だ。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Cu Chulainn's tales come from the Ulster Cycle, compiled in medieval Irish manuscripts like the Lebor na hUidre (Book of the Dun Cow, c.1100). The Tain Bo Cuailnge (Cattle Raid of Cooley) is the central epic, where Cu Chulainn single-handedly defends Ulster against Queen Medb's army of Connacht.",
+        "content_ko": "쿠 훌린의 이야기는 레보르 나 후이드레(갈색 암소의 책, 1100년경) 같은 중세 아일랜드 필사본에 편찬된 얼스터 사이클에서 나온다. 타인 보 쿠알른게(쿨리의 소 약탈)가 중심 서사시로, 쿠 훌린이 홀로 메브 여왕의 코나흐트 군대로부터 얼스터를 방어한다.",
+        "content_ja": "クー・フーリンの物語はレボル・ナ・フイドレ（褐色の牛の書、1100年頃）などの中世アイルランド写本に編纂されたアルスターサイクルから来ている。タイン・ボー・クアルンゲ（クーリーの牛奪い）が中心的叙事詩で、クー・フーリンが一人でメーヴ女王のコノート軍からアルスターを守る。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "Cu Chulainn appears in FGO's tutorial Singularity 'Fuyuki' and is one of the most recurring Servants in the franchise. His Gae Bolg is depicted as a spear that reverses causality — it strikes the heart first, then the thrust occurs afterward, making it nearly impossible to dodge.",
+        "content_ko": "쿠 훌린은 FGO 튜토리얼 특이점 '후유키'에 등장하며 프랜차이즈에서 가장 반복 등장하는 서번트 중 하나다. 그의 게 볼그는 인과를 역전시키는 창으로 묘사되어, 먼저 심장을 꿰뚫은 다음 찌르는 동작이 발생하므로 회피가 거의 불가능하다.",
+        "content_ja": "クー・フーリンはFGOチュートリアル特異点『冬木』に登場し、フランチャイズで最も繰り返し登場するサーヴァントの一人だ。彼のゲイ・ボルグは因果を逆転させる槍として描かれ、まず心臓を貫いてから突く動作が発生するため、回避がほぼ不可能だ。"
+      }
+    ],
+    "historical_basis": "The Ulster Cycle manuscripts, particularly the Tain Bo Cuailnge, preserved in the Book of Leinster (12th century).",
+    "related_servants": [
+      {"name": "Scathach", "class": "Lancer", "rarity": 5},
+      {"name": "Medb", "class": "Rider", "rarity": 5},
+      {"name": "Fionn mac Cumhaill", "class": "Lancer", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Tain Bo Cuailnge", "Book of the Dun Cow", "Fate/stay night", "Fate/Grand Order"]
+  },
+  {
+    "id": "servant-nero",
+    "type": "servant",
+    "title": "Nero Claudius - Emperor of Roses",
+    "title_ko": "네로 클라우디우스 - 장미의 황제",
+    "title_ja": "ネロ・クラウディウス - 薔薇の皇帝",
+    "subtitle": "Rome's most controversial emperor, reimagined",
+    "subtitle_ko": "로마의 가장 논쟁적인 황제, 재해석",
+    "subtitle_ja": "ローマの最も物議を醸した皇帝、再解釈",
+    "era": "Roman Empire",
+    "year": 54,
+    "location": "Rome, Italy",
+    "description": "Nero Claudius Caesar is reimagined in Fate as a female emperor and artist who genuinely loved Rome, contrasting sharply with the historical reputation of tyranny.",
+    "description_ko": "네로 클라우디우스 카이사르는 페이트에서 진심으로 로마를 사랑한 여성 황제이자 예술가로 재해석되어, 폭정이라는 역사적 평판과 극명하게 대비된다.",
+    "description_ja": "ネロ・クラウディウス・カエサルはFateで真にローマを愛した女性皇帝にして芸術家として再解釈され、暴政という歴史的評判と鮮明に対比される。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Nero (37-68 AD) was the last Julio-Claudian emperor. While Suetonius and Tacitus paint him as a tyrant who fiddled while Rome burned, modern scholarship suggests a more complex picture: his early reign was praised, and the Great Fire of 64 AD was likely not his doing. He built the Domus Aurea and pursued artistic ambitions, performing publicly as musician and actor.",
+        "content_ko": "네로(37-68)는 율리우스-클라우디우스 왕조의 마지막 황제였다. 수에토니우스와 타키투스는 로마가 불타는 동안 노래를 불렀다고 묘사하지만, 현대 학계는 더 복잡한 그림을 제시한다. 초기 치세는 칭송받았고, 64년 대화재는 그의 소행이 아닐 가능성이 높다. 도무스 아우레아를 건설하고 음악가와 배우로 공연하며 예술적 야심을 추구했다.",
+        "content_ja": "ネロ（37-68）はユリウス・クラウディウス朝最後の皇帝だった。スエトニウスとタキトゥスはローマが燃える間に歌を歌ったと描くが、現代の学界はより複雑な像を提示する。初期の治世は称賛され、64年の大火は彼の仕業ではない可能性が高い。ドムス・アウレアを建設し、音楽家や俳優として公演し芸術的野心を追求した。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's Second Singularity 'Septem', Nero leads a coalition of Roman emperors against invading Servants. Fate's Nero is female and portrayed as an exuberant, self-proclaimed artistic genius. Her Noble Phantasm 'Aestus Domus Aurea' recreates her golden theater, where she is always the star performer.",
+        "content_ko": "FGO 제2특이점 '셉템'에서 네로는 침략하는 서번트에 맞서 로마 황제들의 연합을 이끈다. 페이트의 네로는 여성이며 자칭 예술적 천재인 활기찬 존재로 그려진다. 보구 '초열의 황금극장'은 그녀의 황금 극장을 재현하며, 거기서 네로는 항상 주연이다.",
+        "content_ja": "FGO第二特異点『セプテム』でネロは侵略するサーヴァントに対しローマ皇帝連合を率いる。Fateのネロは女性で自称芸術的天才の快活な存在として描かれる。宝具「招き蕩う黄金劇場」は彼女の黄金の劇場を再現し、そこでネロは常に主演だ。"
+      }
+    ],
+    "historical_basis": "Suetonius's 'The Twelve Caesars', Tacitus's 'Annals', and Cassius Dio's 'Roman History'.",
+    "related_servants": [
+      {"name": "Romulus", "class": "Lancer", "rarity": 3},
+      {"name": "Caligula", "class": "Berserker", "rarity": 2},
+      {"name": "Julius Caesar", "class": "Saber", "rarity": 3}
+    ],
+    "related_event_ids": [],
+    "sources": ["Suetonius - The Twelve Caesars", "Tacitus - Annals", "Fate/Extra", "Fate/Grand Order - Septem"]
+  },
+  {
+    "id": "servant-drake",
+    "type": "servant",
+    "title": "Francis Drake - Pioneer of the Stars",
+    "title_ko": "프란시스 드레이크 - 성좌의 개척자",
+    "title_ja": "フランシス・ドレイク - 星の開拓者",
+    "subtitle": "The privateer who circumnavigated the globe",
+    "subtitle_ko": "세계를 일주한 사략선장",
+    "subtitle_ja": "世界一周を成し遂げた私掠船長",
+    "era": "Age of Exploration",
+    "year": 1577,
+    "location": "Plymouth, England",
+    "description": "Francis Drake was an English sea captain and privateer who completed the second circumnavigation of the globe and helped defeat the Spanish Armada.",
+    "description_ko": "프란시스 드레이크는 세계 두 번째 일주를 완수하고 스페인 무적함대 격파에 기여한 영국 해군 선장이자 사략선장이었다.",
+    "description_ja": "フランシス・ドレイクは世界二度目の一周を完遂しスペイン無敵艦隊の撃破に貢献したイギリス海軍船長にして私掠船長だった。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Drake (c.1540-1596) was commissioned by Elizabeth I to plunder Spanish ships. His circumnavigation (1577-1580) aboard the Golden Hind brought enormous wealth to England. In 1588, he served as vice admiral against the Spanish Armada. The Spanish called him 'El Draque' and considered him a pirate.",
+        "content_ko": "드레이크(1540경-1596)는 엘리자베스 1세의 명을 받아 스페인 선박을 약탈했다. 골든 하인드호를 타고 세계 일주(1577-1580)를 완수하며 잉글랜드에 막대한 부를 가져왔다. 1588년 스페인 무적함대에 맞서 부제독으로 활동했다. 스페인은 그를 '엘 드라케'라 부르며 해적으로 간주했다.",
+        "content_ja": "ドレイク（1540頃-1596）はエリザベス1世の命を受けスペイン船を略奪した。ゴールデン・ハインド号に乗り世界一周（1577-1580）を完遂しイングランドに莫大な富をもたらした。1588年スペイン無敵艦隊に対し副提督として活動した。スペインは彼を「エル・ドラケ」と呼び海賊と見なした。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's Third Singularity 'Okeanos', Drake is reimagined as a woman — a bold, rum-drinking captain who seeks the edge of the world. Her Noble Phantasm 'Golden Wild Hunt' unleashes her fleet's cannons in a devastating broadside. The Singularity's name Okeanos refers to the mythical ocean at the world's edge.",
+        "content_ko": "FGO 제3특이점 '오케아노스'에서 드레이크는 세계의 끝을 찾는 대담한 럼주 애호가 여성 선장으로 재해석된다. 보구 '황금의 와일드 헌트'는 함대의 대포로 파괴적인 측면 일제사격을 가한다. 특이점 이름 오케아노스는 세계의 끝에 있는 신화적 대양을 가리킨다.",
+        "content_ja": "FGO第三特異点『オケアノス』でドレイクは世界の果てを探す大胆なラム酒愛好家の女性船長として再解釈される。宝具『黄金鹿と嵐の夜』は艦隊の大砲で破壊的な一斉射撃を放つ。特異点名オケアノスは世界の果てにある神話的大洋を指す。"
+      }
+    ],
+    "historical_basis": "Drake's circumnavigation logs, Richard Hakluyt's 'Principal Navigations', and Spanish colonial records.",
+    "related_servants": [
+      {"name": "Blackbeard", "class": "Rider", "rarity": 2},
+      {"name": "Columbus", "class": "Rider", "rarity": 3}
+    ],
+    "related_event_ids": [],
+    "sources": ["Richard Hakluyt - Principal Navigations", "Harry Kelsey - Sir Francis Drake: The Queen's Pirate", "Fate/Grand Order - Okeanos"]
+  },
+  {
+    "id": "servant-tesla",
+    "type": "servant",
+    "title": "Nikola Tesla - Modern Prometheus",
+    "title_ko": "니콜라 테슬라 - 현대의 프로메테우스",
+    "title_ja": "ニコラ・テスラ - 現代のプロメテウス",
+    "subtitle": "The genius who illuminated the world",
+    "subtitle_ko": "세상을 밝힌 천재",
+    "subtitle_ja": "世界を照らした天才",
+    "era": "Industrial Revolution",
+    "year": 1882,
+    "location": "New York, USA",
+    "description": "Nikola Tesla revolutionized electrical engineering with alternating current, making modern power distribution possible. In FGO, he commands lightning itself as a Servant of the Age of Thunder.",
+    "description_ko": "니콜라 테슬라는 교류 전류로 전기공학을 혁명적으로 바꿔 현대 전력 분배를 가능하게 했다. FGO에서 그는 번개의 시대의 서번트로 번개 자체를 지배한다.",
+    "description_ja": "ニコラ・テスラは交流電流で電気工学を革命的に変え、現代の電力配分を可能にした。FGOで彼は雷の時代のサーヴァントとして雷そのものを支配する。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Tesla (1856-1943) emigrated from Serbia to America and developed the AC induction motor, polyphase power systems, and the Tesla coil. His 'War of Currents' with Edison shaped modern electrical infrastructure. Despite his genius, he died in relative poverty, his later years marked by increasingly eccentric claims.",
+        "content_ko": "테슬라(1856-1943)는 세르비아에서 미국으로 이민하여 교류 유도 모터, 다상 전력 시스템, 테슬라 코일을 개발했다. 에디슨과의 '전류 전쟁'은 현대 전기 인프라를 형성했다. 천재성에도 불구하고 상대적 빈곤 속에 사망했으며, 만년은 점점 괴짜적인 주장으로 얼룩졌다.",
+        "content_ja": "テスラ（1856-1943）はセルビアからアメリカに移民し、交流誘導モーター、多相電力システム、テスラコイルを開発した。エジソンとの「電流戦争」は現代の電気インフラを形成した。天才性にもかかわらず比較的貧困の中で亡くなり、晩年はますます奇人的な主張で彩られた。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's Fourth Singularity 'London', Tesla appears as an Archer-class Servant whose Noble Phantasm 'System Keraunos' channels divine lightning. Fate elevates his rivalry with Edison — both appear in London Singularity, with Edison portrayed as a lion-headed composite of American presidents. Tesla embodies the 'Age of Thunder', humanity's mastery over electricity.",
+        "content_ko": "FGO 제4특이점 '런던'에서 테슬라는 보구 '시스템 케라우노스'로 신성한 번개를 다루는 아처 클래스 서번트로 등장한다. 페이트는 에디슨과의 라이벌 관계를 확대하여, 에디슨은 미국 대통령들의 합성체인 사자 머리로 묘사된다. 테슬라는 인류의 전기 지배인 '번개의 시대'를 체현한다.",
+        "content_ja": "FGO第四特異点『ロンドン』でテスラは宝具「人類神話・雷電降臨」で神聖な雷を操るアーチャークラスのサーヴァントとして登場する。Fateはエジソンとのライバル関係を拡大し、エジソンはアメリカ大統領たちの合成体であるライオン頭として描かれる。テスラは人類の電気支配である「雷の時代」を体現する。"
+      }
+    ],
+    "historical_basis": "Tesla's autobiography 'My Inventions' (1919) and W. Bernard Carlson's 'Tesla: Inventor of the Electrical Age'.",
+    "related_servants": [
+      {"name": "Thomas Edison", "class": "Caster", "rarity": 4},
+      {"name": "Charles Babbage", "class": "Caster", "rarity": 3},
+      {"name": "Helena Blavatsky", "class": "Caster", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Nikola Tesla - My Inventions", "W. Bernard Carlson - Tesla: Inventor of the Electrical Age", "Fate/Grand Order - London"]
+  },
+  {
+    "id": "servant-mordred",
+    "type": "servant",
+    "title": "Mordred - Knight of Treachery",
+    "title_ko": "모드레드 - 반역의 기사",
+    "title_ja": "モードレッド - 叛逆の騎士",
+    "subtitle": "The knight who brought down Camelot",
+    "subtitle_ko": "카멜롯을 무너뜨린 기사",
+    "subtitle_ja": "キャメロットを滅ぼした騎士",
+    "era": "Post-Roman Britain",
+    "year": 537,
+    "location": "Camlann, Britain",
+    "description": "Mordred is the illegitimate child of King Arthur and his half-sister Morgan le Fay, whose rebellion destroyed the Kingdom of Camelot at the Battle of Camlann.",
+    "description_ko": "모드레드는 아서왕과 이복 누나 모건 르 페이의 사생아로, 카믈란 전투에서 카멜롯 왕국을 멸망시킨 반란을 일으켰다.",
+    "description_ja": "モードレッドはアーサー王と異母姉モルガン・ル・フェイの私生児で、カムランの戦いでキャメロット王国を滅ぼす反乱を起こした。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Mordred first appears in Geoffrey of Monmouth's Historia (1136) as Arthur's nephew and regent who usurps the throne. Later romances, particularly the French Vulgate Cycle, made Mordred Arthur's incestuous son. The Battle of Camlann, where both Arthur and Mordred fall, is mentioned as early as the Annales Cambriae (c. 970).",
+        "content_ko": "모드레드는 제프리 오브 몬머스의 역사서(1136)에서 왕위를 찬탈한 아서의 조카이자 섭정으로 처음 등장한다. 후대 로망스, 특히 프랑스 불가타 사이클은 모드레드를 아서의 근친상간으로 태어난 아들로 만들었다. 아서와 모드레드 모두 쓰러진 카믈란 전투는 일찍이 칸브리아 연대기(970년경)에서 언급된다.",
+        "content_ja": "モードレッドはジェフリー・オブ・モンマスの歴史書（1136）で王位を簒奪したアーサーの甥にして摂政として初めて登場する。後のロマンス、特にフランスのヴルガータサイクルはモードレッドをアーサーの近親相姦で生まれた息子にした。アーサーとモードレッドの両者が倒れたカムランの戦いは早くもカンブリア年代記（970年頃）で言及されている。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's Sixth Singularity 'Camelot', Mordred is reimagined as a female knight desperate for parental recognition. Created by Morgan using Artoria's genetic material, Mordred sees herself as the rightful heir but is rejected by her 'father'. Her rebellion stems from this personal tragedy rather than pure ambition. Her Noble Phantasm 'Clarent Blood Arthur' is a corrupted version of Arthur's radiant sword.",
+        "content_ko": "FGO 제6특이점 '카멜롯'에서 모드레드는 부모의 인정을 갈구하는 여성 기사로 재해석된다. 모건이 아르토리아의 유전 물질을 사용해 만들어낸 모드레드는 자신을 정당한 후계자로 여기지만 '아버지'에게 거부당한다. 반란은 순수한 야심이 아닌 이 개인적 비극에서 비롯된다. 보구 '찬란한 왕의 검'은 아서의 빛나는 검을 타락시킨 것이다.",
+        "content_ja": "FGO第六特異点『キャメロット』でモードレッドは親の承認を渇望する女性騎士として再解釈される。モルガンがアルトリアの遺伝物質を使って作り出したモードレッドは自分を正当な後継者と見なすが「父」に拒絶される。反乱は純粋な野心ではなくこの個人的悲劇から生まれる。宝具「我が麗しき父への叛逆」はアーサーの輝く剣を堕落させたものだ。"
+      }
+    ],
+    "historical_basis": "Geoffrey of Monmouth's Historia, the Vulgate Cycle, and Thomas Malory's Le Morte d'Arthur.",
+    "related_servants": [
+      {"name": "Artoria Pendragon", "class": "Saber", "rarity": 5},
+      {"name": "Gawain", "class": "Saber", "rarity": 4},
+      {"name": "Lancelot", "class": "Saber", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Geoffrey of Monmouth - Historia Regum Britanniae", "Thomas Malory - Le Morte d'Arthur", "Fate/Apocrypha", "Fate/Grand Order - Camelot"]
+  },
+  {
+    "id": "servant-ivan",
+    "type": "servant",
+    "title": "Ivan the Terrible - Thunder Emperor",
+    "title_ko": "이반 뇌제 - 뇌제",
+    "title_ja": "イヴァン雷帝 - 雷帝",
+    "subtitle": "Russia's most fearsome tsar, merged with a mammoth",
+    "subtitle_ko": "러시아의 가장 두려운 차르, 매머드와 합체",
+    "subtitle_ja": "ロシアの最も恐ろしいツァーリ、マンモスと合体",
+    "era": "Russian Tsardom",
+    "year": 1547,
+    "location": "Moscow, Russia",
+    "description": "Ivan IV Vasilyevich was the first Grand Prince of Moscow to adopt the title of Tsar. In FGO, he appears as a monstrous fusion of tsar and mammoth in the frozen Lostbelt of Russia.",
+    "description_ko": "이반 4세 바실리예비치는 차르 칭호를 채택한 최초의 모스크바 대공이었다. FGO에서 그는 얼어붙은 러시아 로스트벨트에서 차르와 매머드가 합체한 괴물로 등장한다.",
+    "description_ja": "イヴァン4世ヴァシリエヴィチはツァーリの称号を採用した最初のモスクワ大公だった。FGOでは凍りついたロシアのロストベルトでツァーリとマンモスが融合した怪物として登場する。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Ivan IV (1530-1584) expanded Russia enormously, conquering the Khanates of Kazan and Astrakhan. His early reign saw legal and administrative reforms, but his later years were marked by the Oprichnina — a reign of terror against the boyar nobility. He accidentally killed his own son Ivan in a fit of rage, an event immortalized in Repin's famous painting.",
+        "content_ko": "이반 4세(1530-1584)는 카잔 칸국과 아스트라한 칸국을 정복하며 러시아를 크게 확장했다. 초기 치세에는 법적, 행정적 개혁이 이루어졌으나, 후기에는 보야르 귀족에 대한 공포 통치인 오프리치니나로 얼룩졌다. 분노에 휩싸여 아들 이반을 실수로 죽였으며, 이 사건은 레핀의 유명한 그림으로 불멸화되었다.",
+        "content_ja": "イヴァン4世（1530-1584）はカザン・ハン国とアストラハン・ハン国を征服しロシアを大きく拡張した。初期の治世では法的・行政的改革が行われたが、後期はボヤール貴族に対する恐怖統治であるオプリーチニナで汚された。怒りに駆られて息子イヴァンを誤って殺し、この事件はレーピンの有名な絵画で不朽のものとなった。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO's Lostbelt 1 'Permafrost Empire: Anastasia', Ivan has been merged with a demonic beast mammoth through a Yaga ritual, becoming the ruler of an alternate Russia where humans evolved into beast-hybrid Yaga to survive an eternal ice age. His Noble Phantasm 'Zveri — Krestnyy Khod' is a devastating charge that embodies Russia's relentless expansion.",
+        "content_ko": "FGO 로스트벨트 1 '영구동토제국: 아나스타시아'에서 이반은 야가 의식을 통해 마수 매머드와 합체하여, 인류가 영원한 빙하기에서 살아남기 위해 야수 혼혈 야가로 진화한 대안적 러시아의 지배자가 되었다. 보구 '짐승들아, 성자와 함께 행진하라'는 러시아의 끊임없는 팽창을 체현한 파괴적 돌진이다.",
+        "content_ja": "FGOロストベルト1『永久凍土帝国：アナスタシア』でイヴァンはヤガの儀式を通じて魔獣マンモスと融合し、人類が永遠の氷河期で生き延びるため獣混血のヤガに進化した代替ロシアの支配者となった。宝具「我が旅路に従え、獣たち」はロシアの絶え間ない膨張を体現した破壊的突進だ。"
+      }
+    ],
+    "historical_basis": "Primary sources include Kurbsky's letters and the Stoglav Council records.",
+    "related_servants": [
+      {"name": "Anastasia", "class": "Caster", "rarity": 5},
+      {"name": "Avicebron", "class": "Caster", "rarity": 3}
+    ],
+    "related_event_ids": [],
+    "sources": ["Andrey Kurbsky - History of Ivan IV", "Isabel de Madariaga - Ivan the Terrible", "Fate/Grand Order - Lostbelt 1"]
+  },
+  {
+    "id": "servant-nobunaga",
+    "type": "servant",
+    "title": "Oda Nobunaga - Demon King of the Sixth Heaven",
+    "title_ko": "오다 노부나가 - 제6천마왕",
+    "title_ja": "織田信長 - 第六天魔王",
+    "subtitle": "The unifier who broke Japan's feudal order",
+    "subtitle_ko": "일본의 봉건 질서를 깨뜨린 통일자",
+    "subtitle_ja": "日本の封建秩序を破った統一者",
+    "era": "Sengoku Period",
+    "year": 1560,
+    "location": "Owari, Japan",
+    "description": "Oda Nobunaga was the first of Japan's three great unifiers, who used firearms and innovative tactics to begin the unification of Japan during the Sengoku period.",
+    "description_ko": "오다 노부나가는 일본의 3대 통일자 중 첫 번째로, 총기와 혁신적 전술을 사용하여 전국시대 일본 통일을 시작했다.",
+    "description_ja": "織田信長は日本の三英傑の最初の一人で、銃器と革新的な戦術を用いて戦国時代の日本統一を始めた。",
+    "sections": [
+      {
+        "title": "Historical Background",
+        "title_ko": "역사적 배경",
+        "title_ja": "歴史的背景",
+        "content": "Nobunaga (1534-1582) rose from a minor daimyo of Owari Province to control nearly half of Japan. His victory at Okehazama (1560) against overwhelming odds made him famous. He revolutionized warfare by introducing mass firearms tactics at the Battle of Nagashino (1575). He was betrayed and killed by his vassal Akechi Mitsuhide at Honnoji Temple in 1582.",
+        "content_ko": "노부나가(1534-1582)는 오와리 지방의 약소 다이묘에서 일본의 거의 절반을 지배하게 되었다. 오케하자마 전투(1560)에서의 역전승으로 유명해졌다. 나가시노 전투(1575)에서 대량 화기 전술을 도입하여 전쟁을 혁신했다. 1582년 혼노지에서 가신 아케치 미쓰히데에게 배신당해 죽었다.",
+        "content_ja": "信長（1534-1582）は尾張の弱小大名から日本のほぼ半分を支配するに至った。桶狭間の戦い（1560）での逆転勝利で有名になった。長篠の戦い（1575）で大量火器戦術を導入し戦争を革新した。1582年本能寺で家臣の明智光秀に裏切られ死んだ。"
+      },
+      {
+        "title": "Fate Interpretation",
+        "title_ko": "페이트 해석",
+        "title_ja": "Fateでの解釈",
+        "content": "In FGO, Nobunaga is reimagined as a playful, mischievous woman who calls herself the 'Demon King of the Sixth Heaven' — a title the historical Nobunaga actually used. Her Noble Phantasm 'Three Line Formation' recreates her revolutionary volley fire tactics from Nagashino. She is particularly effective against Servants with Divinity, reflecting Nobunaga's historical destruction of Buddhist temples on Mt. Hiei.",
+        "content_ko": "FGO에서 노부나가는 역사적 노부나가가 실제로 사용한 칭호인 '제6천마왕'을 자처하는 장난기 넘치는 여성으로 재해석된다. 보구 '삼천세계'는 나가시노의 혁명적 일제사격 전술을 재현한다. 신성 특성 서번트에게 특히 효과적인데, 이는 노부나가의 히에이산 불교 사원 파괴를 반영한다.",
+        "content_ja": "FGOで信長は歴史的な信長が実際に使った称号「第六天魔王」を自称する茶目っ気のある女性として再解釈される。宝具「三千世界」は長篠の革命的な一斉射撃戦術を再現する。神性特性のサーヴァントに特に有効で、これは信長の比叡山焼き討ちを反映している。"
+      }
+    ],
+    "historical_basis": "Luis Frois's Historia de Japam, Shinchoko-ki (chronicle by Ota Gyuichi), and Nobunaga's own correspondence.",
+    "related_servants": [
+      {"name": "Okita Souji", "class": "Saber", "rarity": 5},
+      {"name": "Chacha", "class": "Berserker", "rarity": 4}
+    ],
+    "related_event_ids": [],
+    "sources": ["Ota Gyuichi - Shinchoko-ki", "Luis Frois - Historia de Japam", "Fate/Grand Order - GUDAGUDA Events"]
   }
 ]

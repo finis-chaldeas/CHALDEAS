@@ -4,6 +4,61 @@ import type { Event, Location, Category } from '../types'
 // Camera mode types
 export type CameraMode = 'orbit' | 'fly'
 
+// View mode: 3D globe or 2D map
+export type ViewMode = 'globe' | 'map'
+
+// Zoom level derived from altitude (4-level system)
+export type ZoomLevel = 'cosmic' | 'continental' | 'regional' | 'local'
+
+// Globe → Map transition threshold (altitude ≤ this triggers map mode)
+export const MAP_TRANSITION_ALTITUDE = 0.15
+// Hysteresis buffer to prevent flickering (map → globe at altitude > 0.18)
+export const MAP_RETURN_ALTITUDE = MAP_TRANSITION_ALTITUDE + 0.03
+
+export const ZOOM_THRESHOLDS = {
+  COSMIC: 2.5,
+  CONTINENTAL: 1.0,
+  REGIONAL: 0.3,
+  LOCAL: 0,
+} as const
+
+// Globe marker type (shared between Globe and Map views)
+export interface GlobeMarkerData {
+  id: number
+  type: 'event' | 'person' | 'location'
+  lat: number
+  lng: number
+  year: number | null
+  year_end: number | null
+  category: string | null
+  title: string
+  description: string | null
+  certainty: string | null
+  color: string | null
+  importance: number | null
+}
+
+// Convert globe altitude to Leaflet zoom level
+export function altitudeToLeafletZoom(altitude: number): number {
+  // Mapping: altitude 0.15 → zoom 8, 0.10 → 11, 0.05 → 14, 0.02 → 16
+  // Using logarithmic mapping: zoom ≈ -14.5 * ln(altitude) + 5.5
+  const zoom = -14.5 * Math.log(altitude) + 5.5
+  return Math.max(3, Math.min(18, Math.round(zoom)))
+}
+
+// Convert Leaflet zoom level to approximate globe altitude
+export function leafletZoomToAltitude(zoom: number): number {
+  // Inverse of above: altitude ≈ exp((5.5 - zoom) / 14.5)
+  return Math.exp((5.5 - zoom) / 14.5)
+}
+
+export function getZoomLevel(altitude: number): ZoomLevel {
+  if (altitude > ZOOM_THRESHOLDS.COSMIC) return 'cosmic'
+  if (altitude > ZOOM_THRESHOLDS.CONTINENTAL) return 'continental'
+  if (altitude > ZOOM_THRESHOLDS.REGIONAL) return 'regional'
+  return 'local'
+}
+
 interface CameraPosition {
   lat: number
   lng: number
@@ -17,11 +72,25 @@ interface FlyState {
   speed: number    // movement speed multiplier
 }
 
+interface FlyTarget {
+  lat: number
+  lng: number
+  altitude: number
+  ts: number  // timestamp to detect new fly commands
+}
+
 interface HighlightedLocation {
   title: string
   lat: number
   lng: number
   year?: number
+}
+
+export interface ViewportBounds {
+  north: number
+  south: number
+  east: number
+  west: number
 }
 
 interface GlobeState {
@@ -39,6 +108,17 @@ interface GlobeState {
   cameraMode: CameraMode
   flyState: FlyState
 
+  // View mode (globe/map)
+  viewMode: ViewMode
+  globeMarkers: GlobeMarkerData[]
+
+  // Viewport tracking
+  viewportBounds: ViewportBounds | null
+  zoomLevel: ZoomLevel
+
+  // Fly-to target (consumed by GlobeContainer)
+  flyTarget: FlyTarget | null
+
   // Filters
   selectedCategories: number[]
   minImportance: number
@@ -54,10 +134,15 @@ interface GlobeState {
   toggleCategory: (categoryId: number) => void
   setMinImportance: (importance: number) => void
   flyToLocation: (lat: number, lng: number) => void
+  clearFlyTarget: () => void
   setHighlightedLocations: (locs: HighlightedLocation[]) => void
   clearHighlightedLocations: () => void
   setCameraMode: (mode: CameraMode) => void
   updateFlyState: (state: Partial<FlyState>) => void
+  setViewportBounds: (bounds: ViewportBounds | null) => void
+  setViewMode: (mode: ViewMode) => void
+  setGlobeMarkers: (markers: GlobeMarkerData[]) => void
+  returnToCosmic: () => void
 }
 
 export const useGlobeStore = create<GlobeState>((set, get) => ({
@@ -67,11 +152,16 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   categories: [],
   selectedEvent: null,
   hoveredEvent: null,
-  cameraPosition: { lat: 30, lng: 20, altitude: 2.5 },
+  cameraPosition: { lat: 30, lng: 20, altitude: 3.0 },
   autoRotate: true,
   highlightedLocations: [],
   cameraMode: 'orbit',
   flyState: { heading: 0, pitch: 0, speed: 1.0 },
+  viewMode: 'globe',
+  globeMarkers: [],
+  viewportBounds: null,
+  zoomLevel: 'cosmic',
+  flyTarget: null,
   selectedCategories: [],
   minImportance: 1,
 
@@ -111,7 +201,10 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   flyToLocation: (lat, lng) =>
     set({
       cameraPosition: { lat, lng, altitude: 1.5 },
+      flyTarget: { lat, lng, altitude: 1.5, ts: Date.now() },
     }),
+
+  clearFlyTarget: () => set({ flyTarget: null }),
 
   setHighlightedLocations: (locs) => {
     set({ highlightedLocations: locs })
@@ -138,4 +231,32 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
     set((prev) => ({
       flyState: { ...prev.flyState, ...state },
     })),
+
+  setViewportBounds: (bounds) => {
+    const altitude = get().cameraPosition.altitude
+    const zoomLevel = getZoomLevel(altitude)
+    const currentViewMode = get().viewMode
+
+    // Hysteresis transition logic: globe → map at ≤0.15, map → globe at >0.18
+    let newViewMode = currentViewMode
+    if (currentViewMode === 'globe' && altitude <= MAP_TRANSITION_ALTITUDE) {
+      newViewMode = 'map'
+    } else if (currentViewMode === 'map' && altitude > MAP_RETURN_ALTITUDE) {
+      newViewMode = 'globe'
+    }
+
+    set({ viewportBounds: bounds, zoomLevel, viewMode: newViewMode })
+  },
+
+  setViewMode: (mode) => set({ viewMode: mode }),
+
+  setGlobeMarkers: (markers) => set({ globeMarkers: markers }),
+
+  returnToCosmic: () =>
+    set({
+      cameraPosition: { lat: 30, lng: 20, altitude: 3.0 },
+      autoRotate: true,
+      zoomLevel: 'cosmic',
+      viewMode: 'globe',
+    }),
 }))

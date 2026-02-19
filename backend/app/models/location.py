@@ -1,15 +1,13 @@
 """
 Location model.
 
-Represents geographical locations where historical events occurred.
-Supports both ancient and modern naming.
+Represents fixed geographical nodes (points) where historical events occurred.
+Each location is an immutable point with (latitude, longitude) coordinates.
 
-V1 Extension:
-- Dual hierarchy: modern (current administrative) and historical (period-specific)
-- Temporal validity: when a historical entity existed
-- Hierarchy levels: site, city, region, country, continent, civilization_area
+Locations are nodes - once created, their coordinates don't change.
+Time-varying attributes (names, territorial affiliation) are in separate tables.
 """
-from sqlalchemy import Column, Integer, String, Numeric, Text, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base, TimestampMixin
@@ -19,85 +17,73 @@ class Location(Base, TimestampMixin):
     __tablename__ = "locations"
 
     id = Column(Integer, primary_key=True, index=True)
+
+    # External reference
+    wikidata_id = Column(String(50), nullable=True, unique=True)
+
+    # Representative name (current, for search/display)
     name = Column(String(255), nullable=False)
     name_ko = Column(String(255))
-    name_original = Column(String(255))  # Original language name
+    name_ja = Column(String(255))
 
-    # Coordinates
+    # Coordinates (immutable, required)
     latitude = Column(Numeric(10, 8), nullable=False)
     longitude = Column(Numeric(11, 8), nullable=False)
 
-    # Classification
-    type = Column(String(50), nullable=False)  # city, region, landmark, battle_site
-    modern_name = Column(String(255))  # Modern equivalent name
+    # Classification: point (cities, buildings, battlefields), natural (mountains, rivers), sea
+    location_type = Column(String(30), nullable=False, default='point', server_default='point', index=True)
+
+    # Modern country (for filtering/grouping)
     country = Column(String(100))
-    region = Column(String(100))
 
-    # V1: Hierarchy Level
-    # site < city < region < country < continent < civilization_area
-    hierarchy_level = Column(
-        String(30),
-        CheckConstraint(
-            "hierarchy_level IN ('site', 'city', 'region', 'country', 'continent', 'civilization_area')"
-        ),
-        nullable=True  # nullable for V0 compatibility
-    )
+    # Physical hierarchy (immutable: 경복궁 → 서울)
+    parent_location_id = Column(Integer, ForeignKey("locations.id"), nullable=True, index=True)
 
-    # V1: Dual Hierarchy
-    # Modern hierarchy: Naples → Campania → Italy → Europe
-    modern_parent_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
-    # Historical hierarchy (time-dependent): Naples → Kingdom of Two Sicilies → Europe (in 1843)
-    historical_parent_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
+    # === Relationships ===
 
-    # V1: Temporal Validity (for historical entities)
-    # When did this location exist under this name/political entity?
-    valid_from = Column(Integer, nullable=True)  # BCE as negative, e.g., -753 for Rome's founding
-    valid_until = Column(Integer, nullable=True)  # null = still exists
-
-    # Description
-    description = Column(Text)
-    description_ko = Column(Text)
-    description_ja = Column(Text)  # Japanese description
-
-    # Japanese name
-    name_ja = Column(String(255))
-
-    # Source tracking for description
-    description_source = Column(String(50))  # wikipedia_en, wikipedia_ko, wikipedia_ja, llm, manual
-    description_source_url = Column(String(500))
-
-    # Connection count for filtering orphans
-    connection_count = Column(Integer, default=0, index=True)
-
-    # Relationships
+    # M2M with events via event_locations
     events = relationship(
         "Event",
         secondary="event_locations",
         back_populates="locations"
     )
+
+    # Events where this is the primary location
     primary_events = relationship(
         "Event",
         back_populates="primary_location",
         foreign_keys="Event.primary_location_id"
     )
+
+    # Persons born here
     birthplace_of = relationship(
         "Person",
         back_populates="birthplace",
         foreign_keys="Person.birthplace_id"
     )
 
-    # V1: Hierarchy relationships
-    modern_parent = relationship(
+    # Physical hierarchy (parent/children)
+    parent = relationship(
         "Location",
         remote_side=[id],
-        foreign_keys=[modern_parent_id],
-        backref="modern_children"
+        foreign_keys=[parent_location_id],
+        backref="children"
     )
-    historical_parent = relationship(
-        "Location",
-        remote_side=[id],
-        foreign_keys=[historical_parent_id],
-        backref="historical_children"
+
+    # Time-varying names
+    names = relationship(
+        "LocationName",
+        back_populates="location",
+        cascade="all, delete-orphan",
+        order_by="LocationName.valid_from"
+    )
+
+    # 1:1 detail info (description, URLs)
+    details = relationship(
+        "LocationDetail",
+        back_populates="location",
+        uselist=False,
+        cascade="all, delete-orphan"
     )
 
     def __repr__(self):
@@ -108,29 +94,35 @@ class Location(Base, TimestampMixin):
         """Return (latitude, longitude) tuple."""
         return (float(self.latitude), float(self.longitude))
 
-    # V1: Helper methods
-    def get_modern_ancestors(self) -> list["Location"]:
-        """Get all ancestors in modern hierarchy (city → region → country → continent)."""
-        ancestors = []
-        current = self.modern_parent
-        while current:
-            ancestors.append(current)
-            current = current.modern_parent
-        return ancestors
+    def get_name_at(self, year: int, language: str = 'en') -> str:
+        """Get the name of this location at a specific year.
 
-    def get_historical_ancestors(self) -> list["Location"]:
-        """Get all ancestors in historical hierarchy."""
-        ancestors = []
-        current = self.historical_parent
-        while current:
-            ancestors.append(current)
-            current = current.historical_parent
-        return ancestors
+        Args:
+            year: Year to query (BCE as negative)
+            language: Language code (en, ko, ja)
 
-    def was_valid_in(self, year: int) -> bool:
-        """Check if this location entity existed in a given year."""
-        if self.valid_from is not None and year < self.valid_from:
-            return False
-        if self.valid_until is not None and year > self.valid_until:
-            return False
-        return True
+        Returns:
+            The period-appropriate name, or current name as fallback.
+        """
+        if not self.names:
+            return self.name
+
+        # Find primary name for the period
+        for loc_name in self.names:
+            if loc_name.is_primary and loc_name.is_valid_in(year):
+                if language == 'ko' and loc_name.name_ko:
+                    return loc_name.name_ko
+                if language == 'ja' and loc_name.name_ja:
+                    return loc_name.name_ja
+                return loc_name.name
+
+        # Fallback: any valid name for the period
+        for loc_name in self.names:
+            if loc_name.is_valid_in(year):
+                if language == 'ko' and loc_name.name_ko:
+                    return loc_name.name_ko
+                if language == 'ja' and loc_name.name_ja:
+                    return loc_name.name_ja
+                return loc_name.name
+
+        return self.name

@@ -31,7 +31,6 @@ class Category(Base, TimestampMixin):
     # Relationships
     parent = relationship("Category", remote_side=[id], backref="children")
     events = relationship("Event", back_populates="category")
-    persons = relationship("Person", back_populates="category")
 
     def __repr__(self):
         return f"<Category(id={self.id}, name='{self.name}')>"

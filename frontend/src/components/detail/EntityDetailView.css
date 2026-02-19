@@ -39,7 +39,8 @@
   flex-direction: column;
   z-index: 1000;
   animation: entitySlideIn 0.3s ease-out;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .entity-detail-view.person-view {
@@ -126,6 +127,18 @@
   font-size: 0.8rem;
   color: #64748b;
   margin-top: 0.25rem;
+}
+
+.fgo-servant-badge {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #ffc107;
+  letter-spacing: 0.02em;
 }
 
 /* ========== Life Span (Person) ========== */
@@ -274,11 +287,9 @@
 
 /* ========== Sections ========== */
 .entity-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .section-header {
@@ -304,9 +315,9 @@
 
 /* ========== Timeline ========== */
 .timeline-list {
-  flex: 1;
   overflow-y: auto;
   padding: 0.5rem 0;
+  max-height: 400px;
 }
 
 .timeline-item {
@@ -377,9 +388,9 @@
 
 /* ========== Connected List ========== */
 .connected-list {
-  flex: 1;
   overflow-y: auto;
   padding: 0.5rem;
+  max-height: 500px;
 }
 
 .connected-item {
@@ -425,6 +436,7 @@
   padding: 0.75rem 1.25rem;
   background: rgba(0, 0, 0, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 .entity-id {
@@ -762,4 +774,359 @@
   color: #64748b;
   font-size: 0.75rem;
   margin-left: auto;
+}
+
+/* Facts Grid (Wikidata Properties) */
+.facts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0.5rem 1.25rem;
+}
+
+.fact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.fact-item:last-child {
+  border-bottom: none;
+}
+
+.fact-label {
+  color: #64748b;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  min-width: 90px;
+}
+
+.fact-value {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  text-align: right;
+  line-height: 1.3;
+}
+
+/* ========== Wikipedia Link ========== */
+.wikipedia-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.wikipedia-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #e2e8f0;
+}
+
+.wikipedia-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.description-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ========== Also Known As (Names) Section ========== */
+.names-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.name-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  border-left: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.name-item:hover {
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.name-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name-text {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+}
+
+.name-localized {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.name-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.name-type-badge {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.name-type-badge.official {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.name-type-badge.regnal {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.name-type-badge.epithet {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+}
+
+.name-type-badge.religious {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.name-type-badge.romanized {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.name-type-badge.native {
+  background: rgba(0, 212, 255, 0.15);
+  color: #22d3ee;
+}
+
+.name-lang {
+  font-size: 0.6rem;
+  color: #475569;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.name-period {
+  font-size: 0.6rem;
+  color: #475569;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* ========== Relationship Type Badges ========== */
+.relation-group {
+  margin-bottom: 0.5rem;
+}
+
+.relation-group-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.relation-group-label.family {
+  color: #ef4444;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.relation-group-label.spouse {
+  color: #ec4899;
+  border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+.relation-group-label.academic {
+  color: #3b82f6;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.relation-group-label.other {
+  color: #64748b;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.rel-type-badge {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.rel-type-badge.family {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.rel-type-badge.spouse {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.rel-type-badge.academic {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.rel-type-badge.other {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+}
+
+/* ========== Hierarchy Breadcrumb ========== */
+.hierarchy-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  font-size: 0.75rem;
+  overflow: hidden;
+}
+
+.hierarchy-breadcrumb-link {
+  color: var(--chaldea-cyan, #00d4ff);
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.hierarchy-breadcrumb-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.hierarchy-breadcrumb-sep {
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.hierarchy-breadcrumb-current {
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hierarchy-browse-all {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 4px;
+  color: var(--chaldea-cyan, #00d4ff);
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.hierarchy-browse-all:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+/* Location wiki link (already in LocationDetailView) */
+.entity-wiki-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  margin: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.entity-wiki-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #e2e8f0;
+}
+
+/* ========== Wikipedia Content Section ========== */
+.wiki-content {
+  padding: 0 1.25rem 0.75rem;
+}
+
+.wiki-excerpt {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: #b0bec5;
+  margin: 0 0 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.wiki-expand-btn {
+  display: inline-block;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #64748b;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+
+.wiki-expand-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.2);
 }

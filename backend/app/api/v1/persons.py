@@ -7,8 +7,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import Optional
 
+from sqlalchemy import text as sa_text
+
 from app.db.session import get_db
-from app.schemas.person import Person, PersonList, PersonDetail, PersonRelation, PersonRelationList
+from app.schemas.person import Person, PersonList, PersonDetail, PersonRelation, PersonRelationList, PersonFlow
 from app.schemas.source import PersonSourceList, SourceWithMentions, MentionContext
 from app.services import person_service, source_service
 
@@ -19,27 +21,98 @@ router = APIRouter()
 async def list_persons(
     year_start: Optional[int] = Query(None, description="Active from year"),
     year_end: Optional[int] = Query(None, description="Active until year"),
-    category_id: Optional[int] = Query(None, description="Filter by category"),
-    include_orphans: bool = Query(False, description="Include entities with no connections"),
+    lat_min: Optional[float] = Query(None, description="Viewport south bound (birthplace)"),
+    lat_max: Optional[float] = Query(None, description="Viewport north bound (birthplace)"),
+    lng_min: Optional[float] = Query(None, description="Viewport west bound (birthplace)"),
+    lng_max: Optional[float] = Query(None, description="Viewport east bound (birthplace)"),
+    sort_by: Optional[str] = Query(None, description="Sort by: 'birth' (default)"),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
-    """List historical figures with optional filtering.
-
-    By default, excludes orphan entities (those with no relationships).
-    Set include_orphans=true to see all entities.
-    """
+    """List historical figures with optional filtering."""
     persons, total = person_service.get_persons(
         db,
         year_start=year_start,
         year_end=year_end,
-        category_id=category_id,
         limit=limit,
         offset=offset,
-        include_orphans=include_orphans,
+        lat_min=lat_min,
+        lat_max=lat_max,
+        lng_min=lng_min,
+        lng_max=lng_max,
+        sort_by=sort_by,
     )
     return PersonList(items=persons, total=total)
+
+
+@router.get("/network")
+async def get_person_network(
+    year_start: Optional[int] = Query(None, description="Active from year"),
+    year_end: Optional[int] = Query(None, description="Active until year"),
+    lat_min: Optional[float] = Query(None, description="Viewport south bound"),
+    lat_max: Optional[float] = Query(None, description="Viewport north bound"),
+    lng_min: Optional[float] = Query(None, description="Viewport west bound"),
+    lng_max: Optional[float] = Query(None, description="Viewport east bound"),
+    limit: int = Query(30, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """
+    Get persons in viewport with their inter-relationships from the links table.
+
+    Returns persons[] + relations[] (from_id, to_id, category).
+    """
+    persons_list, total = person_service.get_persons(
+        db,
+        year_start=year_start,
+        year_end=year_end,
+        limit=limit,
+        offset=0,
+        lat_min=lat_min,
+        lat_max=lat_max,
+        lng_min=lng_min,
+        lng_max=lng_max,
+        sort_by='connections',
+    )
+
+    if not persons_list:
+        return {"persons": [], "relations": [], "total": 0}
+
+    person_ids = [p.id for p in persons_list]
+    persons_out = []
+    for p in persons_list:
+        persons_out.append({
+            "id": p.id,
+            "name": p.name,
+            "name_ko": getattr(p, 'name_ko', None),
+            "birth_year": p.birth_year,
+            "death_year": p.death_year,
+            "role": getattr(p, 'role', None),
+        })
+
+    # Get links between these persons
+    result = db.execute(sa_text("""
+        SELECT from_id, to_id, category
+        FROM links
+        WHERE from_type = 'person' AND to_type = 'person'
+          AND from_id = ANY(:person_ids)
+          AND to_id = ANY(:person_ids)
+        ORDER BY category, from_id
+    """), {"person_ids": person_ids})
+
+    relations = []
+    for row in result:
+        relations.append({
+            "from_id": row[0],
+            "to_id": row[1],
+            "category": row[2],
+        })
+
+    return {
+        "persons": persons_out,
+        "relations": relations,
+        "total": total,
+    }
 
 
 @router.get("/{person_id}", response_model=PersonDetail)
@@ -52,6 +125,23 @@ async def get_person(
     if not person:
         raise HTTPException(status_code=404, detail="Person not found")
     return person
+
+
+@router.get("/{person_id}/flow", response_model=PersonFlow)
+async def get_person_flow(
+    person_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    Get a person's event flow in chronological order.
+
+    Returns birth → events → death as a timeline of locations.
+    All persons have a flow, even with 0 events (birth→death only).
+    """
+    flow_data = person_service.get_person_flow(db, person_id)
+    if not flow_data:
+        raise HTTPException(status_code=404, detail="Person not found")
+    return flow_data
 
 
 @router.get("/{person_id}/events")
@@ -71,16 +161,7 @@ async def get_person_relations(
     min_strength: float = Query(0, ge=0, description="Minimum strength threshold"),
     db: Session = Depends(get_db),
 ):
-    """
-    Get related persons with relationship strength.
-
-    Returns persons connected to this person via person_relationships table,
-    sorted by strength descending.
-
-    - strength: Relationship strength (higher = stronger connection)
-    - time_distance: Years between persons (null = contemporary, positive = apart)
-    - relationship_type: Type of relationship (wikipedia_link, content_mention, etc.)
-    """
+    """Get related persons with relationship strength."""
     relations = person_service.get_related_persons(
         db,
         person_id=person_id,
@@ -102,19 +183,7 @@ async def get_person_sources(
     max_contexts: int = Query(3, ge=1, le=10, description="Max contexts per source"),
     db: Session = Depends(get_db),
 ):
-    """
-    Get sources (books, documents) that mention this person.
-
-    Returns sources ordered by mention count, with optional context snippets.
-
-    Each source includes:
-    - Basic metadata (title, author, type)
-    - Total mention count in that source
-    - Sample mention contexts (the actual text where person is mentioned)
-
-    Use include_contexts=false for faster response without context snippets.
-    """
-    # Verify person exists
+    """Get sources (books, documents) that mention this person."""
     person = person_service.get_person_by_id(db, person_id)
     if not person:
         raise HTTPException(status_code=404, detail="Person not found")
@@ -144,3 +213,78 @@ async def get_person_sources(
         ],
         total=total
     )
+
+
+@router.get("/{person_id}/wikipedia")
+async def get_person_wikipedia(
+    person_id: int,
+    db: Session = Depends(get_db),
+):
+    """Get Wikipedia content for a person via person_sources table."""
+    from sqlalchemy import text
+
+    result = db.execute(text("""
+        SELECT s.id, s.title, s.url,
+               LEFT(s.content_raw, 3000) as content_excerpt,
+               LENGTH(s.content_raw) as full_length
+        FROM person_sources ps
+        JOIN sources s ON s.id = ps.source_id
+        WHERE ps.person_id = :person_id
+          AND s.source_type = 'wikipedia'
+        LIMIT 1
+    """), {"person_id": person_id})
+
+    row = result.fetchone()
+    if not row:
+        return {"person_id": person_id, "has_wikipedia": False}
+
+    return {
+        "person_id": person_id,
+        "has_wikipedia": True,
+        "source_id": row[0],
+        "title": row[1],
+        "url": row[2],
+        "content_excerpt": row[3],
+        "full_length": row[4],
+    }
+
+
+@router.get("/{person_id}/properties")
+async def get_person_properties(
+    person_id: int,
+    db: Session = Depends(get_db),
+):
+    """Get key Wikidata properties for a person."""
+    from sqlalchemy import text
+
+    person = person_service.get_person_by_id(db, person_id)
+    if not person:
+        raise HTTPException(status_code=404, detail="Person not found")
+
+    KEY_PROPERTIES = ['P106', 'P27', 'P140', 'P69', 'P166', 'P39', 'P101', 'P108', 'P463']
+
+    result = db.execute(text("""
+        SELECT property, property_name, value_string, value_qid
+        FROM entity_properties
+        WHERE entity_type = 'person' AND entity_id = :person_id
+          AND property = ANY(:props)
+        ORDER BY property, id
+    """), {"person_id": person_id, "props": KEY_PROPERTIES})
+
+    grouped: dict = {}
+    for row in result:
+        prop = row[0]
+        if prop not in grouped:
+            grouped[prop] = {
+                "property": prop,
+                "label": row[1] or prop,
+                "values": []
+            }
+        value = row[2] or row[3] or ""
+        if value and value not in grouped[prop]["values"]:
+            grouped[prop]["values"].append(value)
+
+    return {
+        "person_id": person_id,
+        "properties": list(grouped.values()),
+    }

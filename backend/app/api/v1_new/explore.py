@@ -43,9 +43,7 @@ class PersonExplore(EntitySummary):
 class LocationExplore(EntitySummary):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
-    type: Optional[str] = None
-    modern_name: Optional[str] = None
-    country: Optional[str] = None
+    location_type: Optional[str] = None
 
 
 class EventExplore(EntitySummary):
@@ -218,8 +216,7 @@ async def explore_persons(
 @router.get("/locations", response_model=PaginatedResponse)
 async def explore_locations(
     q: Optional[str] = Query(None, description="Search by name"),
-    type: Optional[str] = Query(None, description="Location type: city, region, country"),
-    country: Optional[str] = Query(None, description="Filter by country"),
+    location_type: Optional[str] = Query(None, description="Location type: point, natural, sea"),
     has_coordinates: Optional[bool] = Query(None, description="Has lat/lon"),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
@@ -232,12 +229,9 @@ async def explore_locations(
     if q:
         conditions.append("name ILIKE :q")
         params["q"] = f"%{q}%"
-    if type:
-        conditions.append("type = :type")
-        params["type"] = type
-    if country:
-        conditions.append("country = :country")
-        params["country"] = country
+    if location_type:
+        conditions.append("location_type = :location_type")
+        params["location_type"] = location_type
     if has_coordinates is not None:
         if has_coordinates:
             conditions.append("latitude IS NOT NULL AND longitude IS NOT NULL")
@@ -251,7 +245,7 @@ async def explore_locations(
 
     # Fetch
     query_sql = f"""
-        SELECT id, name, name_ko, latitude, longitude, type, modern_name, country
+        SELECT id, name, name_ko, latitude, longitude, location_type
         FROM locations
         WHERE {where_clause}
         ORDER BY name
@@ -266,7 +260,7 @@ async def explore_locations(
             id=row[0], name=row[1], name_ko=row[2],
             latitude=float(row[3]) if row[3] else None,
             longitude=float(row[4]) if row[4] else None,
-            type=row[5], modern_name=row[6], country=row[7]
+            location_type=row[5]
         )
         for row in result
     ]
@@ -290,30 +284,31 @@ async def explore_events(
     params = {}
 
     if q:
-        conditions.append("title ILIKE :q")
+        conditions.append("e.title ILIKE :q")
         params["q"] = f"%{q}%"
     if certainty:
-        conditions.append("certainty = :certainty")
+        conditions.append("e.certainty = :certainty")
         params["certainty"] = certainty
     if year_start:
-        conditions.append("date_start >= :year_start")
+        conditions.append("e.date_start >= :year_start")
         params["year_start"] = year_start
     if year_end:
-        conditions.append("date_start <= :year_end")
+        conditions.append("e.date_start <= :year_end")
         params["year_end"] = year_end
     if temporal_scale:
-        conditions.append("temporal_scale = :temporal_scale")
+        conditions.append("e.temporal_scale = :temporal_scale")
         params["temporal_scale"] = temporal_scale
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
 
-    total = db.execute(text(f"SELECT COUNT(*) FROM events WHERE {where_clause}"), params).scalar()
+    total = db.execute(text(f"SELECT COUNT(*) FROM events e WHERE {where_clause}"), params).scalar()
 
     query_sql = f"""
-        SELECT id, title, title_ko, slug, date_start, date_end, certainty, temporal_scale
-        FROM events
+        SELECT e.id, e.title, e.title_ko, ed.slug, e.date_start, e.date_end, e.certainty, e.temporal_scale
+        FROM events e
+        LEFT JOIN event_details ed ON ed.event_id = e.id
         WHERE {where_clause}
-        ORDER BY date_start NULLS LAST
+        ORDER BY e.date_start NULLS LAST
         LIMIT :limit OFFSET :offset
     """
     params["limit"] = limit
@@ -453,10 +448,10 @@ async def get_top_mentioned(
         }
 
     elif entity_type == "locations":
-        # Locations don't have mention_count, so return by name frequency
         result = db.execute(text("""
-            SELECT id, name, type, modern_name, country
+            SELECT id, name, location_type
             FROM locations
+            WHERE wikidata_id IS NOT NULL
             ORDER BY name
             LIMIT :limit
         """), {"limit": limit})
@@ -464,7 +459,7 @@ async def get_top_mentioned(
         return {
             "entity_type": "locations",
             "items": [
-                {"id": row[0], "name": row[1], "type": row[2], "modern_name": row[3], "country": row[4]}
+                {"id": row[0], "name": row[1], "location_type": row[2]}
                 for row in result
             ]
         }

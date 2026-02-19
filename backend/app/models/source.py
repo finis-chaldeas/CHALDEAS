@@ -72,11 +72,12 @@ class Source(Base, TimestampMixin):
         secondary="event_sources",
         back_populates="sources"
     )
-    persons = relationship(
-        "Person",
-        secondary="person_sources",
-        back_populates="sources"
-    )
+    # persons relationship disabled - person_sources table doesn't exist
+    # persons = relationship(
+    #     "Person",
+    #     secondary="person_sources",
+    #     back_populates="sources"
+    # )
 
     def __repr__(self):
         return f"<Source(id={self.id}, name='{self.name}')>"

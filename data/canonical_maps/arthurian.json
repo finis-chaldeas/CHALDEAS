@@ -1,0 +1,876 @@
+{
+  "Sir Segwarides": {
+    "wikidata_qid": "Q3330708",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Mordred": {
+    "wikidata_qid": "Q81109",
+    "aliases": [
+      "Sir Mordred"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Pertilope": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Kay the Stranger": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Launcelot": {
+    "wikidata_qid": "Q84814435",
+    "aliases": [
+      "Launcelot"
+    ],
+    "confidence": 0.5
+  },
+  "Arthur": {
+    "wikidata_qid": "Q1778168",
+    "aliases": [
+      "King Arthur",
+      "Sir Arthur"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Lambegus": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Lambegus"
+    ],
+    "confidence": 0.5
+  },
+  "Gawaine": {
+    "wikidata_qid": "Q20159731",
+    "aliases": [
+      "Sir Gawaine"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Agravaine": {
+    "wikidata_qid": "Q3606848",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Guenever": {
+    "wikidata_qid": "Q272054",
+    "aliases": [
+      "Queen Guenever"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Gillimer": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lucan de Butlere": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Sir Lucan de Butlere"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Gareth": {
+    "wikidata_qid": "Q15628901",
+    "aliases": [
+      "Sir Gareth of Orkney",
+      "Gareth"
+    ],
+    "confidence": 0.5
+  },
+  "Merlin": {
+    "wikidata_qid": "Q16279386",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Perimones": {
+    "wikidata_qid": "Q107252646",
+    "aliases": [
+      "The Knight of the Red Lawns"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Brandiles": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Gauter": {
+    "wikidata_qid": "Q34607884",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Belias le Orgulous": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Reynold's three brothers (Damus, Priamus)": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Herminde": {
+    "wikidata_qid": "Q20541995",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Driant": {
+    "wikidata_qid": "Q63140074",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Gaheris": {
+    "wikidata_qid": "Q1987228",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Aglovale": {
+    "wikidata_qid": "Q3558163",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bedivere": {
+    "wikidata_qid": "Q202529",
+    "aliases": [
+      "Sir Bedivere"
+    ],
+    "confidence": 0.5
+  },
+  "Clarence": {
+    "wikidata_qid": "Q3373079",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Tor": {
+    "wikidata_qid": "Q19818192",
+    "aliases": [
+      "Tor"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Griflet le Fils de Dieu": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Persant of Inde": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Casanova": {
+    "wikidata_qid": "Q16865414",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King of Little Britain": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lactantius": {
+    "wikidata_qid": "Q209102",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Uwaine": {
+    "wikidata_qid": "Q6129446",
+    "aliases": [
+      "Uwaine"
+    ],
+    "confidence": 0.5
+  },
+  "King Tollemme la Feintes": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King of the Lake": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bell": {
+    "wikidata_qid": "Q1444604",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Satan": {
+    "wikidata_qid": "Q20081344",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Emperor Lucius": {
+    "wikidata_qid": "Q12382759",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Marco": {
+    "wikidata_qid": "Q17520955",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Benvenuto Cellini": {
+    "wikidata_qid": "Q190116",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Elizabeth of England": {
+    "wikidata_qid": "Q2435894",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Watt": {
+    "wikidata_qid": "Q25236",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Earl": {
+    "wikidata_qid": "Q8933847",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Marhalt of Ireland": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Marhaus",
+      "Sir Marhaus"
+    ],
+    "confidence": 0.5
+  },
+  "Morgan le Fay": {
+    "wikidata_qid": "Q1260128",
+    "aliases": [
+      "Morgan Le Fay"
+    ],
+    "confidence": 0.5
+  },
+  "The Sowdan of Syria": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Wat Tyler": {
+    "wikidata_qid": "Q311820",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Morse": {
+    "wikidata_qid": "Q13571164",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Queen Margaret of Navarre": {
+    "wikidata_qid": "Q190058",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Galahad": {
+    "wikidata_qid": "Q107636944",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Emperor of the East": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Cortez": {
+    "wikidata_qid": "Q37439506",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Egglame": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Charolais of Gaul": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Sir Charolais of Gaul"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Carados": {
+    "wikidata_qid": "Q100273541",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Gutenburg": {
+    "wikidata_qid": "Q689473",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Stephenson": {
+    "wikidata_qid": "Q15727828",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Sagramour le Desirous": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Sagramour le Desirous"
+    ],
+    "confidence": 0.5
+  },
+  "King Pellam of Listengese": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Ozana": {
+    "wikidata_qid": "Q7116456",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Bagdemagus": {
+    "wikidata_qid": "Q4841526",
+    "aliases": [
+      "Bagdemagus"
+    ],
+    "confidence": 0.5
+  },
+  "King Morganore": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Galahault": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Amyas le Poulet (Clarence)": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Robinson Crusoe": {
+    "wikidata_qid": "Q12292447",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Lot of Lothian": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Pellinore": {
+    "wikidata_qid": "Q1205690",
+    "aliases": [
+      "Sir Pellinore",
+      "King Pellinore"
+    ],
+    "confidence": 0.5
+  },
+  "Uriens": {
+    "wikidata_qid": "Q1263208",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Nero": {
+    "wikidata_qid": "Q1413",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Logris": {
+    "wikidata_qid": "Q69879080",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Pendragon": {
+    "wikidata_qid": "Q21439446",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Joshua": {
+    "wikidata_qid": "Q3284319",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Mark of Cornwall": {
+    "wikidata_qid": "Q13610143",
+    "aliases": [
+      "King Mark"
+    ],
+    "confidence": 0.5
+  },
+  "Hank Morgan": {
+    "wikidata_qid": "Q100878499",
+    "aliases": [
+      "The Boss"
+    ],
+    "confidence": 0.5
+  },
+  "Artemus Ward": {
+    "wikidata_qid": "Q133749267",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King of England": {
+    "wikidata_qid": "Q234482",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Louis XV": {
+    "wikidata_qid": "Q7738",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Nentres of Garlot": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Raphael": {
+    "wikidata_qid": "Q354507",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Meliganus": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Agrivance of Ireland": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Dinadan": {
+    "wikidata_qid": "Q2259558",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sultan of Egypt": {
+    "wikidata_qid": "Q4115925",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Arkwright": {
+    "wikidata_qid": "Q21489000",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Whitney": {
+    "wikidata_qid": "Q17144522",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Hervis de Revel": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King of Northgalis": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Jack Cade": {
+    "wikidata_qid": "Q613385",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Meliodas of Liones": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Adam": {
+    "wikidata_qid": "Q347181",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Columbus": {
+    "wikidata_qid": "Q16567",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Palamides the Saracen": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Norroy King-at-Arms": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Sagramor Le Desirous": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Labor": {
+    "wikidata_qid": "Q216082",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Kay": {
+    "wikidata_qid": "Q16568731",
+    "aliases": [
+      "Kay"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Sagramor": {
+    "wikidata_qid": "Q3143085",
+    "aliases": [
+      "Sir Sagramore"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Balmoral le Merveilleuse": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Lamorak de Galis": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Lamorak de Galis"
+    ],
+    "confidence": 0.5
+  },
+  "Supreme Lord of Inde": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Marsil": {
+    "wikidata_qid": "Q2363141",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sandy": {
+    "wikidata_qid": "Q1413008",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Belleus": {
+    "wikidata_qid": "Q1113696",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Persides": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Persides"
+    ],
+    "confidence": 0.5
+  },
+  "Accolan": {
+    "wikidata_qid": "Q339327",
+    "aliases": [
+      "Sir Accolan"
+    ],
+    "confidence": 0.5
+  },
+  "King Bors": {
+    "wikidata_qid": "Q1441071",
+    "aliases": [
+      "Sir Bors",
+      "Bors"
+    ],
+    "confidence": 0.5
+  },
+  "Nabon le Noire": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Balan": {
+    "wikidata_qid": "Q241523",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lucius (Emperor of Rome)": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Charlemagne": {
+    "wikidata_qid": "Q19914524",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Ironside": {
+    "wikidata_qid": "Q113128290",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Linet": {
+    "wikidata_qid": "Q37466159",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Mador de la Porte": {
+    "wikidata_qid": null,
+    "aliases": [
+      "Mador"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Turquine": {
+    "wikidata_qid": "Q119140696",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Dinas": {
+    "wikidata_qid": "Q132077",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Hector": {
+    "wikidata_qid": "Q1811874",
+    "aliases": [
+      "Sir Hector"
+    ],
+    "confidence": 0.5
+  },
+  "Nimue": {
+    "wikidata_qid": "Q10336945",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Leodegrance": {
+    "wikidata_qid": "Q1585666",
+    "aliases": [
+      "King Leodegrance"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Gilbert": {
+    "wikidata_qid": "Q1675463",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Percival": {
+    "wikidata_qid": "Q37549103",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Duke de la Rowse": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Gingalin": {
+    "wikidata_qid": "Q2453590",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Taulard": {
+    "wikidata_qid": "Q26926029",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Meliot de Logres": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Anguish of Ireland": {
+    "wikidata_qid": "Q66622183",
+    "aliases": [
+      "King Anguish"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Ulfius": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lile of Avelion": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bors de Ganis": {
+    "wikidata_qid": "Q894176",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bragwaine": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lancelot": {
+    "wikidata_qid": "Q3216952",
+    "aliases": [
+      "Sir Lancelot"
+    ],
+    "confidence": 0.5
+  },
+  "Lionel": {
+    "wikidata_qid": "Q9022830",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Damas": {
+    "wikidata_qid": "Q37445529",
+    "aliases": [
+      "Damas"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Briant": {
+    "wikidata_qid": "Q1613062",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lioness": {
+    "wikidata_qid": "Q6221",
+    "aliases": [
+      "Lady Lioness",
+      "Dame Lioness"
+    ],
+    "confidence": 0.5
+  },
+  "Sir Andred": {
+    "wikidata_qid": "Q34798171",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Hue": {
+    "wikidata_qid": "Q16276974",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Breunor": {
+    "wikidata_qid": "Q2355226",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Garlon": {
+    "wikidata_qid": "Q125972943",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "The Lady of the Lake": {
+    "wikidata_qid": "Q36740",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Gahalatine": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Igraine": {
+    "wikidata_qid": "Q675705",
+    "aliases": [
+      "Queen Igraine"
+    ],
+    "confidence": 0.5
+  },
+  "King Meliodas of Lyonesse": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Tennyson": {
+    "wikidata_qid": "Q37558447",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Blamor": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Isolde": {
+    "wikidata_qid": "Q18218857",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Herleus de Berbeus": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Joseph of Arimathea": {
+    "wikidata_qid": "Q271474",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Meliodas": {
+    "wikidata_qid": "Q3854230",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Griflet": {
+    "wikidata_qid": "Q2289968",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bleoberis": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Isolde la Blanche Mains": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "King Howell of Brittany": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Sir Matto le Breune": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Homer": {
+    "wikidata_qid": "Q19826483",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Longius": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Uther": {
+    "wikidata_qid": "Q17639326",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Dryden": {
+    "wikidata_qid": "Q16869682",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Lamorak": {
+    "wikidata_qid": "Q1880994",
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Pedivere": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Bleoberis de Ganis": {
+    "wikidata_qid": null,
+    "aliases": [],
+    "confidence": 0.5
+  },
+  "Colombe": {
+    "wikidata_qid": "Q954961",
+    "aliases": [],
+    "confidence": 0.5
+  }
+}

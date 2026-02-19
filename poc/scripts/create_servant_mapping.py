@@ -1,142 +1,127 @@
 """
-FGO 서번트 → DB persons 매핑 생성
+FGO Servant -> DB persons mapping generation.
+
+Produces servant_db_mapping.json in the format expected by backend/app/api/v1/servants.py:
+  { "mapped": [...], "fgo_original": [...], "not_found": [...] }
+
+Usage:
+    cd C:/Projects/Chaldeas
+    python poc/scripts/create_servant_mapping.py
 """
 import json
+import sys
 import psycopg2
 from pathlib import Path
 
+# Windows UTF-8 console fix
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
-# FGO 서번트 → Wikidata QID 매핑 (수작업 확인된 것)
+# FGO servant name -> Wikidata QID (manually verified)
 SERVANT_QIDS = {
     # Saber
-    "Altria Pendragon": "Q45556",  # King Arthur
+    "Artoria Pendragon": "Q45556",
     "Nero Claudius": "Q1413",
-    "Gaius Julius Caesar": "Q1048",
-    "Siegfried": "Q152952",
+    "Julius Caesar": "Q1048",
     "Gawain": "Q193969",
     "Lancelot": "Q214963",
     "Mordred": "Q1087720",
-    "Bedivere": "Q815472",
     "Fergus mac Roich": "Q1307208",
-    "Musashi Miyamoto": "Q319824",
-    "Okita Souji": "Q1045108",
-    "Diarmuid Ua Duibhne": "Q1129108",  # Saber version
+    "Miyamoto Musashi": "Q319824",
+    "Sigurd": "Q152952",
+    "Rama": "Q170596",
+    "Jason": "Q191921",
+    "Attila": "Q36724",
 
     # Archer
     "Gilgamesh": "Q41620",
     "Robin Hood": "Q122756",
-    "Atalante": "Q171167",
     "Arjuna": "Q623218",
     "Nikola Tesla": "Q9036",
-    "Napoleon": "Q517",
-    "Paris": "Q167406",
-    "Chiron": "Q41602",
+    "Napoleon Bonaparte": "Q517",
+    "Oda Nobunaga": "Q169124",
+    "Tristan": "Q208385",
 
     # Lancer
     "Cu Chulainn": "Q212903",
     "Leonidas I": "Q152619",
     "Romulus": "Q6116",
-    "Hektor": "Q168395",
+    "Hector": "Q168395",
     "Scathach": "Q1062699",
     "Karna": "Q732622",
     "Brynhildr": "Q152983",
     "Vlad III": "Q43718",
     "Enkidu": "Q155826",
+    "Diarmuid Ua Duibhne": "Q1129108",
+    "Fionn mac Cumhaill": "Q519148",
+    "Parvati": "Q271099",
 
     # Rider
-    "Alexander": "Q8409",  # Iskandar
+    "Iskandar": "Q8409",
     "Medusa": "Q38143",
     "Boudica": "Q130746",
     "Francis Drake": "Q36517",
     "Achilles": "Q41746",
-    "Ushiwakamaru": "Q189346",  # Minamoto no Yoshitsune
     "Ivan the Terrible": "Q7994",
-    "Christopher Columbus": "Q7322",
     "Marie Antoinette": "Q47365",
-    "Ozymandias": "Q1279",  # Ramesses II
-    "Quetzalcoatl": "Q177903",
+    "Ozymandias": "Q1279",
+    "Blackbeard": "Q193489",
+    "Odysseus": "Q47108",
 
     # Caster
     "Medea": "Q188836",
     "Hans Christian Andersen": "Q5673",
     "William Shakespeare": "Q692",
     "Tamamo-no-Mae": "Q1264785",
-    "Solomon": "Q36195",
     "Merlin": "Q188958",
     "Leonardo da Vinci": "Q762",
-    "Xuanzang Sanzang": "Q628641",
-    "Gilgamesh (Caster)": "Q41620",
     "Paracelsus": "Q83428",
     "Thomas Edison": "Q8743",
     "Helena Blavatsky": "Q179991",
     "Circe": "Q134762",
     "Scheherazade": "Q1186638",
-    "Anastasia Nikolaevna": "Q159544",
-    "Avicebron": "Q148629",  # Solomon ibn Gabirol
+    "Anastasia": "Q159544",
+    "Zhuge Liang": "Q207929",
+    "Charles Babbage": "Q4588",
+    "Wolfgang Amadeus Mozart": "Q254",
+    "Skadi": "Q679972",
+    "Nitocris": "Q553939",
+    "Qin Shi Huang": "Q7192",
 
     # Assassin
-    "Sasaki Kojiro": "Q1261989",
-    "Stheno": "Q1265131",
-    "Mata Hari": "Q36108",
-    "Jack the Ripper": "Q46700",
-    "Carmilla": "Q432294",  # Elizabeth Bathory
-    "Shuten-douji": "Q2370889",
+    "Shuten-Douji": "Q2370889",
     "Cleopatra": "Q635",
-    "Semiramis": "Q172847",
-    "First Hassan": None,  # Fictional
-    "Wu Zetian": "Q48993",
-    "Charlotte Corday": "Q273022",
-    "Okada Izo": "Q6149652",
 
     # Berserker
     "Heracles": "Q122248",
-    "Lancelot (Berserker)": "Q214963",
     "Spartacus": "Q46405",
     "Caligula": "Q1409",
     "Darius III": "Q130368",
-    "Kiyohime": "Q3254291",
-    "Eric Bloodaxe": "Q314772",
-    "Tamamo Cat": None,  # FGO original
-    "Frankenstein": "Q150827",  # Frankenstein's monster
-    "Beowulf": "Q180061",
-    "Nightingale": "Q37103",  # Florence Nightingale
-    "Cu Chulainn (Alter)": "Q212903",
-    "Penthesilea": "Q267006",
-    "Paul Bunyan": "Q378792",
-    "Atalante (Alter)": "Q171167",
+    "Florence Nightingale": "Q37103",
+    "Lu Bu": "Q313618",
+    "Xiang Yu": "Q180662",
+    "Minamoto-no-Raikou": None,
 
     # Ruler
     "Jeanne d'Arc": "Q7226",
-    "Amakusa Shirou": "Q1137917",
-    "Sherlock Holmes": "Q3295578",
-    "Qin Shi Huang": "Q7192",
-    "Himiko": "Q156440",
 
     # Avenger
-    "Edmond Dantes": "Q1338702",  # Fictional
-    "Jeanne d'Arc (Alter)": None,  # FGO original
-    "Angra Mainyu": "Q267918",
-    "Gorgon": "Q38143",  # Medusa
     "Antonio Salieri": "Q51088",
 
-    # Moon Cancer
-    "BB": None,  # Fate/Extra original
-
-    # Alter Ego
-    "Meltryllis": None,  # Fate/Extra
-    "Passionlip": None,  # Fate/Extra
-    "Okita Alter": None,  # FGO original
-
-    # Foreigner
-    "Abigail Williams": "Q2975376",
-    "Hokusai": "Q5586",  # Katsushika Hokusai
-    "Yang Guifei": "Q236106",
-    "Van Gogh": "Q5582",
+    # FGO Original (explicitly None)
+    "Medb": None,
 }
 
+FGO_DATA_PATH = PROJECT_ROOT / "data/raw/atlas_academy/fgo_historical_figures.json"
+OUTPUT_PATH = PROJECT_ROOT / "data/raw/atlas_academy/servant_db_mapping.json"
+
+
 def create_mapping():
-    """Generate servant-to-person mapping"""
+    """Generate servant-to-person mapping in the format expected by servants API."""
+    with open(FGO_DATA_PATH, encoding='utf-8') as f:
+        fgo_data = json.load(f)
 
     conn = psycopg2.connect(
         host='localhost', port=5432, dbname='chaldeas',
@@ -144,77 +129,92 @@ def create_mapping():
     )
     cur = conn.cursor()
 
-    # Load FGO servants
-    with open(PROJECT_ROOT / "data/raw/atlas_academy/fgo_historical_figures.json", encoding='utf-8') as f:
-        servants = json.load(f)
+    mapped = []
+    fgo_original = []
+    not_found = []
 
-    results = {
-        "matched": [],
-        "no_qid": [],
-        "qid_not_in_db": [],
-        "no_mapping": []
-    }
-
-    for servant in servants:
-        fgo_name = servant["fgo_name"]
-        base_name = fgo_name.split("(")[0].strip()
+    for servant in fgo_data:
+        fgo_name = servant['fgo_name']
+        hist_name = servant.get('historical_name', fgo_name)
 
         # Check if we have a QID mapping
-        qid = SERVANT_QIDS.get(fgo_name) or SERVANT_QIDS.get(base_name)
+        qid = SERVANT_QIDS.get(fgo_name)
 
-        if qid:
-            # Look up in DB
+        if qid is not None:
+            # Look up by Wikidata QID
             cur.execute(
-                "SELECT id, name, name_ko, birth_year, death_year FROM persons WHERE wikidata_id = %s",
+                "SELECT id, name, name_ko, wikidata_id FROM persons WHERE wikidata_id = %s",
                 (qid,)
             )
             person = cur.fetchone()
 
             if person:
-                results["matched"].append({
+                mapped.append({
                     "fgo_name": fgo_name,
-                    "fgo_class": servant.get("class"),
-                    "fgo_rarity": servant.get("rarity"),
-                    "wikidata_id": qid,
                     "person_id": person[0],
                     "person_name": person[1],
                     "person_name_ko": person[2],
-                    "birth_year": person[3],
-                    "death_year": person[4]
+                    "qid": person[3],
                 })
+                print(f"  MATCHED: {fgo_name} -> {person[1]} (id={person[0]})")
             else:
-                results["qid_not_in_db"].append({
-                    "fgo_name": fgo_name,
-                    "wikidata_id": qid
-                })
-        elif qid is None and fgo_name in SERVANT_QIDS:
-            # Explicitly marked as no QID (FGO original)
-            results["no_qid"].append({
-                "fgo_name": fgo_name,
-                "reason": "FGO original character"
-            })
+                # QID not in DB, try name match
+                cur.execute(
+                    "SELECT id, name, name_ko, wikidata_id FROM persons WHERE name ILIKE %s LIMIT 1",
+                    (f"%{hist_name}%",)
+                )
+                person = cur.fetchone()
+                if person:
+                    mapped.append({
+                        "fgo_name": fgo_name,
+                        "person_id": person[0],
+                        "person_name": person[1],
+                        "person_name_ko": person[2],
+                        "qid": person[3],
+                    })
+                    print(f"  MATCHED (name): {fgo_name} -> {person[1]} (id={person[0]})")
+                else:
+                    not_found.append(fgo_name)
+                    print(f"  NOT FOUND: {fgo_name} (QID {qid} not in DB)")
+
+        elif fgo_name in SERVANT_QIDS and qid is None:
+            # Explicitly marked as no historical counterpart
+            fgo_original.append(fgo_name)
+            print(f"  FGO ORIGINAL: {fgo_name}")
         else:
-            results["no_mapping"].append({
-                "fgo_name": fgo_name,
-                "fgo_class": servant.get("class"),
-                "origin": servant.get("origin")
-            })
+            # No QID mapping defined, try name match
+            cur.execute(
+                "SELECT id, name, name_ko, wikidata_id FROM persons WHERE name ILIKE %s LIMIT 1",
+                (f"%{hist_name}%",)
+            )
+            person = cur.fetchone()
+            if person:
+                mapped.append({
+                    "fgo_name": fgo_name,
+                    "person_id": person[0],
+                    "person_name": person[1],
+                    "person_name_ko": person[2],
+                    "qid": person[3],
+                })
+                print(f"  MATCHED (fallback): {fgo_name} -> {person[1]} (id={person[0]})")
+            else:
+                not_found.append(fgo_name)
+                print(f"  NOT FOUND: {fgo_name}")
 
     conn.close()
 
-    # Save results
-    output_path = PROJECT_ROOT / "data/raw/atlas_academy/servant_person_mapping.json"
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+    output = {
+        "mapped": mapped,
+        "fgo_original": fgo_original,
+        "not_found": not_found
+    }
 
-    print(f"Results saved to {output_path}")
-    print(f"\nSummary:")
-    print(f"  Matched to DB: {len(results['matched'])}")
-    print(f"  QID not in DB: {len(results['qid_not_in_db'])}")
-    print(f"  No QID (FGO original): {len(results['no_qid'])}")
-    print(f"  No mapping defined: {len(results['no_mapping'])}")
+    with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
 
-    return results
+    print(f"\nResults: {len(mapped)} mapped, {len(fgo_original)} FGO original, {len(not_found)} not found")
+    print(f"Saved to: {OUTPUT_PATH}")
+
 
 if __name__ == "__main__":
     create_mapping()

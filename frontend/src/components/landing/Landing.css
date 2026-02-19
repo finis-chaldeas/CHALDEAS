@@ -1,0 +1,696 @@
+/* ========== Welcome Experience ========== */
+
+.welcome-container {
+  width: 90vw;
+  max-width: 700px;
+  padding: 48px 40px;
+  text-align: center;
+  animation: landing-fade-in 0.5s ease;
+}
+
+.welcome-header {
+  margin-bottom: 40px;
+}
+
+.welcome-logo {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: 12px;
+  color: #00d4ff;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  margin-bottom: 10px;
+}
+
+.welcome-tagline {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 2px;
+}
+
+.welcome-paths {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.welcome-path-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  color: inherit;
+}
+
+.welcome-path-card:hover {
+  transform: translateY(-3px);
+}
+
+.welcome-path-explore:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.06);
+}
+
+.welcome-path-tour:hover {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(255, 215, 0, 0.04);
+}
+
+.welcome-path-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.welcome-path-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+}
+
+.welcome-path-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.6;
+}
+
+.welcome-path-count {
+  font-size: 11px;
+  color: #ffd700;
+  font-weight: 500;
+}
+
+.welcome-path-wide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: inherit;
+}
+
+.welcome-path-wide:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: rgba(168, 85, 247, 0.04);
+}
+
+.welcome-path-icon-sm {
+  font-size: 18px;
+}
+
+.welcome-path-title-sm {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.welcome-path-arrow {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-left: auto;
+}
+
+.welcome-back-btn {
+  background: none;
+  border: none;
+  color: #00d4ff;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.welcome-back-btn:hover {
+  text-decoration: underline;
+}
+
+/* ========== Tour Selection Grid ========== */
+
+.tour-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.tour-selection-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  background: rgba(255, 215, 0, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  color: inherit;
+  animation: card-appear 0.3s ease both;
+}
+
+.tour-selection-card:hover {
+  border-color: rgba(255, 215, 0, 0.35);
+  background: rgba(255, 215, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.tour-card-region {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.tour-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffd700;
+  line-height: 1.3;
+}
+
+.tour-card-title-ko {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.tour-card-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+.tour-card-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.tour-card-date {
+  font-size: 11px;
+  color: rgba(0, 212, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-card-steps {
+  font-size: 10px;
+  color: rgba(255, 215, 0, 0.7);
+  background: rgba(255, 215, 0, 0.08);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.tour-card-servants {
+  font-size: 11px;
+  color: rgba(168, 85, 247, 0.7);
+}
+
+.tour-card-action {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffd700;
+  text-align: right;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .welcome-container {
+    width: 100vw;
+    padding: 24px 16px;
+  }
+
+  .welcome-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-logo {
+    font-size: 22px;
+    letter-spacing: 6px;
+  }
+
+  .tour-selection-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landing Page - FGO Dark Theme */
+.landing-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(5, 8, 15, 0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: landing-fade-in 0.4s ease;
+}
+
+@keyframes landing-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.landing-container {
+  width: 90vw;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+/* Header */
+.landing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.landing-logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #00d4ff;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.landing-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.landing-close {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.landing-close:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+}
+
+/* Tabs */
+.landing-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.landing-tab {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.landing-tab:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.landing-tab.active {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.landing-tab.surprise {
+  margin-left: auto;
+  border-color: rgba(251, 191, 36, 0.3);
+  color: rgba(251, 191, 36, 0.8);
+}
+
+.landing-tab.surprise:hover {
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+/* Grid */
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.landing-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px;
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 212, 255, 0.2);
+  border-top-color: #00d4ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Person Card */
+.person-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: card-appear 0.3s ease both;
+}
+
+.person-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.person-card:nth-child(1) { animation-delay: 0.0s; }
+.person-card:nth-child(2) { animation-delay: 0.03s; }
+.person-card:nth-child(3) { animation-delay: 0.06s; }
+.person-card:nth-child(4) { animation-delay: 0.09s; }
+.person-card:nth-child(5) { animation-delay: 0.12s; }
+.person-card:nth-child(6) { animation-delay: 0.15s; }
+.person-card:nth-child(7) { animation-delay: 0.18s; }
+.person-card:nth-child(8) { animation-delay: 0.21s; }
+.person-card:nth-child(9) { animation-delay: 0.24s; }
+.person-card:nth-child(10) { animation-delay: 0.27s; }
+.person-card:nth-child(11) { animation-delay: 0.30s; }
+.person-card:nth-child(12) { animation-delay: 0.33s; }
+
+.person-card-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.person-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.person-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.person-card-avatar {
+  font-size: 18px;
+  font-weight: 600;
+  color: #00d4ff;
+}
+
+.person-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.person-card-name-ko {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 2px;
+}
+
+.person-card-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.person-card-dates {
+  font-size: 11px;
+  color: rgba(0, 212, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.person-card-role {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.person-card-bio {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer info */
+.landing-footer-info {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  margin-top: 20px;
+  padding: 8px;
+}
+
+/* FGO Servants Section */
+.fgo-section {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.fgo-section-header {
+  margin-bottom: 20px;
+}
+
+.fgo-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #a855f7;
+  margin: 0 0 4px;
+  letter-spacing: 1px;
+}
+
+.fgo-section-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.fgo-servant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.fgo-servant-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fgo-servant-card:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.12);
+  transform: translateY(-2px);
+}
+
+.fgo-servant-class {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(168, 85, 247, 0.1);
+  border-radius: 50%;
+}
+
+.fgo-servant-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+}
+
+.fgo-servant-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 3px;
+}
+
+.fgo-class-badge {
+  font-size: 10px;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.fgo-rarity {
+  font-size: 9px;
+  color: #fbbf24;
+}
+
+.fgo-servant-person {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 2px;
+}
+
+.fgo-section-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.fgo-action-btn {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #a855f7;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.fgo-action-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #a855f7;
+}
+
+.fgo-action-showcase {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.fgo-action-showcase:hover {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.15);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .landing-container {
+    width: 100vw;
+    max-height: 100vh;
+    padding: 16px;
+    border-radius: 0;
+  }
+
+  .landing-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .landing-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .person-card {
+    padding: 12px;
+  }
+
+  .person-card-bio {
+    display: none;
+  }
+
+  .fgo-servant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+
+  .fgo-servant-card {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .fgo-servant-class {
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .fgo-section-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fgo-action-btn {
+    text-align: center;
+  }
+}

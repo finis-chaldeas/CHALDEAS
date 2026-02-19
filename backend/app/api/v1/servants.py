@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from app.db.session import get_db
 from app.models.person import Person
+from app.models.person_detail import PersonDetail
 from app.models.v1.text_mention import TextMention
 from app.models.source import Source
 
@@ -242,7 +243,10 @@ def get_servant_detail(
     # Get person details
     person = None
     if servant_map.get('person_id'):
-        person = db.query(Person).filter(Person.id == servant_map['person_id']).first()
+        from sqlalchemy.orm import joinedload
+        person = db.query(Person).options(
+            joinedload(Person.details)
+        ).filter(Person.id == servant_map['person_id']).first()
 
     # Get book mentions
     book_mentions = []
@@ -283,6 +287,10 @@ def get_servant_detail(
             ))
             mention_count += m.count
 
+    biography = None
+    if person and person.details:
+        biography = person.details.biography
+
     return ServantDetail(
         fgo_name=fgo_name,
         fgo_class=fgo_info.get('fgo_class'),
@@ -292,7 +300,7 @@ def get_servant_detail(
         person_name=person.name if person else servant_map.get('person_name'),
         person_name_ko=person.name_ko if person else None,
         wikidata_id=servant_map.get('qid'),
-        biography=person.biography if person else None,
+        biography=biography,
         birth_year=person.birth_year if person else None,
         death_year=person.death_year if person else None,
         is_fgo_original=False,
@@ -336,3 +344,73 @@ def get_servants_by_person(
             ))
 
     return results
+
+
+# --- FGO vs History Comparison ---
+
+COMPARISON_DATA_PATH = PROJECT_ROOT / "data/raw/atlas_academy/servant_comparisons.json"
+_comparison_data = None
+
+
+def get_comparison_data():
+    global _comparison_data
+    if _comparison_data is None:
+        if COMPARISON_DATA_PATH.exists():
+            with open(COMPARISON_DATA_PATH, encoding='utf-8') as f:
+                _comparison_data = json.load(f)
+        else:
+            _comparison_data = {}
+    return _comparison_data
+
+
+class ComparisonAspect(BaseModel):
+    aspect: str
+    fgo_description: str
+    historical_description: str
+    accuracy_score: int  # 1-5
+    assessment: str  # accurate, artistic_license, fictional, composite, gender_swap
+
+
+class ServantComparison(BaseModel):
+    fgo_name: str
+    fgo_class: Optional[str] = None
+    rarity: Optional[int] = None
+    person_name: Optional[str] = None
+    person_id: Optional[int] = None
+    aspects: list[ComparisonAspect] = []
+    overall_accuracy: float = 0.0
+
+
+@router.get("/{fgo_name}/comparison", response_model=ServantComparison)
+def get_servant_comparison(fgo_name: str):
+    """FGO vs History comparison data for a servant"""
+    comparisons = get_comparison_data()
+    fgo_data = get_fgo_data()
+    mapping = get_servant_mapping()
+
+    fgo_lookup = {s['fgo_name']: s for s in fgo_data}
+    fgo_info = fgo_lookup.get(fgo_name, {})
+
+    # Find person mapping
+    person_id = None
+    person_name = None
+    for m in mapping.get('mapped', []):
+        if m['fgo_name'] == fgo_name:
+            person_id = m.get('person_id')
+            person_name = m.get('person_name')
+            break
+
+    servant_comparisons = comparisons.get(fgo_name, [])
+    aspects = [ComparisonAspect(**a) for a in servant_comparisons]
+
+    overall = sum(a.accuracy_score for a in aspects) / len(aspects) if aspects else 0.0
+
+    return ServantComparison(
+        fgo_name=fgo_name,
+        fgo_class=fgo_info.get('fgo_class'),
+        rarity=fgo_info.get('rarity'),
+        person_name=person_name,
+        person_id=person_id,
+        aspects=aspects,
+        overall_accuracy=round(overall, 1)
+    )

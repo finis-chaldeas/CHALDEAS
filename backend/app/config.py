@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # Database
-    database_url: str = "postgresql://chaldeas:chaldeas_dev@localhost:5432/chaldeas"
+    database_url: str = "postgresql://chaldeas:chaldeas_dev@127.0.0.1:5432/chaldeas"
 
     # Environment
     environment: str = "development"

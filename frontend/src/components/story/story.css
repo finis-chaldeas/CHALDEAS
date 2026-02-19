@@ -337,6 +337,13 @@
   line-height: 1.6;
 }
 
+.node-narrative {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.6;
+  font-style: italic;
+}
+
 .node-detail-btn {
   margin-top: 16px;
   padding: 10px 20px;

@@ -20,7 +20,7 @@ interface StoryLocation {
 
 interface StoryNode {
   order: number
-  event_id: number
+  event_id: number | null
   title: string
   title_ko?: string
   year: number | null
@@ -28,6 +28,7 @@ interface StoryNode {
   location: StoryLocation | null
   node_type: string
   description?: string
+  narrative?: string
 }
 
 interface Props {
@@ -59,7 +60,7 @@ export function StoryGlobe({ nodes, currentIndex, onNodeClick }: Props) {
   // Convert nodes to marker data
   const markers = useMemo(() =>
     validNodes.map((node) => {
-      const originalIndex = nodes.findIndex(n => n.event_id === node.event_id)
+      const originalIndex = nodes.findIndex(n => n.order === node.order)
       return {
         ...node,
         originalIndex,
@@ -86,7 +87,7 @@ export function StoryGlobe({ nodes, currentIndex, onNodeClick }: Props) {
     for (let i = 0; i < validNodes.length - 1; i++) {
       const from = validNodes[i]
       const to = validNodes[i + 1]
-      const fromIdx = nodes.findIndex(n => n.event_id === from.event_id)
+      const fromIdx = nodes.findIndex(n => n.order === from.order)
 
       pathData.push({
         coords: [
