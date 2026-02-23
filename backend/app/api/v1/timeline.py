@@ -290,12 +290,14 @@ def get_period_detail(
             narrative_id=r[0],
         ).model_dump())
 
-    # Fetch top events (flat list)
+    # Fetch top events (flat list) with hierarchy info
     event_rows = db.execute(text("""
         SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
                e.importance_score, ed.description, ed.wikipedia_url,
                l.name AS location_name, l.latitude, l.longitude,
-               en.narrative AS entity_narrative, en.significance
+               en.narrative AS entity_narrative, en.significance,
+               e.is_aggregate, e.parent_event_id,
+               (SELECT COUNT(*) FROM events c WHERE c.parent_event_id = e.id) AS child_count
         FROM events e
         LEFT JOIN event_details ed ON ed.event_id = e.id
         LEFT JOIN locations l ON l.id = e.primary_location_id
@@ -318,6 +320,8 @@ def get_period_detail(
         "longitude": float(r[10]) if r[10] else None,
         "narrative": r[11],
         "significance": r[12],
+        "is_aggregate": r[13],
+        "child_count": r[14] or 0,
     } for r in event_rows]
 
     # Fetch top persons (flat list)

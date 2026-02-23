@@ -388,8 +388,22 @@ def get_event(
     ]
     result["child_count"] = len(children)
 
-    # Add sources
+    # Add entity narrative
     from sqlalchemy import text
+    narrative_row = db.execute(text('''
+        SELECT narrative, significance, causes, consequences, model_used, source_url
+        FROM entity_narratives
+        WHERE entity_type = 'event' AND entity_id = :eid
+        LIMIT 1
+    '''), {"eid": event_id}).fetchone()
+
+    if narrative_row:
+        result["narrative"] = narrative_row[0]
+        result["significance"] = narrative_row[1]
+        result["causes"] = narrative_row[2]
+        result["consequences"] = narrative_row[3]
+
+    # Add sources
     sources_query = db.execute(text('''
         SELECT s.id, s.source_type, s.title, s.url, s.content_raw, es.page_reference
         FROM event_sources es
@@ -439,6 +453,51 @@ def get_event_children(
     }
 
 
+@router.get("/{event_id}/relationships")
+def get_event_relationships(
+    event_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    Get causal/temporal relationships for an event.
+
+    Returns related events connected via event_relationships table.
+    """
+    from sqlalchemy import text
+    rows = db.execute(text('''
+        SELECT
+            er.id, er.relationship_type, er.description, er.strength, er.certainty,
+            CASE WHEN er.from_event_id = :eid THEN er.to_event_id ELSE er.from_event_id END AS related_id,
+            CASE WHEN er.from_event_id = :eid THEN 'outgoing' ELSE 'incoming' END AS direction,
+            e.title, e.title_ko, e.date_start, e.date_end
+        FROM event_relationships er
+        JOIN events e ON e.id = CASE WHEN er.from_event_id = :eid THEN er.to_event_id ELSE er.from_event_id END
+        WHERE er.from_event_id = :eid OR er.to_event_id = :eid
+        ORDER BY e.date_start
+    '''), {"eid": event_id}).fetchall()
+
+    return {
+        "event_id": event_id,
+        "relationships": [
+            {
+                "id": r[0],
+                "relationship_type": r[1],
+                "description": r[2],
+                "strength": int(r[3]) if r[3] else None,
+                "certainty": str(r[4]) if r[4] else None,
+                "related_event_id": r[5],
+                "direction": r[6],
+                "related_event_title": r[7],
+                "related_event_title_ko": r[8],
+                "related_event_date_start": r[9],
+                "related_event_date_end": r[10],
+            }
+            for r in rows
+        ],
+        "total": len(rows),
+    }
+
+
 @router.get("/{event_id}/locations")
 def get_event_locations(
     event_id: int,
@@ -454,3 +513,41 @@ def get_event_locations(
     if result is None:
         raise HTTPException(status_code=404, detail="Event not found")
     return result
+
+
+@router.get("/{event_id}/histories")
+def get_event_histories(
+    event_id: int,
+    limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """Get histories that reference this event."""
+    rows = db.execute(sa_text("""
+        SELECT h.id, h.title, h.title_ko, h.summary,
+               h.era_start, h.era_end, h.category, h.author_type, h.importance,
+               he.role, h.created_at
+        FROM history_entities he
+        JOIN histories h ON h.id = he.history_id
+        WHERE he.entity_type = 'event' AND he.entity_id = :eid
+          AND h.status != 'archived'
+        ORDER BY h.importance DESC, h.created_at DESC
+        LIMIT :lim
+    """), {"eid": event_id, "lim": limit})
+
+    items = []
+    for row in rows:
+        items.append({
+            "id": row[0],
+            "title": row[1],
+            "title_ko": row[2],
+            "summary": row[3],
+            "era_start": row[4],
+            "era_end": row[5],
+            "category": row[6],
+            "author_type": row[7],
+            "importance": row[8],
+            "role_in_history": row[9],
+            "created_at": row[10].isoformat() if row[10] else None,
+        })
+
+    return {"event_id": event_id, "histories": items, "total": len(items)}

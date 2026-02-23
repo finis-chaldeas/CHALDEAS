@@ -1,0 +1,973 @@
+/**
+ * EventDetailPanel - FGO-style event detail with tabs (Overview / Connections)
+ */
+import { useState, useMemo, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../../api/client'
+import { ReportButton, SourceBadge } from '../common'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { trackEvent, AnalyticsEvents } from '../../lib/analytics'
+import type { Event } from '../../types'
+
+interface Props {
+  event: Event | null
+  allEvents: Event[]
+  onClose: () => void
+  onEventClick: (event: Event) => void
+  onAskSheba: (query: string) => void
+  onPersonClick?: (personId: number) => void
+  onLocationClick?: (locationId: number) => void
+  onOpenHierarchy?: (rootEventId?: number) => void
+}
+
+interface Connection {
+  id: number
+  event_a: { id: number; title: string; date_start: number | null }
+  event_b: { id: number; title: string; date_start: number | null }
+  direction: string
+  layer_type: string
+  connection_type: string | null
+  strength_score: number
+}
+
+type TabType = 'overview' | 'connections'
+
+// Role icons for persons
+const ROLE_ICONS: Record<string, string> = {
+  commander: '⚔️',
+  general: '🛡️',
+  king: '👑',
+  emperor: '👑',
+  queen: '👑',
+  philosopher: '📖',
+  leader: '⭐',
+  opponent: '🎯',
+  ally: '🤝',
+  advisor: '💬',
+  default: '👤'
+}
+
+const getRoleIcon = (role?: string): string => {
+  if (!role) return ROLE_ICONS.default
+  const lowerRole = role.toLowerCase()
+  for (const [key, icon] of Object.entries(ROLE_ICONS)) {
+    if (lowerRole.includes(key)) return icon
+  }
+  return ROLE_ICONS.default
+}
+
+// Chain navigation state
+interface ChainNav {
+  mode: 'person' | 'location' | 'causal' | null
+  entityId: number | null
+  entityName: string | null
+  events: Array<{ id: number; title: string; date_start: number | null }>
+  currentIndex: number
+}
+
+export function EventDetailPanel({
+  event,
+  allEvents,
+  onClose,
+  onEventClick,
+  onAskSheba,
+  onPersonClick,
+  onLocationClick,
+  onOpenHierarchy,
+}: Props) {
+  const { t } = useTranslation()
+  const { preferredLanguage } = useSettingsStore()
+  const [activeTab, setActiveTab] = useState<TabType>('overview')
+
+  // Track event view
+  useEffect(() => {
+    if (event?.id) {
+      trackEvent(AnalyticsEvents.EVENT_VIEWED, { event_id: event.id })
+    }
+  }, [event?.id])
+  const [chainNav, setChainNav] = useState<ChainNav>({
+    mode: null,
+    entityId: null,
+    entityName: null,
+    events: [],
+    currentIndex: -1
+  })
+  const [showAllPersons, setShowAllPersons] = useState(false)
+  const [showAllSources, setShowAllSources] = useState(false)
+
+  // Fetch full event detail (includes parent, children, sources)
+  const { data: eventDetail } = useQuery({
+    queryKey: ['event-detail', event?.id],
+    queryFn: () => api.get(`/events/${event?.id}`),
+    enabled: !!event?.id,
+    select: (res) => res.data,
+  })
+
+  // Fetch connections for current event
+  const { data: connectionsData, isLoading: connectionsLoading } = useQuery({
+    queryKey: ['event-connections', event?.id],
+    queryFn: () => api.get(`/chains/event/${event?.id}/connections`, {
+      params: { limit: 50 }
+    }),
+    enabled: !!event?.id && activeTab === 'connections',
+    select: (res) => res.data,
+  })
+
+  // Format year display
+  const formatYear = (year: number | null) => {
+    if (year === null) return '?'
+    const absYear = Math.abs(year)
+    const era = year < 0 ? t('timeline.era.bce') : t('timeline.era.ce')
+    return `${absYear} ${era}`
+  }
+
+  // Find related events (before/after within 50 years, same category)
+  const relatedEvents = useMemo(() => {
+    if (!event || !allEvents.length) return { before: [], after: [], related: [] }
+
+    const eventYear = event.date_start
+    const eventCat = typeof event.category === 'string' ? event.category : event.category?.slug
+
+    // Events before (within 100 years)
+    const before = allEvents
+      .filter(e =>
+        e.id !== event.id &&
+        e.date_start < eventYear &&
+        e.date_start >= eventYear - 100
+      )
+      .sort((a, b) => b.date_start - a.date_start)
+      .slice(0, 3)
+
+    // Events after (within 100 years)
+    const after = allEvents
+      .filter(e =>
+        e.id !== event.id &&
+        e.date_start > eventYear &&
+        e.date_start <= eventYear + 100
+      )
+      .sort((a, b) => a.date_start - b.date_start)
+      .slice(0, 3)
+
+    // Related by category (same category, different time)
+    const related = allEvents
+      .filter(e => {
+        if (e.id === event.id) return false
+        const eCat = typeof e.category === 'string' ? e.category : e.category?.slug
+        return eCat === eventCat && Math.abs(e.date_start - eventYear) > 100
+      })
+      .sort((a, b) => Math.abs(a.date_start - eventYear) - Math.abs(b.date_start - eventYear))
+      .slice(0, 3)
+
+    return { before, after, related }
+  }, [event, allEvents])
+
+  // Extract category info
+  const category = useMemo(() => {
+    if (!event) return null
+    if (typeof event.category === 'string') return event.category
+    return event.category?.slug || 'general'
+  }, [event])
+
+  // Persons: prefer detail API (has full list) over list API (first 3 from batch query)
+  const persons = useMemo((): Array<{ id: number; name: string; role?: string }> => {
+    return eventDetail?.persons ?? event?.persons ?? []
+  }, [eventDetail, event])
+
+  // Sources: detail API has full sources, list API only has source_count
+  const sources = useMemo((): Array<{ id: number; name?: string; title?: string; type?: string; url?: string; content?: string; page_reference?: string; reliability?: number; quote?: string }> => {
+    return eventDetail?.sources ?? event?.sources ?? []
+  }, [eventDetail, event])
+
+  // Get connection type color
+  const getTypeColor = (type: string | null) => {
+    const colors: Record<string, string> = {
+      causes: '#ef4444',
+      leads_to: '#f97316',
+      follows: '#3b82f6',
+      part_of: '#a855f7',
+      concurrent: '#22c55e',
+      related: '#6b7280',
+    }
+    return colors[type || ''] || '#6b7280'
+  }
+
+  // Get direction symbol
+  const getDirectionSymbol = (conn: Connection) => {
+    if (!event) return '—'
+    const isEventA = conn.event_a.id === event.id
+
+    switch (conn.direction) {
+      case 'forward': return isEventA ? '→' : '←'
+      case 'backward': return isEventA ? '←' : '→'
+      case 'bidirectional': return '↔'
+      default: return '—'
+    }
+  }
+
+  // Fetch chain events for navigation
+  const { data: personChainData } = useQuery({
+    queryKey: ['person-chain', chainNav.entityId],
+    queryFn: () => api.get(`/chains/person/${chainNav.entityId}`),
+    enabled: chainNav.mode === 'person' && !!chainNav.entityId,
+    select: (res) => res.data,
+  })
+
+  const { data: locationChainData } = useQuery({
+    queryKey: ['location-chain', chainNav.entityId],
+    queryFn: () => api.get(`/chains/location/${chainNav.entityId}`),
+    enabled: chainNav.mode === 'location' && !!chainNav.entityId,
+    select: (res) => res.data,
+  })
+
+  // Update chain events when data is loaded
+  useMemo(() => {
+    if (chainNav.mode === 'person' && personChainData?.connections) {
+      // Extract unique events from connections
+      const eventsMap = new Map<number, { id: number; title: string; date_start: number | null }>()
+      for (const conn of personChainData.connections) {
+        if (!eventsMap.has(conn.event_a.id)) {
+          eventsMap.set(conn.event_a.id, { id: conn.event_a.id, title: conn.event_a.title, date_start: conn.event_a.year })
+        }
+        if (!eventsMap.has(conn.event_b.id)) {
+          eventsMap.set(conn.event_b.id, { id: conn.event_b.id, title: conn.event_b.title, date_start: conn.event_b.year })
+        }
+      }
+      const events = Array.from(eventsMap.values()).sort((a, b) => (a.date_start || 0) - (b.date_start || 0))
+      const currentIndex = events.findIndex(e => e.id === event?.id)
+      setChainNav(prev => ({
+        ...prev,
+        entityName: personChainData.person?.name || prev.entityName,
+        events,
+        currentIndex: currentIndex >= 0 ? currentIndex : 0
+      }))
+    }
+  }, [personChainData, chainNav.mode, event?.id])
+
+  useMemo(() => {
+    if (chainNav.mode === 'location' && locationChainData?.connections) {
+      const eventsMap = new Map<number, { id: number; title: string; date_start: number | null }>()
+      for (const conn of locationChainData.connections) {
+        if (!eventsMap.has(conn.event_a.id)) {
+          eventsMap.set(conn.event_a.id, { id: conn.event_a.id, title: conn.event_a.title, date_start: conn.event_a.year })
+        }
+        if (!eventsMap.has(conn.event_b.id)) {
+          eventsMap.set(conn.event_b.id, { id: conn.event_b.id, title: conn.event_b.title, date_start: conn.event_b.year })
+        }
+      }
+      const events = Array.from(eventsMap.values()).sort((a, b) => (a.date_start || 0) - (b.date_start || 0))
+      const currentIndex = events.findIndex(e => e.id === event?.id)
+      setChainNav(prev => ({
+        ...prev,
+        entityName: locationChainData.location?.name || prev.entityName,
+        events,
+        currentIndex: currentIndex >= 0 ? currentIndex : 0
+      }))
+    }
+  }, [locationChainData, chainNav.mode, event?.id])
+
+  // Start chain navigation
+  const startChainNav = (mode: 'person' | 'location', entityId: number, entityName: string) => {
+    setChainNav({
+      mode,
+      entityId,
+      entityName,
+      events: [],
+      currentIndex: -1
+    })
+    setActiveTab('connections')
+  }
+
+  // Navigate to previous/next event in chain
+  const navigateChain = (direction: 'prev' | 'next') => {
+    if (chainNav.events.length === 0) return
+
+    const newIndex = direction === 'prev'
+      ? Math.max(0, chainNav.currentIndex - 1)
+      : Math.min(chainNav.events.length - 1, chainNav.currentIndex + 1)
+
+    if (newIndex !== chainNav.currentIndex) {
+      const targetEvent = chainNav.events[newIndex]
+      const fullEvent = allEvents.find(e => e.id === targetEvent.id)
+      if (fullEvent) {
+        setChainNav(prev => ({ ...prev, currentIndex: newIndex }))
+        onEventClick(fullEvent)
+      }
+    }
+  }
+
+  // Exit chain navigation
+  const exitChainNav = () => {
+    setChainNav({
+      mode: null,
+      entityId: null,
+      entityName: null,
+      events: [],
+      currentIndex: -1
+    })
+  }
+
+  // Hierarchy level labels
+  const getHierarchyLabel = (level?: number) => {
+    switch (level) {
+      case 0: return 'Era'
+      case 1: return 'Mega'
+      case 2: return 'Aggregate'
+      case 3: return 'Major'
+      case 4: return 'Minor'
+      default: return null
+    }
+  }
+
+  // Handle clicking a child event
+  const handleChildEventClick = async (childId: number) => {
+    const fullEvent = allEvents.find(e => e.id === childId)
+    if (fullEvent) {
+      onEventClick(fullEvent)
+      return
+    }
+    try {
+      const res = await api.get(`/events/${childId}`)
+      if (res.data) onEventClick(res.data)
+    } catch (err) {
+      console.error('Failed to fetch child event:', childId, err)
+    }
+  }
+
+  // Get the "other" event in the connection
+  const getOtherEvent = (conn: Connection) => {
+    if (!event) return null
+    return conn.event_a.id === event.id ? conn.event_b : conn.event_a
+  }
+
+  // Handle clicking a connected event
+  const handleConnectionClick = async (conn: Connection) => {
+    const otherEvent = getOtherEvent(conn)
+    if (!otherEvent) return
+
+    // Try to find in allEvents first
+    const fullEvent = allEvents.find(e => e.id === otherEvent.id)
+    if (fullEvent) {
+      onEventClick(fullEvent)
+      return
+    }
+
+    // If not in allEvents, fetch from API
+    try {
+      const res = await api.get(`/events/${otherEvent.id}`)
+      if (res.data) {
+        onEventClick(res.data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch event:', otherEvent.id, err)
+    }
+  }
+
+  // Group connections by type
+  const groupedConnections = useMemo(() => {
+    if (!connectionsData?.items) return {}
+
+    const groups: Record<string, Connection[]> = {}
+    for (const conn of connectionsData.items) {
+      const type = conn.connection_type || 'unclassified'
+      if (!groups[type]) groups[type] = []
+      groups[type].push(conn)
+    }
+    return groups
+  }, [connectionsData])
+
+  if (!event) {
+    return (
+      <aside className="detail-panel hidden">
+        <div />
+      </aside>
+    )
+  }
+
+  return (
+    <aside className="detail-panel">
+      <button className="close-btn" onClick={onClose}>
+        ✕
+      </button>
+
+      {/* Header with Year */}
+      <div className="detail-header">
+        <div className="detail-meta">
+          {sources.length > 0 ? (
+            <span className="source-ref" title={sources[0].name || sources[0].title}>
+              📜 {sources[0].type === 'primary' ? t('detail.primary') : t('detail.secondary')}: {(sources[0].name || sources[0].title || '')?.slice(0, 30)}{(sources[0].name || sources[0].title || '').length > 30 ? '...' : ''}
+            </span>
+          ) : (
+            <span className="source-ref">📚 {t('detail.archiveId', { id: event.id })}</span>
+          )}
+        </div>
+        <div className="detail-year">
+          <div className="detail-year-number">
+            {Math.abs(event.date_start)}
+          </div>
+          <div className="detail-year-era">
+            {event.date_start < 0 ? t('timeline.era.bce') : t('timeline.era.ce')}
+          </div>
+        </div>
+      </div>
+
+      {/* Title */}
+      <div className="detail-title">
+        <h2>{event.title}</h2>
+      </div>
+
+      {/* Chain Navigation Bar */}
+      {chainNav.mode && chainNav.events.length > 0 && (
+        <div className="chain-nav-bar">
+          <div className="chain-nav-info">
+            <span className={`chain-nav-mode ${chainNav.mode}`}>
+              {chainNav.mode === 'person' ? '👤' : '📍'}
+              {chainNav.entityName}
+            </span>
+            <span className="chain-nav-progress">
+              {chainNav.currentIndex + 1} / {chainNav.events.length}
+            </span>
+          </div>
+          <div className="chain-nav-controls">
+            <button
+              className="chain-nav-btn"
+              onClick={() => navigateChain('prev')}
+              disabled={chainNav.currentIndex <= 0}
+              title={t('detail.previousEvent', 'Previous Event')}
+            >
+              ← {t('detail.prev', 'Prev')}
+            </button>
+            <button
+              className="chain-nav-btn"
+              onClick={() => navigateChain('next')}
+              disabled={chainNav.currentIndex >= chainNav.events.length - 1}
+              title={t('detail.nextEvent', 'Next Event')}
+            >
+              {t('detail.next', 'Next')} →
+            </button>
+            <button
+              className="chain-nav-exit"
+              onClick={exitChainNav}
+              title={t('detail.exitChain', 'Exit Chain Navigation')}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Tab Navigation */}
+      <div className="detail-tabs">
+        <button
+          className={`detail-tab ${activeTab === 'overview' ? 'active' : ''}`}
+          onClick={() => setActiveTab('overview')}
+        >
+          {t('detail.tabs.overview', 'Overview')}
+        </button>
+        <button
+          className={`detail-tab ${activeTab === 'connections' ? 'active' : ''}`}
+          onClick={() => setActiveTab('connections')}
+        >
+          {t('detail.tabs.connections', 'Connections')}
+          {connectionsData?.total ? ` (${connectionsData.total})` : ''}
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="detail-content">
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Hierarchy Info */}
+            {(event.hierarchy_level !== undefined || eventDetail?.parent || (eventDetail?.children && eventDetail.children.length > 0)) && (
+              <div className="hierarchy-section">
+                {/* Level badge + aggregate type */}
+                <div className="hierarchy-badges">
+                  {getHierarchyLabel(event.hierarchy_level) && (
+                    <span className={`hierarchy-badge level-${event.hierarchy_level}`}>
+                      {getHierarchyLabel(event.hierarchy_level)}
+                    </span>
+                  )}
+                  {event.aggregate_type && (
+                    <span className="hierarchy-badge aggregate-type">
+                      {event.aggregate_type}
+                    </span>
+                  )}
+                </div>
+
+                {/* Parent breadcrumb */}
+                {eventDetail?.parent && (
+                  <div className="hierarchy-breadcrumb">
+                    <span
+                      className="hierarchy-breadcrumb-link"
+                      onClick={() => handleChildEventClick(eventDetail.parent.id)}
+                    >
+                      {eventDetail.parent.title}
+                    </span>
+                    <span className="hierarchy-breadcrumb-sep">{'\u203a'}</span>
+                    <span className="hierarchy-breadcrumb-current">{event.title}</span>
+                  </div>
+                )}
+
+                {/* Child events */}
+                {eventDetail?.children && eventDetail.children.length > 0 && (
+                  <div className="hierarchy-children">
+                    <div className="hierarchy-children-header">
+                      Sub-events ({eventDetail.child_count || eventDetail.children.length})
+                    </div>
+                    {eventDetail.children.slice(0, 5).map((child: { id: number; title: string; date_start: number }) => (
+                      <div
+                        key={child.id}
+                        className="hierarchy-child-item"
+                        onClick={() => handleChildEventClick(child.id)}
+                      >
+                        <span className="hierarchy-child-year">{formatYear(child.date_start)}</span>
+                        <span className="hierarchy-child-title">{child.title}</span>
+                      </div>
+                    ))}
+                    {(eventDetail.child_count || eventDetail.children.length) > 5 && (
+                      <button
+                        className="hierarchy-browse-all"
+                        onClick={() => onOpenHierarchy?.(event.id as number)}
+                      >
+                        Browse all {eventDetail.child_count || eventDetail.children.length} sub-events
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 4 Elements Grid: WHO / WHERE / WHEN / WHAT */}
+            <div className="four-elements-grid">
+              {/* WHEN */}
+              <div className="element-card when">
+                <div className="element-label">WHEN</div>
+                <div className="element-value">
+                  <span className="element-main">{Math.abs(event.date_start)}</span>
+                  <span className="element-sub">{event.date_start < 0 ? 'BCE' : 'CE'}</span>
+                </div>
+                {event.date_end && event.date_end !== event.date_start && (
+                  <div className="element-extra">
+                    ~ {Math.abs(event.date_end)} {event.date_end < 0 ? 'BCE' : 'CE'}
+                  </div>
+                )}
+              </div>
+
+              {/* WHERE */}
+              <div className="element-card where">
+                <div className="element-label">WHERE</div>
+                {(event.location || event.locations?.[0]) ? (
+                  <>
+                    <div className="element-value">
+                      <span
+                        className="element-main element-clickable"
+                        onClick={() => {
+                          const loc = event.location || event.locations?.[0]
+                          if (loc) {
+                            if (onLocationClick) {
+                              onLocationClick(loc.id)
+                            } else {
+                              startChainNav('location', loc.id, loc.name)
+                            }
+                          }
+                        }}
+                        title={t('detail.followLocationChain', 'See history of this place')}
+                      >
+                        📍 {event.location?.name || event.locations?.[0]?.name}
+                      </span>
+                    </div>
+                    {/* Coordinates (small) */}
+                    {(event.latitude && event.longitude) && (
+                      <div className="element-coords">
+                        {event.latitude.toFixed(2)}°, {event.longitude.toFixed(2)}°
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="element-value">
+                    <span className="element-main element-unknown">Unknown</span>
+                  </div>
+                )}
+              </div>
+
+              {/* WHO */}
+              <div className="element-card who">
+                <div className="element-label">WHO</div>
+                {persons.length > 0 ? (
+                  <>
+                    <div className="element-value">
+                      <span
+                        className="element-main element-clickable"
+                        onClick={() => {
+                          if (onPersonClick) {
+                            onPersonClick(persons[0].id)
+                          } else {
+                            startChainNav('person', persons[0].id, persons[0].name)
+                          }
+                        }}
+                        title={t('detail.followPersonChain', 'Follow this person\'s story')}
+                      >
+                        {getRoleIcon(persons[0].role)} {persons[0].name}
+                      </span>
+                    </div>
+                    {persons.length > 1 && (
+                      <div
+                        className="element-extra element-clickable"
+                        onClick={() => setShowAllPersons(!showAllPersons)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {showAllPersons ? '▼ Hide' : `+${persons.length - 1} ${t('detail.others', 'others')} ▶`}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="element-value">
+                    <span className="element-main element-unknown">Various</span>
+                  </div>
+                )}
+              </div>
+
+              {/* WHAT (Category) */}
+              <div className="element-card what">
+                <div className="element-label">WHAT</div>
+                <div className="element-value">
+                  <span className={`element-main element-category ${category || 'general'}`}>
+                    {t(`categories.${category || 'general'}`, category || 'Event')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Expanded Persons List */}
+            {showAllPersons && persons.length > 1 && (
+              <div className="expanded-persons-list">
+                <div className="expanded-list-header">
+                  {t('detail.allParticipants', 'All Participants')} ({persons.length})
+                </div>
+                {persons.map((person) => (
+                  <div
+                    key={person.id}
+                    className="expanded-person-item"
+                    onClick={() => {
+                      if (onPersonClick) {
+                        onPersonClick(person.id)
+                      } else {
+                        startChainNav('person', person.id, person.name)
+                      }
+                    }}
+                  >
+                    <span className="person-icon">{getRoleIcon(person.role)}</span>
+                    <div className="person-info">
+                      <span className="person-name">{person.name}</span>
+                      {person.role && <span className="person-role">{person.role}</span>}
+                    </div>
+                    <span className="person-arrow">→</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Description */}
+            <div className="detail-section">
+              <div className="detail-section-header">{t('detail.description', 'Description')}</div>
+              <p className="detail-description">
+                {getLocalizedText(event as unknown as Record<string, unknown>, 'description', preferredLanguage) || t('detail.pendingDescription')}
+              </p>
+              <div className="description-meta">
+                {event.details?.description_source && (
+                  <div className="description-source">
+                    <SourceBadge
+                      source={event.details.description_source}
+                      sourceUrl={event.details.description_source_url}
+                    />
+                  </div>
+                )}
+                {(event.details?.wikipedia_url || event.wikipedia_url) && (
+                  <a
+                    href={event.details?.wikipedia_url || event.wikipedia_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="wikipedia-link"
+                  >
+                    <span className="wikipedia-icon">W</span>
+                    Wikipedia
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Ask SHEBA Button */}
+            <button
+              className="ask-sheba-btn"
+              onClick={() => onAskSheba(t('detail.askShebaQuery', { title: event.title }))}
+            >
+              {t('detail.askShebaAbout')}
+            </button>
+
+            {/* Chronological Context */}
+            {(relatedEvents.before.length > 0 || relatedEvents.after.length > 0) && (
+              <div className="detail-section">
+                <div className="detail-section-header">
+                  {t('detail.chronologicalContext')}
+                </div>
+
+                {/* Events Before */}
+                {relatedEvents.before.length > 0 && (
+                  <div className="related-events" style={{ marginBottom: '1rem' }}>
+                    <div style={{ fontSize: '0.65rem', color: 'var(--chaldea-magenta)', marginBottom: '0.5rem', letterSpacing: '0.1em' }}>
+                      {t('detail.precedingEvents')}
+                    </div>
+                    {relatedEvents.before.map((e) => (
+                      <div
+                        key={e.id}
+                        className="related-event-item before"
+                        onClick={() => onEventClick(e)}
+                      >
+                        <span className="related-event-year">{formatYear(e.date_start)}</span>
+                        <span className="related-event-title">{e.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Current Event Marker */}
+                <div style={{
+                  textAlign: 'center',
+                  padding: '0.5rem',
+                  background: 'rgba(0, 212, 255, 0.1)',
+                  border: '1px solid var(--chaldea-cyan)',
+                  borderRadius: '4px',
+                  marginBottom: '1rem'
+                }}>
+                  <span style={{ color: 'var(--chaldea-cyan)', fontSize: '0.75rem', fontWeight: 600 }}>
+                    {t('detail.currentEvent', { year: formatYear(event.date_start) })}
+                  </span>
+                </div>
+
+                {/* Events After */}
+                {relatedEvents.after.length > 0 && (
+                  <div className="related-events">
+                    <div style={{ fontSize: '0.65rem', color: 'var(--chaldea-green)', marginBottom: '0.5rem', letterSpacing: '0.1em' }}>
+                      {t('detail.followingEvents')}
+                    </div>
+                    {relatedEvents.after.map((e) => (
+                      <div
+                        key={e.id}
+                        className="related-event-item after"
+                        onClick={() => onEventClick(e)}
+                      >
+                        <span className="related-event-year">{formatYear(e.date_start)}</span>
+                        <span className="related-event-title">{e.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Related Events by Category */}
+            {relatedEvents.related.length > 0 && (
+              <div className="detail-section">
+                <div className="detail-section-header">
+                  {t('detail.relatedRecords', { category: t(`categories.${category}`, category || '').toUpperCase() })}
+                </div>
+                <div className="related-events">
+                  {relatedEvents.related.map((e) => (
+                    <div
+                      key={e.id}
+                      className="related-event-item"
+                      onClick={() => onEventClick(e)}
+                    >
+                      <span className="related-event-year">{formatYear(e.date_start)}</span>
+                      <span className="related-event-title">{e.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Persons Section (if available) */}
+            {persons.length > 0 && (
+              <div className="detail-section">
+                <div className="detail-section-header">
+                  {t('detail.keyFigures')}
+                </div>
+                <div className="related-persons">
+                  {persons.map((person) => (
+                    <span key={person.id} className="person-tag">
+                      {person.name}
+                      {person.role && <span style={{ opacity: 0.6 }}> ({person.role})</span>}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Sources Section (if available) */}
+            {sources.length > 0 && (
+              <div className="detail-section">
+                <div className="detail-section-header">
+                  {t('detail.historicalSources')} ({sources.length})
+                </div>
+                <div className="sources-list enhanced">
+                  {sources.slice(0, showAllSources ? sources.length : 2).map((source) => (
+                    <div key={source.id} className="source-item enhanced">
+                      <div className="source-header">
+                        <span className="source-icon">
+                          {source.type === 'primary' ? '📜' : '📚'}
+                        </span>
+                        <span className="source-name">{source.name || source.title}</span>
+                        {source.reliability && (
+                          <span className="source-reliability">
+                            {'★'.repeat(source.reliability)}{'☆'.repeat(5 - source.reliability)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="source-type-badge">
+                        {source.type === 'primary'
+                          ? t('detail.primarySource', 'Primary Source')
+                          : t('detail.secondarySource', 'Secondary Source')}
+                      </div>
+                      {source.quote && (
+                        <blockquote className="source-quote">
+                          "{source.quote}"
+                        </blockquote>
+                      )}
+                      {source.page_reference && (
+                        <div className="source-reference">
+                          {t('detail.reference', 'Ref')}: {source.page_reference}
+                        </div>
+                      )}
+                      {source.url && (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="source-link"
+                        >
+                          {t('detail.viewSource', 'View Source')} →
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                  {sources.length > 2 && (
+                    <button
+                      className="show-more-sources"
+                      onClick={() => setShowAllSources(!showAllSources)}
+                    >
+                      {showAllSources
+                        ? t('detail.showLess', 'Show less')
+                        : t('detail.showMore', `Show ${sources.length - 2} more sources`)}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Connections Tab */}
+        {activeTab === 'connections' && (
+          <div className="connections-tab">
+            {connectionsLoading && (
+              <div className="connections-loading">
+                {t('detail.loadingConnections', 'Loading connections...')}
+              </div>
+            )}
+
+            {!connectionsLoading && connectionsData?.total === 0 && (
+              <div className="connections-empty">
+                {t('detail.noConnections', 'No historical connections found for this event.')}
+              </div>
+            )}
+
+            {!connectionsLoading && Object.keys(groupedConnections).length > 0 && (
+              <div className="connections-list">
+                {Object.entries(groupedConnections).map(([type, conns]) => (
+                  <div key={type} className="connection-group">
+                    <div
+                      className="connection-group-header"
+                      style={{ borderLeftColor: getTypeColor(type) }}
+                    >
+                      <span className="connection-type-label">{type}</span>
+                      <span className="connection-count">{conns.length}</span>
+                    </div>
+
+                    {conns.slice(0, 10).map((conn) => {
+                      const otherEvent = getOtherEvent(conn)
+                      if (!otherEvent) return null
+
+                      return (
+                        <div
+                          key={conn.id}
+                          className="connection-item"
+                          onClick={() => handleConnectionClick(conn)}
+                        >
+                          <span className="connection-direction">
+                            {getDirectionSymbol(conn)}
+                          </span>
+                          <div className="connection-event">
+                            <span className="connection-event-title">
+                              {otherEvent.title}
+                            </span>
+                            <span className="connection-event-year">
+                              {formatYear(otherEvent.date_start)}
+                            </span>
+                          </div>
+                          <span
+                            className="connection-strength"
+                            title={`Strength: ${conn.strength_score.toFixed(1)}`}
+                          >
+                            {conn.strength_score >= 10 ? '●●●' :
+                             conn.strength_score >= 5 ? '●●○' : '●○○'}
+                          </span>
+                        </div>
+                      )
+                    })}
+
+                    {conns.length > 10 && (
+                      <div className="connection-more">
+                        +{conns.length - 10} more
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Connection Stats Summary */}
+            {!connectionsLoading && connectionsData?.total > 0 && (
+              <div className="connections-summary">
+                <span>{t('detail.totalConnections', 'Total')}: {connectionsData.total}</span>
+                {connectionsData.by_layer && (
+                  <span className="connections-by-layer">
+                    {Object.entries(connectionsData.by_layer).map(([layer, count]) => (
+                      <span key={layer} className="layer-badge">
+                        {layer}: {count as number}
+                      </span>
+                    ))}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="detail-footer">
+        <div className="detail-coords">
+          {t('detail.coordinates', {
+            lat: event.latitude?.toFixed(4) || t('detail.notAvailable'),
+            lng: event.longitude?.toFixed(4) || t('detail.notAvailable')
+          })}
+        </div>
+        <div className="detail-status">
+          {t('detail.verified')}
+        </div>
+        <ReportButton entityType="event" entityId={event.id} />
+      </div>
+    </aside>
+  )
+}

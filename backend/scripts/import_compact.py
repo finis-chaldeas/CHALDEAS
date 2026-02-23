@@ -56,6 +56,8 @@ IMPORT_ORDER = [
     "event_persons",
     "event_locations",
     "event_sources",
+    "person_sources",
+    "person_detail",
     "event_connections",
     "event_relationships",
     "historical_chains",
@@ -65,7 +67,14 @@ IMPORT_ORDER = [
     "person_locations",
     "location_relationships",
     "entity_aliases",
-    # 8. QRank (independent, but import last)
+    # 8. Narrative / mention tables
+    "entity_narratives",
+    "text_mentions",
+    "entity_properties",
+    # 9. Histories
+    "histories",
+    "history_entities",
+    # 10. QRank (independent, but import last)
     "qrank",
 ]
 
@@ -75,6 +84,8 @@ TABLES_WITH_SERIAL_ID = [
     "polities", "sources", "event_connections", "event_relationships",
     "historical_chains", "chain_segments", "chain_entity_roles",
     "masters", "import_batches", "entity_aliases", "periods",
+    "entity_narratives", "text_mentions", "entity_properties",
+    "histories", "history_entities",
 ]
 
 

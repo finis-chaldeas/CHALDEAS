@@ -25,7 +25,8 @@ async def list_persons(
     lat_max: Optional[float] = Query(None, description="Viewport north bound (birthplace)"),
     lng_min: Optional[float] = Query(None, description="Viewport west bound (birthplace)"),
     lng_max: Optional[float] = Query(None, description="Viewport east bound (birthplace)"),
-    sort_by: Optional[str] = Query(None, description="Sort by: 'birth' (default)"),
+    domain: Optional[str] = Query(None, description="Filter by domain: science, philosophy, military, etc."),
+    sort_by: Optional[str] = Query(None, description="Sort by: 'birth' (default), 'importance'"),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
@@ -42,6 +43,7 @@ async def list_persons(
         lng_min=lng_min,
         lng_max=lng_max,
         sort_by=sort_by,
+        domain=domain,
     )
     return PersonList(items=persons, total=total)
 
@@ -125,6 +127,38 @@ async def get_person(
     if not person:
         raise HTTPException(status_code=404, detail="Person not found")
     return person
+
+
+@router.get("/{person_id}/narrative")
+async def get_person_narrative(
+    person_id: int,
+    db: Session = Depends(get_db),
+):
+    """Get LLM-generated narrative for a person from entity_narratives."""
+    person = person_service.get_person_by_id(db, person_id)
+    if not person:
+        raise HTTPException(status_code=404, detail="Person not found")
+
+    row = db.execute(sa_text('''
+        SELECT narrative, significance, causes, consequences, model_used, source_url
+        FROM entity_narratives
+        WHERE entity_type = 'person' AND entity_id = :pid
+        LIMIT 1
+    '''), {"pid": person_id}).fetchone()
+
+    if not row:
+        return {"person_id": person_id, "has_narrative": False}
+
+    return {
+        "person_id": person_id,
+        "has_narrative": True,
+        "narrative": row[0],
+        "significance": row[1],
+        "causes": row[2],
+        "consequences": row[3],
+        "model_used": row[4],
+        "source_url": row[5],
+    }
 
 
 @router.get("/{person_id}/flow", response_model=PersonFlow)
@@ -288,3 +322,41 @@ async def get_person_properties(
         "person_id": person_id,
         "properties": list(grouped.values()),
     }
+
+
+@router.get("/{person_id}/histories")
+async def get_person_histories(
+    person_id: int,
+    limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """Get histories that reference this person."""
+    rows = db.execute(sa_text("""
+        SELECT h.id, h.title, h.title_ko, h.summary,
+               h.era_start, h.era_end, h.category, h.author_type, h.importance,
+               he.role, h.created_at
+        FROM history_entities he
+        JOIN histories h ON h.id = he.history_id
+        WHERE he.entity_type = 'person' AND he.entity_id = :pid
+          AND h.status != 'archived'
+        ORDER BY h.importance DESC, h.created_at DESC
+        LIMIT :lim
+    """), {"pid": person_id, "lim": limit})
+
+    items = []
+    for row in rows:
+        items.append({
+            "id": row[0],
+            "title": row[1],
+            "title_ko": row[2],
+            "summary": row[3],
+            "era_start": row[4],
+            "era_end": row[5],
+            "category": row[6],
+            "author_type": row[7],
+            "importance": row[8],
+            "role_in_history": row[9],
+            "created_at": row[10].isoformat() if row[10] else None,
+        })
+
+    return {"person_id": person_id, "histories": items, "total": len(items)}

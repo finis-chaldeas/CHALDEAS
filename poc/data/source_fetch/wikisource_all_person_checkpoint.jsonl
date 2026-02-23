@@ -1,0 +1,500 @@
+{"id": 1623554, "name": "Nicolaus Copernicus", "ws_title": "Author:Nicolaus Copernicus", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:03:55.611213"}
+{"id": 1623738, "name": "Muhammad", "status": "already_exists", "timestamp": "2026-02-22T14:03:55.618800"}
+{"id": 1623781, "name": "Thomas Jefferson", "status": "already_exists", "timestamp": "2026-02-22T14:03:55.623802"}
+{"id": 3250093, "name": "Charles V", "ws_title": "Author:Charles V", "works_found": 2, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:04:01.175894"}
+{"id": 4872432, "name": "Abraham Lincoln", "status": "already_exists", "timestamp": "2026-02-22T14:04:01.182097"}
+{"id": 4872448, "name": "Julius Caesar", "status": "already_exists", "timestamp": "2026-02-22T14:04:01.187094"}
+{"id": 4878707, "name": "Francis Crick", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:02.575783"}
+{"id": 5002108, "name": "Hannibal", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:03.939745"}
+{"id": 6494887, "name": "Jesus Christ", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.943742"}
+{"id": 6494894, "name": "William Shakespeare", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.947744"}
+{"id": 6494897, "name": "Aristotle", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.953987"}
+{"id": 6494944, "name": "Charlemagne", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.957989"}
+{"id": 8117552, "name": "Albert Einstein", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.961987"}
+{"id": 8117562, "name": "Augustus", "status": "already_exists", "timestamp": "2026-02-22T14:04:03.966153"}
+{"id": 8118028, "name": "Adolf Eichmann", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:05.345510"}
+{"id": 8176531, "name": "Ibrahim", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:06.739443"}
+{"id": 9740813, "name": "Wolfgang Amadeus Mozart", "status": "already_exists", "timestamp": "2026-02-22T14:04:06.745879"}
+{"id": 9740830, "name": "Isaac Newton", "status": "already_exists", "timestamp": "2026-02-22T14:04:06.750113"}
+{"id": 9741102, "name": "Q12998", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:08.276180"}
+{"id": 11363659, "name": "Adolf Hitler", "status": "already_exists", "timestamp": "2026-02-22T14:04:08.283175"}
+{"id": 11363667, "name": "Genghis Khan", "status": "already_exists", "timestamp": "2026-02-22T14:04:08.290173"}
+{"id": 11363669, "name": "Leonardo da Vinci", "status": "already_exists", "timestamp": "2026-02-22T14:04:08.295155"}
+{"id": 11363893, "name": "Shigeru Miyamoto", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:09.654774"}
+{"id": 12989639, "name": "historical Jesus", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:11.006332"}
+{"id": 13001176, "name": "John the Evangelist", "status": "already_exists", "timestamp": "2026-02-22T14:04:11.010989"}
+{"id": 1623652, "name": "David Bowie", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:12.395984"}
+{"id": 1623667, "name": "Mao Zedong", "status": "already_exists", "timestamp": "2026-02-22T14:04:12.399989"}
+{"id": 1623679, "name": "Marie Curie", "status": "already_exists", "timestamp": "2026-02-22T14:04:12.401894"}
+{"id": 1624161, "name": "Benjamin Franklin", "status": "already_exists", "timestamp": "2026-02-22T14:04:12.406887"}
+{"id": 1630302, "name": "Luke the Evangelist", "ws_title": "Author:Luke the Evangelist", "works_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:04:20.931456"}
+{"id": 1630737, "name": "Norman Borlaug", "status": "already_exists", "timestamp": "2026-02-22T14:04:20.933461"}
+{"id": 3249495, "name": "Socrates", "status": "already_exists", "timestamp": "2026-02-22T14:04:20.936458"}
+{"id": 3249721, "name": "Harry S. Truman", "status": "already_exists", "timestamp": "2026-02-22T14:04:20.942457"}
+{"id": 3250297, "name": "Pierre-Simon Laplace", "status": "already_exists", "timestamp": "2026-02-22T14:04:20.945455"}
+{"id": 3252296, "name": "Guru Nanak", "status": "already_exists", "timestamp": "2026-02-22T14:04:20.948456"}
+{"id": 3253248, "name": "Claude Shannon", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:22.338273"}
+{"id": 3262437, "name": "Abu Bakr", "status": "already_exists", "timestamp": "2026-02-22T14:04:22.342272"}
+{"id": 4876119, "name": "Vint Cerf", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:23.721981"}
+{"id": 6495576, "name": "Kurt Gödel", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:25.067980"}
+{"id": 6507608, "name": "Winston Churchill", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:26.465332"}
+{"id": 8117691, "name": "Winston Churchill", "status": "already_exists", "timestamp": "2026-02-22T14:04:26.469332"}
+{"id": 8117874, "name": "John von Neumann", "status": "already_exists", "timestamp": "2026-02-22T14:04:26.472331"}
+{"id": 8118184, "name": "Alī ibn Abī Ṭālib", "status": "already_exists", "timestamp": "2026-02-22T14:04:26.477213"}
+{"id": 8120290, "name": "Ludwig Boltzmann", "ws_title": "Author:Ludwig Eduard Boltzmann", "status": "no_works", "timestamp": "2026-02-22T14:04:29.322645"}
+{"id": 9740832, "name": "Charles Darwin", "ws_title": "Author:Charles Robert Darwin", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:04:39.938471"}
+{"id": 9740934, "name": "Michelangelo", "status": "already_exists", "timestamp": "2026-02-22T14:04:39.941485"}
+{"id": 9743244, "name": "Georg Cantor", "ws_title": "Author:Georg Ferdinand Ludwig Philipp Cantor", "status": "no_works", "timestamp": "2026-02-22T14:04:42.698995"}
+{"id": 11363762, "name": "Carl Friedrich Gauss", "status": "already_exists", "timestamp": "2026-02-22T14:04:42.704131"}
+{"id": 11363802, "name": "Alexander the Great", "status": "already_exists", "timestamp": "2026-02-22T14:04:42.707262"}
+{"id": 11363828, "name": "The Buddha", "status": "already_exists", "timestamp": "2026-02-22T14:04:42.711278"}
+{"id": 12988644, "name": "Napoleon", "status": "already_exists", "timestamp": "2026-02-22T14:04:42.715275"}
+{"id": 12988691, "name": "Q2831", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:44.120872"}
+{"id": 12988793, "name": "Augustine of Hippo", "status": "already_exists", "timestamp": "2026-02-22T14:04:44.124998"}
+{"id": 12989262, "name": "Saint Peter", "status": "already_exists", "timestamp": "2026-02-22T14:04:44.128117"}
+{"id": 12990371, "name": "Wolfgang Pauli", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:45.496904"}
+{"id": 13019050, "name": "John B. Goodenough", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:46.953596"}
+{"id": 1623560, "name": "Plato", "status": "already_exists", "timestamp": "2026-02-22T14:04:46.956588"}
+{"id": 1623714, "name": "Constantine the Great", "ws_title": "Author:Constantine (c. 272-337)", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:04:56.854168"}
+{"id": 1623918, "name": "Steve Jobs", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:58.378367"}
+{"id": 1624236, "name": "John the Baptist", "status": "already_exists", "timestamp": "2026-02-22T14:04:58.381978"}
+{"id": 1631388, "name": "Nicolas Carnot", "status": "already_exists", "timestamp": "2026-02-22T14:04:58.384982"}
+{"id": 1631583, "name": "Peter Higgs", "status": "no_wikisource", "timestamp": "2026-02-22T14:04:59.803889"}
+{"id": 1631931, "name": "Akira Toriyama", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:01.147785"}
+{"id": 1632202, "name": "Frederick Douglass", "status": "already_exists", "timestamp": "2026-02-22T14:05:01.152108"}
+{"id": 3249478, "name": "Stanley Kubrick", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:02.554716"}
+{"id": 3249482, "name": "Galileo Galilei", "ws_title": "Author:Galileo Galilei", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:05:13.051919"}
+{"id": 3249550, "name": "Paul McCartney", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:14.411608"}
+{"id": 3249982, "name": "Herodotus", "status": "already_exists", "timestamp": "2026-02-22T14:05:14.415026"}
+{"id": 3251986, "name": "Alexander Grothendieck", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:15.770259"}
+{"id": 3256775, "name": "Mohammad Ali Jinnah", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:17.218525"}
+{"id": 3258617, "name": "Daniel Kahneman", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:18.661093"}
+{"id": 3267005, "name": "Tu Youyou", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:20.041252"}
+{"id": 3286575, "name": "Eiji Toyoda", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:21.405672"}
+{"id": 3313380, "name": "John Mark", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:22.746931"}
+{"id": 3320891, "name": "Tasuku Honjo", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:24.102163"}
+{"id": 4872445, "name": "Charlie Chaplin", "status": "already_exists", "timestamp": "2026-02-22T14:05:24.106162"}
+{"id": 4872454, "name": "Vladimir Lenin", "status": "already_exists", "timestamp": "2026-02-22T14:05:24.109161"}
+{"id": 4872581, "name": "Leonhard Euler", "status": "already_exists", "timestamp": "2026-02-22T14:05:24.113159"}
+{"id": 4872591, "name": "Nelson Mandela", "status": "already_exists", "timestamp": "2026-02-22T14:05:24.117158"}
+{"id": 4872603, "name": "Enrico Fermi", "ws_title": "Author:Enrico Fermi", "status": "no_works", "timestamp": "2026-02-22T14:05:27.033589"}
+{"id": 4872613, "name": "Dmitri Mendeleev", "status": "already_exists", "timestamp": "2026-02-22T14:05:27.036188"}
+{"id": 4873048, "name": "Mehmed II", "ws_title": "Author:Mehmed II", "status": "no_works", "timestamp": "2026-02-22T14:05:29.875149"}
+{"id": 4873303, "name": "Theodosius I", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:31.255523"}
+{"id": 4873313, "name": "Titian", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:32.633798"}
+{"id": 4874545, "name": "Toni Morrison", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:33.996148"}
+{"id": 4878980, "name": "Moshe ben Maimon", "status": "already_exists", "timestamp": "2026-02-22T14:05:33.999173"}
+{"id": 4887017, "name": "Judah ha-Nasi", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:35.358752"}
+{"id": 4898119, "name": "Valmiki", "ws_title": "Author:Valmiki", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:05:41.328917"}
+{"id": 4954753, "name": "Charles Louis de Secondat, baron de Montesquieu", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:42.674294"}
+{"id": 5071881, "name": "Simone Biles", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:44.027845"}
+{"id": 5751533, "name": "Özlem Türeci", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:45.395270"}
+{"id": 6495042, "name": "Ashoka", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:46.901557"}
+{"id": 6495051, "name": "Karl Marx", "status": "already_exists", "timestamp": "2026-02-22T14:05:46.906073"}
+{"id": 6495565, "name": "Frank Sinatra", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:48.428749"}
+{"id": 6495725, "name": "Dennis M. Ritchie", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:49.810284"}
+{"id": 6495918, "name": "Claudio Monteverdi", "status": "already_exists", "timestamp": "2026-02-22T14:05:49.813081"}
+{"id": 6497230, "name": "Pierre de Fermat", "status": "already_exists", "timestamp": "2026-02-22T14:05:49.816397"}
+{"id": 6497514, "name": "William the Silent", "status": "already_exists", "timestamp": "2026-02-22T14:05:49.819991"}
+{"id": 6497691, "name": "Karl Landsteiner", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:51.182743"}
+{"id": 6498604, "name": "Tony Hoare", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:52.560400"}
+{"id": 6502554, "name": "Emperor Meiji", "status": "already_exists", "timestamp": "2026-02-22T14:05:52.563408"}
+{"id": 6598756, "name": "Syukuro Manabe", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:53.935197"}
+{"id": 6743231, "name": "Hannibal", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:55.287697"}
+{"id": 7310433, "name": "Katalin Karikó", "status": "no_wikisource", "timestamp": "2026-02-22T14:05:56.827080"}
+{"id": 8117560, "name": "Johann Sebastian Bach", "status": "already_exists", "timestamp": "2026-02-22T14:05:56.831081"}
+{"id": 8117638, "name": "Vincent van Gogh", "ws_title": "Author:Vincent van Gogh", "works_found": 3, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:06:04.862575"}
+{"id": 8117711, "name": "Laozi", "status": "already_exists", "timestamp": "2026-02-22T14:06:04.865584"}
+{"id": 8118057, "name": "Mikhail Gorbachev", "ws_title": "Author:Mikhail Gorbachev", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:06:10.110290"}
+{"id": 8118234, "name": "David Hilbert", "ws_title": "Author:David Hilbert", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:06:15.802189"}
+{"id": 8126284, "name": "Cai Lun", "status": "no_wikisource", "timestamp": "2026-02-22T14:06:17.211335"}
+{"id": 8129879, "name": "Shiing-Shen Chern", "status": "no_wikisource", "timestamp": "2026-02-22T14:06:18.739665"}
+{"id": 9740810, "name": "Tim Berners-Lee", "ws_title": "Author:Timothy John Berners-Lee", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:06:23.247121"}
+{"id": 9741605, "name": "Saint Nicholas", "status": "already_exists", "timestamp": "2026-02-22T14:06:23.250542"}
+{"id": 9741915, "name": "Otto Hahn", "status": "no_wikisource", "timestamp": "2026-02-22T14:06:24.617645"}
+{"id": 9743531, "name": "Henri Poincaré", "ws_title": "Author:Henri Poincaré", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:06:35.675950"}
+{"id": 9753081, "name": "Kip S. Thorne", "status": "no_wikisource", "timestamp": "2026-02-22T14:06:37.076311"}
+{"id": 11363671, "name": "Mahatma Gandhi", "ws_title": "Author:Mohandas Karamchand Gandhi", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:06:49.665488"}
+{"id": 11363769, "name": "Alan Turing", "ws_title": "Author:Alan Mathison Turing", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:06:54.464616"}
+{"id": 11364683, "name": "Oprah Winfrey", "status": "no_wikisource", "timestamp": "2026-02-22T14:06:55.837895"}
+{"id": 11367446, "name": "Alonzo Church", "ws_title": "Author:Alonzo Church", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:07:03.541002"}
+{"id": 11738830, "name": "Kylian Mbappé", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:04.901790"}
+{"id": 11986091, "name": "Zhang Yiming", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:06.275990"}
+{"id": 12988645, "name": "Louis Pasteur", "ws_title": "Author:Louis Pasteur", "works_found": 10, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:07:17.726523"}
+{"id": 12988653, "name": "Joseph Stalin", "ws_title": "Author:Joseph Vissarionovich Stalin", "works_found": 7, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:07:29.078375"}
+{"id": 12988681, "name": "Charles de Gaulle", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:30.456307"}
+{"id": 12988715, "name": "Confucius", "status": "already_exists", "timestamp": "2026-02-22T14:07:30.460227"}
+{"id": 12988792, "name": "Franklin Delano Roosevelt", "ws_title": "Author:Franklin Delano Roosevelt", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:07:42.332336"}
+{"id": 12989379, "name": "Justinian I", "status": "already_exists", "timestamp": "2026-02-22T14:07:42.335335"}
+{"id": 12991043, "name": "Samuel Finley Breese Morse", "status": "already_exists", "timestamp": "2026-02-22T14:07:42.340386"}
+{"id": 12991436, "name": "Joseph-Louis Lagrange", "ws_title": "Author:Joseph Louis Lagrange", "status": "no_works", "timestamp": "2026-02-22T14:07:45.145432"}
+{"id": 12995989, "name": "Albert B. Sabin", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:46.528342"}
+{"id": 12996171, "name": "Sergei Korolev", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:47.946162"}
+{"id": 12996464, "name": "Frederick Banting", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:49.327183"}
+{"id": 12997476, "name": "mitochondrial Eve", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:50.676150"}
+{"id": 13002128, "name": "Stephen Curry", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:52.034521"}
+{"id": 13012933, "name": "Francis of Assisi", "status": "already_exists", "timestamp": "2026-02-22T14:07:52.038520"}
+{"id": 13062135, "name": "Uğur Şahin", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:53.378834"}
+{"id": 1623630, "name": "Claude Debussy", "ws_title": "Author:Claude Debussy", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:07:57.936079"}
+{"id": 1624033, "name": "Taylor Swift", "status": "no_wikisource", "timestamp": "2026-02-22T14:07:59.306670"}
+{"id": 1624195, "name": "Sejong the Great", "ws_title": "Author:Sejong", "status": "no_works", "timestamp": "2026-02-22T14:08:02.076206"}
+{"id": 3249672, "name": "Johannes Gutenberg", "ws_title": "Author:Johannes Gensfleisch zur Laden zum Gutenberg", "status": "no_works", "timestamp": "2026-02-22T14:08:04.825181"}
+{"id": 3250421, "name": "Euripides", "status": "already_exists", "timestamp": "2026-02-22T14:08:04.829963"}
+{"id": 3250609, "name": "Fritz Haber", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:06.215619"}
+{"id": 3258623, "name": "Louise Brown", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:07.704047"}
+{"id": 3363975, "name": "Georgy Zhukov", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:09.342228"}
+{"id": 3442435, "name": "Reed Hastings", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:10.800942"}
+{"id": 4872557, "name": "Elizabeth I of England", "status": "already_exists", "timestamp": "2026-02-22T14:08:10.804962"}
+{"id": 4872596, "name": "Cyrus the Great", "status": "already_exists", "timestamp": "2026-02-22T14:08:10.809053"}
+{"id": 4873052, "name": "Wilhelm Röntgen", "ws_title": "Author:Wilhelm Conrad Röntgen", "works_found": 4, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:08:20.414234"}
+{"id": 4876920, "name": "Benoit Mandelbrot", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:21.789492"}
+{"id": 4880753, "name": "Babe Ruth", "ws_title": "Author:George Herman Ruth", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:08:26.825603"}
+{"id": 6495057, "name": "Paul the Apostle", "status": "already_exists", "timestamp": "2026-02-22T14:08:26.831594"}
+{"id": 6498624, "name": "Sergey Brin", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:28.388265"}
+{"id": 6502271, "name": "Saint Patrick", "status": "already_exists", "timestamp": "2026-02-22T14:08:28.391254"}
+{"id": 8118009, "name": "Rashi", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:30.022693"}
+{"id": 8124568, "name": "Joseph Lister", "ws_title": "Author:Joseph Lister (1827-1912)", "works_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:08:41.176411"}
+{"id": 9740953, "name": "Qin Shi Huang", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:42.532723"}
+{"id": 9741459, "name": "Ho Chi Minh", "ws_title": "Author:Hồ Chí Minh", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:08:47.079038"}
+{"id": 9747462, "name": "Innocent III", "ws_title": "Author:Innocent III", "works_found": 1, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:08:51.453804"}
+{"id": 9748541, "name": "Stan Lee", "status": "no_wikisource", "timestamp": "2026-02-22T14:08:52.862341"}
+{"id": 11363656, "name": "Ludwig van Beethoven", "status": "already_exists", "timestamp": "2026-02-22T14:08:52.868341"}
+{"id": 11363800, "name": "Martin Luther King Jr.", "ws_title": "Author:Martin Luther King", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:09:04.667097"}
+{"id": 11364329, "name": "Carl Benz", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:06.043898"}
+{"id": 11371542, "name": "Eleanor of Aquitaine", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:07.488266"}
+{"id": 11372179, "name": "Toussaint Louverture", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:08.936928"}
+{"id": 12988816, "name": "Immanuel Kant", "status": "already_exists", "timestamp": "2026-02-22T14:09:08.944929"}
+{"id": 12989537, "name": "Milton Friedman", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:10.316352"}
+{"id": 12989540, "name": "Paul Dirac", "ws_title": "Author:Paul Adrien Maurice Dirac", "status": "no_works", "timestamp": "2026-02-22T14:09:13.134284"}
+{"id": 13000001, "name": "Nasir al-Din al-Tusi", "ws_title": "Author:Khawaja Muhammad ibn Muhammad ibn Hasan Tūsī", "status": "no_works", "timestamp": "2026-02-22T14:09:15.893952"}
+{"id": 13010664, "name": "Anthony Fauci", "ws_title": "Author:Anthony Stephen Fauci", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:09:29.022596"}
+{"id": 1624268, "name": "Rosa Parks", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:30.398293"}
+{"id": 1624900, "name": "Walter Gropius", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:31.803555"}
+{"id": 1625593, "name": "Hermann Weyl", "ws_title": "Author:Hermann Klaus Hugo Weyl", "status": "no_works", "timestamp": "2026-02-22T14:09:34.955960"}
+{"id": 1626019, "name": "Carl von Clausewitz", "status": "already_exists", "timestamp": "2026-02-22T14:09:34.959975"}
+{"id": 1628586, "name": "Arius", "status": "already_exists", "timestamp": "2026-02-22T14:09:34.963968"}
+{"id": 1645347, "name": "Jim Simons", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:36.333640"}
+{"id": 3249578, "name": "Anne Frank", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:37.786470"}
+{"id": 3249673, "name": "Max Planck", "ws_title": "Author:Max Planck", "works_found": 3, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:09:46.419332"}
+{"id": 3249980, "name": "Armand-Jean du Plessis, duc de Richelieu", "ws_title": "Author:Armand Jean du Plessis", "status": "no_works", "timestamp": "2026-02-22T14:09:49.278885"}
+{"id": 3250239, "name": "Bernhard Riemann", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:50.716746"}
+{"id": 3257889, "name": "Joni Mitchell", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:52.093009"}
+{"id": 4872441, "name": "Lionel Messi", "status": "no_wikisource", "timestamp": "2026-02-22T14:09:53.490354"}
+{"id": 4872618, "name": "John Maynard Keynes", "ws_title": "Author:John Maynard Keynes", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:10:00.257200"}
+{"id": 4876099, "name": "Bjarne Stroustrup", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:01.623705"}
+{"id": 4879507, "name": "Gian Lorenzo Bernini", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:03.005637"}
+{"id": 4885969, "name": "John Snow", "ws_title": "Author:John Snow", "status": "no_works", "timestamp": "2026-02-22T14:10:05.745102"}
+{"id": 4931526, "name": "Martin “John” M. Atalla", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:07.266375"}
+{"id": 6494982, "name": "Miguel de Cervantes", "status": "already_exists", "timestamp": "2026-02-22T14:10:07.269374"}
+{"id": 6495054, "name": "James Clerk Maxwell", "ws_title": "Author:James Clerk Maxwell", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:10:18.172935"}
+{"id": 6495824, "name": "Constantine Stanislavsky", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:19.809538"}
+{"id": 6495845, "name": "John Stuart Mill", "ws_title": "Author:John Stuart Mill", "works_found": 10, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:10:31.319316"}
+{"id": 6498618, "name": "John McCarthy", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:32.718399"}
+{"id": 6501728, "name": "Philip II of Macedon", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:34.063243"}
+{"id": 6513627, "name": "Bong Joon-ho", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:35.437391"}
+{"id": 6531262, "name": "Claudia Goldin", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:36.804102"}
+{"id": 8117650, "name": "Jean-Jacques Rousseau", "status": "already_exists", "timestamp": "2026-02-22T14:10:36.810291"}
+{"id": 8117713, "name": "John Locke", "status": "already_exists", "timestamp": "2026-02-22T14:10:36.814290"}
+{"id": 8117726, "name": "Yongle Emperor", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:38.437533"}
+{"id": 8117982, "name": "Kobe Bryant", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:39.870678"}
+{"id": 8120265, "name": "Eleanor Roosevelt", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:41.254052"}
+{"id": 8121202, "name": "Geoffrey Hinton", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:42.661810"}
+{"id": 8124676, "name": "Subutai", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:44.071089"}
+{"id": 8125226, "name": "Mu'awiya I", "status": "already_exists", "timestamp": "2026-02-22T14:10:44.075086"}
+{"id": 8129911, "name": "Thomas Cook", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:45.462029"}
+{"id": 8152329, "name": "King Wu of Zhou", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:46.825652"}
+{"id": 8152610, "name": "Luis Caffarelli", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:48.280402"}
+{"id": 8480316, "name": "Georgy Zhukov", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:49.916712"}
+{"id": 9842038, "name": "Yoshua Bengio", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:51.285824"}
+{"id": 10032938, "name": "Barbara Liskov", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:52.664692"}
+{"id": 11364315, "name": "Antoine Lavoisier", "status": "already_exists", "timestamp": "2026-02-22T14:10:52.668450"}
+{"id": 11364418, "name": "Darius I", "status": "already_exists", "timestamp": "2026-02-22T14:10:52.672450"}
+{"id": 11364648, "name": "Rupert Murdoch", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:54.022808"}
+{"id": 11364725, "name": "Hans Krebs", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:55.404199"}
+{"id": 11365097, "name": "Bob Kahn", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:56.765470"}
+{"id": 11373222, "name": "Robert Noyce", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:58.201790"}
+{"id": 11443447, "name": "Abu Bakr al-Baghdadi", "status": "no_wikisource", "timestamp": "2026-02-22T14:10:59.726023"}
+{"id": 11563295, "name": "Satya Nadella", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:01.077181"}
+{"id": 12988798, "name": "Suleiman the Magnificent", "ws_title": "Author:Suleiman the Magnificent", "status": "no_works", "timestamp": "2026-02-22T14:11:03.854385"}
+{"id": 12988820, "name": "Adam Smith", "status": "already_exists", "timestamp": "2026-02-22T14:11:03.858388"}
+{"id": 12988882, "name": "Al-Biruni", "ws_title": "Author:Abu Rayhan Biruni", "status": "no_works", "timestamp": "2026-02-22T14:11:06.651039"}
+{"id": 12988980, "name": "Deng Xiaoping", "ws_title": "Author:Deng Xiaoping", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:11:13.846290"}
+{"id": 12996458, "name": "Stefan Banach", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:15.206907"}
+{"id": 12996568, "name": "David Attenborough", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:16.579026"}
+{"id": 13003357, "name": "Taejo of Joseon", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:17.984318"}
+{"id": 13016711, "name": "Babur", "ws_title": "Author:Babur", "status": "no_works", "timestamp": "2026-02-22T14:11:20.767502"}
+{"id": 1623547, "name": "George Washington", "status": "already_exists", "timestamp": "2026-02-22T14:11:20.772145"}
+{"id": 1623680, "name": "Simone de Beauvoir", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:22.150773"}
+{"id": 1623692, "name": "John Coltrane", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:23.535791"}
+{"id": 1623719, "name": "Archimedes", "status": "already_exists", "timestamp": "2026-02-22T14:11:23.540221"}
+{"id": 1623741, "name": "Martin Luther", "status": "already_exists", "timestamp": "2026-02-22T14:11:23.546419"}
+{"id": 1623832, "name": "William Herschel", "status": "already_exists", "timestamp": "2026-02-22T14:11:23.550417"}
+{"id": 1623860, "name": "Montesquieu", "status": "already_exists", "timestamp": "2026-02-22T14:11:23.554417"}
+{"id": 1623867, "name": "Charles K. Kao", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:24.923938"}
+{"id": 1624182, "name": "Alexander Fleming", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:26.310519"}
+{"id": 1624240, "name": "Edward Jenner", "status": "already_exists", "timestamp": "2026-02-22T14:11:26.316231"}
+{"id": 1624260, "name": "Thucydides", "status": "already_exists", "timestamp": "2026-02-22T14:11:26.319227"}
+{"id": 1624285, "name": "Antonie van Leeuwenhoek", "status": "already_exists", "timestamp": "2026-02-22T14:11:26.322229"}
+{"id": 1624426, "name": "Robert Hooke", "status": "already_exists", "timestamp": "2026-02-22T14:11:26.325459"}
+{"id": 1624601, "name": "Yasujirō Ozu", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:27.708622"}
+{"id": 1624788, "name": "Max Born", "ws_title": "Author:Max Born", "status": "no_works", "timestamp": "2026-02-22T14:11:30.785947"}
+{"id": 1624959, "name": "Matthew C. Perry", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:32.164649"}
+{"id": 1628107, "name": "Fred Astaire", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:33.572787"}
+{"id": 1628389, "name": "Urbain Le Verrier", "ws_title": "Author:Urbain Jean Joseph Le Verrier", "status": "no_works", "timestamp": "2026-02-22T14:11:36.334133"}
+{"id": 1630097, "name": "Georgy Zhukov", "status": "no_wikisource", "timestamp": "2026-02-22T14:11:37.850008"}
+{"id": 1630697, "name": "Josiah Willard Gibbs", "ws_title": "Author:Josiah Willard Gibbs", "works_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:12:08.585046"}
+{"id": 1630814, "name": "John Napier", "status": "already_exists", "timestamp": "2026-02-22T14:12:08.588554"}
+{"id": 1630886, "name": "William Shockley", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:10.200706"}
+{"id": 1631055, "name": "Andreas Vesalius", "ws_title": "Author:Andreas Vesalius", "status": "no_works", "timestamp": "2026-02-22T14:12:12.965958"}
+{"id": 1631181, "name": "Paul Erdős", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:14.338408"}
+{"id": 1631545, "name": "Narmer", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:15.695817"}
+{"id": 1631927, "name": "Thomas Bayes", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:17.049966"}
+{"id": 1632670, "name": "Elizabeth Blackwell", "ws_title": "Author:Elizabeth Blackwell (1821-1910)", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:12:29.271193"}
+{"id": 1635302, "name": "Wang Wei", "status": "already_exists", "timestamp": "2026-02-22T14:12:29.275438"}
+{"id": 1638135, "name": "Betty White", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:30.724596"}
+{"id": 1638517, "name": "John Tukey", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:32.084122"}
+{"id": 1644182, "name": "Luis E. Miramontes Cárdenas", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:33.454004"}
+{"id": 1654811, "name": "James Mayer de Rothschild", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:34.820223"}
+{"id": 2083973, "name": "Tarana Burke", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:36.219690"}
+{"id": 3249481, "name": "Elvis Presley", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:37.654312"}
+{"id": 3249530, "name": "Madonna", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:39.180390"}
+{"id": 3249593, "name": "Hippocrates", "status": "already_exists", "timestamp": "2026-02-22T14:12:39.185342"}
+{"id": 3249618, "name": "Homer", "status": "already_exists", "timestamp": "2026-02-22T14:12:39.189333"}
+{"id": 3249665, "name": "Akbar", "status": "already_exists", "timestamp": "2026-02-22T14:12:39.193799"}
+{"id": 3249736, "name": "James Madison", "status": "already_exists", "timestamp": "2026-02-22T14:12:39.197872"}
+{"id": 3249837, "name": "Stephen Hawking", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:40.615940"}
+{"id": 3250049, "name": "Urban II", "ws_title": "Author:Urban II", "status": "no_works", "timestamp": "2026-02-22T14:12:43.353450"}
+{"id": 3250215, "name": "David", "status": "already_exists", "timestamp": "2026-02-22T14:12:43.357590"}
+{"id": 3250270, "name": "Otto I the Great", "ws_title": "Author:Otto the Great", "status": "no_works", "timestamp": "2026-02-22T14:12:46.074503"}
+{"id": 3251919, "name": "Rudolf Virchow", "ws_title": "Author:Rudolf Ludwig Karl Virchow", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:12:56.784724"}
+{"id": 3253297, "name": "Louis Braille", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:58.228439"}
+{"id": 3254286, "name": "Françoise Barré-Sinoussi.", "status": "no_wikisource", "timestamp": "2026-02-22T14:12:59.618803"}
+{"id": 3254340, "name": "Billie Holiday", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:00.984947"}
+{"id": 3255030, "name": "Karl Barry Sharpless", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:02.358094"}
+{"id": 3256617, "name": "Frederick Sanger", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:03.706250"}
+{"id": 3257385, "name": "Jack Kilby", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:05.079406"}
+{"id": 3257572, "name": "Abū Ḥanīfa", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:06.434107"}
+{"id": 3257935, "name": "Isambard Kingdom Brunel", "ws_title": "Author:Isambard Kingdom Brunel", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:13:12.544264"}
+{"id": 3259826, "name": "Shen Kuo", "status": "already_exists", "timestamp": "2026-02-22T14:13:12.547259"}
+{"id": 3260958, "name": "Aaron Beck", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:13.935812"}
+{"id": 3261222, "name": "Jeff Bezos", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:15.291950"}
+{"id": 3261233, "name": "Chuck Jones", "ws_title": "Author:Charles Martin Jones", "works_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:13:29.678479"}
+{"id": 3262998, "name": "Max Steiner", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:31.133889"}
+{"id": 3263029, "name": "Shang Yang", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:32.491410"}
+{"id": 3263120, "name": "Edward R. Murrow", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:33.856424"}
+{"id": 3265247, "name": "Edward Bernays", "ws_title": "Author:Edward Bernays", "works_found": 4, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:13:44.765687"}
+{"id": 3267802, "name": "Song Kang-ho", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:46.119339"}
+{"id": 3303625, "name": "Lin-Manuel Miranda", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:47.485176"}
+{"id": 3327396, "name": "Vishnu Sharma", "ws_title": "Author:Vishnu Sharma", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:13:52.593531"}
+{"id": 3350078, "name": "Yann Le Cun", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:53.966293"}
+{"id": 3624928, "name": "Georgy Zhukov", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:55.335812"}
+{"id": 3870064, "name": "Albert Bourla", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:56.687765"}
+{"id": 4064165, "name": "Drew Weissman", "status": "no_wikisource", "timestamp": "2026-02-22T14:13:58.633212"}
+{"id": 4872463, "name": "Neil Armstrong", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:00.176629"}
+{"id": 4872535, "name": "Raphael", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:01.560588"}
+{"id": 4872544, "name": "Johann Wolfgang von Goethe", "ws_title": "Author:Johann Wolfgang von Goethe", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:14:11.909552"}
+{"id": 4872631, "name": "Hongwu Emperor", "ws_title": "Author:Zhu Yuanzhang", "status": "no_works", "timestamp": "2026-02-22T14:14:14.651749"}
+{"id": 4872688, "name": "Pelé", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:16.030029"}
+{"id": 4872722, "name": "Xi Jinping", "ws_title": "Author:Xi Jinping", "works_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:14:27.443309"}
+{"id": 4872759, "name": "Donald Knuth", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:28.836939"}
+{"id": 4872817, "name": "Donald Trump", "ws_title": "Author:Donald John Trump", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:14:41.542975"}
+{"id": 4873062, "name": "Zoroaster", "status": "already_exists", "timestamp": "2026-02-22T14:14:41.546977"}
+{"id": 4873086, "name": "Alexandre Dumas", "ws_title": "Author:Alexandre Dumas (1802-1870)", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:14:54.118389"}
+{"id": 4873111, "name": "David Gross", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:55.486725"}
+{"id": 4873121, "name": "Werner Heisenberg", "status": "no_wikisource", "timestamp": "2026-02-22T14:14:56.850445"}
+{"id": 4873198, "name": "Jerome", "ws_title": "Author:Jerome (c. 345-c. 420)", "works_found": 10, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:15:07.644553"}
+{"id": 4873316, "name": "Zhuang Zhou", "ws_title": "Author:Zhuangzi", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:15:12.720300"}
+{"id": 4873418, "name": "Gustavus Adolphus of Sweden", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:14.122704"}
+{"id": 4873445, "name": "Billie Jean King", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:15.476604"}
+{"id": 4875114, "name": "Pericles", "ws_title": "Author:Pericles", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:15:27.247966"}
+{"id": 4878700, "name": "Jean Piaget", "ws_title": "Author:Jean William Fritz Piaget", "status": "no_works", "timestamp": "2026-02-22T14:15:30.097540"}
+{"id": 4879080, "name": "Frederick II, Holy Roman Emperor", "status": "already_exists", "timestamp": "2026-02-22T14:15:30.102544"}
+{"id": 4879176, "name": "Howard Florey", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:31.580235"}
+{"id": 4879336, "name": "Ibn Saud", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:32.970250"}
+{"id": 4879376, "name": "Raoul Wallenberg", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:34.334505"}
+{"id": 4879468, "name": "Kary Mullis", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:35.673200"}
+{"id": 4879773, "name": "Bobby Charlton", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:37.037911"}
+{"id": 4879955, "name": "Andrey Markov", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:38.485622"}
+{"id": 4882157, "name": "Les Paul", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:39.912895"}
+{"id": 4883642, "name": "Jensen Huang", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:41.349481"}
+{"id": 4883707, "name": "Mansa Musa", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:42.711139"}
+{"id": 4883729, "name": "Ulpian", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:44.091961"}
+{"id": 4883922, "name": "Don Bradman", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:45.441657"}
+{"id": 4884078, "name": "Abu al-Hasan al-Ash'ari", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:46.815728"}
+{"id": 4884306, "name": "Adi Shamir", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:48.257934"}
+{"id": 4887652, "name": "Robert Plant", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:49.743615"}
+{"id": 4890108, "name": "Robert Frank", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:51.186065"}
+{"id": 4890427, "name": "Amos Tversky", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:52.570590"}
+{"id": 4891618, "name": "Alec Jeffreys", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:53.910450"}
+{"id": 4894060, "name": "Joseph in Islam", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:55.264761"}
+{"id": 4894951, "name": "Kelly Johnson", "status": "no_wikisource", "timestamp": "2026-02-22T14:15:56.622468"}
+{"id": 4905343, "name": "M. S. Swaminathan", "ws_title": "Author:Mankombu Sambasivan Swaminathan", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:16:02.664856"}
+{"id": 4908612, "name": "Omm Kalthum", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:04.010420"}
+{"id": 4915199, "name": "John Warnock", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:05.371626"}
+{"id": 4926627, "name": "Henrietta Lacks", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:06.731702"}
+{"id": 4960137, "name": "Yuan Longping", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:08.177459"}
+{"id": 5071455, "name": "Shia view of Ali", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:09.622750"}
+{"id": 6494943, "name": "Elton John", "status": "no_wikisource", "timestamp": "2026-02-22T14:16:11.020245"}
+{"id": 6495001, "name": "Niels Bohr", "ws_title": "Author:Niels Bohr", "status": "no_works", "timestamp": "2026-02-22T14:16:14.259215"}
+{"id": 6495040, "name": "Umar ibn Al-Khattāb", "status": "already_exists", "timestamp": "2026-02-22T14:16:14.262904"}
+{"id": 6495045, "name": "Euclid", "ws_title": "Author:Euclid", "works_found": 6, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:16:25.984225"}
+{"id": 6495064, "name": "Victoria", "ws_title": "Author:Victoria of the United Kingdom", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:16:43.980385"}
+{"id": 6495273, "name": "Alfred Nobel", "ws_title": "Author:Alfred Nobel", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:16:55.607982"}
+{"id": 6495525, "name": "Henry VIII of England", "status": "already_exists", "timestamp": "2026-02-22T14:16:55.612805"}
+{"id": 6495563, "name": "Nicholas II of Russia", "ws_title": "Author:Nicholas II of Russia", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:17:00.493119"}
+{"id": 6495604, "name": "Heinrich Himmler", "ws_title": "Author:Heinrich Himmler", "works_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:17:09.121277"}
+{"id": 6495686, "name": "Alex Ferguson", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:10.555603"}
+{"id": 6496155, "name": "Reinhard Heydrich", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:11.913615"}
+{"id": 6496737, "name": "Samuel de Champlain", "status": "already_exists", "timestamp": "2026-02-22T14:17:11.917621"}
+{"id": 6497295, "name": "Otto Heinrich Warburg", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:13.273833"}
+{"id": 6497615, "name": "Shinya Yamanaka", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:14.647031"}
+{"id": 6499592, "name": "Harriet Tubman", "ws_title": "Author:Harriet Tubman", "works_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:17:26.908934"}
+{"id": 6500134, "name": "John Bunyan", "status": "already_exists", "timestamp": "2026-02-22T14:17:26.911941"}
+{"id": 6500941, "name": "Menander", "ws_title": "Author:Menander", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:17:40.753921"}
+{"id": 6502133, "name": "W. E. B. Du Bois", "ws_title": "Author:William Edward Burghardt Du Bois", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:17:51.919386"}
+{"id": 6502775, "name": "Antonio Stradivari", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:53.303275"}
+{"id": 6503040, "name": "Bharata Muni", "ws_title": "Author:Bharata", "status": "no_works", "timestamp": "2026-02-22T14:17:56.026635"}
+{"id": 6503142, "name": "Edward Witten", "status": "no_wikisource", "timestamp": "2026-02-22T14:17:57.412479"}
+{"id": 6503844, "name": "Wu Cheng'en", "ws_title": "Author:Wu Cheng'en", "status": "no_works", "timestamp": "2026-02-22T14:18:00.257695"}
+{"id": 6506167, "name": "Dr. Seuss", "ws_title": "Author:Theodor Seuss Geisel", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:18:05.134769"}
+{"id": 6509188, "name": "Q369668", "ws_title": "Author:William Osler", "works_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:18:17.706701"}
+{"id": 6513272, "name": "James Hetfield", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:19.257855"}
+{"id": 6517200, "name": "Han Xin", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:20.700864"}
+{"id": 6519653, "name": "Roberto Clemente", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:22.085494"}
+{"id": 6531587, "name": "Q1107006", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:23.431271"}
+{"id": 6538333, "name": "Bob Smith", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:24.785675"}
+{"id": 6587190, "name": "James the Less", "ws_title": "Author:James the Less", "works_found": 2, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:18:31.249650"}
+{"id": 6604022, "name": "Volodymyr Zelenskyy", "ws_title": "Author:Volodymyr Oleksandrovych Zelenskyy", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:18:43.447128"}
+{"id": 6619065, "name": "Akira Yoshino", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:44.787612"}
+{"id": 6654163, "name": "Jennifer Lee", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:46.157560"}
+{"id": 8117561, "name": "Virgil", "ws_title": "Author:Virgil", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:18:58.142809"}
+{"id": 8117578, "name": "Zinedine Zidane", "status": "no_wikisource", "timestamp": "2026-02-22T14:18:59.534504"}
+{"id": 8117704, "name": "Al-Khwarizmi", "status": "already_exists", "timestamp": "2026-02-22T14:18:59.537711"}
+{"id": 8117706, "name": "Erwin Schrödinger", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:00.943601"}
+{"id": 8117763, "name": "Steffi Graf", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:02.308326"}
+{"id": 8118136, "name": "Muhammad Ali", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:03.690261"}
+{"id": 8118145, "name": "Hannibal", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:05.076184"}
+{"id": 8118156, "name": "Florence Nightingale", "ws_title": "Author:Florence Nightingale", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:19:18.882805"}
+{"id": 8118160, "name": "Uthman ibn Affan", "status": "already_exists", "timestamp": "2026-02-22T14:19:18.887909"}
+{"id": 8118212, "name": "Édouard Manet", "ws_title": "Author:Édouard Manet", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:19:24.327385"}
+{"id": 8118223, "name": "John Dalton", "ws_title": "Author:John Dalton (1766-1844)", "works_found": 8, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:19:35.793698"}
+{"id": 8118393, "name": "Charles Babbage", "ws_title": "Author:Charles Babbage", "works_found": 9, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:19:49.230403"}
+{"id": 8118501, "name": "Mark Antony", "ws_title": "Author:Marcus Antonius", "status": "no_works", "timestamp": "2026-02-22T14:19:52.314918"}
+{"id": 8118593, "name": "Jennifer Doudna", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:53.696189"}
+{"id": 8118632, "name": "Wernher von Braun", "status": "no_wikisource", "timestamp": "2026-02-22T14:19:55.065032"}
+{"id": 8119543, "name": "Fridtjof Nansen", "ws_title": "Author:Fridtjof Wedel-Jarlsberg Nansen", "works_found": 10, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:20:06.274693"}
+{"id": 8120166, "name": "Walter Scott", "ws_title": "Author:Walter Scott", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:20:19.849393"}
+{"id": 8122242, "name": "Buster Keaton", "ws_title": "Author:Joseph Frank Keaton", "works_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:20:33.688786"}
+{"id": 8123727, "name": "Daniel Bernoulli", "status": "no_wikisource", "timestamp": "2026-02-22T14:20:35.057403"}
+{"id": 8123952, "name": "Aretha Franklin", "status": "no_wikisource", "timestamp": "2026-02-22T14:20:36.469621"}
+{"id": 8124493, "name": "Georges Méliès", "ws_title": "Author:Georges Méliès", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:20:41.062720"}
+{"id": 8124553, "name": "Hugo Grotius", "ws_title": "Author:Hugo Grotius", "works_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:20:51.275221"}
+{"id": 8124639, "name": "John D. Rockefeller", "status": "no_wikisource", "timestamp": "2026-02-22T14:20:52.633882"}
+{"id": 8124808, "name": "Mikhail Kalashnikov", "status": "no_wikisource", "timestamp": "2026-02-22T14:20:53.988510"}
+{"id": 8125119, "name": "Phidias", "status": "no_wikisource", "timestamp": "2026-02-22T14:20:55.343098"}
+{"id": 8125127, "name": "Thomas Hunt Morgan", "ws_title": "Author:Thomas Hunt Morgan", "works_found": 8, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:21:06.476939"}
+{"id": 8125482, "name": "Roger Penrose", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:07.893025"}
+{"id": 8125876, "name": "Billy Graham", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:09.349699"}
+{"id": 8125953, "name": "William Boeing", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:10.822443"}
+{"id": 8126567, "name": "Richard Rogers", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:12.198289"}
+{"id": 8128410, "name": "Ngozi Okonjo-Iweala", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:13.568035"}
+{"id": 8129415, "name": "Ray Kroc", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:14.928970"}
+{"id": 8129586, "name": "André Weil", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:16.328874"}
+{"id": 8131801, "name": "John Stewart Bell", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:17.683366"}
+{"id": 8134996, "name": "Virginia Apgar", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:19.189525"}
+{"id": 8135372, "name": "Robert Gallo", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:20.724793"}
+{"id": 8144110, "name": "Johanan ben Zakai", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:22.198701"}
+{"id": 8165473, "name": "Mary in Islam", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:23.570537"}
+{"id": 8172277, "name": "Isamu Akasaki", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:24.967263"}
+{"id": 8351985, "name": "Takaaki Kajita", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:26.362490"}
+{"id": 9740862, "name": "Louis Armstrong", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:27.714080"}
+{"id": 9741055, "name": "Fidel Castro", "ws_title": "Author:Fidel Castro", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:21:32.396618"}
+{"id": 9741228, "name": "John XXIII", "ws_title": "Author:John XXIII (1881-1963)", "status": "no_works", "timestamp": "2026-02-22T14:21:35.501382"}
+{"id": 9741307, "name": "Khalid ibn al-Walid", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:36.862968"}
+{"id": 9741445, "name": "Agatha Christie", "ws_title": "Author:Agatha Mary Clarissa Christie", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:21:48.545246"}
+{"id": 9741475, "name": "David Ben-Gurion", "ws_title": "Author:David Ben-Gurion", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:21:54.133360"}
+{"id": 9741551, "name": "Edwin Hubble", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:55.503367"}
+{"id": 9741603, "name": "Hulk Hogan", "status": "no_wikisource", "timestamp": "2026-02-22T14:21:56.873933"}
+{"id": 9741679, "name": "William Wordsworth", "ws_title": "Author:William Wordsworth", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:22:08.777153"}
+{"id": 9741759, "name": "Linus Pauling", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:10.206597"}
+{"id": 9742792, "name": "Emil Fischer", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:11.588528"}
+{"id": 9743527, "name": "James Chadwick", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:12.953214"}
+{"id": 9743584, "name": "Osman I", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:14.308074"}
+{"id": 9743603, "name": "Peter Drucker", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:15.664315"}
+{"id": 9744553, "name": "J. C. R. Licklider", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:17.013032"}
+{"id": 9744663, "name": "William Caxton", "status": "already_exists", "timestamp": "2026-02-22T14:22:17.017207"}
+{"id": 9745614, "name": "Charlie Parker", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:18.382597"}
+{"id": 9746368, "name": "Husayn ibn Ali", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:20.249438"}
+{"id": 9747579, "name": "Robert Oppenheimer", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:21.679838"}
+{"id": 9747599, "name": "Q134661", "ws_title": "Author:George Boole", "works_found": 6, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:22:32.927282"}
+{"id": 9747874, "name": "Arnold Schoenberg", "ws_title": "Author:Arnold Schoenberg", "status": "no_works", "timestamp": "2026-02-22T14:22:36.092516"}
+{"id": 9748524, "name": "Chen-ning Yang", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:37.474974"}
+{"id": 9748765, "name": "Q193344", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:38.944305"}
+{"id": 9749526, "name": "John Browning", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:40.389594"}
+{"id": 9750183, "name": "Bill Russell", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:42.029211"}
+{"id": 9750231, "name": "Gordon Moore", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:43.371604"}
+{"id": 9751672, "name": "Estée Lauder", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:44.750697"}
+{"id": 9752841, "name": "Max Martin", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:46.126257"}
+{"id": 9753123, "name": "Frederick W. Smith", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:47.483907"}
+{"id": 9754174, "name": "William Marshal, 1st Earl of Pembroke", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:49.056650"}
+{"id": 9754475, "name": "Hiroshi Yamauchi", "status": "no_wikisource", "timestamp": "2026-02-22T14:22:50.538593"}
+{"id": 9754893, "name": "Frederick Law Olmsted", "ws_title": "Author:Frederick Law Olmsted (1822-1903)", "works_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:23:02.699514"}
+{"id": 9756852, "name": "Walter Sisulu", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:04.075437"}
+{"id": 9757172, "name": "Lee Byung-chul", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:05.441030"}
+{"id": 9759876, "name": "John C. Bogle", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:06.808859"}
+{"id": 9761726, "name": "Ray Charles", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:08.179454"}
+{"id": 9783413, "name": "Izumo no Okuni", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:09.773736"}
+{"id": 10059503, "name": "Emmanuelle Charpentier", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:11.308657"}
+{"id": 11363681, "name": "Cicero", "ws_title": "Author:Marcus Tullius Cicero", "works_found": 3, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:23:20.931198"}
+{"id": 11363748, "name": "Pablo Picasso", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:22.388321"}
+{"id": 11363764, "name": "Emmy Noether", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:23.743962"}
+{"id": 11363814, "name": "Thomas Edison", "ws_title": "Author:Thomas Alva Edison", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:23:34.876653"}
+{"id": 11363846, "name": "Pythagoras", "status": "already_exists", "timestamp": "2026-02-22T14:23:34.881336"}
+{"id": 11363858, "name": "Ibn al-Haytham", "status": "already_exists", "timestamp": "2026-02-22T14:23:34.885035"}
+{"id": 11363995, "name": "Henry Molaison", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:36.245349"}
+{"id": 11364042, "name": "Benito Mussolini", "ws_title": "Author:Benito Mussolini", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:23:43.130262"}
+{"id": 11364081, "name": "Antoni Gaudí", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:44.501216"}
+{"id": 11364183, "name": "Rudolf Clausius", "ws_title": "Author:Rudolf Julius Emanuel Clausius", "works_found": 5, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:23:56.683727"}
+{"id": 11364246, "name": "Marlon Brando", "status": "no_wikisource", "timestamp": "2026-02-22T14:23:58.056458"}
+{"id": 11364253, "name": "Philip II of Spain", "ws_title": "Author:Philip II of Spain", "works_found": 1, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:24:02.718147"}
+{"id": 11364284, "name": "David Hume", "ws_title": "Author:David Hume (1711-1776)", "works_found": 10, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:24:15.133735"}
+{"id": 11364399, "name": "William of Ockham", "status": "already_exists", "timestamp": "2026-02-22T14:24:15.136731"}
+{"id": 11364669, "name": "Hayao Miyazaki", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:16.561672"}
+{"id": 11365530, "name": "Muhammad ibn Abd al-Wahhab", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:17.909532"}
+{"id": 11365632, "name": "Ralph H. Baer", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:19.309807"}
+{"id": 11366116, "name": "Johann Tetzel", "ws_title": "Author:Johann Tetzel", "status": "no_works", "timestamp": "2026-02-22T14:24:22.184614"}
+{"id": 11366431, "name": "Charles-Augustin de Coulomb", "ws_title": "Author:Charles Augustin de Coulomb", "status": "no_works", "timestamp": "2026-02-22T14:24:25.281722"}
+{"id": 11366499, "name": "Christian Doppler", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:26.635313"}
+{"id": 11367427, "name": "Edgar F. Codd", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:28.018137"}
+{"id": 11367483, "name": "William Harvey", "ws_title": "Author:William Harvey (1578-1657)", "works_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-22T14:24:42.550747"}
+{"id": 11367936, "name": "Peter Scholze", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:43.915771"}
+{"id": 11370235, "name": "Niels Henrik Abel", "status": "no_wikisource", "timestamp": "2026-02-22T14:24:45.292917"}
+{"id": 11370333, "name": "William James", "ws_title": "Author:William James (1842-1910)", "works_found": 10, "works_saved": 0, "status": "no_usable_works", "timestamp": "2026-02-22T14:24:56.276880"}
+{"id": 11370472, "name": "Charlotte Brontë", "ws_title": "Author:Charlotte Brontë", "works_found": 10, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:25:07.837834"}
+{"id": 11370828, "name": "George Marshall", "ws_title": "Author:George Catlett Marshall", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:25:15.050418"}
+{"id": 11371316, "name": "Zeno of Citium", "ws_title": "Author:Zeno of Citium", "works_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:25:25.984208"}
+{"id": 11371434, "name": "Djoser", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:27.359842"}
+{"id": 11371551, "name": "Alexander Hamilton", "ws_title": "Author:Alexander Hamilton", "works_found": 10, "works_saved": 4, "status": "success", "timestamp": "2026-02-22T14:25:39.241167"}
+{"id": 11371789, "name": "Yoichiro Nambu", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:40.821010"}
+{"id": 11372025, "name": "Jonas Salk", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:42.257491"}
+{"id": 11372543, "name": "Ronald Fisher", "ws_title": "Author:Ronald Aylmer Fisher", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:25:47.203111"}
+{"id": 11372561, "name": "Chester W. Nimitz", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:48.572918"}
+{"id": 11372665, "name": "Kūkai", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:50.042916"}
+{"id": 11372963, "name": "Vera Rubin", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:51.475995"}
+{"id": 11373196, "name": "Muḥammad ibn Ismaeel al-Bukhārī", "status": "no_wikisource", "timestamp": "2026-02-22T14:25:52.821459"}
+{"id": 11374290, "name": "James Baldwin", "ws_title": "Author:James Arthur Baldwin", "works_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-22T14:25:59.745485"}
+{"id": 11377604, "name": "Lee de Forest", "ws_title": "Author:Lee de Forest", "works_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:26:05.779501"}
+{"id": 11378407, "name": "Ardashir I", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:07.149305"}
+{"id": 11382444, "name": "Martha Graham", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:08.509298"}
+{"id": 11390710, "name": "Shuji Nakamura", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:10.013174"}
+{"id": 11398383, "name": "Cangjie", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:11.487949"}
+{"id": 11402425, "name": "Denis Mukwege", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:12.852449"}
+{"id": 11490605, "name": "Morris Chang", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:14.222277"}
+{"id": 11645763, "name": "Moungi Bawendi", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:15.571450"}
+{"id": 11662360, "name": "Vitalik Buterin", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:16.931504"}
+{"id": 11728446, "name": "Suga", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:18.283144"}
+{"id": 12988723, "name": "Larry Page", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:19.680985"}
+{"id": 12988809, "name": "Johannes Kepler", "ws_title": "Author:Johannes Kepler", "works_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-22T14:26:28.582643"}
+{"id": 12988854, "name": "Tiger Woods", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:29.984005"}
+{"id": 12989009, "name": "Mario Molina", "status": "no_wikisource", "timestamp": "2026-02-22T14:26:31.616933"}
+{"id": 12989054, "name": "Ernest Hemingway", "ws_title": "Author:Ernest Miller Hemingway", "works_found": 10, "works_saved": 1, "status": "success", "timestamp": "2026-02-22T14:26:42.387039"}

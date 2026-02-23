@@ -114,6 +114,13 @@ def main():
         "masters",
         "entity_aliases",
         "import_batches",
+        "entity_narratives",
+        "text_mentions",
+        "entity_properties",
+        "person_sources",
+        "person_detail",
+        "histories",
+        "history_entities",
     ]
 
     for table in optional_full_tables:
@@ -217,11 +224,17 @@ def main():
             "SELECT * FROM event_sources", out_path)
         total_rows += rows
 
-        # Export only sources referenced by event_sources (minimal subset)
+    # Export sources referenced by event_sources or person_sources
+    has_person_sources = table_exists(cur, 'person_sources')
+    if table_exists(cur, 'event_sources') or has_person_sources:
+        person_sources_clause = "UNION SELECT DISTINCT source_id FROM person_sources" if has_person_sources else ""
         out_path = OUTPUT_DIR / "sources.csv"
-        rows = export_table(cur, "sources (event-ref)",
-            """SELECT s.* FROM sources s
-               WHERE s.id IN (SELECT DISTINCT source_id FROM event_sources)""", out_path)
+        rows = export_table(cur, "sources (connected)",
+            f"""SELECT s.* FROM sources s
+               WHERE s.id IN (
+                   SELECT DISTINCT source_id FROM event_sources
+                   {person_sources_clause}
+               )""", out_path)
         total_rows += rows
 
     # ==========================================

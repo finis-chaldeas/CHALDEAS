@@ -37,6 +37,7 @@ from app.models.associations import (
 from app.models.period_narrative import PeriodNarrative
 from app.models.entity_narrative import EntityNarrative
 from app.models.user_feedback import UserFeedback
+from app.models.history import History, HistoryEntity
 
 # V1 Models
 from app.models.v1 import (
@@ -84,6 +85,8 @@ __all__ = [
     "PeriodNarrative",
     "EntityNarrative",
     "UserFeedback",
+    "History",
+    "HistoryEntity",
     # V1 Associations
     "polity_relationships",
     "person_polities",

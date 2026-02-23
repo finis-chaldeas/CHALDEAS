@@ -38,6 +38,9 @@ class Person(Base, TimestampMixin):
 
     # Classification
     role = Column(String(255))  # king, philosopher, general, prophet, artist, scientist, ...
+    domain = Column(String(20), index=True)  # science, philosophy, military, etc.
+    importance_score = Column(Integer)
+    global_score = Column(Integer, index=True)  # importance_score * domain_weight
     certainty = Column(
         String(20),
         CheckConstraint(

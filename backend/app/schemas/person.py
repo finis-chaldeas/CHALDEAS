@@ -13,6 +13,8 @@ class PersonBase(BaseModel):
     death_year: Optional[int] = None
     lifespan_display: str
     role: Optional[str] = None
+    domain: Optional[str] = None
+    global_score: Optional[int] = None
 
 
 class Person(PersonBase):

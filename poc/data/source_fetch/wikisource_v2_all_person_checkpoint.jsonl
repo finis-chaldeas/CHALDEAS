@@ -1,0 +1,1000 @@
+{"id": 1623554, "name": "Nicolaus Copernicus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:36:20.371427"}
+{"id": 1623738, "name": "Muhammad", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:36:34.645760"}
+{"id": 1623781, "name": "Thomas Jefferson", "status": "already_exists", "timestamp": "2026-02-23T00:36:34.654851"}
+{"id": 3250093, "name": "Charles V", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:36:47.548841"}
+{"id": 4872432, "name": "Abraham Lincoln", "status": "already_exists", "timestamp": "2026-02-23T00:36:47.555897"}
+{"id": 4872448, "name": "Julius Caesar", "status": "already_exists", "timestamp": "2026-02-23T00:36:47.562930"}
+{"id": 4878707, "name": "Francis Crick", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:37:02.755906"}
+{"id": 5002108, "name": "Hannibal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:37:14.850398"}
+{"id": 6494887, "name": "Jesus Christ", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.854595"}
+{"id": 6494894, "name": "William Shakespeare", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.858541"}
+{"id": 6494897, "name": "Aristotle", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.866718"}
+{"id": 6494944, "name": "Charlemagne", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.870237"}
+{"id": 8117552, "name": "Albert Einstein", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.872241"}
+{"id": 8117562, "name": "Augustus", "status": "already_exists", "timestamp": "2026-02-23T00:37:14.879412"}
+{"id": 8118028, "name": "Adolf Eichmann", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T00:37:26.905568"}
+{"id": 8176531, "name": "Ibrahim", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:37:40.596290"}
+{"id": 9740813, "name": "Wolfgang Amadeus Mozart", "status": "already_exists", "timestamp": "2026-02-23T00:37:40.611112"}
+{"id": 9740830, "name": "Isaac Newton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:37:54.566944"}
+{"id": 9741102, "name": "Q12998", "status": "no_results", "timestamp": "2026-02-23T00:37:59.816945"}
+{"id": 11363659, "name": "Adolf Hitler", "status": "already_exists", "timestamp": "2026-02-23T00:37:59.821908"}
+{"id": 11363667, "name": "Genghis Khan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:38:12.013102"}
+{"id": 11363669, "name": "Leonardo da Vinci", "status": "already_exists", "timestamp": "2026-02-23T00:38:12.019562"}
+{"id": 11363893, "name": "Shigeru Miyamoto", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:38:19.178041"}
+{"id": 12989639, "name": "historical Jesus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:38:32.582216"}
+{"id": 13001176, "name": "John the Evangelist", "status": "already_exists", "timestamp": "2026-02-23T00:38:32.586086"}
+{"id": 1623652, "name": "David Bowie", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:38:45.355995"}
+{"id": 1623667, "name": "Mao Zedong", "status": "already_exists", "timestamp": "2026-02-23T00:38:45.360946"}
+{"id": 1623679, "name": "Marie Curie", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:38:58.452629"}
+{"id": 1624161, "name": "Benjamin Franklin", "status": "already_exists", "timestamp": "2026-02-23T00:38:58.457631"}
+{"id": 1630302, "name": "Luke the Evangelist", "status": "already_exists", "timestamp": "2026-02-23T00:38:58.460942"}
+{"id": 1630737, "name": "Norman Borlaug", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T00:39:10.185197"}
+{"id": 3249495, "name": "Socrates", "status": "already_exists", "timestamp": "2026-02-23T00:39:10.188839"}
+{"id": 3249721, "name": "Harry S. Truman", "status": "already_exists", "timestamp": "2026-02-23T00:39:10.196256"}
+{"id": 3250297, "name": "Pierre-Simon Laplace", "status": "already_exists", "timestamp": "2026-02-23T00:39:10.202861"}
+{"id": 3252296, "name": "Guru Nanak", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:39:23.711451"}
+{"id": 3253248, "name": "Claude Shannon", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:39:36.739891"}
+{"id": 3262437, "name": "Abu Bakr", "status": "already_exists", "timestamp": "2026-02-23T00:39:36.745104"}
+{"id": 4876119, "name": "Vint Cerf", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T00:39:52.556737"}
+{"id": 6495576, "name": "Kurt Gödel", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:39:59.649183"}
+{"id": 6507608, "name": "Winston Churchill", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:40:13.322496"}
+{"id": 8117691, "name": "Winston Churchill", "status": "already_exists", "timestamp": "2026-02-23T00:40:13.328025"}
+{"id": 8117874, "name": "John von Neumann", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:40:26.120786"}
+{"id": 8118184, "name": "Alī ibn Abī Ṭālib", "status": "already_exists", "timestamp": "2026-02-23T00:40:26.125840"}
+{"id": 8120290, "name": "Ludwig Boltzmann", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:40:38.468748"}
+{"id": 9740832, "name": "Charles Darwin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:40:50.443465"}
+{"id": 9740934, "name": "Michelangelo", "status": "already_exists", "timestamp": "2026-02-23T00:40:50.450323"}
+{"id": 9743244, "name": "Georg Cantor", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:41:02.591281"}
+{"id": 11363762, "name": "Carl Friedrich Gauss", "status": "already_exists", "timestamp": "2026-02-23T00:41:02.596957"}
+{"id": 11363802, "name": "Alexander the Great", "status": "already_exists", "timestamp": "2026-02-23T00:41:02.601886"}
+{"id": 11363828, "name": "The Buddha", "status": "already_exists", "timestamp": "2026-02-23T00:41:02.606899"}
+{"id": 12988644, "name": "Napoleon", "status": "already_exists", "timestamp": "2026-02-23T00:41:02.611171"}
+{"id": 12988691, "name": "Q2831", "status": "no_results", "timestamp": "2026-02-23T00:41:07.685339"}
+{"id": 12988793, "name": "Augustine of Hippo", "status": "already_exists", "timestamp": "2026-02-23T00:41:07.688987"}
+{"id": 12989262, "name": "Saint Peter", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:41:22.155960"}
+{"id": 12990371, "name": "Wolfgang Pauli", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:41:37.191899"}
+{"id": 13019050, "name": "John B. Goodenough", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:41:48.973685"}
+{"id": 1623560, "name": "Plato", "status": "already_exists", "timestamp": "2026-02-23T00:41:48.976751"}
+{"id": 1623714, "name": "Constantine the Great", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:42:02.957867"}
+{"id": 1623918, "name": "Steve Jobs", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:42:14.576073"}
+{"id": 1624236, "name": "John the Baptist", "status": "already_exists", "timestamp": "2026-02-23T00:42:14.576073"}
+{"id": 1631388, "name": "Nicolas Carnot", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:42:30.884649"}
+{"id": 1631583, "name": "Peter Higgs", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:42:48.769853"}
+{"id": 1631931, "name": "Akira Toriyama", "status": "no_results", "timestamp": "2026-02-23T00:42:54.063864"}
+{"id": 1632202, "name": "Frederick Douglass", "status": "already_exists", "timestamp": "2026-02-23T00:42:54.068343"}
+{"id": 3249478, "name": "Stanley Kubrick", "status": "no_results", "timestamp": "2026-02-23T00:42:59.149864"}
+{"id": 3249482, "name": "Galileo Galilei", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:43:11.011466"}
+{"id": 3249550, "name": "Paul McCartney", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:43:24.695047"}
+{"id": 3249982, "name": "Herodotus", "status": "already_exists", "timestamp": "2026-02-23T00:43:24.698043"}
+{"id": 3251986, "name": "Alexander Grothendieck", "status": "no_results", "timestamp": "2026-02-23T00:43:29.801477"}
+{"id": 3256775, "name": "Mohammad Ali Jinnah", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:43:37.501039"}
+{"id": 3258617, "name": "Daniel Kahneman", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T00:43:46.785827"}
+{"id": 3267005, "name": "Tu Youyou", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T00:43:58.736242"}
+{"id": 3286575, "name": "Eiji Toyoda", "status": "no_results", "timestamp": "2026-02-23T00:44:03.966550"}
+{"id": 3313380, "name": "John Mark", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:44:17.276478"}
+{"id": 3320891, "name": "Tasuku Honjo", "status": "no_results", "timestamp": "2026-02-23T00:44:22.407348"}
+{"id": 4872445, "name": "Charlie Chaplin", "status": "already_exists", "timestamp": "2026-02-23T00:44:22.410250"}
+{"id": 4872454, "name": "Vladimir Lenin", "status": "already_exists", "timestamp": "2026-02-23T00:44:22.416461"}
+{"id": 4872581, "name": "Leonhard Euler", "status": "already_exists", "timestamp": "2026-02-23T00:44:22.420457"}
+{"id": 4872591, "name": "Nelson Mandela", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:44:34.173324"}
+{"id": 4872603, "name": "Enrico Fermi", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T00:44:49.102171"}
+{"id": 4872613, "name": "Dmitri Mendeleev", "status": "already_exists", "timestamp": "2026-02-23T00:44:49.102171"}
+{"id": 4873048, "name": "Mehmed II", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:45:03.990937"}
+{"id": 4873303, "name": "Theodosius I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:45:16.300937"}
+{"id": 4873313, "name": "Titian", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:45:30.305126"}
+{"id": 4874545, "name": "Toni Morrison", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:45:46.028576"}
+{"id": 4878980, "name": "Moshe ben Maimon", "status": "already_exists", "timestamp": "2026-02-23T00:45:46.031577"}
+{"id": 4887017, "name": "Judah ha-Nasi", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:46:03.826818"}
+{"id": 4898119, "name": "Valmiki", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:46:17.051674"}
+{"id": 4954753, "name": "Charles Louis de Secondat, baron de Montesquieu", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T00:46:27.546655"}
+{"id": 5071881, "name": "Simone Biles", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T00:46:43.449997"}
+{"id": 5751533, "name": "Özlem Türeci", "status": "no_results", "timestamp": "2026-02-23T00:46:48.579188"}
+{"id": 6495042, "name": "Ashoka", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:47:00.149161"}
+{"id": 6495051, "name": "Karl Marx", "status": "already_exists", "timestamp": "2026-02-23T00:47:00.153008"}
+{"id": 6495565, "name": "Frank Sinatra", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:47:15.906476"}
+{"id": 6495725, "name": "Dennis M. Ritchie", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:47:30.915292"}
+{"id": 6495918, "name": "Claudio Monteverdi", "status": "already_exists", "timestamp": "2026-02-23T00:47:30.919294"}
+{"id": 6497230, "name": "Pierre de Fermat", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:47:45.454812"}
+{"id": 6497514, "name": "William the Silent", "status": "already_exists", "timestamp": "2026-02-23T00:47:45.459831"}
+{"id": 6497691, "name": "Karl Landsteiner", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:47:53.063616"}
+{"id": 6498604, "name": "Tony Hoare", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:48:10.459117"}
+{"id": 6502554, "name": "Emperor Meiji", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:48:22.394832"}
+{"id": 6598756, "name": "Syukuro Manabe", "status": "no_results", "timestamp": "2026-02-23T00:48:27.437772"}
+{"id": 6743231, "name": "Hannibal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:48:40.353894"}
+{"id": 7310433, "name": "Katalin Karikó", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:48:47.598146"}
+{"id": 8117560, "name": "Johann Sebastian Bach", "status": "already_exists", "timestamp": "2026-02-23T00:48:47.602144"}
+{"id": 8117638, "name": "Vincent van Gogh", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:49:00.678505"}
+{"id": 8117711, "name": "Laozi", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:49:14.447594"}
+{"id": 8118057, "name": "Mikhail Gorbachev", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:49:26.084016"}
+{"id": 8118234, "name": "David Hilbert", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:49:40.501772"}
+{"id": 8126284, "name": "Cai Lun", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:49:52.353897"}
+{"id": 8129879, "name": "Shiing-Shen Chern", "status": "no_results", "timestamp": "2026-02-23T00:49:57.493454"}
+{"id": 9740810, "name": "Tim Berners-Lee", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:50:09.510821"}
+{"id": 9741605, "name": "Saint Nicholas", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:50:21.534075"}
+{"id": 9741915, "name": "Otto Hahn", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:50:36.751836"}
+{"id": 9743531, "name": "Henri Poincaré", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:50:50.122559"}
+{"id": 9753081, "name": "Kip S. Thorne", "status": "no_results", "timestamp": "2026-02-23T00:50:55.340240"}
+{"id": 11363671, "name": "Mahatma Gandhi", "status": "already_exists", "timestamp": "2026-02-23T00:50:55.344475"}
+{"id": 11363769, "name": "Alan Turing", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:51:06.684923"}
+{"id": 11364683, "name": "Oprah Winfrey", "status": "no_results", "timestamp": "2026-02-23T00:51:11.834052"}
+{"id": 11367446, "name": "Alonzo Church", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:51:27.772845"}
+{"id": 11738830, "name": "Kylian Mbappé", "status": "no_results", "timestamp": "2026-02-23T00:51:33.054837"}
+{"id": 11986091, "name": "Zhang Yiming", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:51:40.889570"}
+{"id": 12988645, "name": "Louis Pasteur", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:51:54.569526"}
+{"id": 12988653, "name": "Joseph Stalin", "status": "already_exists", "timestamp": "2026-02-23T00:51:54.572847"}
+{"id": 12988681, "name": "Charles de Gaulle", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:52:08.524135"}
+{"id": 12988715, "name": "Confucius", "status": "already_exists", "timestamp": "2026-02-23T00:52:08.527075"}
+{"id": 12988792, "name": "Franklin Delano Roosevelt", "status": "already_exists", "timestamp": "2026-02-23T00:52:08.531187"}
+{"id": 12989379, "name": "Justinian I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:52:21.548080"}
+{"id": 12991043, "name": "Samuel Finley Breese Morse", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:52:38.829036"}
+{"id": 12991436, "name": "Joseph-Louis Lagrange", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:52:53.667036"}
+{"id": 12995989, "name": "Albert B. Sabin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:53:08.265713"}
+{"id": 12996171, "name": "Sergei Korolev", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:53:25.440214"}
+{"id": 12996464, "name": "Frederick Banting", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:53:39.303383"}
+{"id": 12997476, "name": "mitochondrial Eve", "status": "no_results", "timestamp": "2026-02-23T00:53:44.598556"}
+{"id": 13002128, "name": "Stephen Curry", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:53:58.310396"}
+{"id": 13012933, "name": "Francis of Assisi", "status": "already_exists", "timestamp": "2026-02-23T00:53:58.313394"}
+{"id": 13062135, "name": "Uğur Şahin", "status": "no_results", "timestamp": "2026-02-23T00:54:03.536346"}
+{"id": 1623630, "name": "Claude Debussy", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:54:17.098228"}
+{"id": 1624033, "name": "Taylor Swift", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:54:29.310782"}
+{"id": 1624195, "name": "Sejong the Great", "status": "no_results", "timestamp": "2026-02-23T00:54:34.691707"}
+{"id": 3249672, "name": "Johannes Gutenberg", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:54:50.265999"}
+{"id": 3250421, "name": "Euripides", "status": "already_exists", "timestamp": "2026-02-23T00:54:50.271254"}
+{"id": 3250609, "name": "Fritz Haber", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:55:11.247572"}
+{"id": 3258623, "name": "Louise Brown", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:55:23.642964"}
+{"id": 3363975, "name": "Georgy Zhukov", "status": "no_results", "timestamp": "2026-02-23T00:55:28.743923"}
+{"id": 3442435, "name": "Reed Hastings", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:55:41.291029"}
+{"id": 4872557, "name": "Elizabeth I of England", "status": "already_exists", "timestamp": "2026-02-23T00:55:41.299752"}
+{"id": 4872596, "name": "Cyrus the Great", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:55:55.681893"}
+{"id": 4873052, "name": "Wilhelm Röntgen", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:56:12.183515"}
+{"id": 4876920, "name": "Benoit Mandelbrot", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:56:19.353685"}
+{"id": 4880753, "name": "Babe Ruth", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:56:31.966710"}
+{"id": 6495057, "name": "Paul the Apostle", "status": "already_exists", "timestamp": "2026-02-23T00:56:31.970709"}
+{"id": 6498624, "name": "Sergey Brin", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T00:56:38.982003"}
+{"id": 6502271, "name": "Saint Patrick", "status": "already_exists", "timestamp": "2026-02-23T00:56:38.986491"}
+{"id": 8118009, "name": "Rashi", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:56:51.615914"}
+{"id": 8124568, "name": "Joseph Lister", "status": "already_exists", "timestamp": "2026-02-23T00:56:51.624612"}
+{"id": 9740953, "name": "Qin Shi Huang", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T00:57:05.081149"}
+{"id": 9741459, "name": "Ho Chi Minh", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:57:20.142986"}
+{"id": 9747462, "name": "Innocent III", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:57:34.077431"}
+{"id": 9748541, "name": "Stan Lee", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:57:46.368617"}
+{"id": 11363656, "name": "Ludwig van Beethoven", "status": "already_exists", "timestamp": "2026-02-23T00:57:46.374735"}
+{"id": 11363800, "name": "Martin Luther King Jr.", "status": "already_exists", "timestamp": "2026-02-23T00:57:46.380912"}
+{"id": 11364329, "name": "Carl Benz", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:58:00.646787"}
+{"id": 11371542, "name": "Eleanor of Aquitaine", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:58:14.509162"}
+{"id": 11372179, "name": "Toussaint Louverture", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:58:27.134295"}
+{"id": 12988816, "name": "Immanuel Kant", "status": "already_exists", "timestamp": "2026-02-23T00:58:27.138135"}
+{"id": 12989537, "name": "Milton Friedman", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:58:39.390903"}
+{"id": 12989540, "name": "Paul Dirac", "status": "no_results", "timestamp": "2026-02-23T00:58:44.754943"}
+{"id": 13000001, "name": "Nasir al-Din al-Tusi", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T00:58:56.698320"}
+{"id": 13010664, "name": "Anthony Fauci", "status": "already_exists", "timestamp": "2026-02-23T00:58:56.705723"}
+{"id": 1624268, "name": "Rosa Parks", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:59:08.838217"}
+{"id": 1624900, "name": "Walter Gropius", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T00:59:19.947282"}
+{"id": 1625593, "name": "Hermann Weyl", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:59:36.137586"}
+{"id": 1626019, "name": "Carl von Clausewitz", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T00:59:52.832550"}
+{"id": 1628586, "name": "Arius", "status": "already_exists", "timestamp": "2026-02-23T00:59:52.832550"}
+{"id": 1645347, "name": "Jim Simons", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:00:06.209902"}
+{"id": 3249578, "name": "Anne Frank", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:00:19.764489"}
+{"id": 3249673, "name": "Max Planck", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:00:33.515196"}
+{"id": 3249980, "name": "Armand-Jean du Plessis, duc de Richelieu", "status": "no_results", "timestamp": "2026-02-23T01:00:38.728824"}
+{"id": 3250239, "name": "Bernhard Riemann", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:01:04.411720"}
+{"id": 3257889, "name": "Joni Mitchell", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:01:12.049940"}
+{"id": 4872441, "name": "Lionel Messi", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:01:24.999486"}
+{"id": 4872618, "name": "John Maynard Keynes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:01:37.336738"}
+{"id": 4876099, "name": "Bjarne Stroustrup", "status": "no_results", "timestamp": "2026-02-23T01:01:42.444370"}
+{"id": 4879507, "name": "Gian Lorenzo Bernini", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:01:52.317247"}
+{"id": 4885969, "name": "John Snow", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:02:05.164109"}
+{"id": 4931526, "name": "Martin “John” M. Atalla", "status": "no_results", "timestamp": "2026-02-23T01:02:10.318743"}
+{"id": 6494982, "name": "Miguel de Cervantes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:02:20.616346"}
+{"id": 6495054, "name": "James Clerk Maxwell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:02:35.062464"}
+{"id": 6495824, "name": "Constantine Stanislavsky", "status": "no_results", "timestamp": "2026-02-23T01:02:40.227703"}
+{"id": 6495845, "name": "John Stuart Mill", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:02:53.487200"}
+{"id": 6498618, "name": "John McCarthy", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:03:06.811920"}
+{"id": 6501728, "name": "Philip II of Macedon", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:03:20.233148"}
+{"id": 6513627, "name": "Bong Joon-ho", "status": "no_results", "timestamp": "2026-02-23T01:03:25.562400"}
+{"id": 6531262, "name": "Claudia Goldin", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:03:32.725684"}
+{"id": 8117650, "name": "Jean-Jacques Rousseau", "status": "already_exists", "timestamp": "2026-02-23T01:03:32.725684"}
+{"id": 8117713, "name": "John Locke", "status": "already_exists", "timestamp": "2026-02-23T01:03:32.736296"}
+{"id": 8117726, "name": "Yongle Emperor", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:03:40.145012"}
+{"id": 8117982, "name": "Kobe Bryant", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:03:53.870900"}
+{"id": 8120265, "name": "Eleanor Roosevelt", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:04:05.117515"}
+{"id": 8121202, "name": "Geoffrey Hinton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:04:18.837400"}
+{"id": 8124676, "name": "Subutai", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:04:30.876116"}
+{"id": 8125226, "name": "Mu'awiya I", "status": "already_exists", "timestamp": "2026-02-23T01:04:30.879640"}
+{"id": 8129911, "name": "Thomas Cook", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:04:44.198923"}
+{"id": 8152329, "name": "King Wu of Zhou", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:04:56.052674"}
+{"id": 8152610, "name": "Luis Caffarelli", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:05:08.187392"}
+{"id": 8480316, "name": "Georgy Zhukov", "status": "no_results", "timestamp": "2026-02-23T01:05:13.474919"}
+{"id": 9842038, "name": "Yoshua Bengio", "status": "no_results", "timestamp": "2026-02-23T01:05:18.573774"}
+{"id": 10032938, "name": "Barbara Liskov", "status": "no_results", "timestamp": "2026-02-23T01:05:23.821809"}
+{"id": 11364315, "name": "Antoine Lavoisier", "status": "already_exists", "timestamp": "2026-02-23T01:05:23.825208"}
+{"id": 11364418, "name": "Darius I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:05:39.012355"}
+{"id": 11364648, "name": "Rupert Murdoch", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:05:52.272723"}
+{"id": 11364725, "name": "Hans Krebs", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:06:07.025396"}
+{"id": 11365097, "name": "Bob Kahn", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:06:20.735118"}
+{"id": 11373222, "name": "Robert Noyce", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:06:34.145215"}
+{"id": 11443447, "name": "Abu Bakr al-Baghdadi", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:06:46.839337"}
+{"id": 11563295, "name": "Satya Nadella", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:06:57.953983"}
+{"id": 12988798, "name": "Suleiman the Magnificent", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:07:12.229151"}
+{"id": 12988820, "name": "Adam Smith", "status": "already_exists", "timestamp": "2026-02-23T01:07:12.234700"}
+{"id": 12988882, "name": "Al-Biruni", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:07:24.288255"}
+{"id": 12988980, "name": "Deng Xiaoping", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:07:36.104473"}
+{"id": 12996458, "name": "Stefan Banach", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:07:43.840375"}
+{"id": 12996568, "name": "David Attenborough", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:07:55.691950"}
+{"id": 13003357, "name": "Taejo of Joseon", "status": "no_results", "timestamp": "2026-02-23T01:08:00.838507"}
+{"id": 13016711, "name": "Babur", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:08:13.452037"}
+{"id": 1623547, "name": "George Washington", "status": "already_exists", "timestamp": "2026-02-23T01:08:13.456038"}
+{"id": 1623680, "name": "Simone de Beauvoir", "status": "no_results", "timestamp": "2026-02-23T01:08:18.661525"}
+{"id": 1623692, "name": "John Coltrane", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:08:34.690424"}
+{"id": 1623719, "name": "Archimedes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:08:47.006911"}
+{"id": 1623741, "name": "Martin Luther", "status": "already_exists", "timestamp": "2026-02-23T01:08:47.006911"}
+{"id": 1623832, "name": "William Herschel", "status": "already_exists", "timestamp": "2026-02-23T01:08:47.006911"}
+{"id": 1623860, "name": "Montesquieu", "status": "already_exists", "timestamp": "2026-02-23T01:08:47.017342"}
+{"id": 1623867, "name": "Charles K. Kao", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:09:02.451390"}
+{"id": 1624182, "name": "Alexander Fleming", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:09:14.226799"}
+{"id": 1624240, "name": "Edward Jenner", "status": "already_exists", "timestamp": "2026-02-23T01:09:14.230793"}
+{"id": 1624260, "name": "Thucydides", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:09:28.220999"}
+{"id": 1624285, "name": "Antonie van Leeuwenhoek", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:09:35.427411"}
+{"id": 1624426, "name": "Robert Hooke", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:09:48.775653"}
+{"id": 1624601, "name": "Yasujirō Ozu", "status": "no_results", "timestamp": "2026-02-23T01:09:54.073920"}
+{"id": 1624788, "name": "Max Born", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:10:09.245973"}
+{"id": 1624959, "name": "Matthew C. Perry", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:10:22.610256"}
+{"id": 1628107, "name": "Fred Astaire", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:10:39.902500"}
+{"id": 1628389, "name": "Urbain Le Verrier", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:10:46.617356"}
+{"id": 1630097, "name": "Georgy Zhukov", "status": "no_results", "timestamp": "2026-02-23T01:10:51.728456"}
+{"id": 1630697, "name": "Josiah Willard Gibbs", "status": "already_exists", "timestamp": "2026-02-23T01:10:51.734965"}
+{"id": 1630814, "name": "John Napier", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:11:03.488428"}
+{"id": 1630886, "name": "William Shockley", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:11:16.871843"}
+{"id": 1631055, "name": "Andreas Vesalius", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:11:31.709228"}
+{"id": 1631181, "name": "Paul Erdős", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:11:42.334624"}
+{"id": 1631545, "name": "Narmer", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:11:49.208282"}
+{"id": 1631927, "name": "Thomas Bayes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:12:01.732408"}
+{"id": 1632670, "name": "Elizabeth Blackwell", "status": "already_exists", "timestamp": "2026-02-23T01:12:01.732408"}
+{"id": 1635302, "name": "Wang Wei", "status": "already_exists", "timestamp": "2026-02-23T01:12:01.738916"}
+{"id": 1638135, "name": "Betty White", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:12:14.362989"}
+{"id": 1638517, "name": "John Tukey", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:12:29.820949"}
+{"id": 1644182, "name": "Luis E. Miramontes Cárdenas", "status": "no_results", "timestamp": "2026-02-23T01:12:35.089206"}
+{"id": 1654811, "name": "James Mayer de Rothschild", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:12:46.807070"}
+{"id": 2083973, "name": "Tarana Burke", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:12:54.963465"}
+{"id": 3249481, "name": "Elvis Presley", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:13:11.699219"}
+{"id": 3249530, "name": "Madonna", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:13:29.780222"}
+{"id": 3249593, "name": "Hippocrates", "status": "already_exists", "timestamp": "2026-02-23T01:13:29.780222"}
+{"id": 3249618, "name": "Homer", "status": "already_exists", "timestamp": "2026-02-23T01:13:29.780222"}
+{"id": 3249665, "name": "Akbar", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:13:44.629985"}
+{"id": 3249736, "name": "James Madison", "status": "already_exists", "timestamp": "2026-02-23T01:13:44.631984"}
+{"id": 3249837, "name": "Stephen Hawking", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:13:57.080433"}
+{"id": 3250049, "name": "Urban II", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:14:12.304207"}
+{"id": 3250215, "name": "David", "status": "already_exists", "timestamp": "2026-02-23T01:14:12.306217"}
+{"id": 3250270, "name": "Otto I the Great", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:14:24.504866"}
+{"id": 3251919, "name": "Rudolf Virchow", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:14:36.588850"}
+{"id": 3253297, "name": "Louis Braille", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:14:52.257968"}
+{"id": 3254286, "name": "Françoise Barré-Sinoussi.", "status": "no_results", "timestamp": "2026-02-23T01:14:57.801722"}
+{"id": 3254340, "name": "Billie Holiday", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:15:10.652439"}
+{"id": 3255030, "name": "Karl Barry Sharpless", "status": "no_results", "timestamp": "2026-02-23T01:15:16.024376"}
+{"id": 3256617, "name": "Frederick Sanger", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:15:29.483415"}
+{"id": 3257385, "name": "Jack Kilby", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:15:43.181627"}
+{"id": 3257572, "name": "Abū Ḥanīfa", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:15:58.129279"}
+{"id": 3257935, "name": "Isambard Kingdom Brunel", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:16:09.611774"}
+{"id": 3259826, "name": "Shen Kuo", "status": "already_exists", "timestamp": "2026-02-23T01:16:09.614718"}
+{"id": 3260958, "name": "Aaron Beck", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:16:25.448717"}
+{"id": 3261222, "name": "Jeff Bezos", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:16:36.944280"}
+{"id": 3261233, "name": "Chuck Jones", "status": "already_exists", "timestamp": "2026-02-23T01:16:36.949852"}
+{"id": 3262998, "name": "Max Steiner", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:16:50.764595"}
+{"id": 3263029, "name": "Shang Yang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:17:02.640387"}
+{"id": 3263120, "name": "Edward R. Murrow", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:17:17.514291"}
+{"id": 3265247, "name": "Edward Bernays", "status": "already_exists", "timestamp": "2026-02-23T01:17:17.517076"}
+{"id": 3267802, "name": "Song Kang-ho", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:17:30.703807"}
+{"id": 3303625, "name": "Lin-Manuel Miranda", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:17:45.810769"}
+{"id": 3327396, "name": "Vishnu Sharma", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:18:00.320867"}
+{"id": 3350078, "name": "Yann Le Cun", "status": "no_results", "timestamp": "2026-02-23T01:18:05.455271"}
+{"id": 3624928, "name": "Georgy Zhukov", "status": "no_results", "timestamp": "2026-02-23T01:18:10.612160"}
+{"id": 3870064, "name": "Albert Bourla", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:18:24.417381"}
+{"id": 4064165, "name": "Drew Weissman", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:18:37.443740"}
+{"id": 4872463, "name": "Neil Armstrong", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:18:48.880755"}
+{"id": 4872535, "name": "Raphael", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:19:02.188173"}
+{"id": 4872544, "name": "Johann Wolfgang von Goethe", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:19:16.356883"}
+{"id": 4872631, "name": "Hongwu Emperor", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:19:23.485919"}
+{"id": 4872688, "name": "Pelé", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:19:36.507676"}
+{"id": 4872722, "name": "Xi Jinping", "status": "already_exists", "timestamp": "2026-02-23T01:19:36.511889"}
+{"id": 4872759, "name": "Donald Knuth", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:19:55.758657"}
+{"id": 4872817, "name": "Donald Trump", "status": "already_exists", "timestamp": "2026-02-23T01:19:55.764096"}
+{"id": 4873062, "name": "Zoroaster", "status": "already_exists", "timestamp": "2026-02-23T01:19:55.766101"}
+{"id": 4873086, "name": "Alexandre Dumas", "status": "already_exists", "timestamp": "2026-02-23T01:19:55.766101"}
+{"id": 4873111, "name": "David Gross", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:20:08.074281"}
+{"id": 4873121, "name": "Werner Heisenberg", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:20:19.864358"}
+{"id": 4873198, "name": "Jerome", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:20:34.498597"}
+{"id": 4873316, "name": "Zhuang Zhou", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:20:51.546711"}
+{"id": 4873418, "name": "Gustavus Adolphus of Sweden", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:21:10.649143"}
+{"id": 4873445, "name": "Billie Jean King", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:21:22.820925"}
+{"id": 4875114, "name": "Pericles", "status": "already_exists", "timestamp": "2026-02-23T01:21:22.826122"}
+{"id": 4878700, "name": "Jean Piaget", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:21:43.012505"}
+{"id": 4879080, "name": "Frederick II, Holy Roman Emperor", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:21:56.168474"}
+{"id": 4879176, "name": "Howard Florey", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:22:10.557741"}
+{"id": 4879336, "name": "Ibn Saud", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:22:26.923373"}
+{"id": 4879376, "name": "Raoul Wallenberg", "status": "no_results", "timestamp": "2026-02-23T01:22:32.095986"}
+{"id": 4879468, "name": "Kary Mullis", "status": "no_results", "timestamp": "2026-02-23T01:22:37.409687"}
+{"id": 4879773, "name": "Bobby Charlton", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:22:58.122357"}
+{"id": 4879955, "name": "Andrey Markov", "status": "no_results", "timestamp": "2026-02-23T01:23:03.289808"}
+{"id": 4882157, "name": "Les Paul", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:23:18.115572"}
+{"id": 4883642, "name": "Jensen Huang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:23:34.084229"}
+{"id": 4883707, "name": "Mansa Musa", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:23:45.870987"}
+{"id": 4883729, "name": "Ulpian", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:23:59.488895"}
+{"id": 4883922, "name": "Don Bradman", "status": "no_results", "timestamp": "2026-02-23T01:24:04.666126"}
+{"id": 4884078, "name": "Abu al-Hasan al-Ash'ari", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:24:18.784632"}
+{"id": 4884306, "name": "Adi Shamir", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:24:28.783156"}
+{"id": 4887652, "name": "Robert Plant", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:24:40.365167"}
+{"id": 4890108, "name": "Robert Frank", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:24:53.862475"}
+{"id": 4890427, "name": "Amos Tversky", "status": "no_results", "timestamp": "2026-02-23T01:24:59.015410"}
+{"id": 4891618, "name": "Alec Jeffreys", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:25:08.350617"}
+{"id": 4894060, "name": "Joseph in Islam", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:25:20.520389"}
+{"id": 4894951, "name": "Kelly Johnson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:25:32.617650"}
+{"id": 4905343, "name": "M. S. Swaminathan", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:25:49.982560"}
+{"id": 4908612, "name": "Omm Kalthum", "status": "no_results", "timestamp": "2026-02-23T01:25:55.082273"}
+{"id": 4915199, "name": "John Warnock", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:26:07.641515"}
+{"id": 4926627, "name": "Henrietta Lacks", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:26:20.129311"}
+{"id": 4960137, "name": "Yuan Longping", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:26:31.846308"}
+{"id": 5071455, "name": "Shia view of Ali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:26:44.155368"}
+{"id": 6494943, "name": "Elton John", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:26:57.922194"}
+{"id": 6495001, "name": "Niels Bohr", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:27:13.408023"}
+{"id": 6495040, "name": "Umar ibn Al-Khattāb", "status": "already_exists", "timestamp": "2026-02-23T01:27:13.424094"}
+{"id": 6495045, "name": "Euclid", "status": "already_exists", "timestamp": "2026-02-23T01:27:13.429851"}
+{"id": 6495064, "name": "Victoria", "status": "already_exists", "timestamp": "2026-02-23T01:27:13.433852"}
+{"id": 6495273, "name": "Alfred Nobel", "status": "already_exists", "timestamp": "2026-02-23T01:27:13.433852"}
+{"id": 6495525, "name": "Henry VIII of England", "status": "already_exists", "timestamp": "2026-02-23T01:27:13.438814"}
+{"id": 6495563, "name": "Nicholas II of Russia", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:27:27.887732"}
+{"id": 6495604, "name": "Heinrich Himmler", "status": "already_exists", "timestamp": "2026-02-23T01:27:27.894580"}
+{"id": 6495686, "name": "Alex Ferguson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:27:40.657747"}
+{"id": 6496155, "name": "Reinhard Heydrich", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:27:54.226656"}
+{"id": 6496737, "name": "Samuel de Champlain", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:28:08.426419"}
+{"id": 6497295, "name": "Otto Heinrich Warburg", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:28:23.858354"}
+{"id": 6497615, "name": "Shinya Yamanaka", "status": "no_results", "timestamp": "2026-02-23T01:28:29.261504"}
+{"id": 6499592, "name": "Harriet Tubman", "status": "already_exists", "timestamp": "2026-02-23T01:28:29.264866"}
+{"id": 6500134, "name": "John Bunyan", "status": "already_exists", "timestamp": "2026-02-23T01:28:29.268544"}
+{"id": 6500941, "name": "Menander", "status": "already_exists", "timestamp": "2026-02-23T01:28:29.273332"}
+{"id": 6502133, "name": "W. E. B. Du Bois", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:28:42.116150"}
+{"id": 6502775, "name": "Antonio Stradivari", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:28:54.581248"}
+{"id": 6503040, "name": "Bharata Muni", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:29:05.388982"}
+{"id": 6503142, "name": "Edward Witten", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:29:21.059595"}
+{"id": 6503844, "name": "Wu Cheng'en", "status": "no_results", "timestamp": "2026-02-23T01:29:26.406229"}
+{"id": 6506167, "name": "Dr. Seuss", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:29:40.125469"}
+{"id": 6509188, "name": "Q369668", "status": "already_exists", "timestamp": "2026-02-23T01:29:40.129160"}
+{"id": 6513272, "name": "James Hetfield", "status": "no_results", "timestamp": "2026-02-23T01:29:45.260374"}
+{"id": 6517200, "name": "Han Xin", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:30:02.202454"}
+{"id": 6519653, "name": "Roberto Clemente", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:30:19.789455"}
+{"id": 6531587, "name": "Q1107006", "status": "no_results", "timestamp": "2026-02-23T01:30:24.940012"}
+{"id": 6538333, "name": "Bob Smith", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:30:36.844116"}
+{"id": 6587190, "name": "James the Less", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:30:53.260451"}
+{"id": 6604022, "name": "Volodymyr Zelenskyy", "status": "already_exists", "timestamp": "2026-02-23T01:30:53.268133"}
+{"id": 6619065, "name": "Akira Yoshino", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:31:05.806089"}
+{"id": 6654163, "name": "Jennifer Lee", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:31:18.529208"}
+{"id": 8117561, "name": "Virgil", "status": "already_exists", "timestamp": "2026-02-23T01:31:18.532514"}
+{"id": 8117578, "name": "Zinedine Zidane", "status": "no_results", "timestamp": "2026-02-23T01:31:23.692417"}
+{"id": 8117704, "name": "Al-Khwarizmi", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:31:35.286940"}
+{"id": 8117706, "name": "Erwin Schrödinger", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:31:47.619303"}
+{"id": 8117763, "name": "Steffi Graf", "status": "no_results", "timestamp": "2026-02-23T01:31:52.725336"}
+{"id": 8118136, "name": "Muhammad Ali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:32:05.823096"}
+{"id": 8118145, "name": "Hannibal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:32:17.303229"}
+{"id": 8118156, "name": "Florence Nightingale", "status": "already_exists", "timestamp": "2026-02-23T01:32:17.304232"}
+{"id": 8118160, "name": "Uthman ibn Affan", "status": "already_exists", "timestamp": "2026-02-23T01:32:17.304232"}
+{"id": 8118212, "name": "Édouard Manet", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:32:31.631951"}
+{"id": 8118223, "name": "John Dalton", "status": "already_exists", "timestamp": "2026-02-23T01:32:31.631951"}
+{"id": 8118393, "name": "Charles Babbage", "status": "already_exists", "timestamp": "2026-02-23T01:32:31.641355"}
+{"id": 8118501, "name": "Mark Antony", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:32:46.115161"}
+{"id": 8118593, "name": "Jennifer Doudna", "status": "no_results", "timestamp": "2026-02-23T01:32:51.214789"}
+{"id": 8118632, "name": "Wernher von Braun", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:33:04.030903"}
+{"id": 8119543, "name": "Fridtjof Nansen", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:33:16.087978"}
+{"id": 8120166, "name": "Walter Scott", "status": "already_exists", "timestamp": "2026-02-23T01:33:16.091987"}
+{"id": 8122242, "name": "Buster Keaton", "status": "already_exists", "timestamp": "2026-02-23T01:33:16.096313"}
+{"id": 8123727, "name": "Daniel Bernoulli", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:33:30.555234"}
+{"id": 8123952, "name": "Aretha Franklin", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:33:37.478033"}
+{"id": 8124493, "name": "Georges Méliès", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:33:49.552747"}
+{"id": 8124553, "name": "Hugo Grotius", "status": "already_exists", "timestamp": "2026-02-23T01:33:49.559012"}
+{"id": 8124639, "name": "John D. Rockefeller", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:34:04.986220"}
+{"id": 8124808, "name": "Mikhail Kalashnikov", "status": "no_results", "timestamp": "2026-02-23T01:34:10.253848"}
+{"id": 8125119, "name": "Phidias", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:34:25.387971"}
+{"id": 8125127, "name": "Thomas Hunt Morgan", "status": "already_exists", "timestamp": "2026-02-23T01:34:25.392511"}
+{"id": 8125482, "name": "Roger Penrose", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:34:40.932347"}
+{"id": 8125876, "name": "Billy Graham", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:34:54.451712"}
+{"id": 8125953, "name": "William Boeing", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:35:07.707325"}
+{"id": 8126567, "name": "Richard Rogers", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:35:20.840615"}
+{"id": 8128410, "name": "Ngozi Okonjo-Iweala", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:35:32.593927"}
+{"id": 8129415, "name": "Ray Kroc", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:35:40.381286"}
+{"id": 8129586, "name": "André Weil", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:35:55.168866"}
+{"id": 8131801, "name": "John Stewart Bell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:36:07.513772"}
+{"id": 8134996, "name": "Virginia Apgar", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:36:24.953081"}
+{"id": 8135372, "name": "Robert Gallo", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:36:40.241830"}
+{"id": 8144110, "name": "Johanan ben Zakai", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:36:56.092014"}
+{"id": 8165473, "name": "Mary in Islam", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:37:08.345967"}
+{"id": 8172277, "name": "Isamu Akasaki", "status": "no_results", "timestamp": "2026-02-23T01:37:13.552159"}
+{"id": 8351985, "name": "Takaaki Kajita", "status": "no_results", "timestamp": "2026-02-23T01:37:18.763387"}
+{"id": 9740862, "name": "Louis Armstrong", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:37:30.720984"}
+{"id": 9741055, "name": "Fidel Castro", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:37:42.424725"}
+{"id": 9741228, "name": "John XXIII", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:37:53.792027"}
+{"id": 9741307, "name": "Khalid ibn al-Walid", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:38:07.807239"}
+{"id": 9741445, "name": "Agatha Christie", "status": "already_exists", "timestamp": "2026-02-23T01:38:07.810275"}
+{"id": 9741475, "name": "David Ben-Gurion", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:38:22.215463"}
+{"id": 9741551, "name": "Edwin Hubble", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:38:38.384224"}
+{"id": 9741603, "name": "Hulk Hogan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:38:54.880811"}
+{"id": 9741679, "name": "William Wordsworth", "status": "already_exists", "timestamp": "2026-02-23T01:38:54.880811"}
+{"id": 9741759, "name": "Linus Pauling", "status": "no_results", "timestamp": "2026-02-23T01:39:00.063313"}
+{"id": 9742792, "name": "Emil Fischer", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:39:15.158853"}
+{"id": 9743527, "name": "James Chadwick", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:39:31.079142"}
+{"id": 9743584, "name": "Osman I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:39:44.851208"}
+{"id": 9743603, "name": "Peter Drucker", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:39:59.945396"}
+{"id": 9744553, "name": "J. C. R. Licklider", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:40:09.186223"}
+{"id": 9744663, "name": "William Caxton", "status": "already_exists", "timestamp": "2026-02-23T01:40:09.189227"}
+{"id": 9745614, "name": "Charlie Parker", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:40:21.977846"}
+{"id": 9746368, "name": "Husayn ibn Ali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:40:35.041839"}
+{"id": 9747579, "name": "Robert Oppenheimer", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:40:48.779120"}
+{"id": 9747599, "name": "Q134661", "status": "already_exists", "timestamp": "2026-02-23T01:40:48.779120"}
+{"id": 9747874, "name": "Arnold Schoenberg", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:41:03.328576"}
+{"id": 9748524, "name": "Chen-ning Yang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:41:15.996053"}
+{"id": 9748765, "name": "Q193344", "status": "no_results", "timestamp": "2026-02-23T01:41:21.220699"}
+{"id": 9749526, "name": "John Browning", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:41:33.615718"}
+{"id": 9750183, "name": "Bill Russell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:41:45.593047"}
+{"id": 9750231, "name": "Gordon Moore", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:41:59.581923"}
+{"id": 9751672, "name": "Estée Lauder", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:42:20.727765"}
+{"id": 9752841, "name": "Max Martin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:42:36.234077"}
+{"id": 9753123, "name": "Frederick W. Smith", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:42:47.881897"}
+{"id": 9754174, "name": "William Marshal, 1st Earl of Pembroke", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:43:04.815426"}
+{"id": 9754475, "name": "Hiroshi Yamauchi", "status": "no_results", "timestamp": "2026-02-23T01:43:10.148978"}
+{"id": 9754893, "name": "Frederick Law Olmsted", "status": "already_exists", "timestamp": "2026-02-23T01:43:10.151517"}
+{"id": 9756852, "name": "Walter Sisulu", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:43:19.032528"}
+{"id": 9757172, "name": "Lee Byung-chul", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:43:26.506405"}
+{"id": 9759876, "name": "John C. Bogle", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:43:40.267717"}
+{"id": 9761726, "name": "Ray Charles", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:43:56.104336"}
+{"id": 9783413, "name": "Izumo no Okuni", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:44:06.059828"}
+{"id": 10059503, "name": "Emmanuelle Charpentier", "status": "no_results", "timestamp": "2026-02-23T01:44:11.778274"}
+{"id": 11363681, "name": "Cicero", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:44:26.801267"}
+{"id": 11363748, "name": "Pablo Picasso", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:44:40.449133"}
+{"id": 11363764, "name": "Emmy Noether", "status": "no_results", "timestamp": "2026-02-23T01:44:45.608311"}
+{"id": 11363814, "name": "Thomas Edison", "status": "already_exists", "timestamp": "2026-02-23T01:44:45.611882"}
+{"id": 11363846, "name": "Pythagoras", "status": "already_exists", "timestamp": "2026-02-23T01:44:45.615247"}
+{"id": 11363858, "name": "Ibn al-Haytham", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:44:54.978846"}
+{"id": 11363995, "name": "Henry Molaison", "status": "no_results", "timestamp": "2026-02-23T01:45:00.423009"}
+{"id": 11364042, "name": "Benito Mussolini", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:45:12.717735"}
+{"id": 11364081, "name": "Antoni Gaudí", "status": "no_results", "timestamp": "2026-02-23T01:45:17.851758"}
+{"id": 11364183, "name": "Rudolf Clausius", "status": "already_exists", "timestamp": "2026-02-23T01:45:17.854492"}
+{"id": 11364246, "name": "Marlon Brando", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T01:45:27.324968"}
+{"id": 11364253, "name": "Philip II of Spain", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:45:43.668296"}
+{"id": 11364284, "name": "David Hume", "status": "already_exists", "timestamp": "2026-02-23T01:45:43.672304"}
+{"id": 11364399, "name": "William of Ockham", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:45:59.143989"}
+{"id": 11364669, "name": "Hayao Miyazaki", "status": "no_results", "timestamp": "2026-02-23T01:46:04.320998"}
+{"id": 11365530, "name": "Muhammad ibn Abd al-Wahhab", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:46:20.295848"}
+{"id": 11365632, "name": "Ralph H. Baer", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:46:33.501792"}
+{"id": 11366116, "name": "Johann Tetzel", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:46:50.600186"}
+{"id": 11366431, "name": "Charles-Augustin de Coulomb", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T01:47:04.483029"}
+{"id": 11366499, "name": "Christian Doppler", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:47:20.322185"}
+{"id": 11367427, "name": "Edgar F. Codd", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:47:40.624622"}
+{"id": 11367483, "name": "William Harvey", "status": "already_exists", "timestamp": "2026-02-23T01:47:40.627380"}
+{"id": 11367936, "name": "Peter Scholze", "status": "no_results", "timestamp": "2026-02-23T01:47:45.768387"}
+{"id": 11370235, "name": "Niels Henrik Abel", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:48:03.535589"}
+{"id": 11370333, "name": "William James", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:48:16.600523"}
+{"id": 11370472, "name": "Charlotte Brontë", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:48:28.946074"}
+{"id": 11370828, "name": "George Marshall", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:48:42.351855"}
+{"id": 11371316, "name": "Zeno of Citium", "status": "already_exists", "timestamp": "2026-02-23T01:48:42.351855"}
+{"id": 11371434, "name": "Djoser", "status": "no_results", "timestamp": "2026-02-23T01:48:47.518473"}
+{"id": 11371551, "name": "Alexander Hamilton", "status": "already_exists", "timestamp": "2026-02-23T01:48:47.522473"}
+{"id": 11371789, "name": "Yoichiro Nambu", "status": "no_results", "timestamp": "2026-02-23T01:48:52.700862"}
+{"id": 11372025, "name": "Jonas Salk", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:49:08.303570"}
+{"id": 11372543, "name": "Ronald Fisher", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:49:20.920478"}
+{"id": 11372561, "name": "Chester W. Nimitz", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:49:35.302680"}
+{"id": 11372665, "name": "Kūkai", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:49:47.875732"}
+{"id": 11372963, "name": "Vera Rubin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:50:01.383936"}
+{"id": 11373196, "name": "Muḥammad ibn Ismaeel al-Bukhārī", "status": "no_results", "timestamp": "2026-02-23T01:50:06.517293"}
+{"id": 11374290, "name": "James Baldwin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:50:19.530140"}
+{"id": 11377604, "name": "Lee de Forest", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:50:31.086323"}
+{"id": 11378407, "name": "Ardashir I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:50:45.057327"}
+{"id": 11382444, "name": "Martha Graham", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:50:57.321796"}
+{"id": 11390710, "name": "Shuji Nakamura", "status": "no_results", "timestamp": "2026-02-23T01:51:02.581809"}
+{"id": 11398383, "name": "Cangjie", "status": "no_results", "timestamp": "2026-02-23T01:51:07.737694"}
+{"id": 11402425, "name": "Denis Mukwege", "status": "no_results", "timestamp": "2026-02-23T01:51:13.037425"}
+{"id": 11490605, "name": "Morris Chang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:51:25.739634"}
+{"id": 11645763, "name": "Moungi Bawendi", "status": "no_results", "timestamp": "2026-02-23T01:51:30.931274"}
+{"id": 11662360, "name": "Vitalik Buterin", "status": "no_results", "timestamp": "2026-02-23T01:51:36.062084"}
+{"id": 11728446, "name": "Suga", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:51:47.356919"}
+{"id": 12988723, "name": "Larry Page", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:51:59.142009"}
+{"id": 12988809, "name": "Johannes Kepler", "status": "already_exists", "timestamp": "2026-02-23T01:51:59.145345"}
+{"id": 12988854, "name": "Tiger Woods", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:52:14.320953"}
+{"id": 12989009, "name": "Mario Molina", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:52:31.436548"}
+{"id": 12989054, "name": "Ernest Hemingway", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:52:50.441152"}
+{"id": 12989266, "name": "Linus Torvalds", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:53:02.925764"}
+{"id": 12989358, "name": "Heinrich Hertz", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:53:15.821020"}
+{"id": 12989429, "name": "Benedict of Nursia", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:53:30.440790"}
+{"id": 12989698, "name": "J. P. Morgan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:53:43.336034"}
+{"id": 12989781, "name": "Hermann Minkowski", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:53:56.275353"}
+{"id": 12991134, "name": "Theodor Schwann", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:54:08.161349"}
+{"id": 12991517, "name": "James Watson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:54:20.900707"}
+{"id": 12992439, "name": "Seymour Cray", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:54:37.248755"}
+{"id": 12992481, "name": "Miles Davis", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:54:49.733023"}
+{"id": 12993334, "name": "Paul Samuelson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:55:03.685493"}
+{"id": 12994101, "name": "Mohamed Atta", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:55:17.843049"}
+{"id": 12995710, "name": "Santiago Ramón y Cajal", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:55:25.218815"}
+{"id": 12995767, "name": "Andrey Kolmogorov", "status": "no_results", "timestamp": "2026-02-23T01:55:30.602289"}
+{"id": 12996305, "name": "Filippo Brunelleschi", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:55:44.577424"}
+{"id": 12996631, "name": "Julian Schwinger", "status": "no_results", "timestamp": "2026-02-23T01:55:49.857369"}
+{"id": 12996651, "name": "Augustin-Jean Fresnel", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T01:56:02.230694"}
+{"id": 12996731, "name": "Muhammad ibn Jarir al-Tabari", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:56:20.249966"}
+{"id": 12996760, "name": "Osamu Tezuka", "status": "no_results", "timestamp": "2026-02-23T01:56:25.483674"}
+{"id": 12996879, "name": "Sargon of Akkad", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:56:40.563591"}
+{"id": 12997061, "name": "Cleisthenes", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:56:57.651316"}
+{"id": 12999157, "name": "Dionysius Exiguus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:57:11.495919"}
+{"id": 13000171, "name": "Nurhaci", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:57:23.457289"}
+{"id": 13000546, "name": "Elon Musk", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:57:36.969761"}
+{"id": 13001491, "name": "Michael Ellis DeBakey", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T01:57:44.358447"}
+{"id": 13001953, "name": "Pierre Omidyar", "status": "no_results", "timestamp": "2026-02-23T01:57:49.527862"}
+{"id": 13006655, "name": "Joe Shuster", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:58:04.973177"}
+{"id": 13006918, "name": "Ferenc Puskás", "status": "no_results", "timestamp": "2026-02-23T01:58:10.253464"}
+{"id": 13015567, "name": "Abu Ubaidah ibn al-Jarrah", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:58:23.304986"}
+{"id": 13020326, "name": "William Ramsay", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:58:36.398076"}
+{"id": 13107822, "name": "Nikolay Rimsky-Korsakov", "status": "no_results", "timestamp": "2026-02-23T01:58:41.700229"}
+{"id": 13113917, "name": "Aisha", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:58:53.500386"}
+{"id": 13537032, "name": "Aleksandr Pushkin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:59:07.143943"}
+{"id": 1623623, "name": "Emily Dickinson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:59:22.640284"}
+{"id": 1623874, "name": "Edgar Allan Poe", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:59:36.982465"}
+{"id": 1624156, "name": "Alexander Graham Bell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T01:59:50.314586"}
+{"id": 1624186, "name": "Robert Koch", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:00:03.577266"}
+{"id": 1624325, "name": "Ignatius of Loyola", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:00:20.324631"}
+{"id": 1624826, "name": "Gottlob Frege", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:00:30.528599"}
+{"id": 1626345, "name": "John Milton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:00:46.474038"}
+{"id": 1628677, "name": "Mirza Ghalib", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:00:59.362499"}
+{"id": 1631587, "name": "Susan B. Anthony", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:01:12.290708"}
+{"id": 1633951, "name": "Michael Porter", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:01:24.057160"}
+{"id": 1642143, "name": "Ibn Taymiyyah", "status": "no_results", "timestamp": "2026-02-23T02:01:29.218684"}
+{"id": 1652265, "name": "Ben Burtt", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:01:49.156520"}
+{"id": 3249499, "name": "Q1067", "status": "no_results", "timestamp": "2026-02-23T02:01:54.401538"}
+{"id": 3249669, "name": "Michael Faraday", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:02:08.170389"}
+{"id": 3249681, "name": "Thomas Aquinas", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:02:23.582826"}
+{"id": 3249713, "name": "Serena Williams", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:02:36.915289"}
+{"id": 3256297, "name": "John Forbes Nash", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:02:52.952591"}
+{"id": 3257265, "name": "Andrea Palladio", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:03:07.685856"}
+{"id": 3257530, "name": "Chandragupta Maurya", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:03:21.286535"}
+{"id": 4872503, "name": "George Orwell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:03:32.941938"}
+{"id": 4872609, "name": "Steven Spielberg", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:03:51.795925"}
+{"id": 4873171, "name": "Amedeo Avogadro", "status": "no_results", "timestamp": "2026-02-23T02:03:56.964861"}
+{"id": 4873896, "name": "Heike Kamerlingh Onnes", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T02:04:07.682750"}
+{"id": 4876096, "name": "Brian Kernighan", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:04:15.038479"}
+{"id": 4876103, "name": "Brendan Eich", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:04:23.513714"}
+{"id": 4879736, "name": "Ernest Lawrence", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:04:37.608171"}
+{"id": 4879758, "name": "Nagarjuna", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:04:49.515639"}
+{"id": 4880045, "name": "Võ Nguyên Giáp", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:05:07.576277"}
+{"id": 4880139, "name": "Margaret Atwood", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:05:23.302839"}
+{"id": 4896520, "name": "Robert S. Langer, Jr.", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:05:40.410984"}
+{"id": 6495639, "name": "Athanasius of Alexandria", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:05:53.942728"}
+{"id": 6495649, "name": "Oliver Cromwell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:06:08.236625"}
+{"id": 6498638, "name": "Q92877", "status": "no_results", "timestamp": "2026-02-23T02:06:13.339457"}
+{"id": 6501572, "name": "Thomas Paine", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:06:27.605428"}
+{"id": 6501733, "name": "Maria Montessori", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:06:44.062706"}
+{"id": 6502650, "name": "Luis Walter Alvarez", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:06:56.579020"}
+{"id": 6502713, "name": "Jørn Utzon", "status": "no_results", "timestamp": "2026-02-23T02:07:01.829000"}
+{"id": 8117931, "name": "Lu Xun", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:07:13.962595"}
+{"id": 8118109, "name": "Bertrand Russell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:07:27.999301"}
+{"id": 8118189, "name": "Stephen King", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:07:40.224633"}
+{"id": 8118941, "name": "Jay-Z", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:07:55.488732"}
+{"id": 8126353, "name": "Patanjali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:08:06.213451"}
+{"id": 9740824, "name": "André-Marie Ampère", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:08:21.413279"}
+{"id": 9740825, "name": "Alessandro Volta", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:08:38.823362"}
+{"id": 9741010, "name": "René Descartes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:08:50.409427"}
+{"id": 9741453, "name": "Paul Cézanne", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:09:04.273537"}
+{"id": 9741479, "name": "George Lucas", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:09:16.388221"}
+{"id": 9741685, "name": "Isabella I of Castile", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:09:31.449899"}
+{"id": 9747565, "name": "Leo III", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:09:45.565797"}
+{"id": 9748596, "name": "Tsung-Dao Lee", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:09:53.522410"}
+{"id": 9752443, "name": "Thurgood Marshall", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:10:07.072383"}
+{"id": 9800517, "name": "Maryam Mirzakhani", "status": "no_results", "timestamp": "2026-02-23T02:10:12.269200"}
+{"id": 10682366, "name": "George Floyd", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:10:24.774764"}
+{"id": 11363716, "name": "Duke Ellington", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:10:36.953576"}
+{"id": 11363803, "name": "Otto von Bismarck", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:10:49.630895"}
+{"id": 11363824, "name": "Georg Wilhelm Friedrich Hegel", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:11:04.798578"}
+{"id": 11363888, "name": "Henry Dunant", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:11:22.408993"}
+{"id": 11364258, "name": "Q34660", "status": "no_results", "timestamp": "2026-02-23T02:11:27.751699"}
+{"id": 11364598, "name": "Luis Buñuel", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:11:35.742640"}
+{"id": 11365099, "name": "Ivan Sutherland", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:11:48.862275"}
+{"id": 11370584, "name": "John Williams", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:12:00.874990"}
+{"id": 11370873, "name": "Li Si", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:12:13.257858"}
+{"id": 11371686, "name": "Epictetus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:12:28.574451"}
+{"id": 12988761, "name": "Q7245", "status": "no_results", "timestamp": "2026-02-23T02:12:33.748339"}
+{"id": 12988805, "name": "Henry Ford", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:12:45.618660"}
+{"id": 12988810, "name": "Gottfried Wilhelm Leibniz", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:13:00.177810"}
+{"id": 12989334, "name": "Gamal Abdel Nasser", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:13:17.333866"}
+{"id": 12989393, "name": "Robert Boyle", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:13:29.119934"}
+{"id": 12991506, "name": "Antonio Gramsci", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:13:37.121575"}
+{"id": 12994116, "name": "Henrietta Swan Leavitt", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:13:53.277460"}
+{"id": 12997129, "name": "Sergei Diaghilev", "status": "no_results", "timestamp": "2026-02-23T02:13:58.375902"}
+{"id": 13000172, "name": "Earl Warren", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:14:12.056512"}
+{"id": 13001170, "name": "Robert Stephenson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:14:23.664355"}
+{"id": 13001822, "name": "Huineng", "status": "no_results", "timestamp": "2026-02-23T02:14:28.757628"}
+{"id": 13027537, "name": "Giorgio Parisi", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:14:37.704706"}
+{"id": 1623683, "name": "Sophocles", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:14:52.614815"}
+{"id": 1623926, "name": "Gustave Eiffel", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:15:08.752373"}
+{"id": 1626018, "name": "Emil von Behring", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:15:26.211844"}
+{"id": 1628939, "name": "Thelonious Monk", "status": "no_results", "timestamp": "2026-02-23T02:15:31.343898"}
+{"id": 1631570, "name": "Manuel I of Portugal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:15:45.248462"}
+{"id": 1637088, "name": "Saint Cyril the Philosopher", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:15:58.602386"}
+{"id": 3249602, "name": "Charles Dickens", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:16:10.689455"}
+{"id": 3250051, "name": "Oscar Wilde", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:16:23.511693"}
+{"id": 3250253, "name": "Ferdowsi", "status": "no_results", "timestamp": "2026-02-23T02:16:28.655897"}
+{"id": 3257260, "name": "Hulagu Khan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:16:40.458366"}
+{"id": 3257310, "name": "Giovanni Pierluigi da Palestrina", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:16:55.402990"}
+{"id": 3261122, "name": "Henry Moseley", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:17:08.334521"}
+{"id": 4872455, "name": "Niccolò Machiavelli", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:17:19.334078"}
+{"id": 4879409, "name": "Oliver Heaviside", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:17:33.841733"}
+{"id": 4879862, "name": "Margaret Mitchell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:17:45.847639"}
+{"id": 4891752, "name": "Kevin Feige", "status": "no_results", "timestamp": "2026-02-23T02:17:50.975455"}
+{"id": 6495006, "name": "Alexander Pushkin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:18:05.330157"}
+{"id": 6495598, "name": "Caravaggio", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:18:19.529900"}
+{"id": 6499686, "name": "Eddy Merckx", "status": "no_results", "timestamp": "2026-02-23T02:18:24.740110"}
+{"id": 6787946, "name": "Bang Si-hyuk", "status": "no_results", "timestamp": "2026-02-23T02:18:29.859261"}
+{"id": 8117659, "name": "Leo Tolstoy", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:18:43.964657"}
+{"id": 8118252, "name": "Diocletian", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:18:56.801983"}
+{"id": 8124832, "name": "Ptolemy I Soter", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:19:11.568667"}
+{"id": 8125217, "name": "Andrew Lloyd Webber", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:19:30.685839"}
+{"id": 8125241, "name": "Herbert Simon", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:19:42.708017"}
+{"id": 8125370, "name": "Toyotomi Hideyoshi", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:19:56.792203"}
+{"id": 8135467, "name": "Tang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:20:09.139018"}
+{"id": 8137566, "name": "Ronaldo", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:20:16.532917"}
+{"id": 8143150, "name": "Sly Stone", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:20:28.797597"}
+{"id": 9748272, "name": "Tiridates III of Armenia", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:20:40.876238"}
+{"id": 9748483, "name": "Apollonius of Perga", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:20:53.876965"}
+{"id": 9749087, "name": "Michael Atiyah", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:21:04.556388"}
+{"id": 9749098, "name": "Gilbert N. Lewis", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:21:15.936748"}
+{"id": 9752255, "name": "Abdul Qadir Gilani", "status": "no_results", "timestamp": "2026-02-23T02:21:21.090067"}
+{"id": 9752529, "name": "Sōichirō Honda", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:21:29.026988"}
+{"id": 9761168, "name": "Bob Iger", "status": "no_results", "timestamp": "2026-02-23T02:21:34.420079"}
+{"id": 11364304, "name": "Bertolt Brecht", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:21:50.972419"}
+{"id": 12988774, "name": "Hernán Cortés", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:22:05.223333"}
+{"id": 12988864, "name": "Cristiano Ronaldo", "status": "no_results", "timestamp": "2026-02-23T02:22:10.368211"}
+{"id": 12989204, "name": "Auguste Rodin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:22:25.323688"}
+{"id": 12989368, "name": "Michel de Montaigne", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:22:36.502371"}
+{"id": 12989535, "name": "J. J. Thomson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:22:48.046094"}
+{"id": 12995476, "name": "Bartolomeu Dias", "status": "no_results", "timestamp": "2026-02-23T02:22:53.256661"}
+{"id": 12995732, "name": "Jöns Jacob Berzelius", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T02:23:05.620322"}
+{"id": 12997788, "name": "Lynn Margulis", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:23:13.226847"}
+{"id": 1623598, "name": "Helmut Kohl", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:23:30.246375"}
+{"id": 1623677, "name": "Søren Kierkegaard", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:23:43.814608"}
+{"id": 1623702, "name": "Ögedei Khan", "status": "no_results", "timestamp": "2026-02-23T02:23:48.926056"}
+{"id": 1623978, "name": "Orson Welles", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:24:00.634492"}
+{"id": 1624153, "name": "Theodore Roosevelt", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:24:13.513438"}
+{"id": 1624245, "name": "Michael Jordan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:24:31.339949"}
+{"id": 1624334, "name": "Hans Christian Ørsted", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:24:47.161177"}
+{"id": 1624682, "name": "Ali Khamenei", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:25:00.858715"}
+{"id": 1625019, "name": "Richard Glücks", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:25:15.143819"}
+{"id": 1626759, "name": "Luca Pacioli", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:25:29.672677"}
+{"id": 1627184, "name": "Pepin of Herstal", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:25:37.225374"}
+{"id": 1628281, "name": "Darius III", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:25:51.133718"}
+{"id": 1628678, "name": "Count Basie", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:25:59.980898"}
+{"id": 1630236, "name": "Steve Irwin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:26:16.086138"}
+{"id": 1630270, "name": "Albert A. Michelson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:26:28.264019"}
+{"id": 1630325, "name": "Xerxes I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:26:45.205772"}
+{"id": 1630443, "name": "Magic Johnson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:26:59.704385"}
+{"id": 1630552, "name": "Moctezuma II", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:27:15.656947"}
+{"id": 1630762, "name": "Eugene Wigner", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:27:26.298388"}
+{"id": 1630821, "name": "Hipparchus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:27:39.622269"}
+{"id": 1630839, "name": "Charles-Maurice de Talleyrand-Périgord", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:27:52.660281"}
+{"id": 1631357, "name": "Jin Yong", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:28:05.799070"}
+{"id": 1631387, "name": "Ursula K. Le Guin", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:28:24.424064"}
+{"id": 1631754, "name": "Thomas Cranmer", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:28:37.783711"}
+{"id": 1631866, "name": "Marvin Minsky", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:28:51.749279"}
+{"id": 1632025, "name": "Igor Sikorsky", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:29:01.135974"}
+{"id": 1632500, "name": "Carlos Gardel", "status": "no_results", "timestamp": "2026-02-23T02:29:06.474513"}
+{"id": 1632542, "name": "Yayoi Kusama", "status": "no_results", "timestamp": "2026-02-23T02:29:11.601775"}
+{"id": 1632881, "name": "Richard S. Hamilton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:29:23.231599"}
+{"id": 1633650, "name": "Tirumalai Krishnamacharya", "status": "no_results", "timestamp": "2026-02-23T02:29:28.374121"}
+{"id": 1634028, "name": "Q273233", "status": "no_results", "timestamp": "2026-02-23T02:29:33.621037"}
+{"id": 1634788, "name": "Richard Arkwright", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:29:47.220310"}
+{"id": 1635107, "name": "Caetano Veloso", "status": "no_results", "timestamp": "2026-02-23T02:29:52.375446"}
+{"id": 1636570, "name": "Francis Collins", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:30:04.912835"}
+{"id": 1637236, "name": "Roger Sherman", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:30:18.348504"}
+{"id": 1637944, "name": "Qi Baishi", "status": "no_results", "timestamp": "2026-02-23T02:30:24.068813"}
+{"id": 1639411, "name": "Raymond Loewy", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:30:31.270395"}
+{"id": 1639426, "name": "Florian Schneider", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:30:48.526762"}
+{"id": 1640105, "name": "Madam C. J. Walker", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:31:03.500469"}
+{"id": 1642408, "name": "Sam Walton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:31:15.507674"}
+{"id": 1642746, "name": "Raphael Lemkin", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:31:28.584029"}
+{"id": 1643776, "name": "Mei Lanfang", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:31:35.457557"}
+{"id": 1653026, "name": "Chandragupta II", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:31:47.641104"}
+{"id": 1657130, "name": "Sam Houser", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:32:01.100944"}
+{"id": 1667904, "name": "Walter Camp", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:32:12.944978"}
+{"id": 1696059, "name": "Nizamuddin Auliya", "status": "no_results", "timestamp": "2026-02-23T02:32:18.378654"}
+{"id": 1904597, "name": "Aziz Sancar", "status": "no_results", "timestamp": "2026-02-23T02:32:23.538181"}
+{"id": 3249608, "name": "Jimi Hendrix", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T02:32:34.855862"}
+{"id": 3249631, "name": "Yuri Gagarin", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:32:42.071659"}
+{"id": 3249687, "name": "Ronald Reagan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:32:54.102115"}
+{"id": 3250153, "name": "Sun Tzu", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:33:08.038027"}
+{"id": 3250168, "name": "Ruhollah Khomeini", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:33:23.470134"}
+{"id": 3250195, "name": "William Butler Yeats", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:33:37.543301"}
+{"id": 3250209, "name": "Virginia Woolf", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:33:50.636268"}
+{"id": 3250246, "name": "Eratosthenes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:34:04.459385"}
+{"id": 3250249, "name": "Malcolm X", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:34:15.667868"}
+{"id": 3250361, "name": "Jean Sibelius", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T02:34:28.388836"}
+{"id": 3250390, "name": "Wangari Muta Maathai", "status": "no_results", "timestamp": "2026-02-23T02:34:33.551297"}
+{"id": 3250420, "name": "Martin Heidegger", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:34:46.726790"}
+{"id": 3250616, "name": "Q57145", "status": "no_results", "timestamp": "2026-02-23T02:34:52.279299"}
+{"id": 3251369, "name": "Abu Hurairah", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:35:05.175222"}
+{"id": 3253296, "name": "Eugene O'Neill", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:35:16.810145"}
+{"id": 3254117, "name": "Jan van Eyck", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:35:30.841026"}
+{"id": 3254315, "name": "Robert Walpole", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:35:42.872634"}
+{"id": 3255337, "name": "Fritz Zwicky", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:35:50.100928"}
+{"id": 3256277, "name": "Maria Meneghini Callas", "status": "no_results", "timestamp": "2026-02-23T02:35:55.547841"}
+{"id": 3256654, "name": "Leó Szilárd", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:36:10.213369"}
+{"id": 3256704, "name": "Hans Bethe", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:36:24.242286"}
+{"id": 3257030, "name": "Christopher Wren", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:36:35.988360"}
+{"id": 3257140, "name": "Emilio G. Segrè", "status": "no_results", "timestamp": "2026-02-23T02:36:41.182109"}
+{"id": 3257330, "name": "Fatima", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:36:53.947106"}
+{"id": 3257437, "name": "Jane Goodall", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:37:05.803054"}
+{"id": 3257602, "name": "Kenneth Arrow", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:37:19.567340"}
+{"id": 3257897, "name": "Alexander Friedmann", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:37:39.782410"}
+{"id": 3258009, "name": "Jean-Jacques Dessalines", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:37:55.161933"}
+{"id": 3258462, "name": "Catherine of Siena", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:38:09.757728"}
+{"id": 3258581, "name": "René Cassin", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:38:21.508236"}
+{"id": 3258834, "name": "Shivaji", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:38:33.203582"}
+{"id": 3261178, "name": "Aga Khan IV", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:38:46.748758"}
+{"id": 3261348, "name": "John Harrison", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:38:59.928913"}
+{"id": 3261448, "name": "Sugar Ray Robinson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:39:13.097036"}
+{"id": 3262846, "name": "David Stern", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:39:25.499675"}
+{"id": 3263976, "name": "Ralf Hütter", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:39:39.755871"}
+{"id": 3265683, "name": "Marie Stopes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:39:55.989063"}
+{"id": 3267788, "name": "Marco van Basten", "status": "no_results", "timestamp": "2026-02-23T02:40:01.180725"}
+{"id": 3268205, "name": "Nile Rodgers", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:40:16.338960"}
+{"id": 3269037, "name": "Henry Luce", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:40:30.028946"}
+{"id": 3269148, "name": "Christiana Figueres", "status": "no_results", "timestamp": "2026-02-23T02:40:35.313642"}
+{"id": 3308059, "name": "Ma Huateng", "status": "no_results", "timestamp": "2026-02-23T02:40:40.537857"}
+{"id": 3332661, "name": "Gazi Yaşargil", "status": "no_results", "timestamp": "2026-02-23T02:40:45.759683"}
+{"id": 3352181, "name": "Stuart J. Russell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:40:59.957708"}
+{"id": 4872514, "name": "Peter Jackson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:41:13.285735"}
+{"id": 4872583, "name": "Louis XIV of France", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:41:27.643508"}
+{"id": 4872590, "name": "Avicenna", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:41:40.718126"}
+{"id": 4872619, "name": "Max Weber", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:41:55.692040"}
+{"id": 4872630, "name": "Dwight D. Eisenhower", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:42:09.251743"}
+{"id": 4872758, "name": "Zhou Enlai", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:42:23.370707"}
+{"id": 4872860, "name": "Theodor Mommsen", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:42:36.536534"}
+{"id": 4873036, "name": "Frederick II of Prussia", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:42:51.156193"}
+{"id": 4873080, "name": "John Calvin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:43:02.762980"}
+{"id": 4873122, "name": "Aeschylus", "status": "already_exists", "timestamp": "2026-02-23T02:43:02.768575"}
+{"id": 4873167, "name": "Rumi", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:43:19.607823"}
+{"id": 4873199, "name": "Michel Foucault", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:43:33.475300"}
+{"id": 4873295, "name": "Terry Pratchett", "status": "no_results", "timestamp": "2026-02-23T02:43:38.754815"}
+{"id": 4873306, "name": "Arthur C. Clarke", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:43:52.164219"}
+{"id": 4873492, "name": "Lise Meitner", "status": "no_results", "timestamp": "2026-02-23T02:43:57.464727"}
+{"id": 4873504, "name": "Otto Lilienthal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:44:09.515484"}
+{"id": 4873727, "name": "Jeremy Bentham", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:44:22.487167"}
+{"id": 4874376, "name": "Alois Alzheimer", "status": "no_results", "timestamp": "2026-02-23T02:44:27.822478"}
+{"id": 4874567, "name": "Elia Kazan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:44:41.820195"}
+{"id": 4874868, "name": "Wladimir Köppen", "status": "no_results", "timestamp": "2026-02-23T02:44:47.238505"}
+{"id": 4876100, "name": "Raymond Tomlinson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:45:02.646434"}
+{"id": 4876151, "name": "Robert Taylor", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:45:15.898626"}
+{"id": 4877614, "name": "Susumu Tonegawa", "status": "no_results", "timestamp": "2026-02-23T02:45:21.028382"}
+{"id": 4879003, "name": "Claude Lévi-Strauss", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:45:38.686258"}
+{"id": 4879442, "name": "Hideki Yukawa", "status": "no_results", "timestamp": "2026-02-23T02:45:43.899363"}
+{"id": 4879771, "name": "Yves Saint Laurent", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:46:03.511737"}
+{"id": 4879858, "name": "Adrian Newey", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:46:11.623483"}
+{"id": 4880010, "name": "Q178577", "status": "no_results", "timestamp": "2026-02-23T02:46:16.872429"}
+{"id": 4880033, "name": "Themistocles", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:46:29.253574"}
+{"id": 4880066, "name": "Jane Addams", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:46:41.148504"}
+{"id": 4880278, "name": "Robert Johnson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:46:54.116383"}
+{"id": 4880312, "name": "Juvenal", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:47:05.904525"}
+{"id": 4880423, "name": "Jules Rimet", "status": "no_results", "timestamp": "2026-02-23T02:47:11.360382"}
+{"id": 4880526, "name": "Brian Epstein", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:47:26.838700"}
+{"id": 4880617, "name": "Charles Goodyear", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:47:38.684053"}
+{"id": 4880751, "name": "Pachacútec", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:47:55.285040"}
+{"id": 4881316, "name": "Betty Friedan", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:48:03.455050"}
+{"id": 4881473, "name": "Margaret Bourke-White", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:48:17.349654"}
+{"id": 4881892, "name": "Frances Perkins", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:48:29.469461"}
+{"id": 4882302, "name": "Markus Persson", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:48:38.241189"}
+{"id": 4882415, "name": "Richard Rodgers", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:48:53.518263"}
+{"id": 4882960, "name": "George VI", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:49:06.346369"}
+{"id": 4883441, "name": "Bernard Herrmann", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:49:22.619744"}
+{"id": 4883644, "name": "Sen no Rikyū", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T02:49:34.016512"}
+{"id": 4883801, "name": "Jack Kirby", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:49:46.482325"}
+{"id": 4883972, "name": "John Vincent Atanasoff", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:50:01.529332"}
+{"id": 4884238, "name": "Georgios Papanikolaou", "status": "no_results", "timestamp": "2026-02-23T02:50:06.826974"}
+{"id": 4886083, "name": "Oliver Tambo", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:50:21.282146"}
+{"id": 4887075, "name": "Menachem Mendel Schneerson", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T02:50:35.914262"}
+{"id": 4889958, "name": "Elizabeth Cady Stanton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:50:49.293453"}
+{"id": 4890657, "name": "Aurangzeb", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:51:03.107934"}
+{"id": 4893477, "name": "Claude Lanzmann", "status": "no_results", "timestamp": "2026-02-23T02:51:08.317777"}
+{"id": 4893924, "name": "Juan Martín Maldacena", "status": "no_results", "timestamp": "2026-02-23T02:51:13.527649"}
+{"id": 4905481, "name": "Alfred Blalock", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:51:29.290505"}
+{"id": 4912435, "name": "Norman Lear", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:51:41.398374"}
+{"id": 4939156, "name": "Rajaraja I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:51:55.974655"}
+{"id": 4942874, "name": "Louise Glück", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:52:08.028234"}
+{"id": 4970999, "name": "Solomon Northup", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:52:20.037210"}
+{"id": 6494911, "name": "Marcus Aurelius", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:52:34.389061"}
+{"id": 6494931, "name": "David Lynch", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:52:49.309400"}
+{"id": 6494990, "name": "Marco Polo", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:53:01.309912"}
+{"id": 6495089, "name": "Aryabhata", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:53:16.098232"}
+{"id": 6495185, "name": "Sophie Wilson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:53:29.139904"}
+{"id": 6495230, "name": "Fritz Lang", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:53:43.473906"}
+{"id": 6495477, "name": "Woodrow Wilson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:53:55.921721"}
+{"id": 6495506, "name": "Francis Drake", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:54:09.679798"}
+{"id": 6495614, "name": "Matthew the Apostle", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:54:23.139576"}
+{"id": 6495729, "name": "Coco Chanel", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T02:54:30.699495"}
+{"id": 6495953, "name": "Dziga Vertov", "status": "no_results", "timestamp": "2026-02-23T02:54:35.890412"}
+{"id": 6496602, "name": "Niccolò Paganini", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:54:53.057222"}
+{"id": 6497236, "name": "Nicolaus Otto", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:55:08.886901"}
+{"id": 6497305, "name": "Carl Bosch", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:55:23.303744"}
+{"id": 6497325, "name": "Franz Boas", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:55:36.965835"}
+{"id": 6497630, "name": "Robert Burns", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:55:53.038363"}
+{"id": 6500054, "name": "Charles Mingus", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:56:11.324238"}
+{"id": 6502051, "name": "Georges Braque", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:56:29.563771"}
+{"id": 6502053, "name": "Niko Tinbergen", "status": "no_results", "timestamp": "2026-02-23T02:56:34.720503"}
+{"id": 6502282, "name": "Edmund Burke", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:56:48.856750"}
+{"id": 6502402, "name": "Abu Bakr al-Razi", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:57:09.783812"}
+{"id": 6502455, "name": "Georges Cuvier", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:57:21.506882"}
+{"id": 6502986, "name": "Mohammed Omar", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:57:35.076644"}
+{"id": 6503771, "name": "Lucius Junius Brutus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:57:47.803641"}
+{"id": 6503927, "name": "Padmasambhava", "status": "no_results", "timestamp": "2026-02-23T02:57:53.033686"}
+{"id": 6506092, "name": "Thomas Cromwell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:58:05.694185"}
+{"id": 6506223, "name": "Ralph Ellison", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:58:19.227314"}
+{"id": 6506517, "name": "Frank Whittle", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:58:30.855435"}
+{"id": 6506910, "name": "Wang Anshi", "status": "no_results", "timestamp": "2026-02-23T02:58:36.038858"}
+{"id": 6509583, "name": "Steve Chen", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:58:51.373244"}
+{"id": 6511513, "name": "Chien-Shiung Wu", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T02:59:00.636543"}
+{"id": 6520723, "name": "Calyampudi Radhakrishna Rao", "status": "no_results", "timestamp": "2026-02-23T02:59:05.804251"}
+{"id": 6579638, "name": "Demis Hassabis", "status": "no_results", "timestamp": "2026-02-23T02:59:11.046422"}
+{"id": 6629842, "name": "Carter Godwin Woodson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:59:24.648302"}
+{"id": 6757501, "name": "Ester Ledecká", "status": "no_results", "timestamp": "2026-02-23T02:59:29.825205"}
+{"id": 6825134, "name": "V", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T02:59:43.568170"}
+{"id": 6855858, "name": "Jimin", "status": "no_results", "timestamp": "2026-02-23T02:59:48.720421"}
+{"id": 8117546, "name": "Cleopatra", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:00:00.444814"}
+{"id": 8117593, "name": "Konrad Adenauer", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:00:16.123281"}
+{"id": 8117646, "name": "Tupac Shakur", "status": "no_results", "timestamp": "2026-02-23T03:00:21.397233"}
+{"id": 8117904, "name": "Maya Angelou", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T03:00:32.520680"}
+{"id": 8117977, "name": "Christopher Nolan", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:00:43.937457"}
+{"id": 8118120, "name": "Albert Camus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:00:57.546867"}
+{"id": 8118139, "name": "Mark Zuckerberg", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T03:01:11.731721"}
+{"id": 8118177, "name": "John Steinbeck", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:01:26.086672"}
+{"id": 8118294, "name": "Helmuth von Moltke the Elder", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:01:39.018471"}
+{"id": 8118373, "name": "Strabo", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:02:04.529245"}
+{"id": 8118449, "name": "Leo X", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:02:19.333163"}
+{"id": 8118465, "name": "Dizzy Gillespie", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:02:38.620883"}
+{"id": 8118539, "name": "Mieszko I", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:02:48.915772"}
+{"id": 8118795, "name": "Wassily Kandinsky", "status": "no_results", "timestamp": "2026-02-23T03:02:54.088796"}
+{"id": 8119073, "name": "Theodor Eicke", "status": "no_results", "timestamp": "2026-02-23T03:02:59.673348"}
+{"id": 8119599, "name": "Bing Crosby", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:03:11.374154"}
+{"id": 8120086, "name": "Alban Berg", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:03:25.795027"}
+{"id": 8120195, "name": "Adam Mickiewicz", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:03:40.518714"}
+{"id": 8121194, "name": "Judea Pearl", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:03:52.297930"}
+{"id": 8121982, "name": "Baháʼu'lláh", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:04:08.954198"}
+{"id": 8124380, "name": "Lavrentiy Beria", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:04:15.862024"}
+{"id": 8124816, "name": "Jabir ibn Hayyan", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:04:23.109167"}
+{"id": 8124886, "name": "Svante Pääbo", "status": "no_results", "timestamp": "2026-02-23T03:04:28.258176"}
+{"id": 8125131, "name": "Gaius Marius", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:04:45.418835"}
+{"id": 8125197, "name": "Dolly Parton", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:05:05.246137"}
+{"id": 8125360, "name": "Robert I of Scotland", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:05:20.135288"}
+{"id": 8125368, "name": "Charles Sanders Peirce", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:05:33.069920"}
+{"id": 8125436, "name": "Jim Henson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:05:45.780620"}
+{"id": 8125464, "name": "James Hutton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:05:58.582142"}
+{"id": 8125753, "name": "William Wilberforce", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:06:10.401971"}
+{"id": 8126138, "name": "Guillermo del Toro", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:06:28.916890"}
+{"id": 8126372, "name": "Rem Koolhaas", "status": "no_results", "timestamp": "2026-02-23T03:06:34.196634"}
+{"id": 8126394, "name": "Abraham Ortelius", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:06:47.308368"}
+{"id": 8126464, "name": "Stevie Nicks", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:06:54.638016"}
+{"id": 8126690, "name": "Jessye Norman", "status": "no_results", "timestamp": "2026-02-23T03:06:59.824677"}
+{"id": 8128634, "name": "Tony Bennett", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:07:13.378184"}
+{"id": 8128648, "name": "Leo Fender", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:07:26.437942"}
+{"id": 8129096, "name": "Fela Kuti", "status": "no_results", "timestamp": "2026-02-23T03:07:31.813312"}
+{"id": 8129393, "name": "Baal Shem Tov", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:07:51.056298"}
+{"id": 8129494, "name": "Sam Phillips", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:08:03.983892"}
+{"id": 8130451, "name": "Isaac Luria", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:08:19.978939"}
+{"id": 8131070, "name": "Berry Gordy", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T03:08:35.925013"}
+{"id": 8131658, "name": "Yakov Zeldovich", "status": "no_results", "timestamp": "2026-02-23T03:08:41.133367"}
+{"id": 8135323, "name": "Ella Josephine Baker", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:08:54.869272"}
+{"id": 8135738, "name": "Steve Wozniak", "status": "no_results", "timestamp": "2026-02-23T03:09:00.144576"}
+{"id": 8144347, "name": "George Washington Goethals", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:09:12.601002"}
+{"id": 8144819, "name": "August Wilson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:09:23.842626"}
+{"id": 8159256, "name": "Muhammad bin Saud", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T03:09:38.223363"}
+{"id": 8192278, "name": "Willis Carrier", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:09:51.376127"}
+{"id": 8276172, "name": "Hafs", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:10:03.151358"}
+{"id": 8425496, "name": "Mikhail Bulgakov", "status": "no_results", "timestamp": "2026-02-23T03:10:08.290142"}
+{"id": 8672625, "name": "Donna Strickland", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:10:25.233520"}
+{"id": 8971675, "name": "Stéphane Bancel", "status": "no_results", "timestamp": "2026-02-23T03:10:30.583904"}
+{"id": 9740814, "name": "Jean-François Champollion", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:10:50.911961"}
+{"id": 9740871, "name": "Masashi Kishimoto", "status": "no_results", "timestamp": "2026-02-23T03:10:56.038164"}
+{"id": 9741003, "name": "James Watt", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:11:08.163054"}
+{"id": 9741154, "name": "Justus von Liebig", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:11:20.978234"}
+{"id": 9741344, "name": "Christopher Marlowe", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:11:34.587419"}
+{"id": 9741444, "name": "Isaac Asimov", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:11:46.711256"}
+{"id": 9741477, "name": "T. S. Eliot", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:12:03.633707"}
+{"id": 9741492, "name": "Christiaan Huygens", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T03:12:19.222565"}
+{"id": 9741555, "name": "Pieter Brueghel the Elder", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:12:28.270854"}
+{"id": 9741716, "name": "Warren Buffett", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:12:41.740838"}
+{"id": 9742093, "name": "Chandrasekhara Venkata Raman", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:12:50.774428"}
+{"id": 9743276, "name": "August Kekulé", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:13:04.045252"}
+{"id": 9747333, "name": "Parmenides", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:13:18.438479"}
+{"id": 9747556, "name": "Lee Kuan Yew", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:13:31.601498"}
+{"id": 9747588, "name": "George Stephenson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:13:42.745985"}
+{"id": 9747703, "name": "Alexis de Tocqueville", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:13:57.413780"}
+{"id": 9748075, "name": "Camillo Benso di Cavour", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:14:04.239311"}
+{"id": 9748349, "name": "Edward Norton Lorenz", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:14:24.000708"}
+{"id": 9748895, "name": "Barbara McClintock", "results_found": 7, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:14:41.893051"}
+{"id": 9749049, "name": "Pafnuty Chebyshev", "status": "no_results", "timestamp": "2026-02-23T03:14:47.058042"}
+{"id": 9749081, "name": "Guillaume Dufay", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:15:00.833496"}
+{"id": 9749134, "name": "Edward O. Wilson", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:15:13.933715"}
+{"id": 9749498, "name": "Judith Butler", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:15:26.776393"}
+{"id": 9749685, "name": "Agnès Varda", "status": "no_results", "timestamp": "2026-02-23T03:15:32.190596"}
+{"id": 9751154, "name": "Eddie Van Halen", "status": "no_results", "timestamp": "2026-02-23T03:15:37.333261"}
+{"id": 9751191, "name": "Harry Markowitz", "results_found": 4, "works_saved": 4, "status": "success", "timestamp": "2026-02-23T03:15:51.786044"}
+{"id": 9752313, "name": "Carl Woese", "status": "no_results", "timestamp": "2026-02-23T03:15:56.881466"}
+{"id": 9752357, "name": "Craig Venter", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:16:09.048090"}
+{"id": 9756105, "name": "Yuri Knorozov", "status": "no_results", "timestamp": "2026-02-23T03:16:14.322085"}
+{"id": 9756500, "name": "Esther Duflo", "status": "no_results", "timestamp": "2026-02-23T03:16:19.570781"}
+{"id": 9759104, "name": "Sulla", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:16:34.363960"}
+{"id": 9759119, "name": "Andrew Carnegie", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:16:46.128841"}
+{"id": 9759411, "name": "Andrea M. Ghez", "status": "no_results", "timestamp": "2026-02-23T03:16:51.448247"}
+{"id": 10009004, "name": "Abu Mansur al-Maturidi", "status": "no_results", "timestamp": "2026-02-23T03:16:56.659448"}
+{"id": 10075118, "name": "Fei-Fei Li", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:17:10.156640"}
+{"id": 11363661, "name": "Victor Hugo", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:17:26.121955"}
+{"id": 11363699, "name": "Buzz Aldrin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:17:38.003887"}
+{"id": 11363749, "name": "Rembrandt", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:17:52.330032"}
+{"id": 11363774, "name": "Christopher Columbus", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:18:05.662311"}
+{"id": 11363808, "name": "Simón Bolívar", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:18:19.164073"}
+{"id": 11363812, "name": "Walt Disney", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:18:31.585681"}
+{"id": 11363823, "name": "Sigmund Freud", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:18:46.141395"}
+{"id": 11363827, "name": "Ludwig Wittgenstein", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:18:58.543854"}
+{"id": 11364078, "name": "Roald Dahl", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:19:06.919816"}
+{"id": 11364269, "name": "Benedictus de Spinoza", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:19:20.328071"}
+{"id": 11364385, "name": "Benjamin Netanyahu", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:19:31.791626"}
+{"id": 11364403, "name": "Theodor Herzl", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:19:43.526437"}
+{"id": 11364540, "name": "Marcus Vipsanius Agrippa", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:20:00.683962"}
+{"id": 11364618, "name": "Jesse Owens", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:20:13.222737"}
+{"id": 11364831, "name": "Werner von Siemens", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:20:26.493055"}
+{"id": 11369658, "name": "Friedrich Miescher", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:20:37.408890"}
+{"id": 11370753, "name": "Alfred Thayer Maan", "status": "no_results", "timestamp": "2026-02-23T03:20:42.764558"}
+{"id": 11371012, "name": "Jean Monnet", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:20:55.561346"}
+{"id": 11371082, "name": "Pep Guardiola", "status": "no_results", "timestamp": "2026-02-23T03:21:00.717501"}
+{"id": 11371119, "name": "Jacqueline Kennedy Onassis", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:21:10.376894"}
+{"id": 11371404, "name": "Fernando Pessoa", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:21:25.885762"}
+{"id": 11371528, "name": "Lorenzo de' Medici", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:21:39.477447"}
+{"id": 11371598, "name": "John Cage", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:21:53.208679"}
+{"id": 11371756, "name": "George S. Patton", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:22:05.095508"}
+{"id": 11371887, "name": "Quincy Jones", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:22:17.257295"}
+{"id": 11372069, "name": "Barry Marshall", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:22:28.830472"}
+{"id": 11372098, "name": "Brahmagupta", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:22:42.275210"}
+{"id": 11372328, "name": "Samuel Adams", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:22:55.004183"}
+{"id": 11372583, "name": "Michael Dell", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:23:08.820339"}
+{"id": 11372964, "name": "Yo-Yo Ma", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:23:23.655341"}
+{"id": 11373159, "name": "Anna Walentynowicz", "status": "no_results", "timestamp": "2026-02-23T03:23:28.832252"}
+{"id": 11374247, "name": "Cormac McCarthy", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:23:42.355743"}
+{"id": 11375074, "name": "Al-Shafi'i", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:23:56.397916"}
+{"id": 11375137, "name": "Ur-Nammu", "status": "no_results", "timestamp": "2026-02-23T03:24:01.706287"}
+{"id": 11375172, "name": "Charles M. Schulz", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:24:15.752862"}
+{"id": 11375450, "name": "Akiva ben Joseph", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:24:23.656590"}
+{"id": 11382034, "name": "Tansen", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T03:24:34.687756"}
+{"id": 11386011, "name": "Brian Eno", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:24:53.430609"}
+{"id": 11393688, "name": "Bhumibol Adulyadej", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:25:09.039117"}
+{"id": 11394881, "name": "Donna Summer", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:25:21.498796"}
+{"id": 11404175, "name": "Darryl McDaniels", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T03:25:35.841020"}
+{"id": 11418751, "name": "Muhammad of Ghor", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T03:25:50.057905"}
+{"id": 11431442, "name": "The Weeknd", "status": "no_results", "timestamp": "2026-02-23T03:25:55.237846"}
+{"id": 11444544, "name": "Andrew Y. Ng", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:26:09.978115"}
+{"id": 11981618, "name": "Lil Nas X", "results_found": 5, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:26:29.252342"}
+{"id": 12988667, "name": "Ramesses II", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:26:41.514451"}
+{"id": 12988726, "name": "Bill Gates", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:26:53.429136"}
+{"id": 12988772, "name": "Igor Stravinsky", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:27:05.162827"}
+{"id": 12988801, "name": "Edsger W. Dijkstra", "results_found": 3, "works_saved": 3, "status": "success", "timestamp": "2026-02-23T03:27:16.641681"}
+{"id": 12988823, "name": "Al-Ghazali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:27:28.640720"}
+{"id": 12988833, "name": "Ayrton Senna", "status": "no_results", "timestamp": "2026-02-23T03:27:33.991802"}
+{"id": 12989234, "name": "Mark the Evangelist", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:27:48.030415"}
+{"id": 12989308, "name": "Francis Bacon", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:28:00.839304"}
+{"id": 12989311, "name": "Thomas Hobbes", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:28:12.576779"}
+{"id": 12989357, "name": "Konstantin Tsiolkovsky", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:28:21.929235"}
+{"id": 12989427, "name": "Maximilien Robespierre", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:28:34.737822"}
+{"id": 12989829, "name": "Edward I of England", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:28:51.827802"}
+{"id": 12989913, "name": "Ignaz Semmelweis", "status": "no_results", "timestamp": "2026-02-23T03:28:56.995020"}
+{"id": 12990001, "name": "Walter Benjamin", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:29:11.285190"}
+{"id": 12990369, "name": "Anthony Hopkins", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:29:23.908056"}
+{"id": 12991053, "name": "Harald zur Hausen", "status": "no_results", "timestamp": "2026-02-23T03:29:29.078004"}
+{"id": 12991165, "name": "Arnold Sommerfeld", "status": "no_results", "timestamp": "2026-02-23T03:29:34.426369"}
+{"id": 12991435, "name": "James VI and I", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:29:47.657075"}
+{"id": 12991452, "name": "Svante August Arrhenius", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:30:03.797209"}
+{"id": 12992421, "name": "Sid Meier", "results_found": 1, "works_saved": 1, "status": "success", "timestamp": "2026-02-23T03:30:11.989053"}
+{"id": 12993486, "name": "Sidney Poitier", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:30:26.633430"}
+{"id": 12993926, "name": "Alexander VI", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:30:38.056696"}
+{"id": 12995077, "name": "William Thomson, 1st Baron Kelvin", "results_found": 2, "works_saved": 2, "status": "success", "timestamp": "2026-02-23T03:30:48.820303"}
+{"id": 12995288, "name": "Pompey", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:31:02.292319"}
+{"id": 12995440, "name": "Hatshepsut", "results_found": 6, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:31:18.895551"}
+{"id": 12995492, "name": "William Lawrence Bragg", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:31:32.611995"}
+{"id": 12995519, "name": "Lev Landau", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:31:48.491158"}
+{"id": 12995582, "name": "Abbot Suger", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:32:03.325119"}
+{"id": 12996549, "name": "Muhammad Ali", "results_found": 8, "works_saved": 5, "status": "success", "timestamp": "2026-02-23T03:32:16.513978"}

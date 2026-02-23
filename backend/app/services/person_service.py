@@ -26,6 +26,7 @@ def get_persons(
     lng_min: Optional[float] = None,
     lng_max: Optional[float] = None,
     sort_by: Optional[str] = None,
+    domain: Optional[str] = None,
 ) -> tuple[list[Person], int]:
     """Get persons with optional filtering."""
     query = db.query(Person)
@@ -37,6 +38,10 @@ def get_persons(
     if not include_noise:
         noise_filters = [Person.name.ilike(p) for p in NOISE_PATTERNS]
         query = query.filter(not_(or_(*noise_filters)))
+
+    # Domain filter
+    if domain is not None:
+        query = query.filter(Person.domain == domain)
 
     if year_start is not None:
         query = query.filter(Person.death_year >= year_start)
@@ -57,7 +62,13 @@ def get_persons(
 
     total = query.count()
 
-    persons = query.order_by(Person.birth_year).offset(offset).limit(limit).all()
+    # Sorting
+    if sort_by == 'importance':
+        query = query.order_by(Person.global_score.desc().nullslast(), Person.birth_year)
+    else:
+        query = query.order_by(Person.birth_year)
+
+    persons = query.offset(offset).limit(limit).all()
 
     return persons, total
 

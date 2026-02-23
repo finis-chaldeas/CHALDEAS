@@ -27,20 +27,20 @@ def get_sources(
     Actual sources table columns:
     id, source_type, title, author, year, chapter, chunk_index, content_raw, url, created_at
     """
-    # Base query
+    # Base query — use person_sources for counts (text_mentions is empty in compact DB)
     query = db.execute(text("""
         SELECT
             s.id,
             s.title as name,
             s.source_type as type,
             s.author,
-            COUNT(DISTINCT tm.id) as mention_count,
-            COUNT(DISTINCT CASE WHEN tm.entity_type = 'person' THEN tm.entity_id END) as person_count
+            COUNT(DISTINCT ps.person_id) as mention_count,
+            COUNT(DISTINCT ps.person_id) as person_count
         FROM sources s
-        LEFT JOIN text_mentions tm ON tm.source_id = s.id
+        LEFT JOIN person_sources ps ON ps.source_id = s.id
         WHERE (:source_type IS NULL OR s.source_type = :source_type)
         GROUP BY s.id
-        HAVING COUNT(DISTINCT tm.id) > 0
+        HAVING COUNT(DISTINCT ps.person_id) > 0
         ORDER BY mention_count DESC
         LIMIT :limit OFFSET :offset
     """), {
@@ -55,7 +55,7 @@ def get_sources(
     count_result = db.execute(text("""
         SELECT COUNT(DISTINCT s.id)
         FROM sources s
-        JOIN text_mentions tm ON tm.source_id = s.id
+        JOIN person_sources ps ON ps.source_id = s.id
         WHERE (:source_type IS NULL OR s.source_type = :source_type)
     """), {"source_type": source_type})
 
@@ -75,20 +75,18 @@ def get_source_by_id(db: Session, source_id: int) -> Optional[dict]:
             s.url,
             s.author,
             s.source_type as archive_type,
-            3 as reliability,
+            COALESCE(s.reliability, 3) as reliability,
             '' as description,
-            s.year as publication_year,
-            s.year as original_year,
-            'en' as language,
+            s.publication_year,
+            s.original_year,
+            COALESCE(s.language, 'en') as language,
             s.url as document_id,
-            COUNT(DISTINCT tm.id) as mention_count,
-            COUNT(DISTINCT CASE WHEN tm.entity_type = 'person' THEN tm.entity_id END) as person_count,
-            COUNT(DISTINCT CASE WHEN tm.entity_type = 'location' THEN tm.entity_id END) as location_count,
-            COUNT(DISTINCT CASE WHEN tm.entity_type = 'event' THEN tm.entity_id END) as event_count
+            0 as mention_count,
+            0 as person_count,
+            0 as location_count,
+            0 as event_count
         FROM sources s
-        LEFT JOIN text_mentions tm ON tm.source_id = s.id
         WHERE s.id = :source_id
-        GROUP BY s.id
     """), {"source_id": source_id})
 
     row = result.fetchone()
@@ -154,9 +152,9 @@ def get_person_sources(
 ) -> Tuple[List[dict], int]:
     """
     Get sources that mention a person.
-    Includes mention contexts if requested.
+    Uses person_sources join table first, falls back to text_mentions.
     """
-    # Get sources with mention counts
+    # Primary: use person_sources table (122K+ rows in compact DB)
     query = db.execute(text("""
         SELECT
             s.id,
@@ -164,24 +162,23 @@ def get_person_sources(
             s.title as title,
             s.source_type as type,
             s.author,
-            COUNT(tm.id) as mention_count
+            1 as mention_count
         FROM sources s
-        JOIN text_mentions tm ON tm.source_id = s.id
-        WHERE tm.entity_type = 'person' AND tm.entity_id = :person_id
-        GROUP BY s.id
-        ORDER BY mention_count DESC
+        JOIN person_sources ps ON ps.source_id = s.id
+        WHERE ps.person_id = :person_id
+        ORDER BY s.title
         LIMIT :limit
     """), {"person_id": person_id, "limit": limit})
 
     sources = []
     for row in query.fetchall():
         source_data = dict(row._mapping)
-        source_data["person_count"] = 0  # Not needed for this view
+        source_data["person_count"] = 0
 
-        # Get contexts if requested
+        # Try to get mention contexts from text_mentions if available
         if include_contexts:
             context_query = db.execute(text("""
-                SELECT mention_text, context_text, confidence, chunk_index
+                SELECT mention_text, context, confidence
                 FROM text_mentions
                 WHERE source_id = :source_id
                   AND entity_type = 'person'
@@ -197,9 +194,9 @@ def get_person_sources(
             source_data["mentions"] = [
                 {
                     "mention_text": ctx.mention_text or "",
-                    "context_text": ctx.context_text,
+                    "context_text": ctx.context,
                     "confidence": ctx.confidence,
-                    "chunk_index": ctx.chunk_index
+                    "chunk_index": None
                 }
                 for ctx in context_query.fetchall()
             ]
@@ -210,10 +207,9 @@ def get_person_sources(
 
     # Get total count
     count_result = db.execute(text("""
-        SELECT COUNT(DISTINCT s.id)
-        FROM sources s
-        JOIN text_mentions tm ON tm.source_id = s.id
-        WHERE tm.entity_type = 'person' AND tm.entity_id = :person_id
+        SELECT COUNT(*)
+        FROM person_sources
+        WHERE person_id = :person_id
     """), {"person_id": person_id})
 
     total = count_result.scalar() or 0
@@ -235,9 +231,9 @@ def get_source_mentions(
             tm.entity_type,
             tm.entity_id,
             tm.mention_text,
-            tm.context_text,
+            tm.context as context_text,
             tm.confidence,
-            tm.chunk_index,
+            0 as chunk_index,
             CASE
                 WHEN tm.entity_type = 'person' THEN p.name
                 WHEN tm.entity_type = 'location' THEN l.name
@@ -250,7 +246,7 @@ def get_source_mentions(
         LEFT JOIN events e ON tm.entity_type = 'event' AND tm.entity_id = e.id
         WHERE tm.source_id = :source_id
           AND (:entity_type IS NULL OR tm.entity_type = :entity_type)
-        ORDER BY tm.chunk_index, tm.id
+        ORDER BY tm.id
         LIMIT :limit OFFSET :offset
     """), {
         "source_id": source_id,

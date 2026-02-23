@@ -7,7 +7,8 @@ echo.
 echo [1/4] PostgreSQL 서비스 중지...
 net stop postgresql-x64-18
 if errorlevel 1 (
-    echo 서비스 중지 실패. 이미 중지되었거나 권한이 없습니다.
+    echo 서비스 중지 실패. 이미 중지되었거나 권한이 없습니다.잠깐 그거 왜 미진행이야? 진행하기롳한 거 아니었어?
+    
     echo 관리자 권한으로 실행했는지 확인하세요.
     pause
     exit /b 1

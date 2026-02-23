@@ -189,12 +189,27 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
     params = {"limit": limit}
 
     # Time filter: person was alive during the period
-    if year_start is not None:
-        conditions.append("(p.death_year IS NULL OR p.death_year >= :year_start)")
-        params["year_start"] = year_start
-    if year_end is not None:
-        conditions.append("(p.birth_year IS NULL OR p.birth_year <= :year_end)")
-        params["year_end"] = year_end
+    # Persons with NULL birth/death AND no floruit are excluded (not matched to any era)
+    if year_start is not None or year_end is not None:
+        time_parts = []
+        # Case 1: has birth/death years
+        alive_conds = []
+        if year_start is not None:
+            alive_conds.append("((p.death_year IS NULL AND p.birth_year + 80 >= :year_start) OR p.death_year >= :year_start)")
+            params["year_start"] = year_start
+        if year_end is not None:
+            alive_conds.append("p.birth_year <= :year_end")
+            params["year_end"] = year_end
+        alive_conds.append("p.birth_year IS NOT NULL")
+        time_parts.append(f"({' AND '.join(alive_conds)})")
+        # Case 2: no birth/death but has floruit
+        floruit_conds = ["p.birth_year IS NULL", "p.floruit_start IS NOT NULL"]
+        if year_start is not None:
+            floruit_conds.append("COALESCE(p.floruit_end, p.floruit_start + 40) >= :year_start")
+        if year_end is not None:
+            floruit_conds.append("p.floruit_start <= :year_end")
+        time_parts.append(f"({' AND '.join(floruit_conds)})")
+        conditions.append(f"({' OR '.join(time_parts)})")
 
     # Viewport filter via birthplace location
     location_join = "LEFT JOIN locations l ON l.id = p.birthplace_id"
@@ -377,12 +392,24 @@ def _count_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_max)
     conditions = ["p.wikidata_id IS NOT NULL"]
     params = {}
 
-    if year_start is not None:
-        conditions.append("(p.death_year IS NULL OR p.death_year >= :year_start)")
-        params["year_start"] = year_start
-    if year_end is not None:
-        conditions.append("(p.birth_year IS NULL OR p.birth_year <= :year_end)")
-        params["year_end"] = year_end
+    if year_start is not None or year_end is not None:
+        time_parts = []
+        alive_conds = []
+        if year_start is not None:
+            alive_conds.append("((p.death_year IS NULL AND p.birth_year + 80 >= :year_start) OR p.death_year >= :year_start)")
+            params["year_start"] = year_start
+        if year_end is not None:
+            alive_conds.append("p.birth_year <= :year_end")
+            params["year_end"] = year_end
+        alive_conds.append("p.birth_year IS NOT NULL")
+        time_parts.append(f"({' AND '.join(alive_conds)})")
+        floruit_conds = ["p.birth_year IS NULL", "p.floruit_start IS NOT NULL"]
+        if year_start is not None:
+            floruit_conds.append("COALESCE(p.floruit_end, p.floruit_start + 40) >= :year_start")
+        if year_end is not None:
+            floruit_conds.append("p.floruit_start <= :year_end")
+        time_parts.append(f"({' AND '.join(floruit_conds)})")
+        conditions.append(f"({' OR '.join(time_parts)})")
 
     where = " AND ".join(conditions)
     return db.execute(text(f"SELECT COUNT(*) FROM persons p WHERE {where}"), params).scalar()

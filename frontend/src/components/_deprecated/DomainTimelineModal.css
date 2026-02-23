@@ -1,0 +1,290 @@
+/* ========== Domain Timeline Modal ========== */
+
+.domain-timeline-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.domain-timeline-modal {
+  width: min(900px, 92vw);
+  max-height: 88vh;
+  background: var(--chaldea-bg-dark, #0a0e1a);
+  border: 1px solid var(--chaldea-border, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.domain-timeline-header {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--chaldea-border, rgba(255, 255, 255, 0.1));
+  flex-shrink: 0;
+}
+
+.domain-timeline-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.domain-timeline-back {
+  background: none;
+  border: 1px solid var(--chaldea-border);
+  border-radius: 6px;
+  color: var(--chaldea-text);
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.domain-timeline-back:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--chaldea-text-bright);
+}
+
+.domain-timeline-title {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--chaldea-text-bright, #e0e0e0);
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.domain-timeline-close {
+  background: none;
+  border: none;
+  color: var(--chaldea-text-dim);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.domain-timeline-close:hover {
+  color: var(--chaldea-text-bright);
+}
+
+.domain-timeline-subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--chaldea-text-dim, #888);
+}
+
+/* Domain Selection Grid */
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.domain-grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--chaldea-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.domain-grid-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--domain-color, rgba(255, 255, 255, 0.3));
+  transform: translateY(-2px);
+}
+
+.domain-grid-icon {
+  font-size: 1.8rem;
+}
+
+.domain-grid-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  letter-spacing: 0.03em;
+}
+
+.domain-grid-label-ko {
+  font-size: 0.7rem;
+  color: var(--chaldea-text-dim);
+}
+
+/* Domain Timeline Content */
+.domain-timeline-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+
+.domain-timeline-loading,
+.domain-timeline-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--chaldea-text-dim);
+  font-size: 0.85rem;
+}
+
+/* Era Group */
+.domain-era-group {
+  margin-bottom: 1.5rem;
+}
+
+.domain-era-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.domain-era-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--chaldea-text-bright);
+  letter-spacing: 0.1em;
+}
+
+.domain-era-range {
+  font-size: 0.7rem;
+  color: var(--chaldea-text-dim);
+}
+
+/* Timeline entries */
+.domain-era-timeline {
+  padding-left: 0.75rem;
+}
+
+.domain-person-entry {
+  position: relative;
+  padding-left: 1.25rem;
+  padding-bottom: 0.5rem;
+  min-height: 2rem;
+}
+
+.domain-person-dot {
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.domain-person-line {
+  position: absolute;
+  left: 3px;
+  top: 0.9rem;
+  bottom: -0.1rem;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.domain-person-content {
+  padding-left: 0.5rem;
+}
+
+.domain-person-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.15rem 0;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.domain-person-btn:hover {
+  opacity: 0.8;
+}
+
+.domain-person-year {
+  font-size: 0.7rem;
+  color: var(--chaldea-text-dim);
+  min-width: 5.5rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.domain-person-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--chaldea-text-bright);
+}
+
+.domain-person-name-ko {
+  font-size: 0.75rem;
+  color: var(--chaldea-text-dim);
+}
+
+.domain-person-role {
+  font-size: 0.7rem;
+  color: var(--chaldea-text-dim);
+  padding-left: 6rem;
+  margin-top: -0.1rem;
+}
+
+/* Footer */
+.domain-timeline-footer {
+  padding: 1rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 1rem;
+}
+
+.domain-timeline-link {
+  background: none;
+  border: 1px solid var(--chaldea-border);
+  border-radius: 6px;
+  color: var(--chaldea-cyan, #00d4ff);
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.domain-timeline-link:hover {
+  background: rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .domain-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .domain-grid-card {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .domain-grid-icon {
+    font-size: 1.4rem;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
