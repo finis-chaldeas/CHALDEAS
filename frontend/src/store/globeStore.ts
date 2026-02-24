@@ -117,6 +117,9 @@ interface GlobeState {
   // Fly-to target (consumed by GlobeContainer)
   flyTarget: FlyTarget | null
 
+  // Rayshift steps overlay
+  rayshiftSteps: { lat: number; lng: number; label: string }[] | null
+
   // Filters
   selectedCategories: number[]
   minImportance: number
@@ -140,6 +143,8 @@ interface GlobeState {
   setViewportBounds: (bounds: ViewportBounds | null) => void
   setViewMode: (mode: ViewMode) => void
   setGlobeMarkers: (markers: GlobeMarkerData[]) => void
+  setRayshiftSteps: (steps: { lat: number; lng: number; label: string }[]) => void
+  clearRayshiftSteps: () => void
   returnToCosmic: () => void
 }
 
@@ -151,7 +156,7 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   selectedEvent: null,
   hoveredEvent: null,
   cameraPosition: { lat: 30, lng: 20, altitude: 3.0 },
-  autoRotate: true,
+  autoRotate: false,
   highlightedLocations: [],
   cameraMode: 'orbit',
   flyState: { heading: 0, pitch: 0, speed: 1.0 },
@@ -160,6 +165,7 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   viewportBounds: null,
   zoomLevel: 'cosmic',
   flyTarget: null,
+  rayshiftSteps: null,
   selectedCategories: [],
   minImportance: 1,
 
@@ -242,10 +248,14 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
 
   setGlobeMarkers: (markers) => set({ globeMarkers: markers }),
 
+  setRayshiftSteps: (steps) => set({ rayshiftSteps: steps }),
+
+  clearRayshiftSteps: () => set({ rayshiftSteps: null }),
+
   returnToCosmic: () =>
     set({
       cameraPosition: { lat: 30, lng: 20, altitude: 3.0 },
-      autoRotate: true,
+      autoRotate: false,
       zoomLevel: 'cosmic',
       viewMode: 'globe',
     }),

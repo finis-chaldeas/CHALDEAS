@@ -9,6 +9,7 @@
 import { useMemo, useRef, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTimelineStore, ERAS, TimelineDisplayMode } from '../../store/timelineStore'
+import { useGlobeStore } from '../../store/globeStore'
 import './UnifiedTimeline.css'
 
 // Era definitions with colors
@@ -23,7 +24,6 @@ const ERA_STYLES = [
 // Speed presets
 const SPEED_PRESETS = [
   { label: '1x', value: 5 },
-  { label: '2x', value: 10 },
   { label: '5x', value: 25 },
   { label: '10x', value: 50 },
 ]
@@ -51,6 +51,8 @@ export function UnifiedTimeline({ events = [] }: Props) {
     setDisplayMode,
     jumpToEra,
   } = useTimelineStore()
+
+  const { autoRotate, setAutoRotate } = useGlobeStore()
 
   const minYear = yearRange.min
   const maxYear = yearRange.max
@@ -332,9 +334,16 @@ export function UnifiedTimeline({ events = [] }: Props) {
           </span>
         </div>
 
-        {/* Speed Controls - standard and expanded */}
+        {/* Speed Controls + Pause - standard and expanded */}
         {displayMode !== 'compact' && (
           <div className="timeline-speed">
+            <button
+              className={`speed-btn speed-btn-globe ${!autoRotate ? 'active' : ''}`}
+              onClick={() => setAutoRotate(!autoRotate)}
+              title={autoRotate ? t('globe.stopRotation', 'Stop globe') : t('globe.startRotation', 'Spin globe')}
+            >
+              {autoRotate ? '🌐' : '⏹'}
+            </button>
             {SPEED_PRESETS.map((preset) => (
               <button
                 key={preset.value}

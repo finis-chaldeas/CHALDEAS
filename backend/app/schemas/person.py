@@ -9,6 +9,7 @@ from app.schemas.source import Source
 class PersonBase(BaseModel):
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     birth_year: Optional[int] = None
     death_year: Optional[int] = None
     lifespan_display: str
@@ -86,6 +87,7 @@ class PersonRelation(BaseModel):
     id: int
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     birth_year: Optional[int] = None
     death_year: Optional[int] = None
     strength: int = 0
@@ -110,6 +112,7 @@ class FlowEvent(BaseModel):
     event_id: int
     title: str
     title_ko: Optional[str] = None
+    title_ja: Optional[str] = None
     year: Optional[int] = None
     year_end: Optional[int] = None
     location: Optional[str] = None
@@ -129,6 +132,7 @@ class PersonFlow(BaseModel):
     person_id: int
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     birth_year: Optional[int] = None
     death_year: Optional[int] = None
     birthplace: Optional[FlowLocation] = None

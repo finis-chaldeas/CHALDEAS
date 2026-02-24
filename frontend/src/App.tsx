@@ -15,9 +15,11 @@ import { TourOverlay } from './components/tour'
 import { HistoryViewer, HistoryEditor } from './components/history'
 import { NarrativePanel } from './components/narrative'
 import { SourceBrowser } from './components/sources'
+import Rayshift from './components/rayshift/Rayshift'
 import WorldBriefing from './components/globe/WorldBriefing'
 import ViewportFeed from './components/globe/ViewportFeed'
 import FloatingButtons from './components/globe/FloatingButtons'
+import EraFeed from './components/globe/EraFeed'
 import DeepReadModal from './components/navigator/DeepReadModal'
 import type { ShebaEpisode } from './data/shebaEpisodes'
 import { useTimelineStore } from './store/timelineStore'
@@ -25,7 +27,7 @@ import { useGlobeStore } from './store/globeStore'
 import { useSettingsStore } from './store/settingsStore'
 import { useObservationStore, getEraFromYear } from './store/observationStore'
 import { useQuery } from '@tanstack/react-query'
-import { api } from './api/client'
+import { api, locationsApi } from './api/client'
 import type { Event } from './types'
 
 // Lazy load heavy components (Three.js/Globe, panels)
@@ -49,8 +51,6 @@ const PanelLoader = () => (
   </div>
 )
 
-const GLOBE_STYLE_KEYS = ['default', 'holo', 'night'] as const
-
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
   useEffect(() => {
@@ -67,13 +67,11 @@ function App() {
   const isMobile = useIsMobile()
   const { currentYear, setCurrentYear } = useTimelineStore()
   const { selectedEvent, setSelectedEvent, flyToLocation, viewMode, globeMarkers } = useGlobeStore()
-  const { globeStyle: settingsGlobeStyle, setGlobeStyle: setSettingsGlobeStyle } = useSettingsStore()
+  const { globeStyle } = useSettingsStore()
   const { recordEventView, recordPersonView } = useObservationStore()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
-  const globeStyle = settingsGlobeStyle
-  const setGlobeStyle = setSettingsGlobeStyle
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [initialChatQuery, setInitialChatQuery] = useState<string | null>(null)
   const [isChainOpen, setIsChainOpen] = useState(false)
@@ -92,13 +90,14 @@ function App() {
   const [editingHistoryId, setEditingHistoryId] = useState<number | null>(null)
   const [isDeepReadOpen, setIsDeepReadOpen] = useState(false)
   const [isSourceBrowserOpen, setIsSourceBrowserOpen] = useState(false)
+  const [sourceBrowserSourceId, setSourceBrowserSourceId] = useState<number | null>(null)
   const [narrativeEventId, setNarrativeEventId] = useState<number | null>(null)
   const [narrativePersonId, setNarrativePersonId] = useState<number | null>(null)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
-  // Rayshift state (Phase 8)
-  const [rayshiftMode, setRayshiftMode] = useState<'causal' | 'life' | 'tour' | null>(null)
-  const [, setRayshiftEntityId] = useState<number | null>(null)
+  // Rayshift state
+  const [rayshiftMode, setRayshiftMode] = useState<'causal' | 'life' | 'tour' | 'hierarchy' | null>(null)
+  const [rayshiftEntityId, setRayshiftEntityId] = useState<number | null>(null)
 
   // Handlers for entity detail views
   const handlePersonClick = (personId: number) => {
@@ -110,6 +109,22 @@ function App() {
   const handleLocationClick = (locationId: number) => {
     setPersonDetailId(null)
     setLocationDetailId(locationId)
+  }
+
+  // Narrative panel location click: fly globe to location
+  const handleNarrativeLocationClick = async (locationId: number) => {
+    try {
+      const res = await locationsApi.get(locationId)
+      const loc = res.data
+      if (loc?.latitude && loc?.longitude) {
+        setNarrativeEventId(null)
+        setNarrativePersonId(null)
+        setSelectedEvent(null)
+        flyToLocation(loc.latitude, loc.longitude)
+      }
+    } catch (err) {
+      console.error('Failed to fetch location:', err)
+    }
   }
 
   const handleCloseEntityView = () => {
@@ -249,6 +264,10 @@ function App() {
             onChatClick={() => setIsChatOpen(true)}
             onMenuClick={() => setIsSettingsOpen(true)}
           />
+          <EraFeed
+            onEventClick={handleNarrativeEventClick}
+            onPersonClick={handleNarrativePersonClick}
+          />
         </>
       )}
 
@@ -299,8 +318,14 @@ function App() {
         }}
         onEventClick={handleNarrativeEventClick}
         onPersonClick={handleNarrativePersonClick}
-        onSourceClick={() => {
+        onLocationClick={handleNarrativeLocationClick}
+        onSourceClick={(sourceId) => {
+          setSourceBrowserSourceId(sourceId)
           setIsSourceBrowserOpen(true)
+        }}
+        onRayshift={(mode, entityId) => {
+          setRayshiftMode(mode)
+          setRayshiftEntityId(entityId)
         }}
       />
 
@@ -490,11 +515,26 @@ function App() {
       {/* Source Browser */}
       <SourceBrowser
         isOpen={isSourceBrowserOpen}
-        onClose={() => setIsSourceBrowserOpen(false)}
+        onClose={() => { setIsSourceBrowserOpen(false); setSourceBrowserSourceId(null) }}
         onPersonClick={(personId) => {
           handleNarrativePersonClick(personId)
         }}
+        initialSourceId={sourceBrowserSourceId}
       />
+
+      {/* Rayshift Navigation Bar */}
+      {rayshiftMode && rayshiftEntityId && (
+        <Rayshift
+          mode={rayshiftMode}
+          entityId={rayshiftEntityId}
+          onClose={() => {
+            setRayshiftMode(null)
+            setRayshiftEntityId(null)
+          }}
+          onEventClick={handleNarrativeEventClick}
+          onPersonClick={handleNarrativePersonClick}
+        />
+      )}
 
       {/* Hierarchy Explorer */}
       {isHierarchyOpen && (

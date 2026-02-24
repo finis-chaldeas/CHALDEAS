@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { sourcesApi } from '../../api/client'
 import type { SourceDetail, SourcePerson, SourceMention } from '../../types'
 
-type SourceTab = 'persons' | 'mentions'
+type SourceTab = 'content' | 'persons' | 'mentions'
 
 // ─── Source Persons Tab ─────────────────────────────────────
 
@@ -22,46 +22,39 @@ function SourcePersonsTab({
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-2">
+      <div className="source-skeleton-list">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-8 bg-chaldea-border rounded" />
+          <div key={i} className="source-skeleton" style={{ height: '2rem' }} />
         ))}
       </div>
     )
   }
 
   if (!persons || persons.length === 0) {
-    return <p className="text-xs text-chaldea-text italic">No persons mentioned in this source.</p>
+    return <p className="source-mention-context">No persons mentioned in this source.</p>
   }
 
   const sorted = [...persons].sort((a, b) => b.mention_count - a.mention_count)
   const maxMentions = Math.max(...sorted.map((p) => p.mention_count), 1)
 
   return (
-    <div className="space-y-1">
+    <div>
       {sorted.map((p) => (
         <button
           key={p.id}
           onClick={() => onPersonClick(p.id)}
-          className="w-full text-left px-3 py-2 rounded text-xs border border-chaldea-border
-                     hover:bg-chaldea-cyan/10 transition-colors group"
+          className="source-person-item"
         >
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-baseline gap-1.5 min-w-0 flex-1">
-              <span className="text-chaldea-text-bright truncate group-hover:text-chaldea-cyan transition-colors">
-                {p.name}
-              </span>
-              {p.role && (
-                <span className="text-chaldea-text text-[10px] shrink-0">({p.role})</span>
-              )}
+          <div className="source-person-row">
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', minWidth: 0, flex: 1 }}>
+              <span className="source-person-name">{p.name}</span>
+              {p.role && <span className="source-person-role">({p.role})</span>}
             </div>
-            <span className="text-chaldea-text text-[10px] shrink-0">
-              {p.mention_count}x
-            </span>
+            <span className="source-person-count">{p.mention_count}x</span>
           </div>
-          <div className="mt-1 h-[2px] bg-chaldea-border rounded-full overflow-hidden">
+          <div className="source-person-bar">
             <div
-              className="h-full bg-chaldea-gold rounded-full transition-all"
+              className="source-person-bar-fill"
               style={{ width: `${(p.mention_count / maxMentions) * 100}%` }}
             />
           </div>
@@ -82,16 +75,16 @@ function SourceMentionsTab({ sourceId }: { sourceId: number }) {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-2">
+      <div className="source-skeleton-list">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-12 bg-chaldea-border rounded" />
+          <div key={i} className="source-skeleton" style={{ height: '3rem' }} />
         ))}
       </div>
     )
   }
 
   if (!mentions || mentions.length === 0) {
-    return <p className="text-xs text-chaldea-text italic">No mentions recorded for this source.</p>
+    return <p className="source-mention-context">No mentions recorded for this source.</p>
   }
 
   function highlightEntity(context: string, entityName: string): JSX.Element {
@@ -108,35 +101,30 @@ function SourceMentionsTab({ sourceId }: { sourceId: number }) {
     return (
       <>
         {before}
-        <span className="text-chaldea-cyan font-medium">{match}</span>
+        <span className="source-mention-highlight">{match}</span>
         {after}
       </>
     )
   }
 
-  const entityTypeBadge: Record<string, string> = {
-    person: 'text-chaldea-cyan',
-    event: 'text-chaldea-orange',
-    location: 'text-chaldea-green',
+  const nameClass: Record<string, string> = {
+    person: 'source-mention-name--person',
+    event: 'source-mention-name--event',
+    location: 'source-mention-name--location',
   }
 
   return (
-    <div className="space-y-2">
+    <div>
       {mentions.map((m) => (
-        <div
-          key={m.id}
-          className="px-3 py-2 rounded border border-chaldea-border text-xs"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`font-medium ${entityTypeBadge[m.entity_type] || 'text-chaldea-text-bright'}`}>
+        <div key={m.id} className="source-mention-item">
+          <div className="source-mention-header">
+            <span className={`source-mention-name ${nameClass[m.entity_type] || ''}`}>
               {m.entity_name}
             </span>
-            <span className="text-[9px] text-chaldea-text uppercase px-1 py-0.5 rounded border border-chaldea-border">
-              {m.entity_type}
-            </span>
+            <span className="source-mention-type-tag">{m.entity_type}</span>
           </div>
           {m.context && (
-            <p className="text-[11px] text-chaldea-text leading-relaxed italic">
+            <p className="source-mention-context">
               "...{highlightEntity(m.context, m.entity_name)}..."
             </p>
           )}
@@ -144,6 +132,109 @@ function SourceMentionsTab({ sourceId }: { sourceId: number }) {
       ))}
     </div>
   )
+}
+
+// ─── Wiki Content Tab ──────────────────────────────────────
+
+function SourceWikiContent({ sourceId }: { sourceId: number }) {
+  const { data: wiki, isLoading } = useQuery({
+    queryKey: ['source-wiki', sourceId],
+    queryFn: () => sourcesApi.getWiki(sourceId),
+    select: (res) => res.data as {
+      source_id: number
+      title: string
+      content_html?: string | null
+      content_text?: string | null
+      word_count?: number
+      external_url?: string
+      status: string
+    },
+  })
+
+  if (isLoading) {
+    return (
+      <div className="source-skeleton-detail">
+        <div className="source-skeleton source-skeleton-body" />
+      </div>
+    )
+  }
+
+  if (!wiki) return null
+
+  // If we have HTML content, render it
+  if (wiki.status === 'ok' && wiki.content_html) {
+    return (
+      <div className="source-wiki-container">
+        {wiki.word_count && (
+          <div style={{ fontSize: '0.65rem', color: 'var(--chaldea-text)', marginBottom: '0.75rem' }}>
+            {wiki.word_count.toLocaleString()} words
+          </div>
+        )}
+        <div
+          className="source-wiki-content"
+          dangerouslySetInnerHTML={{ __html: wiki.content_html }}
+        />
+        {wiki.external_url && (
+          <div className="source-detail-footer">
+            <a
+              href={wiki.external_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="source-detail-external"
+            >
+              View on Wikipedia &rarr;
+            </a>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Fallback: plain text
+  if (wiki.status === 'ok' && wiki.content_text) {
+    return (
+      <div className="source-wiki-container">
+        <div className="source-text">{wiki.content_text}</div>
+        {wiki.external_url && (
+          <div className="source-detail-footer">
+            <a
+              href={wiki.external_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="source-detail-external"
+            >
+              View on Wikipedia &rarr;
+            </a>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ZIM not found or other status — show external link
+  if (wiki.external_url) {
+    return (
+      <div className="source-wiki-container">
+        <div className="source-status">
+          {wiki.status === 'zim_not_found'
+            ? 'Local Wikipedia archive not available. View the article online.'
+            : wiki.status === 'article_not_found'
+              ? 'Article not found in local archive. View it online.'
+              : 'Content unavailable locally.'}
+        </div>
+        <a
+          href={wiki.external_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="source-detail-external"
+        >
+          Read on Wikipedia &rarr;
+        </a>
+      </div>
+    )
+  }
+
+  return null
 }
 
 // ─── Source Detail Panel ────────────────────────────────────
@@ -155,7 +246,7 @@ interface SourceDetailPanelProps {
 }
 
 export function SourceDetailPanel({ sourceId, onBack, onPersonClick }: SourceDetailPanelProps) {
-  const [activeTab, setActiveTab] = useState<SourceTab>('persons')
+  const [activeTab, setActiveTab] = useState<SourceTab>('content')
 
   const { data: source, isLoading, isError } = useQuery({
     queryKey: ['source', sourceId],
@@ -163,108 +254,82 @@ export function SourceDetailPanel({ sourceId, onBack, onPersonClick }: SourceDet
     select: (res) => res.data as SourceDetail,
   })
 
-  const typeBadgeColor: Record<string, string> = {
-    book: 'border-chaldea-gold text-chaldea-gold',
-    wikipedia: 'border-chaldea-cyan text-chaldea-cyan',
-    wikidata: 'border-chaldea-green text-chaldea-green',
-    article: 'border-chaldea-magenta text-chaldea-magenta',
+  const typeClass: Record<string, string> = {
+    book: 'source-type-tag--book',
+    wikipedia: 'source-type-tag--wikipedia',
+    wikidata: 'source-type-tag--wikidata',
+    article: 'source-type-tag--article',
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="source-detail">
       {/* Back */}
-      <div className="flex items-center gap-2 p-3 border-b border-chaldea-border">
-        <button
-          onClick={onBack}
-          className="w-7 h-7 flex items-center justify-center rounded border border-chaldea-border
-                     text-chaldea-text hover:text-chaldea-cyan hover:border-chaldea-cyan transition-colors text-sm"
-          title="Back to source list"
-        >
+      <div className="source-detail-header">
+        <button onClick={onBack} className="source-detail-back" title="Back to source list">
           &larr;
         </button>
-        <span className="text-xs text-chaldea-text">Sources</span>
+        <span className="source-detail-breadcrumb">Sources</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="source-detail-body">
         {isLoading && (
-          <div className="p-6">
-            <div className="animate-pulse space-y-3">
-              <div className="h-5 bg-chaldea-border rounded w-3/4" />
-              <div className="h-3 bg-chaldea-border rounded w-1/2" />
-              <div className="h-16 bg-chaldea-border rounded" />
-            </div>
+          <div className="source-skeleton-detail">
+            <div className="source-skeleton source-skeleton-title" />
+            <div className="source-skeleton source-skeleton-author" />
+            <div className="source-skeleton source-skeleton-body" />
           </div>
         )}
 
         {isError && (
-          <div className="p-6">
-            <p className="text-sm text-chaldea-magenta">Failed to load source details.</p>
-          </div>
+          <div className="source-error">Failed to load source details.</div>
         )}
 
         {source && (
-          <div className="p-5 space-y-4">
+          <>
             {/* Header */}
-            <div>
-              <div className="flex items-start gap-2">
-                <h2 className="text-lg font-semibold text-chaldea-text-bright leading-tight flex-1">
-                  {source.title}
-                </h2>
-                <span
-                  className={`shrink-0 mt-1 px-1.5 py-0.5 rounded text-[10px] uppercase border ${
-                    typeBadgeColor[source.type] || 'border-chaldea-border text-chaldea-text'
-                  }`}
-                >
-                  {source.type}
-                </span>
-              </div>
-              {source.author && (
-                <p className="text-sm text-chaldea-text mt-1">by {source.author}</p>
-              )}
+            <div className="source-detail-title-row">
+              <h2 className="source-detail-title">{source.title}</h2>
+              <span className={`source-type-tag ${typeClass[source.type] || ''}`}>
+                {source.type}
+              </span>
             </div>
+            {source.author && (
+              <p className="source-detail-author">by {source.author}</p>
+            )}
 
             {/* Stats */}
-            <div className="flex items-center gap-4 text-xs">
+            <div className="source-detail-stats">
               {source.mention_count !== undefined && source.mention_count > 0 && (
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-chaldea-cyan" />
-                  <span className="text-chaldea-text">
-                    <span className="text-chaldea-text-bright font-medium">{source.mention_count}</span> mentions
-                  </span>
+                <div className="source-detail-stat">
+                  <span className="source-detail-stat-dot source-detail-stat-dot--cyan" />
+                  <span><span className="source-detail-stat-value">{source.mention_count}</span> mentions</span>
                 </div>
               )}
               {source.person_count !== undefined && source.person_count > 0 && (
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-chaldea-gold" />
-                  <span className="text-chaldea-text">
-                    <span className="text-chaldea-text-bright font-medium">{source.person_count}</span> persons
-                  </span>
+                <div className="source-detail-stat">
+                  <span className="source-detail-stat-dot source-detail-stat-dot--gold" />
+                  <span><span className="source-detail-stat-value">{source.person_count}</span> persons</span>
                 </div>
               )}
               {source.event_count !== undefined && source.event_count > 0 && (
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-chaldea-orange" />
-                  <span className="text-chaldea-text">
-                    <span className="text-chaldea-text-bright font-medium">{source.event_count}</span> events
-                  </span>
+                <div className="source-detail-stat">
+                  <span className="source-detail-stat-dot source-detail-stat-dot--orange" />
+                  <span><span className="source-detail-stat-value">{source.event_count}</span> events</span>
                 </div>
               )}
             </div>
 
             {/* Tab bar */}
-            <div className="flex border-b border-chaldea-border">
+            <div className="source-tab-bar">
               {([
-                { key: 'persons' as SourceTab, label: 'Persons Mentioned' },
+                { key: 'content' as SourceTab, label: 'Article' },
+                { key: 'persons' as SourceTab, label: 'Persons' },
                 { key: 'mentions' as SourceTab, label: 'Mentions' },
               ]).map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`px-4 py-2 text-xs font-medium transition-colors border-b-2 -mb-px ${
-                    activeTab === tab.key
-                      ? 'text-chaldea-cyan border-chaldea-cyan'
-                      : 'text-chaldea-text border-transparent hover:text-chaldea-text-bright hover:border-chaldea-border'
-                  }`}
+                  className={`source-tab-btn ${activeTab === tab.key ? 'source-tab-btn--active' : ''}`}
                 >
                   {tab.label}
                 </button>
@@ -272,25 +337,24 @@ export function SourceDetailPanel({ sourceId, onBack, onPersonClick }: SourceDet
             </div>
 
             {/* Tab content */}
-            <div>
-              {activeTab === 'persons' && <SourcePersonsTab sourceId={sourceId} onPersonClick={onPersonClick} />}
-              {activeTab === 'mentions' && <SourceMentionsTab sourceId={sourceId} />}
-            </div>
+            {activeTab === 'content' && <SourceWikiContent sourceId={sourceId} />}
+            {activeTab === 'persons' && <SourcePersonsTab sourceId={sourceId} onPersonClick={onPersonClick} />}
+            {activeTab === 'mentions' && <SourceMentionsTab sourceId={sourceId} />}
 
-            {/* Read Full link */}
-            {source.url && (
-              <div className="border-t border-chaldea-border pt-3">
+            {/* External link (only if not showing in content tab) */}
+            {activeTab !== 'content' && source.url && (
+              <div className="source-detail-footer">
                 <a
                   href={source.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-chaldea-cyan hover:underline"
+                  className="source-detail-external"
                 >
-                  Read Full Source
+                  View Source &rarr;
                 </a>
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

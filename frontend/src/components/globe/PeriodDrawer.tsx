@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { timelineApi } from '../../api/client'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import type { PeriodEvent, PeriodPerson } from '../../types'
 
 function formatYear(year: number): string {
@@ -39,6 +40,7 @@ interface PeriodDrawerProps {
 }
 
 export default function PeriodDrawer({ periodStart, onClose, onEventClick, onPersonClick }: PeriodDrawerProps) {
+  const { preferredLanguage } = useSettingsStore()
   const drawerRef = useRef<HTMLDivElement>(null)
 
   const { data: events, isLoading: eventsLoading } = useQuery({
@@ -160,7 +162,7 @@ export default function PeriodDrawer({ periodStart, onClose, onEventClick, onPer
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-[11px] text-chaldea-text-bright group-hover:text-white leading-tight flex-1">
-                        {event.title}
+                        {getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}
                       </div>
                       {event.importance_score != null && (
                         <ImportanceStars score={event.importance_score} />
@@ -217,10 +219,7 @@ export default function PeriodDrawer({ periodStart, onClose, onEventClick, onPer
                                transition-all duration-150 group"
                   >
                     <div className="text-[11px] text-chaldea-text-bright group-hover:text-white leading-tight">
-                      {person.name}
-                      {person.name_ko && (
-                        <span className="text-chaldea-text/40 ml-1.5">{person.name_ko}</span>
-                      )}
+                      {getLocalizedText(person as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.name}
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
                       <Lifespan birth={person.birth_year} death={person.death_year} />

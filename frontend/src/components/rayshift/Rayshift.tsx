@@ -1,19 +1,23 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { eventsApi, personsApi } from '../../api/client'
+import { eventsApi, personsApi, api } from '../../api/client'
 import { useGlobeStore } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import type { EventRelationship, FlowEvent } from '../../types'
 
-type RayshiftMode = 'causal' | 'life' | 'tour'
+type RayshiftMode = 'causal' | 'life' | 'tour' | 'hierarchy'
 
 interface RayshiftStep {
   id: number
   title: string
+  title_ko?: string
+  title_ja?: string
   year?: number
   lat?: number
   lng?: number
   description?: string
+  isCurrent?: boolean
 }
 
 interface RayshiftProps {
@@ -32,20 +36,61 @@ function formatYear(year: number | undefined): string {
 
 export default function Rayshift({ mode, entityId, onClose, onEventClick }: RayshiftProps) {
   const flyToLocation = useGlobeStore((s) => s.flyToLocation)
+  const setRayshiftSteps = useGlobeStore((s) => s.setRayshiftSteps)
+  const clearRayshiftSteps = useGlobeStore((s) => s.clearRayshiftSteps)
   const setCurrentYear = useTimelineStore((s) => s.setCurrentYear)
+  const { preferredLanguage } = useSettingsStore()
   const [currentStep, setCurrentStep] = useState(0)
 
-  // Fetch steps based on mode
+  // Stable ref for onEventClick to prevent infinite loop
+  const onEventClickRef = useRef(onEventClick)
+  onEventClickRef.current = onEventClick
+
+  // Track if initial position has been set
+  const initialized = useRef(false)
+
+  // ─── Causal Chain ─────────────────────────────────────
   const { data: causalSteps } = useQuery({
     queryKey: ['rayshift-causal', entityId],
     queryFn: async () => {
       const res = await eventsApi.getRelationships(entityId)
       const rels = (res.data?.relationships ?? []) as EventRelationship[]
-      // Build chain: entity itself + outgoing effects
+
+      const causes = rels.filter(r => r.direction === 'incoming')
+      const effects = rels.filter(r => r.direction === 'outgoing')
+
+      // Fetch all event details in parallel for location data
+      const allIds = [
+        ...causes.map(r => r.related_event_id),
+        entityId,
+        ...effects.map(r => r.related_event_id),
+      ]
+      const uniqueIds = [...new Set(allIds)]
+      const details = await Promise.all(
+        uniqueIds.map(id => eventsApi.get(id).then(r => r.data).catch(() => null))
+      )
+      const detailMap = new Map(details.filter(Boolean).map(d => [d.id, d]))
+
+      // Build steps: causes (chronological) → origin → effects (chronological)
       const steps: RayshiftStep[] = []
-      // Fetch origin event
-      const originRes = await eventsApi.get(entityId)
-      const origin = originRes.data
+
+      const sortedCauses = [...causes].sort(
+        (a, b) => (a.related_event_date_start ?? 0) - (b.related_event_date_start ?? 0)
+      )
+      for (const r of sortedCauses) {
+        const d = detailMap.get(r.related_event_id)
+        steps.push({
+          id: r.related_event_id,
+          title: r.related_event_title,
+          year: r.related_event_date_start,
+          lat: d?.latitude ?? d?.location?.latitude,
+          lng: d?.longitude ?? d?.location?.longitude,
+          description: r.description,
+        })
+      }
+
+      // Origin event
+      const origin = detailMap.get(entityId)
       if (origin) {
         steps.push({
           id: origin.id as number,
@@ -54,24 +99,31 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
           lat: origin.latitude ?? origin.location?.latitude,
           lng: origin.longitude ?? origin.location?.longitude,
           description: origin.description,
+          isCurrent: true,
         })
       }
-      // Add related events (causes first, then effects)
-      const causes = rels.filter(r => r.direction === 'incoming')
-      const effects = rels.filter(r => r.direction === 'outgoing')
-      for (const r of [...causes, ...effects]) {
+
+      const sortedEffects = [...effects].sort(
+        (a, b) => (a.related_event_date_start ?? 0) - (b.related_event_date_start ?? 0)
+      )
+      for (const r of sortedEffects) {
+        const d = detailMap.get(r.related_event_id)
         steps.push({
           id: r.related_event_id,
           title: r.related_event_title,
           year: r.related_event_date_start,
+          lat: d?.latitude ?? d?.location?.latitude,
+          lng: d?.longitude ?? d?.location?.longitude,
           description: r.description,
         })
       }
+
       return steps
     },
     enabled: mode === 'causal',
   })
 
+  // ─── Life Journey ─────────────────────────────────────
   const { data: lifeSteps } = useQuery({
     queryKey: ['rayshift-life', entityId],
     queryFn: async () => {
@@ -80,6 +132,8 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
       return flow.map((f): RayshiftStep => ({
         id: f.event_id,
         title: f.title,
+        title_ko: f.title_ko,
+        title_ja: f.title_ja,
         year: f.year,
         lat: f.lat,
         lng: f.lng,
@@ -89,32 +143,113 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
     enabled: mode === 'life',
   })
 
-  const steps = mode === 'causal' ? causalSteps : mode === 'life' ? lifeSteps : []
+  // ─── Hierarchy (sub-events of a parent) ──────────────────
+  const { data: hierarchySteps } = useQuery({
+    queryKey: ['rayshift-hierarchy', entityId],
+    queryFn: async () => {
+      // Fetch children of this event
+      const childRes = await eventsApi.getChildren(entityId)
+      const children = (childRes.data?.items ?? childRes.data?.children ?? []) as Array<{
+        id: number; title: string; date_start?: number; child_count?: number
+      }>
 
-  // Navigate to current step
-  const navigateToStep = useCallback((step: RayshiftStep) => {
-    if (step.lat && step.lng) {
-      flyToLocation(step.lat, step.lng)
+      // Sort chronologically
+      const sorted = [...children].sort((a, b) => (a.date_start ?? 0) - (b.date_start ?? 0))
+
+      // Fetch parent event detail + all children details in parallel for locations
+      interface EventDetail {
+        id: number; title: string; title_ko?: string; title_ja?: string; date_start?: number; description?: string
+        latitude?: number; longitude?: number; location?: { latitude?: number; longitude?: number }
+      }
+      const allIds = [entityId, ...sorted.map(c => c.id)]
+      const details = await Promise.all(
+        allIds.map(id => api.get(`/events/${id}`).then(r => r.data as EventDetail).catch(() => null))
+      )
+      const detailMap = new Map(details.filter((d): d is EventDetail => d !== null).map(d => [d.id, d]))
+
+      // Build steps: parent (origin) first, then children chronologically
+      const steps: RayshiftStep[] = []
+      const origin = detailMap.get(entityId)
+      if (origin) {
+        steps.push({
+          id: origin.id as number,
+          title: origin.title,
+          title_ko: origin.title_ko,
+          title_ja: origin.title_ja,
+          year: origin.date_start,
+          lat: origin.latitude ?? origin.location?.latitude,
+          lng: origin.longitude ?? origin.location?.longitude,
+          description: origin.description,
+          isCurrent: true,
+        })
+      }
+      for (const child of sorted) {
+        const d = detailMap.get(child.id)
+        steps.push({
+          id: child.id,
+          title: child.title,
+          title_ko: d?.title_ko,
+          title_ja: d?.title_ja,
+          year: child.date_start,
+          lat: d?.latitude ?? d?.location?.latitude,
+          lng: d?.longitude ?? d?.location?.longitude,
+          description: d?.description,
+        })
+      }
+      return steps
+    },
+    enabled: mode === 'hierarchy',
+  })
+
+  const steps = mode === 'causal' ? causalSteps : mode === 'life' ? lifeSteps : mode === 'hierarchy' ? hierarchySteps : []
+
+  // Initialize: set currentStep to origin event index (don't navigate — user is already there)
+  useEffect(() => {
+    if (!initialized.current && steps && steps.length > 0) {
+      initialized.current = true
+      const originIdx = steps.findIndex(s => s.id === entityId)
+      if (originIdx >= 0) setCurrentStep(originIdx)
     }
+  }, [steps, entityId])
+
+  // Sync steps to globe store for visual overlay (markers + arcs)
+  useEffect(() => {
+    if (steps && steps.length > 0) {
+      const globeSteps = steps
+        .filter(s => s.lat != null && s.lng != null)
+        .map(s => ({ lat: s.lat!, lng: s.lng!, label: s.title }))
+      if (globeSteps.length > 0) setRayshiftSteps(globeSteps)
+    }
+    return () => { clearRayshiftSteps() }
+  }, [steps, setRayshiftSteps, clearRayshiftSteps])
+
+  // Navigate to a step: fly camera + set year + open card
+  const navigateToStep = useCallback(async (step: RayshiftStep) => {
     if (step.year) {
       setCurrentYear(step.year)
     }
-    if (mode === 'causal' || mode === 'tour') {
-      onEventClick(step.id)
-    } else if (mode === 'life') {
-      onEventClick(step.id)
+    if (step.lat != null && step.lng != null) {
+      flyToLocation(step.lat, step.lng)
     }
-  }, [flyToLocation, setCurrentYear, onEventClick, mode])
+    onEventClickRef.current(step.id)
+  }, [flyToLocation, setCurrentYear])
 
-  // Navigate on step change
-  useEffect(() => {
-    if (steps && steps.length > 0 && currentStep < steps.length) {
-      navigateToStep(steps[currentStep])
+  // Prev/Next — navigate only on explicit user action
+  const goPrev = () => {
+    const next = Math.max(0, currentStep - 1)
+    if (next !== currentStep && steps && next < steps.length) {
+      setCurrentStep(next)
+      navigateToStep(steps[next])
     }
-  }, [currentStep, steps, navigateToStep])
+  }
 
-  const goPrev = () => setCurrentStep((s) => Math.max(0, s - 1))
-  const goNext = () => setCurrentStep((s) => Math.min((steps?.length || 1) - 1, s + 1))
+  const goNext = () => {
+    const next = Math.min((steps?.length || 1) - 1, currentStep + 1)
+    if (next !== currentStep && steps && next < steps.length) {
+      setCurrentStep(next)
+      navigateToStep(steps[next])
+    }
+  }
 
   if (!steps || steps.length === 0) {
     return (
@@ -126,7 +261,7 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
   }
 
   const step = steps[currentStep]
-  const modeLabel = mode === 'causal' ? 'Causal Chain' : mode === 'life' ? 'Life Journey' : 'Guided Tour'
+  const modeLabel = mode === 'causal' ? 'Causal Chain' : mode === 'life' ? 'Life Journey' : mode === 'hierarchy' ? 'Story Journey' : 'Guided Tour'
 
   return (
     <div className="rayshift-bar">
@@ -141,10 +276,27 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
       </button>
 
       <div className="rayshift-current">
-        <span className="rayshift-title">{step.title}</span>
+        <span className="rayshift-title">{getLocalizedText(step as unknown as Record<string, unknown>, 'title', preferredLanguage) || step.title}</span>
         <span className="rayshift-meta">
           {step.year ? formatYear(step.year) : ''} ({currentStep + 1}/{steps.length})
         </span>
+      </div>
+
+      {/* Step dots */}
+      <div className="rayshift-dots">
+        {steps.map((s, i) => (
+          <button
+            key={s.id}
+            className={`rayshift-dot ${i === currentStep ? 'active' : i < currentStep ? 'visited' : ''}`}
+            onClick={() => {
+              if (i !== currentStep) {
+                setCurrentStep(i)
+                navigateToStep(steps[i])
+              }
+            }}
+            title={s.title}
+          />
+        ))}
       </div>
 
       <button
@@ -156,98 +308,6 @@ export default function Rayshift({ mode, entityId, onClose, onEventClick }: Rays
       </button>
 
       <button onClick={onClose} className="rayshift-close">{'\u2715'}</button>
-
-      <style>{`
-        .rayshift-bar {
-          position: fixed;
-          bottom: 70px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 60;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 8px 16px;
-          background: rgba(10, 14, 23, 0.95);
-          border: 1px solid rgba(0, 212, 255, 0.3);
-          border-radius: 8px;
-          backdrop-filter: blur(12px);
-          max-width: 90vw;
-        }
-
-        .rayshift-mode {
-          font-size: 9px;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          color: #fbbf24;
-          font-weight: 600;
-          white-space: nowrap;
-        }
-
-        .rayshift-nav-btn {
-          padding: 4px 10px;
-          border: 1px solid rgba(0, 212, 255, 0.3);
-          border-radius: 4px;
-          background: transparent;
-          color: #00d4ff;
-          font-size: 11px;
-          cursor: pointer;
-          transition: all 0.2s;
-          white-space: nowrap;
-        }
-
-        .rayshift-nav-btn:hover:not(:disabled) {
-          background: rgba(0, 212, 255, 0.15);
-        }
-
-        .rayshift-nav-btn:disabled {
-          opacity: 0.3;
-          cursor: default;
-        }
-
-        .rayshift-current {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          min-width: 120px;
-          max-width: 300px;
-        }
-
-        .rayshift-title {
-          font-size: 12px;
-          color: #d0e8f0;
-          font-weight: 500;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 100%;
-        }
-
-        .rayshift-meta {
-          font-size: 9px;
-          color: #8ba4b4;
-        }
-
-        .rayshift-close {
-          padding: 4px 8px;
-          border: 1px solid rgba(255, 51, 102, 0.3);
-          border-radius: 4px;
-          background: transparent;
-          color: #ff3366;
-          font-size: 12px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .rayshift-close:hover {
-          background: rgba(255, 51, 102, 0.15);
-        }
-
-        .rayshift-loading {
-          font-size: 11px;
-          color: #8ba4b4;
-        }
-      `}</style>
     </div>
   )
 }

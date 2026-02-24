@@ -122,6 +122,28 @@
     "submit": "Submit",
     "cancel": "Cancel"
   },
+  "location": {
+    "historyAtLocation": "History at this Location",
+    "historicalNames": "Historical Names",
+    "politicalHistory": "Political History",
+    "noEvents": "No historical events recorded at this location",
+    "events": "Events",
+    "names": "Names",
+    "timeSpan": "Time Span"
+  },
+  "narrative": {
+    "partOf": "Part of",
+    "story": "Story",
+    "events": "events",
+    "subEvents": "sub-events",
+    "keyFigures": "Key Figures",
+    "connectedEvents": "Connected Events",
+    "sources": "Sources",
+    "causes": "Causes",
+    "consequences": "Consequences",
+    "rayshiftStory": "Rayshift: Follow Story",
+    "rayshiftCausal": "Rayshift: Follow Causal Chain"
+  },
   "era": {
     "names": {
       "PREHISTORY": "Prehistory",

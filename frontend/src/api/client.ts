@@ -68,6 +68,7 @@ export const sourcesApi = {
     api.get(`/sources/${id}/persons`, { params }),
   getMentions: (id: number, params?: { entity_type?: string; limit?: number; offset?: number }) =>
     api.get(`/sources/${id}/mentions`, { params }),
+  getWiki: (id: number) => api.get(`/sources/wiki/${id}`),
 }
 
 export const locationsApi = {
@@ -83,6 +84,12 @@ export const nodesApi = {
     api.get('/globe/nodes', { params }),
   getEvents: (locationId: number, params?: { year_start?: number; year_end?: number; limit?: number; offset?: number }) =>
     api.get(`/globe/nodes/${locationId}/events`, { params }),
+}
+
+// Smart Markers API (hero cards + cluster bubbles)
+export const smartMarkersApi = {
+  get: (params: { year_start: number; year_end: number; zoom: string; bounds?: string }) =>
+    api.get('/globe/smart-markers', { params }),
 }
 
 export const searchApi = {

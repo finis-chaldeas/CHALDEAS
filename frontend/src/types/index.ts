@@ -170,6 +170,7 @@ export interface FlowEvent {
   event_id: number
   title: string
   title_ko?: string
+  title_ja?: string
   year?: number
   year_end?: number
   location?: string
@@ -197,13 +198,15 @@ export interface PersonRole extends Person {
 export interface Source {
   id: number
   name: string
-  type: 'primary' | 'secondary' | 'digital_archive'
+  title?: string
+  type: string
   url?: string
   author?: string
   publication_year?: number
   description?: string
-  reliability: 1 | 2 | 3 | 4 | 5
-  archive_type?: 'perseus' | 'ctext' | 'gutenberg' | 'latin_library' | 'augustana'
+  reliability?: number
+  archive_type?: string
+  content?: string
 }
 
 export interface SourceReference extends Source {
@@ -477,6 +480,7 @@ export interface EventRelationship {
   direction: 'incoming' | 'outgoing'
   related_event_title: string
   related_event_title_ko?: string
+  related_event_title_ja?: string
   related_event_date_start?: number
   related_event_date_end?: number
 }
@@ -526,6 +530,54 @@ export interface PersonSource {
   mention_count: number
   person_count?: number
   mentions?: { mention_text: string; context_text?: string; confidence?: number; chunk_index?: number }[]
+}
+
+// Smart Markers (Globe hero cards + cluster bubbles)
+export interface HeroMarker {
+  id: number
+  type: 'event'
+  lat: number
+  lng: number
+  title: string
+  title_ko?: string
+  title_ja?: string
+  description?: string
+  year?: number
+  year_end?: number
+  category?: string
+  importance: number
+  child_count: number
+  location_name?: string
+  location_name_ko?: string
+  location_name_ja?: string
+  location_id?: number
+}
+
+export interface ClusterEvent {
+  id: number
+  title: string
+  title_ko?: string
+  title_ja?: string
+  year?: number
+  importance?: number
+  category?: string
+}
+
+export interface ClusterBubble {
+  lat: number
+  lng: number
+  count: number
+  top_event_title?: string
+  top_importance?: number
+  year_range: (number | null)[]
+  top_events: ClusterEvent[]
+}
+
+export interface SmartMarkersResponse {
+  heroes: HeroMarker[]
+  clusters: ClusterBubble[]
+  zoom: string
+  total_events: number
 }
 
 // Content Report

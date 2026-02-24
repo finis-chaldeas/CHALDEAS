@@ -474,7 +474,8 @@ async def get_person_chain(
     result = db.execute(text("""
         SELECT
             ec.id, ec.event_a_id, ec.event_b_id, ec.direction, ec.connection_type,
-            ec.strength_score, ea.title, ea.date_start, eb.title, eb.date_start
+            ec.strength_score, ea.title, ea.date_start, eb.title, eb.date_start,
+            ea.title_ko, ea.title_ja, eb.title_ko, eb.title_ja
         FROM event_connections ec
         JOIN events ea ON ec.event_a_id = ea.id
         JOIN events eb ON ec.event_b_id = eb.id
@@ -490,8 +491,8 @@ async def get_person_chain(
     for row in result:
         connections.append({
             "id": row[0],
-            "event_a": {"id": row[1], "title": row[6], "year": row[7]},
-            "event_b": {"id": row[2], "title": row[8], "year": row[9]},
+            "event_a": {"id": row[1], "title": row[6], "title_ko": row[10], "title_ja": row[11], "year": row[7]},
+            "event_b": {"id": row[2], "title": row[8], "title_ko": row[12], "title_ja": row[13], "year": row[9]},
             "direction": row[3],
             "type": row[4],
             "strength": float(row[5])
@@ -525,7 +526,8 @@ async def get_location_chain(
     result = db.execute(text("""
         SELECT
             ec.id, ec.event_a_id, ec.event_b_id, ec.direction, ec.connection_type,
-            ec.strength_score, ea.title, ea.date_start, eb.title, eb.date_start
+            ec.strength_score, ea.title, ea.date_start, eb.title, eb.date_start,
+            ea.title_ko, ea.title_ja, eb.title_ko, eb.title_ja
         FROM event_connections ec
         JOIN events ea ON ec.event_a_id = ea.id
         JOIN events eb ON ec.event_b_id = eb.id
@@ -541,8 +543,8 @@ async def get_location_chain(
     for row in result:
         connections.append({
             "id": row[0],
-            "event_a": {"id": row[1], "title": row[6], "year": row[7]},
-            "event_b": {"id": row[2], "title": row[8], "year": row[9]},
+            "event_a": {"id": row[1], "title": row[6], "title_ko": row[10], "title_ja": row[11], "year": row[7]},
+            "event_b": {"id": row[2], "title": row[8], "title_ko": row[12], "title_ja": row[13], "year": row[9]},
             "direction": row[3],
             "type": row[4],
             "strength": float(row[5])

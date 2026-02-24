@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { timelineApi } from '../../api/client'
 import { useTimelineStore } from '../../store/timelineStore'
 import { useGlobeStore } from '../../store/globeStore'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import type { PeriodDetail, PeriodEvent, PeriodPerson } from '../../types'
 import PeriodDrawer from './PeriodDrawer'
 
@@ -20,6 +21,7 @@ interface WorldBriefingProps {
 export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepRead }: WorldBriefingProps) {
   const currentYear = useTimelineStore((s) => s.currentYear)
   const zoomLevel = useGlobeStore((s) => s.zoomLevel)
+  const { preferredLanguage } = useSettingsStore()
 
   const [expanded, setExpanded] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -56,18 +58,16 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
 
   return (
     <>
-      <div className="fixed top-2 left-1/2 -translate-x-1/2 z-20 max-w-[560px] w-[calc(100vw-2rem)] pointer-events-none">
+      <div className="world-briefing">
         {/* Single-line bar */}
         <button
           onClick={() => !isCompact && setExpanded((e) => !e)}
-          className="pointer-events-auto w-full flex items-center justify-center gap-3
-                     bg-chaldea-panel/80 backdrop-blur-xl rounded-lg border border-chaldea-border/30
-                     px-4 py-1.5 transition-all hover:border-chaldea-cyan/20"
+          className="world-briefing-bar"
         >
-          <span className="text-[10px] text-chaldea-cyan/60 tracking-widest uppercase shrink-0">
+          <span className="world-briefing-year">
             {formatYear(periodStart)}
           </span>
-          <span className="text-xs text-chaldea-text-bright font-medium truncate">
+          <span className="world-briefing-headline">
             {isLoading ? '...' : headline}
           </span>
           {!isCompact && (
@@ -79,14 +79,12 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
 
         {/* Expanded detail */}
         {expanded && !isCompact && (
-          <div className="pointer-events-auto bg-chaldea-panel/90 backdrop-blur-xl
-                          rounded-b-lg border border-t-0 border-chaldea-border/30
-                          px-4 py-3 max-h-[260px] overflow-y-auto">
+          <div className="world-briefing-expanded">
             {period?.narrative && (
-              <p className="text-[11px] text-chaldea-text leading-relaxed mb-2">{period.narrative}</p>
+              <p className="world-briefing-narrative">{period.narrative}</p>
             )}
             {period?.defining_moment && (
-              <p className="text-[10px] text-chaldea-orange italic mb-2">{period.defining_moment}</p>
+              <p className="world-briefing-moment">{period.defining_moment}</p>
             )}
 
             {topEvents.length > 0 && (
@@ -95,10 +93,8 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
                 {topEvents.map((evt) => (
                   <button key={evt.id}
                     onClick={(e) => { e.stopPropagation(); onEventClick(evt.id) }}
-                    className="text-[10px] text-chaldea-text-bright bg-chaldea-cyan/5
-                               border border-chaldea-cyan/10 rounded px-1.5 py-px
-                               hover:bg-chaldea-cyan/10 hover:border-chaldea-cyan/20 transition-colors">
-                    {evt.title}
+                    className="world-briefing-tag">
+                    {getLocalizedText(evt as unknown as Record<string, unknown>, 'title', preferredLanguage) || evt.title}
                   </button>
                 ))}
               </div>
@@ -110,44 +106,35 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
                 {topPersons.map((person) => (
                   <button key={person.id}
                     onClick={(e) => { e.stopPropagation(); onPersonClick(person.id) }}
-                    className="text-[10px] text-chaldea-text-bright bg-chaldea-orange/5
-                               border border-chaldea-orange/10 rounded px-1.5 py-px
-                               hover:bg-chaldea-orange/10 hover:border-chaldea-orange/20 transition-colors">
-                    {person.name}
+                    className="world-briefing-tag world-briefing-tag--person">
+                    {getLocalizedText(person as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.name}
                   </button>
                 ))}
               </div>
             )}
 
-            <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+            <div className="world-briefing-actions">
               <button
                 onClick={(e) => { e.stopPropagation(); setDrawerOpen((o) => !o) }}
-                className={`text-[9px] uppercase tracking-wide px-2 py-1 rounded border transition-colors
-                  ${drawerOpen
-                    ? 'bg-chaldea-cyan/10 border-chaldea-cyan/20 text-chaldea-cyan'
-                    : 'border-white/10 text-chaldea-text hover:text-chaldea-cyan hover:border-chaldea-cyan/20'}`}>
+                className={`world-briefing-action-btn ${drawerOpen ? 'active' : ''}`}>
                 {drawerOpen ? 'Close Details' : 'View Details'}
               </button>
               {onOpenDeepRead && (
                 <button
                   onClick={(e) => { e.stopPropagation(); onOpenDeepRead() }}
-                  className="text-[9px] uppercase tracking-wide px-2 py-1 rounded
-                             border border-white/10 text-chaldea-text
-                             hover:text-chaldea-orange hover:border-chaldea-orange/20 transition-colors">
+                  className="world-briefing-action-btn">
                   Deep Read
                 </button>
               )}
               <div className="flex-1" />
               <button onClick={(e) => { e.stopPropagation(); handleFeedback(1) }}
                 disabled={feedbackSent !== null}
-                className={`w-5 h-5 flex items-center justify-center text-[9px] rounded border transition-colors
-                  ${feedbackSent === 'up' ? 'border-chaldea-green/40 bg-chaldea-green/10 text-chaldea-green' : 'border-white/10 text-chaldea-text/50 hover:text-chaldea-green'}`}>
+                className={`world-briefing-feedback ${feedbackSent === 'up' ? 'active-up' : ''}`}>
                 &#x25B2;
               </button>
               <button onClick={(e) => { e.stopPropagation(); handleFeedback(-1) }}
                 disabled={feedbackSent !== null}
-                className={`w-5 h-5 flex items-center justify-center text-[9px] rounded border transition-colors
-                  ${feedbackSent === 'down' ? 'border-chaldea-magenta/40 bg-chaldea-magenta/10 text-chaldea-magenta' : 'border-white/10 text-chaldea-text/50 hover:text-chaldea-magenta'}`}>
+                className={`world-briefing-feedback ${feedbackSent === 'down' ? 'active-down' : ''}`}>
                 &#x25BC;
               </button>
             </div>

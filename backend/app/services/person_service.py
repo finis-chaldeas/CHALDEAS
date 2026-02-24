@@ -101,6 +101,7 @@ def get_related_persons(
             p.id,
             p.name,
             p.name_ko,
+            p.name_ja,
             p.birth_year,
             p.death_year,
             pr.strength,
@@ -118,6 +119,7 @@ def get_related_persons(
             p.id,
             p.name,
             p.name_ko,
+            p.name_ja,
             p.birth_year,
             p.death_year,
             pr.strength,
@@ -145,12 +147,13 @@ def get_related_persons(
             "id": row[0],
             "name": row[1],
             "name_ko": row[2],
-            "birth_year": row[3],
-            "death_year": row[4],
-            "strength": row[5],
-            "time_distance": row[6],
-            "relationship_type": row[7],
-            "is_bidirectional": row[8],
+            "name_ja": row[3],
+            "birth_year": row[4],
+            "death_year": row[5],
+            "strength": row[6],
+            "time_distance": row[7],
+            "relationship_type": row[8],
+            "is_bidirectional": row[9],
         })
 
     return relations
@@ -166,7 +169,7 @@ def get_person_flow(db: Session, person_id: int) -> dict:
 
     # Get events linked to this person, sorted chronologically
     result = db.execute(text("""
-        SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
+        SELECT e.id, e.title, e.title_ko, e.title_ja, e.date_start, e.date_end,
                l.name as location_name, l.latitude, l.longitude,
                ep.role
         FROM event_persons ep
@@ -182,12 +185,13 @@ def get_person_flow(db: Session, person_id: int) -> dict:
             "event_id": row[0],
             "title": row[1],
             "title_ko": row[2],
-            "year": row[3],
-            "year_end": row[4],
-            "location": row[5],
-            "lat": float(row[6]) if row[6] else None,
-            "lng": float(row[7]) if row[7] else None,
-            "role": row[8],
+            "title_ja": row[3],
+            "year": row[4],
+            "year_end": row[5],
+            "location": row[6],
+            "lat": float(row[7]) if row[7] else None,
+            "lng": float(row[8]) if row[8] else None,
+            "role": row[9],
         })
 
     # Build birthplace/deathplace info
@@ -213,6 +217,7 @@ def get_person_flow(db: Session, person_id: int) -> dict:
         "person_id": person.id,
         "name": person.name,
         "name_ko": person.name_ko,
+        "name_ja": person.name_ja,
         "birth_year": person.birth_year,
         "death_year": person.death_year,
         "birthplace": birthplace,

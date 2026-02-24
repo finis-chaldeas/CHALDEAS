@@ -37,6 +37,8 @@ def _batch_fetch_persons(db: Session, event_ids: list[int]) -> dict[int, dict]:
                 ep.event_id,
                 p.id AS person_id,
                 p.name AS person_name,
+                p.name_ko AS person_name_ko,
+                p.name_ja AS person_name_ja,
                 ep.role,
                 ROW_NUMBER() OVER (PARTITION BY ep.event_id ORDER BY p.id) AS rn
             FROM event_persons ep
@@ -49,7 +51,7 @@ def _batch_fetch_persons(db: Session, event_ids: list[int]) -> dict[int, dict]:
             WHERE event_id = ANY(:ids)
             GROUP BY event_id
         )
-        SELECT r.event_id, r.person_id, r.person_name, r.role, c.cnt
+        SELECT r.event_id, r.person_id, r.person_name, r.person_name_ko, r.person_name_ja, r.role, c.cnt
         FROM ranked r
         JOIN counts c ON c.event_id = r.event_id
         WHERE r.rn <= 3
@@ -57,12 +59,14 @@ def _batch_fetch_persons(db: Session, event_ids: list[int]) -> dict[int, dict]:
     """), {"ids": event_ids}).fetchall()
 
     result: dict[int, dict] = {}
-    for eid, pid, pname, role, cnt in rows:
+    for eid, pid, pname, pname_ko, pname_ja, role, cnt in rows:
         if eid not in result:
             result[eid] = {"persons": [], "person_count": cnt}
         result[eid]["persons"].append({
             "id": pid,
             "name": pname,
+            "name_ko": pname_ko,
+            "name_ja": pname_ja,
             "role": role or "participant",
         })
     return result
@@ -95,6 +99,7 @@ def event_to_dict(event, persons_data: dict | None = None, source_count: int | N
         "id": event.id,
         "title": event.title,
         "title_ko": event.title_ko,
+        "title_ja": event.title_ja,
         "date_start": event.date_start,
         "date_end": event.date_end,
         "importance": event.importance or 3,
@@ -106,6 +111,8 @@ def event_to_dict(event, persons_data: dict | None = None, source_count: int | N
         "location": {
             "id": location.id,
             "name": location.name,
+            "name_ko": location.name_ko,
+            "name_ja": location.name_ja,
             "latitude": float(location.latitude) if location.latitude else None,
             "longitude": float(location.longitude) if location.longitude else None,
         } if location else None,
@@ -352,6 +359,8 @@ def get_event(
         {
             "id": p.id,
             "name": p.name,
+            "name_ko": p.name_ko,
+            "name_ja": p.name_ja,
             "slug": p.slug if hasattr(p, 'slug') and p.slug else f"person-{p.id}",
             "role": "participant",
             "birth_year": p.birth_year,
@@ -363,6 +372,8 @@ def get_event(
         {
             "id": l.id,
             "name": l.name,
+            "name_ko": l.name_ko,
+            "name_ja": l.name_ja,
             "latitude": float(l.latitude) if l.latitude else None,
             "longitude": float(l.longitude) if l.longitude else None,
             "role": "location",
@@ -378,12 +389,13 @@ def get_event(
                 "id": parent.id,
                 "title": parent.title,
                 "title_ko": parent.title_ko,
+                "title_ja": parent.title_ja,
             }
 
     # Add children summary
     children = event_service.get_event_children(db, event.id, include_nested=False, limit=10)
     result["children"] = [
-        {"id": c.id, "title": c.title, "date_start": c.date_start}
+        {"id": c.id, "title": c.title, "title_ko": c.title_ko, "title_ja": c.title_ja, "date_start": c.date_start}
         for c in children
     ]
     result["child_count"] = len(children)
@@ -447,7 +459,7 @@ def get_event_children(
     )
 
     return {
-        "parent": {"id": event.id, "title": event.title},
+        "parent": {"id": event.id, "title": event.title, "title_ko": event.title_ko, "title_ja": event.title_ja},
         "items": [event_to_dict(c) for c in children],
         "count": len(children),
     }
@@ -469,7 +481,7 @@ def get_event_relationships(
             er.id, er.relationship_type, er.description, er.strength, er.certainty,
             CASE WHEN er.from_event_id = :eid THEN er.to_event_id ELSE er.from_event_id END AS related_id,
             CASE WHEN er.from_event_id = :eid THEN 'outgoing' ELSE 'incoming' END AS direction,
-            e.title, e.title_ko, e.date_start, e.date_end
+            e.title, e.title_ko, e.title_ja, e.date_start, e.date_end
         FROM event_relationships er
         JOIN events e ON e.id = CASE WHEN er.from_event_id = :eid THEN er.to_event_id ELSE er.from_event_id END
         WHERE er.from_event_id = :eid OR er.to_event_id = :eid
@@ -489,8 +501,9 @@ def get_event_relationships(
                 "direction": r[6],
                 "related_event_title": r[7],
                 "related_event_title_ko": r[8],
-                "related_event_date_start": r[9],
-                "related_event_date_end": r[10],
+                "related_event_title_ja": r[9],
+                "related_event_date_start": r[10],
+                "related_event_date_end": r[11],
             }
             for r in rows
         ],

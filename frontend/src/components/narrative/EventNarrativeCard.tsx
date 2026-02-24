@@ -1,7 +1,8 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { eventsApi, historiesApi } from '../../api/client'
-import type { Event, EventRelationship, EventHierarchyNode, HistoryListItem } from '../../types'
+import { useTranslation } from 'react-i18next'
+import { eventsApi } from '../../api/client'
+import type { Event, EventRelationship, EventHierarchyNode } from '../../types'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import { ReportButton } from './ReportButton'
 
 function formatYear(year: number | undefined): string {
@@ -10,123 +11,72 @@ function formatYear(year: number | undefined): string {
   return `${year} CE`
 }
 
-// ─── Event Hierarchy Section ────────────────────────────────
+// ─── Event Story Section (Hierarchy as Story) ────────────────
 
-function EventHierarchySection({
+function EventStorySection({
   eventId,
   event,
   onEventClick,
+  onRayshiftHierarchy,
 }: {
   eventId: number
   event: Event
   onEventClick: (eventId: number) => void
+  onRayshiftHierarchy?: (eventId: number) => void
 }) {
-  const [expanded, setExpanded] = useState(false)
-  const hasHierarchy = !!event.parent_event_id || (event.child_count && event.child_count > 0)
-
+  // Always try to fetch children — don't gate on child_count
   const { data: children } = useQuery({
     queryKey: ['event-children', eventId],
     queryFn: () => eventsApi.getChildren(eventId).catch(() => ({ data: { children: [] } })),
-    select: (res) => res.data?.children as EventHierarchyNode[] | undefined,
-    enabled: hasHierarchy === true,
+    select: (res) => (res.data?.items ?? res.data?.children ?? []) as EventHierarchyNode[],
     retry: false,
   })
 
-  if (!hasHierarchy) return null
-
-  // Extract parent info - handle the case where parent might be on the event object
+  const { t } = useTranslation()
+  const { preferredLanguage } = useSettingsStore()
   const parentInfo = (event as Event & { parent?: { id: number; title: string; title_ko?: string } }).parent
+  const hasParent = !!event.parent_event_id
+  const hasChildren = children && children.length > 0
+
+  if (!hasParent && !hasChildren) return null
 
   return (
-    <div>
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Event Hierarchy
-      </h4>
-
+    <div className="nc-section">
       {/* Parent link */}
-      {parentInfo && (
-        <button
-          onClick={() => onEventClick(parentInfo.id)}
-          className="w-full text-left px-3 py-1.5 rounded text-xs border border-chaldea-border
-                     hover:bg-chaldea-cyan/10 transition-colors flex items-center gap-2 mb-1"
-        >
-          <span className="text-chaldea-gold text-[10px]">Parent</span>
-          <span className="text-chaldea-text-bright flex-1 truncate">
-            {parentInfo.title}
-          </span>
-        </button>
+      {hasParent && parentInfo && (
+        <div>
+          <div className="nc-section-header">{t('narrative.partOf')}</div>
+          <button onClick={() => onEventClick(parentInfo.id)}
+            className="nc-link-item" style={{ borderLeft: '3px solid var(--chaldea-gold)' }}>
+            <span className="nc-link-arrow">{'\u2191'}</span>
+            <span className="nc-link-title">{getLocalizedText(parentInfo as unknown as Record<string, unknown>, 'title', preferredLanguage) || parentInfo.title}</span>
+          </button>
+        </div>
       )}
 
-      {/* Children */}
-      {children && children.length > 0 && (
-        <div>
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1 text-xs text-chaldea-text hover:text-chaldea-text-bright
-                       transition-colors mb-1"
-          >
-            <span className="text-[10px]">{expanded ? '\u25BC' : '\u25B6'}</span>
-            <span>
-              {children.length} sub-event{children.length !== 1 ? 's' : ''}
-            </span>
-          </button>
-          {expanded && (
-            <div className="space-y-0.5 ml-2 border-l border-chaldea-border pl-2">
-              {children.map((child) => (
-                <button
-                  key={child.id}
-                  onClick={() => onEventClick(child.id)}
-                  className="w-full text-left px-2 py-1 rounded text-xs
-                             hover:bg-chaldea-cyan/10 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-chaldea-cyan text-[10px] w-14 text-right shrink-0">
-                    {formatYear(child.date_start)}
-                  </span>
-                  <span className="text-chaldea-text-bright flex-1 truncate">
-                    {child.title}
-                  </span>
-                  {child.child_count && child.child_count > 0 && (
-                    <span className="text-chaldea-text text-[10px]">
-                      +{child.child_count}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+      {/* Children as story timeline */}
+      {hasChildren && (
+        <div style={{ marginTop: hasParent && parentInfo ? '0.75rem' : 0 }}>
+          <div className="nc-section-header">{t('narrative.story')} ({children.length} {t('narrative.events')})</div>
+          <div className="nc-story-list">
+            {children.map((child) => (
+              <button key={child.id} onClick={() => onEventClick(child.id)} className="nc-story-item">
+                <span className="nc-story-item-year">{formatYear(child.date_start)}</span>
+                <span className="nc-story-item-title">{getLocalizedText(child as unknown as Record<string, unknown>, 'title', preferredLanguage) || child.title}</span>
+                {child.child_count != null && child.child_count > 0 && (
+                  <span className="nc-story-item-meta">+{child.child_count} {t('narrative.subEvents')}</span>
+                )}
+              </button>
+            ))}
+          </div>
+          {onRayshiftHierarchy && children.length > 1 && (
+            <button onClick={() => onRayshiftHierarchy(eventId)}
+              className="nc-rayshift-btn nc-rayshift-btn--hierarchy" style={{ marginTop: '0.5rem' }}>
+              {t('narrative.rayshiftStory')} &rarr;
+            </button>
           )}
         </div>
       )}
-    </div>
-  )
-}
-
-// ─── Related Reading (Histories) ─────────────────────────────
-
-function RelatedReading({ entityType, entityId }: { entityType: 'event' | 'person'; entityId: number }) {
-  const { data: histories } = useQuery({
-    queryKey: ['related-histories', entityType, entityId],
-    queryFn: () => historiesApi.list({ entity_type: entityType, entity_id: entityId, limit: 3 }),
-    select: (res) => (res.data?.items ?? []) as HistoryListItem[],
-    retry: false,
-  })
-
-  if (!histories || histories.length === 0) return null
-
-  return (
-    <div className="border-t border-chaldea-border pt-3">
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Related Reading
-      </h4>
-      <div className="space-y-1.5">
-        {histories.map((h) => (
-          <div key={h.id} className="p-2 rounded border border-chaldea-border/50 hover:border-chaldea-gold/30 transition-colors">
-            <p className="text-[11px] text-chaldea-text-bright">{h.title}</p>
-            {h.summary && (
-              <p className="text-[9px] text-chaldea-text mt-0.5 line-clamp-2">{h.summary}</p>
-            )}
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
@@ -137,9 +87,15 @@ interface EventNarrativeCardProps {
   eventId: number
   onEventClick: (eventId: number) => void
   onPersonClick: (personId: number) => void
+  onLocationClick?: (locationId: number) => void
+  onSourceClick?: (sourceId: number) => void
+  onRayshift?: (eventId: number) => void
+  onRayshiftHierarchy?: (eventId: number) => void
 }
 
-export function EventNarrativeCard({ eventId, onEventClick, onPersonClick }: EventNarrativeCardProps) {
+export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLocationClick, onSourceClick, onRayshift, onRayshiftHierarchy }: EventNarrativeCardProps) {
+  const { t } = useTranslation()
+  const { preferredLanguage } = useSettingsStore()
   const { data: event, isLoading } = useQuery({
     queryKey: ['event', eventId],
     queryFn: () => eventsApi.get(eventId),
@@ -155,12 +111,10 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick }: Eve
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-3">
-          <div className="h-5 bg-chaldea-border rounded w-3/4" />
-          <div className="h-3 bg-chaldea-border rounded w-1/2" />
-          <div className="h-20 bg-chaldea-border rounded" />
-        </div>
+      <div className="nc-loading">
+        <div className="nc-loading-bar nc-loading-bar--wide" />
+        <div className="nc-loading-bar nc-loading-bar--mid" />
+        <div className="nc-loading-bar nc-loading-bar--tall" />
       </div>
     )
   }
@@ -174,20 +128,28 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick }: Eve
   const hasNarrative = !!narrative
 
   return (
-    <div className="p-5 space-y-4">
+    <div className="nc-content">
       {/* Title + spacetime */}
       <div>
-        <h2 className="text-lg font-semibold text-chaldea-text-bright leading-tight">
-          {event.title}
-        </h2>
-        {event.title_ko && (
-          <p className="text-sm text-chaldea-text mt-0.5">{event.title_ko}</p>
-        )}
-        <div className="flex items-center gap-3 mt-2 text-xs text-chaldea-text">
-          <span className="text-chaldea-cyan">{formatYear(event.date_start)}</span>
-          {event.location && <span>{event.location.name}</span>}
+        <h2 className="nc-title">{getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}</h2>
+        <div className="nc-spacetime">
+          <span className="nc-year">{formatYear(event.date_start)}</span>
+          {event.location && (
+            <span
+              className="nc-location-link"
+              onClick={(e) => {
+                e.stopPropagation()
+                if (onLocationClick && event.location?.id) {
+                  onLocationClick(event.location.id)
+                }
+              }}
+              style={{ cursor: onLocationClick ? 'pointer' : 'default' }}
+            >
+              {getLocalizedText(event.location as unknown as Record<string, unknown>, 'name', preferredLanguage) || event.location.name}
+            </span>
+          )}
           {event.category && (
-            <span className="px-1.5 py-0.5 rounded bg-chaldea-panel-alt border border-chaldea-border text-[10px]">
+            <span className="nc-category">
               {typeof event.category === 'string' ? event.category : event.category.name}
             </span>
           )}
@@ -196,161 +158,107 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick }: Eve
 
       {/* Narrative (V4 core) */}
       {hasNarrative ? (
-        <div className="space-y-3">
-          <p className="text-sm text-chaldea-text-bright leading-relaxed">
-            {narrative}
-          </p>
-          {significance && (
-            <p className="text-xs text-chaldea-orange italic border-l-2 border-chaldea-orange pl-3">
-              {significance}
-            </p>
-          )}
+        <div>
+          <p className="nc-narrative">{narrative}</p>
+          {significance && <p className="nc-significance">{significance}</p>}
           {causes && (
-            <div>
-              <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1">
-                Causes
-              </h4>
+            <div style={{ marginTop: '0.75rem' }}>
+              <div className="nc-cause-title">{t('narrative.causes')}</div>
               {Array.isArray(causes) ? (
-                <ul className="text-xs text-chaldea-text-bright space-y-0.5 list-disc list-inside">
+                <ul className="nc-cause-list">
                   {causes.map((c: string, i: number) => <li key={i}>{c}</li>)}
                 </ul>
               ) : (
-                <p className="text-xs text-chaldea-text-bright">{causes}</p>
+                <p className="nc-cause-text">{causes}</p>
               )}
             </div>
           )}
           {consequences && (
-            <div>
-              <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1">
-                Consequences
-              </h4>
+            <div style={{ marginTop: '0.75rem' }}>
+              <div className="nc-cause-title">{t('narrative.consequences')}</div>
               {Array.isArray(consequences) ? (
-                <ul className="text-xs text-chaldea-text-bright space-y-0.5 list-disc list-inside">
+                <ul className="nc-cause-list">
                   {consequences.map((c: string, i: number) => <li key={i}>{c}</li>)}
                 </ul>
               ) : (
-                <p className="text-xs text-chaldea-text-bright">{consequences}</p>
+                <p className="nc-cause-text">{consequences}</p>
               )}
             </div>
           )}
         </div>
       ) : (
-        /* Fallback to description */
-        event.description && (
-          <p className="text-sm text-chaldea-text leading-relaxed">
-            {event.description}
-          </p>
-        )
+        event.description && <p className="nc-description">{getLocalizedText(event as unknown as Record<string, unknown>, 'description', preferredLanguage) || event.description}</p>
       )}
 
-      {/* Participants */}
+      {/* Key Figures */}
       {event.persons && event.persons.length > 0 && (
         <div>
-          <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-            Key Figures
-          </h4>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="nc-section-header">{t('narrative.keyFigures')}</div>
+          <div className="nc-person-tags">
             {event.persons.map((p) => (
               <button
                 key={p.id}
                 onClick={() => onPersonClick(typeof p.id === 'number' ? p.id : parseInt(String(p.id), 10))}
-                className="px-2 py-1 text-xs rounded border border-chaldea-border
-                           text-chaldea-cyan hover:bg-chaldea-cyan/10 transition-colors"
+                className="nc-person-tag"
               >
-                {p.name}
+                {getLocalizedText(p as unknown as Record<string, unknown>, 'name', preferredLanguage) || p.name}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Causal relationships */}
+      {/* Connected Events */}
       {relationships && relationships.length > 0 && (
         <div>
-          <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-            Connected Events
-          </h4>
-          <div className="space-y-1">
+          <div className="nc-section-header">{t('narrative.connectedEvents')}</div>
+          <div className="nc-link-list">
             {relationships.slice(0, 5).map((r) => (
-              <button
-                key={r.id}
-                onClick={() => onEventClick(r.related_event_id)}
-                className="w-full text-left px-3 py-1.5 rounded text-xs border border-chaldea-border
-                           hover:bg-chaldea-cyan/10 transition-colors flex items-center gap-2"
-              >
-                <span className="text-chaldea-text">
+              <button key={r.id} onClick={() => onEventClick(r.related_event_id)} className="nc-link-item">
+                <span className="nc-link-arrow">
                   {r.direction === 'incoming' ? '\u2190' : '\u2192'}
                 </span>
-                <span className="text-chaldea-text-bright flex-1 truncate">
-                  {r.related_event_title}
-                </span>
-                <span className="text-chaldea-cyan text-[10px]">
-                  {formatYear(r.related_event_date_start)}
-                </span>
+                <span className="nc-link-title">{getLocalizedText(r as unknown as Record<string, unknown>, 'related_event_title', preferredLanguage) || r.related_event_title}</span>
+                <span className="nc-link-year">{formatYear(r.related_event_date_start)}</span>
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Event Hierarchy */}
-      {event && <EventHierarchySection eventId={eventId} event={event} onEventClick={onEventClick} />}
+      {/* Story (hierarchy children as timeline) */}
+      <EventStorySection eventId={eventId} event={event} onEventClick={onEventClick} onRayshiftHierarchy={onRayshiftHierarchy} />
 
-      {/* Related Reading (Histories) */}
-      <RelatedReading entityType="event" entityId={eventId} />
-
-      {/* Rayshift entry point */}
-      {relationships && relationships.length > 0 && (
-        <div className="border-t border-chaldea-border pt-3">
-          <button
-            onClick={() => onEventClick(eventId)}
-            className="text-[10px] px-3 py-1.5 rounded border border-chaldea-magenta/30
-                       text-chaldea-magenta hover:bg-chaldea-magenta/10 transition-colors"
-          >
-            Follow Causal Chain &rarr;
+      {/* Rayshift */}
+      {relationships && relationships.length > 0 && onRayshift && (
+        <div className="nc-section">
+          <button onClick={() => onRayshift(eventId)} className="nc-rayshift-btn nc-rayshift-btn--causal">
+            {t('narrative.rayshiftCausal')} &rarr;
           </button>
         </div>
       )}
 
-      {/* Sources */}
+      {/* Sources — open in modal */}
       {event.sources && event.sources.length > 0 && (
-        <div className="border-t border-chaldea-border pt-3">
-          <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1">
-            Sources
-          </h4>
-          {event.sources.slice(0, 3).map((s) => (
-            <p key={s.id} className="text-[10px] text-chaldea-text">
-              {s.url ? (
-                <a
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-chaldea-cyan"
-                >
-                  {s.name || s.type}
-                </a>
-              ) : (
-                s.name || s.type
-              )}
-            </p>
-          ))}
+        <div className="nc-section">
+          <div className="nc-section-header">{t('narrative.sources')} ({event.sources.length})</div>
+          <div className="nc-sources-list">
+            {event.sources.slice(0, 5).map((s) => {
+              const displayTitle = s.title || s.name || s.type
+              return (
+                <button key={s.id}
+                  onClick={() => onSourceClick?.(s.id)}
+                  className="nc-source-link">
+                  <span className="nc-source-link-title">{displayTitle}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
 
-      {/* Wikipedia link */}
-      {event.wikipedia_url && (
-        <a
-          href={event.wikipedia_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block text-xs text-chaldea-cyan hover:underline"
-        >
-          Read on Wikipedia
-        </a>
-      )}
-
       {/* Report */}
-      <div className="border-t border-chaldea-border pt-3">
+      <div className="nc-section">
         <ReportButton entityType="event" entityId={eventId} />
       </div>
     </div>

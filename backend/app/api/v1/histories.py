@@ -104,12 +104,25 @@ async def list_histories(
     tag: Optional[str] = Query(None, description="Filter by tag"),
     status: Optional[str] = Query(None, description="Filter by status"),
     author_type: Optional[str] = Query(None, description="Filter by author_type"),
+    entity_type: Optional[str] = Query(None, description="Filter by entity type (person, event, location)"),
+    entity_id: Optional[int] = Query(None, description="Filter by entity ID"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
     """List histories with optional filtering."""
     query = db.query(History)
+
+    # Entity filtering via history_entities junction table
+    if entity_type and entity_id is not None:
+        query = query.join(HistoryEntity, History.id == HistoryEntity.history_id).filter(
+            HistoryEntity.entity_type == entity_type,
+            HistoryEntity.entity_id == entity_id,
+        )
+    elif entity_type:
+        query = query.join(HistoryEntity, History.id == HistoryEntity.history_id).filter(
+            HistoryEntity.entity_type == entity_type,
+        )
 
     if category:
         query = query.filter(History.category == category)

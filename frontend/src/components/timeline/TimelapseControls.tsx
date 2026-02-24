@@ -12,10 +12,8 @@ import './TimelapseControls.css'
 // Speed presets (years per second)
 const SPEED_PRESETS = [
   { label: '1x', value: 5 },
-  { label: '2x', value: 10 },
   { label: '5x', value: 25 },
   { label: '10x', value: 50 },
-  { label: '50x', value: 100 },
 ]
 
 export function TimelapseControls() {

@@ -9,6 +9,7 @@ import { useState, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import ViewportFeed from '../globe/ViewportFeed'
 import WorldBriefing from '../globe/WorldBriefing'
+import { HeroCardDeck } from './HeroCardDeck'
 import type { Event } from '../../types'
 import type { GlobeMarkerData } from '../../store/globeStore'
 
@@ -81,6 +82,7 @@ export function MobileLayout({
               onPersonClick={onNarrativePersonClick}
               onOpenDeepRead={onDeepReadOpen}
             />
+            <HeroCardDeck onEventClick={onNarrativeEventClick} />
             <Suspense fallback={<div className="mobile-loading">Loading map...</div>}>
               <MapView
                 markers={markers}

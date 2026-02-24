@@ -5,14 +5,18 @@
  */
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { api } from '../../api/client'
 import { ReportButton } from '../common'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import type { Event } from '../../types'
 import './EntityDetailView.css'
 
 interface LocationEvent {
   id: number
   title: string
+  title_ko?: string
+  title_ja?: string
   date_start: number | null
   date_end: number | null
 }
@@ -60,6 +64,8 @@ interface Props {
 export function LocationDetailView({ locationId, onClose, onEventClick, onLocationClick: _onLocationClick }: Props) {
   // Note: _onLocationClick reserved for future connected locations navigation
   void _onLocationClick
+  const { t } = useTranslation()
+  const { preferredLanguage } = useSettingsStore()
 
   // Fetch location details from locations API
   const { data: location, isLoading: locationLoading } = useQuery<LocationInfo>({
@@ -120,12 +126,7 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
         <button className="entity-close" onClick={onClose}>✕</button>
         <div className="entity-icon location">📍</div>
         <div className="entity-title-section">
-          <h2 className="entity-name">{location?.name || 'Unknown'}</h2>
-          {location?.name_ko && (
-            <div className="entity-name-alt">
-              {location.name_ko}
-            </div>
-          )}
+          <h2 className="entity-name">{location ? getLocalizedText(location as unknown as Record<string, unknown>, 'name', preferredLanguage) || location.name : 'Unknown'}</h2>
         </div>
       </div>
 
@@ -139,7 +140,7 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
       {location?.details?.description && (
         <div className="entity-section">
           <div className="entity-description">
-            {location.details.description}
+            {getLocalizedText(location.details as unknown as Record<string, unknown>, 'description', preferredLanguage) || location.details.description}
           </div>
           {location.details.wikipedia_url && (
             <a href={location.details.wikipedia_url} target="_blank" rel="noopener noreferrer" className="entity-wiki-link">
@@ -153,12 +154,12 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
       <div className="entity-stats">
         <div className="stat-item">
           <span className="stat-value">{location?.event_count || historyEvents.length}</span>
-          <span className="stat-label">Events</span>
+          <span className="stat-label">{t('location.events')}</span>
         </div>
         {location?.names && location.names.length > 0 && (
           <div className="stat-item">
             <span className="stat-value">{location.names.length}</span>
-            <span className="stat-label">Names</span>
+            <span className="stat-label">{t('location.names')}</span>
           </div>
         )}
         {timeSpan && (
@@ -166,9 +167,35 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
             <span className="stat-value">
               {formatYear(timeSpan.earliest)} ~ {formatYear(timeSpan.latest)}
             </span>
-            <span className="stat-label">Time Span</span>
+            <span className="stat-label">{t('location.timeSpan')}</span>
           </div>
         )}
+      </div>
+
+      {/* History Timeline — moved to top for visibility */}
+      <div className="entity-section">
+        <div className="section-header">
+          <span className="section-icon">📜</span>
+          <span className="section-title">{t('location.historyAtLocation')}</span>
+        </div>
+        <div className="timeline-list">
+          {historyEvents.length > 0 ? (
+            historyEvents.map((event, index) => (
+              <div
+                key={event.id}
+                className="timeline-item"
+                onClick={() => handleEventClick(event.id)}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <div className="timeline-dot location" />
+                <div className="timeline-year">{formatYear(event.date_start)}</div>
+                <div className="timeline-title">{getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}</div>
+              </div>
+            ))
+          ) : (
+            <div className="timeline-empty">{t('location.noEvents')}</div>
+          )}
+        </div>
       </div>
 
       {/* Coordinates */}
@@ -181,13 +208,12 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
         </div>
       )}
 
-
       {/* Historical Names */}
       {location?.names && location.names.length > 0 && (
         <div className="entity-section">
           <div className="section-header">
             <span className="section-icon">🏷</span>
-            <span className="section-title">Historical Names</span>
+            <span className="section-title">{t('location.historicalNames')}</span>
           </div>
           <div className="timeline-list">
             {location.names
@@ -211,7 +237,7 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
         <div className="entity-section">
           <div className="section-header">
             <span className="section-icon">🏛</span>
-            <span className="section-title">Political History</span>
+            <span className="section-title">{t('location.politicalHistory')}</span>
           </div>
           <div className="timeline-list">
             {location.territories
@@ -222,38 +248,12 @@ export function LocationDetailView({ locationId, onClose, onEventClick, onLocati
                   <div className="timeline-year">
                     {t.valid_from ? formatYear(t.valid_from) : '?'} ~ {t.valid_until ? formatYear(t.valid_until) : ''}
                   </div>
-                  <div className="timeline-title">{t.name_ko || t.name} <span style={{ opacity: 0.5, fontSize: '0.85em' }}>({t.territory_type})</span></div>
+                  <div className="timeline-title">{getLocalizedText(t as unknown as Record<string, unknown>, 'name', preferredLanguage) || t.name} <span style={{ opacity: 0.5, fontSize: '0.85em' }}>({t.territory_type})</span></div>
                 </div>
               ))}
           </div>
         </div>
       )}
-
-      {/* History Timeline */}
-      <div className="entity-section">
-        <div className="section-header">
-          <span className="section-icon">📜</span>
-          <span className="section-title">History at this Location</span>
-        </div>
-        <div className="timeline-list">
-          {historyEvents.length > 0 ? (
-            historyEvents.map((event, index) => (
-              <div
-                key={event.id}
-                className="timeline-item"
-                onClick={() => handleEventClick(event.id)}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="timeline-dot location" />
-                <div className="timeline-year">{formatYear(event.date_start)}</div>
-                <div className="timeline-title">{event.title}</div>
-              </div>
-            ))
-          ) : (
-            <div className="timeline-empty">No historical events found</div>
-          )}
-        </div>
-      </div>
 
       {/* Footer */}
       <div className="entity-footer">

@@ -443,13 +443,13 @@ API: `GET /events/{id}/relationships` → causes/enables/follows
 │ 👤 Leonidas I (commander)        │
 │ 👤 Xerxes I (invader)            │
 │                                  │
-│ ─── 하위 사건 ───                │  ← /events/{id}/children
-│ Day 1: Initial Defense           │
-│ Day 2: Betrayal                  │
-│ Day 3: Last Stand                │
+│ ─── Story (하위 사건 타임라인) ── │  ← /events/{id}/children
+│ ●─ Day 1: Initial Defense        │     항상 펼쳐진 타임라인 형태
+│ ●─ Day 2: Betrayal               │     (토글 아님, 즉시 보임)
+│ ●─ Day 3: Last Stand             │     하위 이벤트 = 이 이벤트의 히스토리
 │                                  │
-│ ─── 관련 읽을거리 ───            │  ← /events/{id}/histories
-│ 📜 "The Persian Wars"            │
+│ ─── 관련 읽을거리 ───            │  ← /histories (entity_type/id 필터)
+│ 📜 "The Persian Wars"            │     (있으면 표시, 없으면 생략)
 │                                  │
 │ ─── 출처 ───                    │  ← sources (클릭 시 모달)
 │ 📖 Herodotus, Histories         │
@@ -523,6 +523,19 @@ API: `GET /events/{id}/relationships` → causes/enables/follows
 ### 9.1 컨셉
 
 FGO의 레이시프트처럼, **시간과 공간을 따라 이동하면서 이야기를 순서대로 체험**한다.
+
+> **중요: Rayshift = 기존 History 시스템의 진화**
+>
+> 기존의 History(에세이) 시스템은 텍스트 기반이었다. Rayshift는 이것을
+> **글로브 위에서 체험하는 인터랙티브 형태**로 진화시킨 것이다.
+>
+> - History 에세이의 entity 태그 → Rayshift의 스텝 좌표
+> - History의 era_start/end → Rayshift의 시간 이동
+> - History의 featured entities → Rayshift의 정거장
+> - 이벤트의 hierarchy children → 해당 이벤트의 Story (자동 Rayshift 후보)
+>
+> History 에세이는 "읽기"용으로 여전히 존재하지만,
+> 핵심 탐색 경험은 Rayshift가 담당한다.
 
 진입 방법:
 1. NarrativePanel의 "Rayshift: 인과 체인 따라가기" 클릭
@@ -627,6 +640,17 @@ Rayshift 모드가 활성화되면 하단에 오버레이:
 ## 10. 소스 모달
 
 출처를 클릭하면 **모달**로 열린다. 현재 보고 있는 NarrativePanel 등의 컨텍스트를 유지.
+
+> **핵심 원칙: 소스 = 원문 열람**
+>
+> 소스 클릭 시 외부 링크(새 탭)로 보내지 않는다.
+> 모달 안에서 원문을 직접 보여준다.
+> - Wikipedia 소스 → Wikipedia 본문을 모달 안에서 렌더링 (iframe 또는 API fetch)
+> - Book 소스 → 관련 구절(text_mentions)을 인용 형태로 표시
+> - 외부 링크는 "원본 페이지 열기" 보조 버튼으로만 제공
+>
+> NarrativeCard의 Sources 섹션도 `<a href>` 외부 링크가 아닌,
+> `onSourceClick(sourceId)` → SourceBrowser 모달 열기로 동작해야 한다.
 
 ```
 ┌─────────────────── 소스 모달 ──────────────────┐

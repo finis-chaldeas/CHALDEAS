@@ -87,6 +87,7 @@ async def get_person_network(
             "id": p.id,
             "name": p.name,
             "name_ko": getattr(p, 'name_ko', None),
+            "name_ja": getattr(p, 'name_ja', None),
             "birth_year": p.birth_year,
             "death_year": p.death_year,
             "role": getattr(p, 'role', None),

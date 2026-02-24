@@ -27,25 +27,19 @@ export default function FloatingButtons({
   }
 
   return (
-    <div className="fixed right-3 bottom-24 z-50 flex flex-col gap-1.5 items-end">
+    <div className="floating-buttons">
       {BUTTONS.map(({ id, icon, label }) => (
-        <div key={id} className="flex items-center gap-2 flex-row-reverse">
+        <div key={id} className="floating-btn-row">
           <button
             onClick={handlers[id]}
             onMouseEnter={() => setHoveredId(id)}
             onMouseLeave={() => setHoveredId(null)}
-            className="w-9 h-9 rounded-lg bg-chaldea-panel/80 backdrop-blur-xl
-                       border border-chaldea-border/30 text-chaldea-cyan/70
-                       flex items-center justify-center text-sm
-                       hover:border-chaldea-cyan/30 hover:text-chaldea-cyan
-                       hover:-translate-y-px transition-all shadow-lg shadow-black/20"
+            className="floating-btn"
           >
             {icon}
           </button>
           {hoveredId === id && (
-            <span className="bg-chaldea-panel/90 backdrop-blur-xl border border-chaldea-border/30
-                             rounded-md px-2.5 py-1 text-[10px] font-semibold tracking-wide
-                             text-chaldea-cyan/80 whitespace-nowrap animate-fade-in shadow-lg shadow-black/20">
+            <span className="floating-btn-label">
               {label}
             </span>
           )}

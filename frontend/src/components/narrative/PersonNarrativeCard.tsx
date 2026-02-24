@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { personsApi, servantsApi, historiesApi } from '../../api/client'
 import type { Person, PersonNarrative, PersonRelation, PersonSource, PersonNameEntry, HistoryListItem } from '../../types'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import { ReportButton } from './ReportButton'
 
 function formatYear(year: number | undefined): string {
@@ -15,37 +16,42 @@ type PersonTab = 'story' | 'network' | 'sources'
 // ─── Quick Facts ────────────────────────────────────────────
 
 function PersonQuickFacts({ person }: { person: Person }) {
+  const { preferredLanguage } = useSettingsStore()
   const facts: { label: string; value: string }[] = []
 
   if (person.birth_year) facts.push({ label: 'Born', value: formatYear(person.birth_year) })
   if (person.death_year) facts.push({ label: 'Died', value: formatYear(person.death_year) })
   if (person.details?.era) facts.push({ label: 'Era', value: person.details.era })
-  if (person.birthplace?.name) facts.push({ label: 'Birthplace', value: person.birthplace.name })
-  if (person.deathplace?.name) facts.push({ label: 'Deathplace', value: person.deathplace.name })
+  if (person.birthplace) {
+    const bpName = getLocalizedText(person.birthplace as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.birthplace.name
+    if (bpName) facts.push({ label: 'Birthplace', value: bpName })
+  }
+  if (person.deathplace) {
+    const dpName = getLocalizedText(person.deathplace as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.deathplace.name
+    if (dpName) facts.push({ label: 'Deathplace', value: dpName })
+  }
   if (person.wikidata_id) facts.push({ label: 'Wikidata', value: person.wikidata_id })
 
   if (facts.length === 0) return null
 
   return (
     <div>
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Quick Facts
-      </h4>
-      <div className="grid grid-cols-1 gap-1">
+      <div className="nc-section-header">Quick Facts</div>
+      <div className="nc-facts-grid">
         {facts.map((fact) => (
-          <div key={fact.label} className="flex items-baseline gap-2 text-xs">
-            <span className="text-chaldea-text shrink-0">{fact.label}:</span>
+          <div key={fact.label} className="nc-fact">
+            <span className="nc-fact-label">{fact.label}:</span>
             {fact.label === 'Wikidata' ? (
               <a
                 href={`https://www.wikidata.org/wiki/${fact.value}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-chaldea-cyan hover:underline truncate"
+                className="nc-fact-link"
               >
                 {fact.value}
               </a>
             ) : (
-              <span className="text-chaldea-text-bright truncate">{fact.value}</span>
+              <span className="nc-fact-value">{fact.value}</span>
             )}
           </div>
         ))}
@@ -63,6 +69,7 @@ function PersonRelationsSection({
   personId: number
   onPersonClick: (id: number) => void
 }) {
+  const { preferredLanguage } = useSettingsStore()
   const { data: relations, isLoading } = useQuery({
     queryKey: ['person-relations', personId],
     queryFn: () => personsApi.getRelations(personId, { limit: 8 }).catch(() => ({ data: { relations: [] } })),
@@ -72,10 +79,10 @@ function PersonRelationsSection({
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-1">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-6 bg-chaldea-border rounded" />
-        ))}
+      <div className="nc-loading">
+        <div className="nc-loading-bar" style={{ width: '100%' }} />
+        <div className="nc-loading-bar" style={{ width: '100%' }} />
+        <div className="nc-loading-bar" style={{ width: '100%' }} />
       </div>
     )
   }
@@ -86,38 +93,22 @@ function PersonRelationsSection({
 
   return (
     <div>
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Related Persons
-      </h4>
-      <div className="space-y-1">
+      <div className="nc-section-header">Related Persons</div>
+      <div className="nc-link-list">
         {relations.map((rel) => (
-          <button
-            key={rel.id}
-            onClick={() => onPersonClick(rel.id)}
-            className="w-full text-left px-3 py-1.5 rounded text-xs border border-chaldea-border
-                       hover:bg-chaldea-cyan/10 transition-colors group"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-baseline gap-1.5 min-w-0 flex-1">
-                <span className="text-chaldea-text-bright truncate group-hover:text-chaldea-cyan transition-colors">
-                  {rel.name}
-                </span>
+          <button key={rel.id} onClick={() => onPersonClick(rel.id)} className="nc-link-item"
+            style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+            <div className="nc-relation-info" style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem', minWidth: 0, flex: 1 }}>
+                <span className="nc-relation-name">{getLocalizedText(rel as unknown as Record<string, unknown>, 'name', preferredLanguage) || rel.name}</span>
                 {rel.relationship_type && rel.relationship_type !== 'related_to' && (
-                  <span className="text-chaldea-text text-[10px] shrink-0">
-                    ({rel.relationship_type})
-                  </span>
+                  <span className="nc-relation-type">({rel.relationship_type})</span>
                 )}
               </div>
-              <span className="text-chaldea-text text-[10px] shrink-0">
-                str {rel.strength}
-              </span>
+              <span className="nc-relation-str">str {rel.strength}</span>
             </div>
-            {/* Strength bar */}
-            <div className="mt-1 h-[2px] bg-chaldea-border rounded-full overflow-hidden">
-              <div
-                className="h-full bg-chaldea-cyan rounded-full transition-all"
-                style={{ width: `${(rel.strength / maxStrength) * 100}%` }}
-              />
+            <div className="nc-bar-track">
+              <div className="nc-bar-fill" style={{ width: `${(rel.strength / maxStrength) * 100}%` }} />
             </div>
           </button>
         ))}
@@ -154,60 +145,25 @@ function PersonSourcesSection({
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-2">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-8 bg-chaldea-border rounded" />
-        ))}
+      <div className="nc-loading">
+        <div className="nc-loading-bar" style={{ width: '100%', height: '32px' }} />
+        <div className="nc-loading-bar" style={{ width: '100%', height: '32px' }} />
+        <div className="nc-loading-bar" style={{ width: '100%', height: '32px' }} />
       </div>
     )
   }
 
   if (!sources || sources.length === 0) return null
 
-  const typeBadgeColor: Record<string, string> = {
-    book: 'text-chaldea-gold border-chaldea-gold',
-    wikipedia: 'text-chaldea-cyan border-chaldea-cyan',
-    wikidata: 'text-chaldea-green border-chaldea-green',
-    article: 'text-chaldea-magenta border-chaldea-magenta',
-  }
-
   return (
     <div>
-      {!expanded && (
-        <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-          Sources
-        </h4>
-      )}
-      <div className="space-y-1.5">
+      {!expanded && <div className="nc-section-header">Sources ({sources.length})</div>}
+      <div className="nc-sources-list">
         {sources.map((src) => (
-          <button
-            key={src.id}
-            onClick={() => onSourceClick?.(src.id)}
-            className="w-full text-left px-3 py-2 rounded text-xs border border-chaldea-border
-                       hover:bg-chaldea-cyan/10 transition-colors group"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-chaldea-text-bright truncate flex-1 group-hover:text-chaldea-cyan transition-colors">
-                {src.title || src.name}
-              </span>
-              <span
-                className={`shrink-0 px-1 py-0.5 rounded border text-[9px] uppercase ${
-                  typeBadgeColor[src.type] || 'text-chaldea-text border-chaldea-border'
-                }`}
-              >
-                {src.type}
-              </span>
-            </div>
-            {src.author && (
-              <p className="text-[10px] text-chaldea-text mt-0.5 truncate">
-                by {src.author}
-              </p>
-            )}
-            {/* Context snippet from text_mentions */}
+          <button key={src.id} onClick={() => onSourceClick?.(src.id)} className="nc-source-link">
+            <span className="nc-source-link-title">{src.title || src.name}</span>
             {src.mentions && src.mentions.length > 0 && src.mentions[0].context_text && (
-              <p className="mt-1 text-[10px] text-chaldea-text leading-relaxed line-clamp-2 italic">
-                "...{src.mentions[0].context_text}..."
-              </p>
+              <span className="nc-source-context">"...{src.mentions[0].context_text}..."</span>
             )}
           </button>
         ))}
@@ -242,27 +198,17 @@ function PersonNamesSection({ names }: { names: PersonNameEntry[] }) {
 
   return (
     <div>
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Names in Other Languages
-      </h4>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="nc-section-header">Names in Other Languages</div>
+      <div className="nc-name-tags">
         {displayNames.map((n, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-chaldea-border text-[11px]"
-          >
-            <span className="text-chaldea-text text-[9px] uppercase">
-              {langLabel[n.lang] || n.lang}
-            </span>
-            <span className="text-chaldea-text-bright">{n.name}</span>
+          <span key={i} className="nc-name-tag">
+            <span className="nc-name-lang">{langLabel[n.lang] || n.lang}</span>
+            <span className="nc-name-value">{n.name}</span>
           </span>
         ))}
       </div>
       {nameList.length > 4 && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-1 text-[10px] text-chaldea-cyan hover:underline"
-        >
+        <button onClick={() => setExpanded(!expanded)} className="nc-more-link">
           {expanded ? 'Show less' : `+${nameList.length - 4} more`}
         </button>
       )}
@@ -283,23 +229,17 @@ function FGOServantSection({ personId }: { personId: number }) {
   if (!servant) return null
 
   return (
-    <div className="border-t border-chaldea-border pt-3">
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-orange mb-1.5">
-        FGO Servant
-      </h4>
-      <div className="p-2 rounded border border-chaldea-orange/20 bg-chaldea-orange/5">
-        <p className="text-[11px] text-chaldea-text-bright font-medium">
-          {servant.fgo_name || servant.name}
-        </p>
+    <div className="nc-section">
+      <div className="nc-section-header" style={{ color: 'var(--chaldea-orange)' }}>FGO Servant</div>
+      <div className="nc-fgo-servant">
+        <div className="nc-fgo-name">{servant.fgo_name || servant.name}</div>
         {servant.class_name && (
-          <p className="text-[9px] text-chaldea-orange mt-0.5">
+          <div className="nc-fgo-class">
             Class: {servant.class_name} | Rarity: {'*'.repeat(servant.rarity || 0)}
-          </p>
+          </div>
         )}
         {servant.noble_phantasm && (
-          <p className="text-[9px] text-chaldea-text mt-0.5 italic">
-            NP: {servant.noble_phantasm}
-          </p>
+          <div className="nc-fgo-np">NP: {servant.noble_phantasm}</div>
         )}
       </div>
     </div>
@@ -319,17 +259,13 @@ function PersonRelatedReading({ personId }: { personId: number }) {
   if (!histories || histories.length === 0) return null
 
   return (
-    <div className="border-t border-chaldea-border pt-3">
-      <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-        Related Reading
-      </h4>
-      <div className="space-y-1.5">
+    <div className="nc-section">
+      <div className="nc-section-header">Related Reading</div>
+      <div className="nc-reading-list">
         {histories.map((h) => (
-          <div key={h.id} className="p-2 rounded border border-chaldea-border/50 hover:border-chaldea-gold/30 transition-colors">
-            <p className="text-[11px] text-chaldea-text-bright">{h.title}</p>
-            {h.summary && (
-              <p className="text-[9px] text-chaldea-text mt-0.5 line-clamp-2">{h.summary}</p>
-            )}
+          <div key={h.id} className="nc-reading-item">
+            <div className="nc-reading-title">{h.title}</div>
+            {h.summary && <div className="nc-reading-summary">{h.summary}</div>}
           </div>
         ))}
       </div>
@@ -344,9 +280,11 @@ interface PersonNarrativeCardProps {
   onEventClick: (eventId: number) => void
   onPersonClick: (personId: number) => void
   onSourceClick?: (sourceId: number) => void
+  onRayshift?: (personId: number) => void
 }
 
-export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onSourceClick }: PersonNarrativeCardProps) {
+export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onSourceClick, onRayshift }: PersonNarrativeCardProps) {
+  const { preferredLanguage } = useSettingsStore()
   const [activeTab, setActiveTab] = useState<PersonTab>('story')
 
   const { data: person, isLoading } = useQuery({
@@ -371,12 +309,10 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-3">
-          <div className="h-5 bg-chaldea-border rounded w-3/4" />
-          <div className="h-3 bg-chaldea-border rounded w-1/2" />
-          <div className="h-20 bg-chaldea-border rounded" />
-        </div>
+      <div className="nc-loading">
+        <div className="nc-loading-bar nc-loading-bar--wide" />
+        <div className="nc-loading-bar nc-loading-bar--mid" />
+        <div className="nc-loading-bar nc-loading-bar--tall" />
       </div>
     )
   }
@@ -397,56 +333,40 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
   ]
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header: always visible */}
-      <div className="p-5 pb-0 space-y-3">
-        <div className="flex gap-3">
-          {/* Image */}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* Header */}
+      <div className="nc-person-header">
+        <div className="nc-person-identity">
           {person.details?.image_url && (
-            <div className="shrink-0">
-              <img
-                src={person.details.image_url}
-                alt={person.name}
-                className="w-16 h-16 rounded-lg object-cover border border-chaldea-border"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-              />
-            </div>
+            <img
+              src={person.details.image_url}
+              alt={person.name}
+              className="nc-person-image"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+            />
           )}
-
-          {/* Name + dates */}
-          <div className="min-w-0 flex-1">
-            <h2 className="text-lg font-semibold text-chaldea-text-bright leading-tight">
-              {person.name}
-            </h2>
-            {person.name_ko && (
-              <p className="text-sm text-chaldea-text mt-0.5">{person.name_ko}</p>
-            )}
-            <div className="flex items-center gap-3 mt-1 text-xs text-chaldea-text">
-              <span className="text-chaldea-cyan">
+          <div className="nc-person-info">
+            <h2 className="nc-title">{getLocalizedText(person as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.name}</h2>
+            <div className="nc-spacetime">
+              <span className="nc-year">
                 {person.lifespan_display ||
                   `${formatYear(person.birth_year)} - ${formatYear(person.death_year)}`}
               </span>
               {displayRole && <span>{displayRole}</span>}
             </div>
             {biography && !hasNarrative && (
-              <p className="text-[11px] text-chaldea-text mt-1 line-clamp-2">
-                {biography}
-              </p>
+              <div className="nc-person-bio-preview">{biography}</div>
             )}
           </div>
         </div>
 
         {/* Tab bar */}
-        <div className="flex border-b border-chaldea-border">
+        <div className="nc-tab-bar">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-2 text-xs font-medium transition-colors border-b-2 -mb-px ${
-                activeTab === tab.key
-                  ? 'text-chaldea-cyan border-chaldea-cyan'
-                  : 'text-chaldea-text border-transparent hover:text-chaldea-text-bright hover:border-chaldea-border'
-              }`}
+              className={`nc-tab ${activeTab === tab.key ? 'active' : ''}`}
             >
               {tab.label}
             </button>
@@ -454,28 +374,22 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
         </div>
       </div>
 
-      {/* Tab content: scrollable */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-4">
+      {/* Tab content */}
+      <div className="nc-tab-content">
         {activeTab === 'story' && (
           <>
             {/* LLM Narrative */}
             {hasNarrative && (
-              <div className="space-y-3">
-                <p className="text-sm text-chaldea-text-bright leading-relaxed">
-                  {narrative.narrative}
-                </p>
+              <div>
+                <p className="nc-narrative">{narrative.narrative}</p>
                 {narrative.significance && (
-                  <p className="text-xs text-chaldea-orange italic border-l-2 border-chaldea-orange pl-3">
-                    {narrative.significance}
-                  </p>
+                  <p className="nc-significance">{narrative.significance}</p>
                 )}
               </div>
             )}
 
             {!hasNarrative && biography && biography.length > 60 && (
-              <p className="text-sm text-chaldea-text leading-relaxed">
-                {biography}
-              </p>
+              <p className="nc-description">{biography}</p>
             )}
 
             <PersonQuickFacts person={person} />
@@ -484,38 +398,33 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
               <PersonNamesSection names={person.names} />
             )}
 
-            {/* Event flow */}
+            {/* Life Events */}
             {flowData?.flow && flowData.flow.length > 0 && (
               <div>
-                <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-                  Life Events
-                </h4>
-                <div className="space-y-1">
+                <div className="nc-section-header">Life Events</div>
+                <div className="nc-link-list">
                   {flowData.flow
                     .slice(0, 8)
                     .map(
                       (evt: {
                         event_id: number
                         title: string
+                        title_ko?: string
+                        title_ja?: string
                         year?: number
                         location?: string
                       }) => (
                         <button
                           key={evt.event_id}
                           onClick={() => onEventClick(evt.event_id)}
-                          className="w-full text-left px-3 py-1.5 rounded text-xs border border-chaldea-border
-                                     hover:bg-chaldea-cyan/10 transition-colors flex items-center gap-2"
+                          className="nc-link-item"
                         >
-                          <span className="text-chaldea-cyan text-[10px] w-14 text-right shrink-0">
+                          <span className="nc-link-year">
                             {evt.year ? formatYear(evt.year) : ''}
                           </span>
-                          <span className="text-chaldea-text-bright flex-1 truncate">
-                            {evt.title}
-                          </span>
+                          <span className="nc-link-title">{getLocalizedText(evt as unknown as Record<string, unknown>, 'title', preferredLanguage) || evt.title}</span>
                           {evt.location && (
-                            <span className="text-chaldea-text text-[10px] truncate max-w-[80px]">
-                              {evt.location}
-                            </span>
+                            <span className="nc-link-meta">{evt.location}</span>
                           )}
                         </button>
                       )
@@ -528,24 +437,16 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
             <PersonSourcesSection personId={personId} onSourceClick={onSourceClick} />
 
             {/* External links */}
-            <div className="flex items-center gap-4 border-t border-chaldea-border pt-3">
+            <div className="nc-section nc-external-links">
               {person.details?.wikipedia_url && (
-                <a
-                  href={person.details.wikipedia_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-chaldea-cyan hover:underline"
-                >
+                <a href={person.details.wikipedia_url} target="_blank" rel="noopener noreferrer"
+                  className="nc-external-link">
                   Wikipedia
                 </a>
               )}
               {person.wikidata_id && (
-                <a
-                  href={`https://www.wikidata.org/wiki/${person.wikidata_id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-chaldea-cyan hover:underline"
-                >
+                <a href={`https://www.wikidata.org/wiki/${person.wikidata_id}`} target="_blank"
+                  rel="noopener noreferrer" className="nc-external-link">
                   Wikidata
                 </a>
               )}
@@ -554,23 +455,21 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
             {/* FGO Servant */}
             <FGOServantSection personId={personId} />
 
-            {/* Related Reading (Histories) */}
+            {/* Related Reading */}
             <PersonRelatedReading personId={personId} />
 
             {/* Rayshift: Life Journey */}
-            {flowData?.flow && flowData.flow.length > 1 && (
-              <div className="border-t border-chaldea-border pt-3">
-                <button
-                  className="text-[10px] px-3 py-1.5 rounded border border-chaldea-gold/30
-                             text-chaldea-gold hover:bg-chaldea-gold/10 transition-colors"
-                >
-                  Follow Life Journey &rarr;
+            {flowData?.flow && flowData.flow.length > 1 && onRayshift && (
+              <div className="nc-section">
+                <button onClick={() => onRayshift(personId)}
+                  className="nc-rayshift-btn nc-rayshift-btn--life">
+                  Rayshift: Follow Life Journey &rarr;
                 </button>
               </div>
             )}
 
             {/* Report */}
-            <div className="border-t border-chaldea-border pt-3">
+            <div className="nc-section">
               <ReportButton entityType="person" entityId={personId} />
             </div>
           </>
@@ -581,24 +480,16 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
             <PersonRelationsSection personId={personId} onPersonClick={onPersonClick} />
             {flowData?.flow && flowData.flow.length > 0 && (
               <div>
-                <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-1.5">
-                  Events ({flowData.flow.length})
-                </h4>
-                <div className="space-y-1">
+                <div className="nc-section-header">Events ({flowData.flow.length})</div>
+                <div className="nc-link-list">
                   {flowData.flow.map(
-                    (evt: { event_id: number; title: string; year?: number }) => (
-                      <button
-                        key={evt.event_id}
-                        onClick={() => onEventClick(evt.event_id)}
-                        className="w-full text-left px-3 py-1.5 rounded text-xs border border-chaldea-border
-                                   hover:bg-chaldea-cyan/10 transition-colors flex items-center gap-2"
-                      >
-                        <span className="text-chaldea-cyan text-[10px] w-14 text-right shrink-0">
+                    (evt: { event_id: number; title: string; title_ko?: string; title_ja?: string; year?: number }) => (
+                      <button key={evt.event_id} onClick={() => onEventClick(evt.event_id)}
+                        className="nc-link-item">
+                        <span className="nc-link-year">
                           {evt.year ? formatYear(evt.year) : ''}
                         </span>
-                        <span className="text-chaldea-text-bright flex-1 truncate">
-                          {evt.title}
-                        </span>
+                        <span className="nc-link-title">{getLocalizedText(evt as unknown as Record<string, unknown>, 'title', preferredLanguage) || evt.title}</span>
                       </button>
                     )
                   )}
@@ -610,9 +501,7 @@ export function PersonNarrativeCard({ personId, onEventClick, onPersonClick, onS
 
         {activeTab === 'sources' && (
           <div>
-            <h4 className="text-[10px] uppercase tracking-wider text-chaldea-text mb-3">
-              Source References
-            </h4>
+            <div className="nc-section-header">Source References</div>
             <PersonSourcesSection personId={personId} expanded onSourceClick={onSourceClick} />
           </div>
         )}

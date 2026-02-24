@@ -307,8 +307,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
         <button className="entity-close" onClick={onClose}>✕</button>
         <div className="entity-icon person">👤</div>
         <div className="entity-title-section">
-          <h2 className="entity-name">{person.name}</h2>
-          {person.name_ko && <div className="entity-name-alt">{person.name_ko}</div>}
+          <h2 className="entity-name">{getLocalizedText(person as unknown as Record<string, unknown>, 'name', preferredLanguage) || person.name}</h2>
           {servantData && (
             <div className="fgo-servant-badge">
               FGO Servant: {servantData.fgo_name}
@@ -509,7 +508,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
               >
                 <div className="timeline-dot" />
                 <div className="timeline-year">{formatYear(event.year)}</div>
-                <div className="timeline-title">{event.title}</div>
+                <div className="timeline-title">{getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}</div>
               </div>
             ))
           ) : (
@@ -538,7 +537,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
                     onClick={() => onPersonClick(p.id)}
                   >
                     <div className="connected-main">
-                      <span className="connected-name">{p.name}</span>
+                      <span className="connected-name">{getLocalizedText(p as unknown as Record<string, unknown>, 'name', preferredLanguage) || p.name}</span>
                       {p.relationship_type && (
                         <span className={`rel-type-badge ${getRelTypeClass(p.relationship_type)}`}>
                           {formatRelType(p.relationship_type)}
@@ -568,7 +567,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
                     onClick={() => onPersonClick(p.id)}
                   >
                     <div className="connected-main">
-                      <span className="connected-name">{p.name}</span>
+                      <span className="connected-name">{getLocalizedText(p as unknown as Record<string, unknown>, 'name', preferredLanguage) || p.name}</span>
                       {p.relationship_type && (
                         <span className={`rel-type-badge ${getRelTypeClass(p.relationship_type)}`}>
                           {formatRelType(p.relationship_type)}
@@ -598,7 +597,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
                     onClick={() => onPersonClick(p.id)}
                   >
                     <div className="connected-main">
-                      <span className="connected-name">{p.name}</span>
+                      <span className="connected-name">{getLocalizedText(p as unknown as Record<string, unknown>, 'name', preferredLanguage) || p.name}</span>
                       {p.relationship_type && (
                         <span className={`rel-type-badge ${getRelTypeClass(p.relationship_type)}`}>
                           {formatRelType(p.relationship_type)}
@@ -630,7 +629,7 @@ export function PersonDetailView({ personId, onClose, onEventClick, onPersonClic
                     onClick={() => onPersonClick(p.id)}
                   >
                     <div className="connected-main">
-                      <span className="connected-name">{p.name}</span>
+                      <span className="connected-name">{getLocalizedText(p as unknown as Record<string, unknown>, 'name', preferredLanguage) || p.name}</span>
                       {p.relationship_type && (
                         <span className={`rel-type-badge ${getRelTypeClass(p.relationship_type)}`}>
                           {formatRelType(p.relationship_type)}

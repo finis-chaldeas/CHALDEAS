@@ -33,41 +33,26 @@ export function ReportButton({ entityType, entityId }: ReportButtonProps) {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="text-[10px] text-chaldea-text hover:text-chaldea-orange transition-colors"
-      >
+      <button onClick={() => setOpen(true)} className="nc-report-btn">
         Report Issue
       </button>
     )
   }
 
   if (submitted) {
-    return (
-      <div className="text-[10px] text-chaldea-green py-2">
-        Report submitted. Thank you.
-      </div>
-    )
+    return <div className="nc-report-success">Report submitted. Thank you.</div>
   }
 
   return (
-    <div className="border border-chaldea-border rounded p-3 space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] uppercase tracking-wider text-chaldea-text">
-          Report Issue
-        </span>
-        <button
-          onClick={() => setOpen(false)}
-          className="text-chaldea-text hover:text-chaldea-text-bright text-xs"
-        >
-          x
-        </button>
+    <div className="nc-report-form">
+      <div className="nc-report-header">
+        <span className="nc-report-label">Report Issue</span>
+        <button onClick={() => setOpen(false)} className="nc-report-close">x</button>
       </div>
       <select
         value={reportType}
         onChange={(e) => setReportType(e.target.value as ContentReport['report_type'])}
-        className="w-full text-xs bg-chaldea-bg border border-chaldea-border rounded px-2 py-1
-                   text-chaldea-text-bright focus:border-chaldea-cyan outline-none"
+        className="nc-report-select"
       >
         <option value="incorrect">Incorrect information</option>
         <option value="suspicious">Suspicious / unverified</option>
@@ -80,9 +65,7 @@ export function ReportButton({ entityType, entityId }: ReportButtonProps) {
         onChange={(e) => setReason(e.target.value)}
         placeholder="Describe the issue..."
         rows={2}
-        className="w-full text-xs bg-chaldea-bg border border-chaldea-border rounded px-2 py-1
-                   text-chaldea-text-bright placeholder:text-chaldea-text/50 focus:border-chaldea-cyan
-                   outline-none resize-none"
+        className="nc-report-textarea"
       />
       <button
         onClick={() =>
@@ -94,8 +77,7 @@ export function ReportButton({ entityType, entityId }: ReportButtonProps) {
           })
         }
         disabled={!reason.trim() || mutation.isPending}
-        className="text-xs px-3 py-1 rounded border border-chaldea-orange text-chaldea-orange
-                   hover:bg-chaldea-orange/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="nc-report-submit"
       >
         {mutation.isPending ? 'Submitting...' : 'Submit'}
       </button>

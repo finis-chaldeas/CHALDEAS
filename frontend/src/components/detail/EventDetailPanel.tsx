@@ -413,7 +413,7 @@ export function EventDetailPanel({
 
       {/* Title */}
       <div className="detail-title">
-        <h2>{event.title}</h2>
+        <h2>{getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}</h2>
       </div>
 
       {/* Chain Navigation Bar */}
@@ -502,10 +502,10 @@ export function EventDetailPanel({
                       className="hierarchy-breadcrumb-link"
                       onClick={() => handleChildEventClick(eventDetail.parent.id)}
                     >
-                      {eventDetail.parent.title}
+                      {getLocalizedText(eventDetail.parent as Record<string, unknown>, 'title', preferredLanguage) || eventDetail.parent.title}
                     </span>
                     <span className="hierarchy-breadcrumb-sep">{'\u203a'}</span>
-                    <span className="hierarchy-breadcrumb-current">{event.title}</span>
+                    <span className="hierarchy-breadcrumb-current">{getLocalizedText(event as unknown as Record<string, unknown>, 'title', preferredLanguage) || event.title}</span>
                   </div>
                 )}
 
@@ -522,7 +522,7 @@ export function EventDetailPanel({
                         onClick={() => handleChildEventClick(child.id)}
                       >
                         <span className="hierarchy-child-year">{formatYear(child.date_start)}</span>
-                        <span className="hierarchy-child-title">{child.title}</span>
+                        <span className="hierarchy-child-title">{getLocalizedText(child as Record<string, unknown>, 'title', preferredLanguage) || child.title}</span>
                       </div>
                     ))}
                     {(eventDetail.child_count || eventDetail.children.length) > 5 && (
@@ -574,7 +574,7 @@ export function EventDetailPanel({
                         }}
                         title={t('detail.followLocationChain', 'See history of this place')}
                       >
-                        📍 {event.location?.name || event.locations?.[0]?.name}
+                        📍 {getLocalizedText((event.location || event.locations?.[0] || {}) as Record<string, unknown>, 'name', preferredLanguage) || event.location?.name || event.locations?.[0]?.name}
                       </span>
                     </div>
                     {/* Coordinates (small) */}
@@ -608,7 +608,7 @@ export function EventDetailPanel({
                         }}
                         title={t('detail.followPersonChain', 'Follow this person\'s story')}
                       >
-                        {getRoleIcon(persons[0].role)} {persons[0].name}
+                        {getRoleIcon(persons[0].role)} {getLocalizedText(persons[0] as Record<string, unknown>, 'name', preferredLanguage) || persons[0].name}
                       </span>
                     </div>
                     {persons.length > 1 && (
@@ -659,7 +659,7 @@ export function EventDetailPanel({
                   >
                     <span className="person-icon">{getRoleIcon(person.role)}</span>
                     <div className="person-info">
-                      <span className="person-name">{person.name}</span>
+                      <span className="person-name">{getLocalizedText(person as Record<string, unknown>, 'name', preferredLanguage) || person.name}</span>
                       {person.role && <span className="person-role">{person.role}</span>}
                     </div>
                     <span className="person-arrow">→</span>
@@ -725,7 +725,7 @@ export function EventDetailPanel({
                         onClick={() => onEventClick(e)}
                       >
                         <span className="related-event-year">{formatYear(e.date_start)}</span>
-                        <span className="related-event-title">{e.title}</span>
+                        <span className="related-event-title">{getLocalizedText(e as unknown as Record<string, unknown>, 'title', preferredLanguage) || e.title}</span>
                       </div>
                     ))}
                   </div>
@@ -758,7 +758,7 @@ export function EventDetailPanel({
                         onClick={() => onEventClick(e)}
                       >
                         <span className="related-event-year">{formatYear(e.date_start)}</span>
-                        <span className="related-event-title">{e.title}</span>
+                        <span className="related-event-title">{getLocalizedText(e as unknown as Record<string, unknown>, 'title', preferredLanguage) || e.title}</span>
                       </div>
                     ))}
                   </div>
@@ -796,7 +796,7 @@ export function EventDetailPanel({
                 <div className="related-persons">
                   {persons.map((person) => (
                     <span key={person.id} className="person-tag">
-                      {person.name}
+                      {getLocalizedText(person as Record<string, unknown>, 'name', preferredLanguage) || person.name}
                       {person.role && <span style={{ opacity: 0.6 }}> ({person.role})</span>}
                     </span>
                   ))}
@@ -909,7 +909,7 @@ export function EventDetailPanel({
                           </span>
                           <div className="connection-event">
                             <span className="connection-event-title">
-                              {otherEvent.title}
+                              {getLocalizedText(otherEvent as Record<string, unknown>, 'title', preferredLanguage) || otherEvent.title}
                             </span>
                             <span className="connection-event-year">
                               {formatYear(otherEvent.date_start)}

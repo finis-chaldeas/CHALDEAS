@@ -122,6 +122,28 @@
     "submit": "送信",
     "cancel": "キャンセル"
   },
+  "location": {
+    "historyAtLocation": "この場所の歴史",
+    "historicalNames": "歴史的名称",
+    "politicalHistory": "政治史",
+    "noEvents": "この場所に記録された歴史的イベントはありません",
+    "events": "イベント",
+    "names": "名称",
+    "timeSpan": "期間"
+  },
+  "narrative": {
+    "partOf": "上位イベント",
+    "story": "ストーリー",
+    "events": "件のイベント",
+    "subEvents": "件のサブイベント",
+    "keyFigures": "主要人物",
+    "connectedEvents": "関連イベント",
+    "sources": "出典",
+    "causes": "原因",
+    "consequences": "結果",
+    "rayshiftStory": "レイシフト：ストーリーを辿る",
+    "rayshiftCausal": "レイシフト：因果関係を辿る"
+  },
   "era": {
     "names": {
       "PREHISTORY": "先史時代",

@@ -122,6 +122,28 @@
     "submit": "제출",
     "cancel": "취소"
   },
+  "location": {
+    "historyAtLocation": "이 장소의 역사",
+    "historicalNames": "역사적 명칭",
+    "politicalHistory": "정치적 역사",
+    "noEvents": "이 장소에 기록된 역사적 사건이 없습니다",
+    "events": "이벤트",
+    "names": "명칭",
+    "timeSpan": "기간"
+  },
+  "narrative": {
+    "partOf": "상위 사건",
+    "story": "스토리",
+    "events": "개 사건",
+    "subEvents": "개 하위 사건",
+    "keyFigures": "주요 인물",
+    "connectedEvents": "연결된 사건",
+    "sources": "출처",
+    "causes": "원인",
+    "consequences": "결과",
+    "rayshiftStory": "레이시프트: 스토리 따라가기",
+    "rayshiftCausal": "레이시프트: 인과 관계 따라가기"
+  },
   "era": {
     "names": {
       "PREHISTORY": "선사시대",

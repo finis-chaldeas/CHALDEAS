@@ -116,10 +116,11 @@ def _get_top_events(db, year_start, year_end, lat_min, lat_max, lng_min, lng_max
 
     rows = db.execute(text(f"""
         SELECT
-            e.id, e.title, e.title_ko, e.date_start, e.date_end,
+            e.id, e.title, e.title_ko, e.title_ja, e.date_start, e.date_end,
             e.importance, 0 as connection_count, ed.description,
             c.slug as category_slug, c.name as category_name,
-            l.name as location_name, l.latitude, l.longitude,
+            l.name as location_name, l.name_ko as location_name_ko, l.name_ja as location_name_ja,
+            l.latitude, l.longitude,
             {qrank_col} as qrank_score,
             e.parent_event_id
         FROM events e
@@ -136,20 +137,22 @@ def _get_top_events(db, year_start, year_end, lat_min, lat_max, lng_min, lng_max
     for row in rows:
         # Get top 3 participants
         participants = db.execute(text("""
-            SELECT p.name FROM event_persons ep
+            SELECT p.name, p.name_ko, p.name_ja FROM event_persons ep
             JOIN persons p ON p.id = ep.person_id
             WHERE ep.event_id = :eid
             LIMIT 3
         """), {"eid": row[0]}).fetchall()
         participant_names = [p[0] for p in participants]
+        participant_names_ko = [p[1] for p in participants if p[1]]
+        participant_names_ja = [p[2] for p in participants if p[2]]
 
         # Participant total count
         p_total = db.execute(text(
             "SELECT COUNT(*) FROM event_persons WHERE event_id = :eid"
         ), {"eid": row[0]}).scalar()
 
-        importance = row[5] or 3
-        conn_count = row[6] or 0
+        importance = row[6] or 3
+        conn_count = row[7] or 0
 
         context = f"Importance {importance}/5"
         if conn_count > 5:
@@ -160,22 +163,27 @@ def _get_top_events(db, year_start, year_end, lat_min, lat_max, lng_min, lng_max
             "id": row[0],
             "title": row[1],
             "title_ko": row[2],
-            "date_start": row[3],
-            "date_end": row[4],
-            "date_display": _format_year(row[3]),
+            "title_ja": row[3],
+            "date_start": row[4],
+            "date_end": row[5],
+            "date_display": _format_year(row[4]),
             "importance": importance,
             "connection_count": conn_count,
-            "category": row[8],
-            "category_name": row[9],
-            "location_name": row[10],
-            "latitude": float(row[11]) if row[11] else None,
-            "longitude": float(row[12]) if row[12] else None,
-            "description": (row[7][:200] + "...") if row[7] and len(row[7]) > 200 else row[7],
+            "category": row[9],
+            "category_name": row[10],
+            "location_name": row[11],
+            "location_name_ko": row[12],
+            "location_name_ja": row[13],
+            "latitude": float(row[14]) if row[14] else None,
+            "longitude": float(row[15]) if row[15] else None,
+            "description": (row[8][:200] + "...") if row[8] and len(row[8]) > 200 else row[8],
             "participants": participant_names,
+            "participants_ko": participant_names_ko,
+            "participants_ja": participant_names_ja,
             "participant_count": p_total,
             "context": context,
-            "parent_event_id": row[14],
-            "_sort_score": importance * 1000 + (row[13] or 0) / 1000000,  # for interleaving
+            "parent_event_id": row[17],
+            "_sort_score": importance * 1000 + (row[16] or 0) / 1000000,  # for interleaving
         })
 
     return items
@@ -245,9 +253,9 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
 
     rows = db.execute(text(f"""
         SELECT
-            p.id, p.name, p.name_ko, p.birth_year, p.death_year,
+            p.id, p.name, p.name_ko, p.name_ja, p.birth_year, p.death_year,
             p.role, pd.biography, 0 as connection_count,
-            l.name as birthplace_name,
+            l.name as birthplace_name, l.name_ko as birthplace_name_ko, l.name_ja as birthplace_name_ja,
             {qrank_col} as qrank_score
         FROM persons p
         LEFT JOIN person_details pd ON pd.person_id = p.id
@@ -272,7 +280,7 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
     items = []
     for row in rows:
         event_count = event_counts.get(row[0], 0)
-        conn_count = row[7] or 0
+        conn_count = row[8] or 0
 
         context_parts = []
         if event_count > 0:
@@ -282,7 +290,7 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
         context = ", ".join(context_parts) if context_parts else "Notable figure"
 
         # Compute importance-like score for interleaving (1-5 scale)
-        qrank_score = row[9] or 0  # index 9 = qrank_score (after removing event_count from query)
+        qrank_score = row[12] or 0
         if qrank_score > 1000000:
             importance = 5
         elif qrank_score > 100000:
@@ -295,8 +303,8 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
             importance = 1
 
         bio_snippet = None
-        if row[6]:
-            bio = row[6]
+        if row[7]:
+            bio = row[7]
             bio_snippet = (bio[:150] + "...") if len(bio) > 150 else bio
 
         items.append({
@@ -305,16 +313,19 @@ def _get_top_persons(db, year_start, year_end, lat_min, lat_max, lng_min, lng_ma
             "title": row[1],  # name as title for unified interface
             "name": row[1],
             "name_ko": row[2],
-            "birth_year": row[3],
-            "death_year": row[4],
-            "date_start": row[3],  # for unified sorting
-            "date_display": _format_lifespan(row[3], row[4]),
+            "name_ja": row[3],
+            "birth_year": row[4],
+            "death_year": row[5],
+            "date_start": row[4],  # for unified sorting
+            "date_display": _format_lifespan(row[4], row[5]),
             "importance": importance,
-            "role": row[5],
+            "role": row[6],
             "biography": bio_snippet,
             "event_count": event_count,
             "connection_count": conn_count,
-            "birthplace_name": row[8],
+            "birthplace_name": row[9],
+            "birthplace_name_ko": row[10],
+            "birthplace_name_ja": row[11],
             "context": context,
             "_sort_score": importance * 1000 + qrank_score / 1000000,
         })

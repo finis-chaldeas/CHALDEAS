@@ -30,6 +30,8 @@ class GlobeMarker(BaseModel):
     year_end: Optional[int] = None
     category: Optional[str] = None
     title: str
+    title_ko: Optional[str] = None
+    title_ja: Optional[str] = None
     description: Optional[str] = None
     certainty: Optional[str] = None
     color: Optional[str] = None
@@ -167,6 +169,7 @@ async def get_globe_markers(
                 id=row[0],
                 type="event",
                 title=row[1] or "Unknown Event",
+                title_ko=row[2],
                 lat=float(row[5]),
                 lng=float(row[6]),
                 year=row[3],
@@ -202,6 +205,7 @@ async def get_globe_markers(
                 id=row[0],
                 type="location",
                 title=row[1] or "Unknown Location",
+                title_ko=row[2],
                 lat=float(row[3]),
                 lng=float(row[4]),
                 category=row[5],
@@ -244,6 +248,7 @@ async def get_globe_markers(
                     id=row[0],
                     type="person",
                     title=row[1] or "Unknown Person",
+                    title_ko=row[2],
                     lat=float(row[7]),
                     lng=float(row[8]),
                     year=row[3],
@@ -260,6 +265,7 @@ class AnchorLocation(BaseModel):
     id: int
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     lat: float
     lng: float
     event_count: int
@@ -283,14 +289,14 @@ async def get_anchor_locations(
     min_events = tier_thresholds.get(tier, 15)
 
     result = db.execute(text("""
-        SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+        SELECT l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude,
                COUNT(e.id) as event_count
         FROM locations l
         JOIN events e ON e.primary_location_id = l.id
         WHERE l.latitude IS NOT NULL
           AND l.longitude IS NOT NULL
           AND l.location_type = 'point'
-        GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+        GROUP BY l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude
         HAVING COUNT(e.id) >= :min_events
         ORDER BY COUNT(e.id) DESC
         LIMIT :limit
@@ -298,14 +304,15 @@ async def get_anchor_locations(
 
     locations = []
     for row in result:
-        ec = row[5]
+        ec = row[6]
         t = 1 if ec >= 15 else (2 if ec >= 5 else 3)
         locations.append(AnchorLocation(
             id=row[0],
             name=row[1] or "Unknown",
             name_ko=row[2],
-            lat=float(row[3]),
-            lng=float(row[4]),
+            name_ja=row[3],
+            lat=float(row[4]),
+            lng=float(row[5]),
             event_count=ec,
             tier=t,
         ))
@@ -686,6 +693,372 @@ async def get_marker_clusters(
     }
 
 
+# ============== Smart Markers System ==============
+
+class HeroMarker(BaseModel):
+    """Hero marker: important event displayed as a card on the globe."""
+    id: int
+    type: Literal["event"] = "event"
+    lat: float
+    lng: float
+    title: str
+    title_ko: Optional[str] = None
+    title_ja: Optional[str] = None
+    description: Optional[str] = None
+    year: Optional[int] = None
+    year_end: Optional[int] = None
+    category: Optional[str] = None
+    importance: int
+    child_count: int = 0
+    location_name: Optional[str] = None
+    location_name_ko: Optional[str] = None
+    location_name_ja: Optional[str] = None
+    location_id: Optional[int] = None
+
+
+class ClusterEvent(BaseModel):
+    """Single event within a cluster bubble."""
+    id: int
+    title: str
+    title_ko: Optional[str] = None
+    title_ja: Optional[str] = None
+    year: Optional[int] = None
+    importance: Optional[int] = None
+    category: Optional[str] = None
+
+
+class ClusterBubble(BaseModel):
+    """Cluster bubble: grouped events shown as a count bubble."""
+    lat: float
+    lng: float
+    count: int
+    top_event_title: Optional[str] = None
+    top_importance: Optional[int] = None
+    year_range: List[Optional[int]]  # [min_year, max_year]
+    top_events: List[ClusterEvent] = []  # Top events for browse panel
+
+
+class SmartMarkersResponse(BaseModel):
+    """Combined response with hero cards and cluster bubbles."""
+    heroes: List[HeroMarker]
+    clusters: List[ClusterBubble]
+    zoom: str
+    total_events: int
+
+
+def _haversine_approx(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """Approximate angular distance in degrees (fast, no trig)."""
+    dlat = abs(lat1 - lat2)
+    dlng = abs(lng1 - lng2)
+    return (dlat * dlat + dlng * dlng) ** 0.5
+
+
+def _select_heroes(candidates: list, max_count: int, min_distance_deg: float, zoom: str = "cosmic") -> list:
+    """Select heroes with monotonic inclusion guarantee.
+
+    Two-pass approach ensures events visible at coarser zoom levels
+    remain visible when zooming in (no flip-flopping).
+
+    Pass 1: Select 'anchor' heroes using cosmic-level distance (these
+            persist across all zoom levels for consistency).
+    Pass 2: Fill remaining slots at the current zoom's min_distance,
+            never displacing anchors.
+    """
+    # Anchor distance = cosmic level (largest), ensures stable core set
+    ANCHOR_DISTANCE = 15  # matches cosmic min_distance
+    anchor_max = ZOOM_CONFIG["cosmic"]["max_heroes"]
+
+    # Pass 1: Anchor heroes (importance 5+ with large spacing)
+    anchors = []
+    for c in candidates:
+        if c["importance"] < 5:
+            continue
+        too_close = any(
+            _haversine_approx(c["lat"], c["lng"], h["lat"], h["lng"]) < ANCHOR_DISTANCE
+            for h in anchors
+        )
+        if not too_close:
+            anchors.append(c)
+        if len(anchors) >= anchor_max:
+            break
+
+    # Pass 2: Fill with remaining candidates at current zoom's distance
+    heroes = list(anchors)
+    anchor_ids = {h["id"] for h in anchors}
+    for c in candidates:
+        if c["id"] in anchor_ids:
+            continue
+        if len(heroes) >= max_count:
+            break
+        too_close = any(
+            _haversine_approx(c["lat"], c["lng"], h["lat"], h["lng"]) < min_distance_deg
+            for h in heroes
+        )
+        if not too_close:
+            heroes.append(c)
+
+    return heroes
+
+
+# Zoom-level configuration
+ZOOM_CONFIG = {
+    "cosmic":      {"min_importance": 5, "max_heroes": 12, "grid_size": 30, "min_distance": 15},
+    "continental": {"min_importance": 4, "max_heroes": 20, "grid_size": 10, "min_distance": 5},
+    "regional":    {"min_importance": 3, "max_heroes": 25, "grid_size": 3,  "min_distance": 2},
+    "local":       {"min_importance": 2, "max_heroes": 30, "grid_size": 1,  "min_distance": 0.5},
+}
+
+
+@router.get("/smart-markers", response_model=SmartMarkersResponse)
+async def get_smart_markers(
+    year_start: int = Query(..., description="Start year (BCE as negative)"),
+    year_end: int = Query(..., description="End year"),
+    zoom: str = Query("cosmic", description="Zoom level: cosmic/continental/regional/local"),
+    bounds: Optional[str] = Query(None, description="lat1,lng1,lat2,lng2 viewport bounds"),
+    limit_heroes: int = Query(15, ge=1, le=50),
+    limit_clusters: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db),
+):
+    """
+    Smart Markers: zoom-level-aware event display.
+
+    Returns hero cards (important events) and cluster bubbles (grouped minor events).
+    Hero selection uses importance-based filtering with overlap prevention.
+    """
+    config = ZOOM_CONFIG.get(zoom, ZOOM_CONFIG["cosmic"])
+    min_importance = config["min_importance"]
+    grid_size = config["grid_size"]
+    min_distance = config["min_distance"]
+    max_heroes = min(config["max_heroes"], limit_heroes)
+
+    # Parse bounds
+    bounds_filter = ""
+    bounds_params: dict = {}
+    if bounds:
+        try:
+            lat1, lng1, lat2, lng2 = map(float, bounds.split(","))
+            bounds_filter = """
+                AND l.latitude BETWEEN :lat_min AND :lat_max
+                AND l.longitude BETWEEN :lng_min AND :lng_max
+            """
+            bounds_params = {
+                "lat_min": min(lat1, lat2),
+                "lat_max": max(lat1, lat2),
+                "lng_min": min(lng1, lng2),
+                "lng_max": max(lng1, lng2),
+            }
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid bounds format")
+
+    # Step 1: Get hero candidates (high importance events)
+    candidate_limit = max_heroes * 3  # Fetch extra for overlap filtering
+    params_heroes: dict = {
+        "year_start": year_start,
+        "year_end": year_end,
+        "min_importance": min_importance,
+        "candidate_limit": candidate_limit,
+    }
+    params_heroes.update(bounds_params)
+
+    hero_result = db.execute(text(f"""
+        SELECT e.id, e.title, e.title_ko, e.title_ja,
+               ed.description, e.date_start, e.date_end,
+               l.latitude, l.longitude, l.name as location_name,
+               e.importance,
+               (SELECT COUNT(*) FROM events ec WHERE ec.parent_event_id = e.id) as child_count,
+               c.name as category,
+               l.name_ko as location_name_ko,
+               l.name_ja as location_name_ja,
+               l.id as location_id
+        FROM events e
+        JOIN locations l ON e.primary_location_id = l.id
+        LEFT JOIN event_details ed ON ed.event_id = e.id
+        LEFT JOIN categories c ON e.category_id = c.id
+        WHERE e.date_start >= :year_start AND e.date_start <= :year_end
+          AND l.latitude IS NOT NULL
+          AND l.longitude IS NOT NULL
+          AND e.importance >= :min_importance
+          {bounds_filter}
+        ORDER BY e.importance DESC, child_count DESC, e.date_start ASC NULLS LAST
+        LIMIT :candidate_limit
+    """), params_heroes)
+
+    candidates = []
+    for row in hero_result:
+        candidates.append({
+            "id": row[0],
+            "title": row[1] or "Unknown Event",
+            "title_ko": row[2],
+            "title_ja": row[3],
+            "description": (row[4] or "")[:200] if row[4] else None,
+            "year": row[5],
+            "year_end": row[6],
+            "lat": float(row[7]),
+            "lng": float(row[8]),
+            "location_name": row[9],
+            "importance": row[10] or 3,
+            "child_count": row[11] or 0,
+            "category": row[12],
+            "location_name_ko": row[13],
+            "location_name_ja": row[14],
+            "location_id": row[15],
+        })
+
+    # Step 2: Select heroes with overlap prevention
+    selected = _select_heroes(candidates, max_heroes, min_distance, zoom)
+    hero_ids = [h["id"] for h in selected]
+
+    heroes = [
+        HeroMarker(
+            id=h["id"],
+            lat=h["lat"],
+            lng=h["lng"],
+            title=h["title"],
+            title_ko=h["title_ko"],
+            title_ja=h["title_ja"],
+            description=h["description"],
+            year=h["year"],
+            year_end=h["year_end"],
+            category=h["category"],
+            importance=h["importance"],
+            child_count=h["child_count"],
+            location_name=h["location_name"],
+            location_name_ko=h.get("location_name_ko"),
+            location_name_ja=h.get("location_name_ja"),
+            location_id=h.get("location_id"),
+        )
+        for h in selected
+    ]
+
+    # Step 3: Get total event count for this time range
+    params_total: dict = {"year_start": year_start, "year_end": year_end}
+    params_total.update(bounds_params)
+    total_events = db.execute(text(f"""
+        SELECT COUNT(*)
+        FROM events e
+        JOIN locations l ON e.primary_location_id = l.id
+        WHERE e.date_start >= :year_start AND e.date_start <= :year_end
+          AND l.latitude IS NOT NULL
+          {bounds_filter}
+    """), params_total).scalar() or 0
+
+    # Step 4: Get cluster bubbles (non-hero events grouped by grid)
+    params_clusters: dict = {
+        "year_start": year_start,
+        "year_end": year_end,
+        "grid_size": float(grid_size),
+        "limit_clusters": limit_clusters,
+    }
+    params_clusters.update(bounds_params)
+
+    # Build hero exclusion clause
+    hero_exclude = ""
+    if hero_ids:
+        # Use ANY array for hero exclusion
+        hero_id_list = ",".join(str(hid) for hid in hero_ids)
+        hero_exclude = f"AND e.id NOT IN ({hero_id_list})"
+
+    cluster_result = db.execute(text(f"""
+        SELECT
+            FLOOR(l.latitude / :grid_size) * :grid_size + :grid_size / 2 as center_lat,
+            FLOOR(l.longitude / :grid_size) * :grid_size + :grid_size / 2 as center_lng,
+            COUNT(*) as count,
+            MIN(e.date_start) as min_year,
+            MAX(e.date_start) as max_year,
+            MAX(e.importance) as top_importance
+        FROM events e
+        JOIN locations l ON e.primary_location_id = l.id
+        WHERE e.date_start >= :year_start AND e.date_start <= :year_end
+          AND l.latitude IS NOT NULL
+          AND l.longitude IS NOT NULL
+          {hero_exclude}
+          {bounds_filter}
+        GROUP BY FLOOR(l.latitude / :grid_size), FLOOR(l.longitude / :grid_size)
+        HAVING COUNT(*) >= 2
+        ORDER BY COUNT(*) DESC
+        LIMIT :limit_clusters
+    """), params_clusters)
+
+    clusters = []
+    cluster_grid_keys = []  # Track grid keys for event matching
+    for row in cluster_result:
+        cluster = ClusterBubble(
+            lat=float(row[0]),
+            lng=float(row[1]),
+            count=row[2],
+            year_range=[row[3], row[4]],
+            top_importance=row[5],
+        )
+        clusters.append(cluster)
+        # Grid key = (floor(lat/grid), floor(lng/grid))
+        grid_lat = int((float(row[0]) - grid_size / 2) / grid_size)
+        grid_lng = int((float(row[1]) - grid_size / 2) / grid_size)
+        cluster_grid_keys.append((grid_lat, grid_lng))
+
+    # Step 5: Fetch top events per cluster grid cell (up to 7 per cell)
+    if clusters:
+        params_events: dict = {
+            "year_start": year_start,
+            "year_end": year_end,
+            "grid_size": float(grid_size),
+        }
+        params_events.update(bounds_params)
+
+        events_result = db.execute(text(f"""
+            WITH grid_events AS (
+                SELECT e.id, e.title, e.title_ko, e.title_ja,
+                       e.date_start, e.importance,
+                       c.name as category,
+                       FLOOR(l.latitude / :grid_size) as grid_lat,
+                       FLOOR(l.longitude / :grid_size) as grid_lng,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY FLOOR(l.latitude / :grid_size), FLOOR(l.longitude / :grid_size)
+                           ORDER BY e.importance DESC NULLS LAST, e.date_start ASC NULLS LAST
+                       ) as rn
+                FROM events e
+                JOIN locations l ON e.primary_location_id = l.id
+                LEFT JOIN categories c ON e.category_id = c.id
+                WHERE e.date_start >= :year_start AND e.date_start <= :year_end
+                  AND l.latitude IS NOT NULL AND l.longitude IS NOT NULL
+                  {hero_exclude}
+                  {bounds_filter}
+            )
+            SELECT id, title, title_ko, title_ja, date_start, importance, category,
+                   grid_lat, grid_lng
+            FROM grid_events
+            WHERE rn <= 7
+            ORDER BY grid_lat, grid_lng, rn
+        """), params_events)
+
+        # Build grid_key → events map
+        grid_events_map: dict = {}
+        for row in events_result:
+            key = (int(row[7]), int(row[8]))
+            if key not in grid_events_map:
+                grid_events_map[key] = []
+            grid_events_map[key].append(ClusterEvent(
+                id=row[0],
+                title=row[1] or "Unknown",
+                title_ko=row[2],
+                title_ja=row[3],
+                year=row[4],
+                importance=row[5],
+                category=row[6],
+            ))
+
+        # Match events to clusters
+        for i, cluster in enumerate(clusters):
+            key = cluster_grid_keys[i]
+            cluster.top_events = grid_events_map.get(key, [])
+
+    return SmartMarkersResponse(
+        heroes=heroes,
+        clusters=clusters,
+        zoom=zoom,
+        total_events=total_events,
+    )
+
+
 # ============== Node System ==============
 
 class LocationNode(BaseModel):
@@ -693,6 +1066,7 @@ class LocationNode(BaseModel):
     id: int
     name: str
     name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
     lat: float
     lng: float
     event_count: int          # 전체 이벤트 수
@@ -781,7 +1155,7 @@ async def get_location_nodes(
     # min_events가 0이면 LEFT JOIN으로 이벤트 없는 노드도 포함
     if min_events == 0:
         result = db.execute(text(f"""
-            SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+            SELECT l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude,
                    COUNT(e.id) as event_count,
                    {active_count_expr} as active_count,
                    (SELECT e2.title FROM events e2
@@ -796,13 +1170,13 @@ async def get_location_nodes(
             LEFT JOIN events e ON e.primary_location_id = l.id
             WHERE l.latitude IS NOT NULL
               AND l.longitude IS NOT NULL
-            GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+            GROUP BY l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude
             ORDER BY COUNT(e.id) DESC
             LIMIT :limit
         """), params)
     else:
         result = db.execute(text(f"""
-            SELECT l.id, l.name, l.name_ko, l.latitude, l.longitude,
+            SELECT l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude,
                    COUNT(e.id) as event_count,
                    {active_count_expr} as active_count,
                    (SELECT e2.title FROM events e2
@@ -817,7 +1191,7 @@ async def get_location_nodes(
             JOIN events e ON e.primary_location_id = l.id
             WHERE l.latitude IS NOT NULL
               AND l.longitude IS NOT NULL
-            GROUP BY l.id, l.name, l.name_ko, l.latitude, l.longitude
+            GROUP BY l.id, l.name, l.name_ko, l.name_ja, l.latitude, l.longitude
             HAVING COUNT(e.id) >= :min_events
             ORDER BY COUNT(e.id) DESC
             LIMIT :limit
@@ -825,19 +1199,20 @@ async def get_location_nodes(
 
     nodes = []
     for row in result:
-        ec = row[5]
+        ec = row[6]
         tier = 1 if ec >= 20 else (2 if ec >= 5 else (3 if ec >= 1 else 4))
         nodes.append(LocationNode(
             id=row[0],
             name=row[1] or "Unknown",
             name_ko=row[2],
-            lat=float(row[3]),
-            lng=float(row[4]),
+            name_ja=row[3],
+            lat=float(row[4]),
+            lng=float(row[5]),
             event_count=ec,
-            active_event_count=row[6] or 0,
+            active_event_count=row[7] or 0,
             tier=tier,
-            top_event=row[7],
-            top_importance=row[8],
+            top_event=row[8],
+            top_importance=row[9],
         ))
 
     return nodes
@@ -884,7 +1259,7 @@ async def get_node_events(
 
     # 이벤트 리스트
     events = db.execute(text(f"""
-        SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
+        SELECT e.id, e.title, e.title_ko, e.title_ja, e.date_start, e.date_end,
                e.importance, ed.description, e.category_id,
                c.name as category_name
         FROM events e
@@ -900,11 +1275,12 @@ async def get_node_events(
             "id": row[0],
             "title": row[1],
             "title_ko": row[2],
-            "date_start": row[3],
-            "date_end": row[4],
-            "importance": row[5],
-            "description": row[6],
-            "category": row[8],
+            "title_ja": row[3],
+            "date_start": row[4],
+            "date_end": row[5],
+            "importance": row[6],
+            "description": row[7],
+            "category": row[9],
         }
         for row in events
     ]

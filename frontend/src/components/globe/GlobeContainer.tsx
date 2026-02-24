@@ -2,11 +2,12 @@ import { useRef, useMemo, useEffect, useState, useCallback } from 'react'
 import Globe, { GlobeMethods } from 'react-globe.gl'
 import { useGlobeStore, getZoomLevel } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
+import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFlyMode } from '../../hooks/useFlyMode'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { api, eventsApi, personsApi, locationsApi, nodesApi } from '../../api/client'
-import type { Event } from '../../types'
+import { api, eventsApi, personsApi, locationsApi, nodesApi, smartMarkersApi } from '../../api/client'
+import type { Event, SmartMarkersResponse, ClusterEvent } from '../../types'
 import { CameraModeToggle } from './CameraModeToggle'
 import './GlobeHeatmap.css'
 
@@ -103,13 +104,15 @@ interface GlobeContainerProps {
   onHeatmapToggle?: (show: boolean) => void
 }
 
-// Globe texture URLs for different styles
-const GLOBE_TEXTURES: Record<string, string> = {
-  default: '//unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
-  // FGO Part 1 style - dark with visible land
+// Globe texture URLs - LOD system: low-res for zoomed out, high-res for zoomed in
+const GLOBE_TEXTURES_LO: Record<string, string> = {
+  default: '//unpkg.com/three-globe/example/img/earth-blue-marble.jpg', // ~2k, fast load
   holo: '//unpkg.com/three-globe/example/img/earth-dark.jpg',
-  // Night lights style
   night: '//unpkg.com/three-globe/example/img/earth-night.jpg',
+}
+const GLOBE_TEXTURES_HI: Record<string, string> = {
+  default: '/textures/8k_earth_daymap.jpg',  // 8k, self-hosted
+  night: '/textures/8k_earth_nightmap.jpg',   // 8k, self-hosted
 }
 
 // Generate graticule (lat/long grid lines) data
@@ -153,8 +156,10 @@ export function GlobeContainer({
     events,
     setEvents,
     selectedEvent,
+    setSelectedEvent,
     highlightedLocations,
     cameraMode,
+    autoRotate: storeAutoRotate,
     setViewportBounds,
     setCameraPosition,
     flyTarget,
@@ -166,13 +171,42 @@ export function GlobeContainer({
   // Fly mode controls (WASD navigation)
   useFlyMode({ globeRef, enabled: cameraMode === 'fly' })
   const { currentYear } = useTimelineStore()
+  const { preferredLanguage } = useSettingsStore()
   const debouncedYear = useDebounce(currentYear, 150) // Debounce API calls during timeline drag (150ms for snappier response)
   const [focusedLocation, setFocusedLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [countries, setCountries] = useState<GeoJSONFeature[]>([])
   const [internalShowHeatmap, setInternalShowHeatmap] = useState(false)
-  const [altitude, setAltitude] = useState(2.5) // Track zoom level for clustering
-  const currentZoomLevel = useMemo(() => getZoomLevel(altitude), [altitude])
+  const [showAllCities, setShowAllCities] = useState(false)
+  // Use ref for continuous altitude (avoids re-render every frame)
+  // Only update state-based zoom level when it actually changes threshold
+  const altitudeRef = useRef(2.5)
+  const [currentZoomLevel, setCurrentZoomLevel] = useState<ReturnType<typeof getZoomLevel>>('cosmic')
   const [, setLoadingMarkerId] = useState<number | null>(null)
+  const [clusterPanel, setClusterPanel] = useState<{ events: ClusterEvent[]; lat: number; lng: number; locationName?: string } | null>(null)
+  const clusterPanelRef = useRef(clusterPanel)
+  clusterPanelRef.current = clusterPanel
+  const setClusterPanelRef = useRef(setClusterPanel)
+  setClusterPanelRef.current = setClusterPanel
+
+  // Refs for values used inside htmlElement callback
+  // Keeps the callback reference stable to prevent three-globe from
+  // destroying and recreating DOM elements on every re-render
+  const selectedEventRef = useRef(selectedEvent)
+  selectedEventRef.current = selectedEvent
+  const eventsRef = useRef(events)
+  eventsRef.current = events
+  const eventsDataRef = useRef<Event[] | undefined>(undefined)
+  const onEventClickRef = useRef(onEventClick)
+  onEventClickRef.current = onEventClick
+  const onLocationClickRef = useRef(onLocationClick)
+  onLocationClickRef.current = onLocationClick
+  const anchorLocationsRef = useRef<AnchorLocation[] | undefined>(undefined)
+  const setSelectedEventRef = useRef(setSelectedEvent)
+  setSelectedEventRef.current = setSelectedEvent
+  const debouncedYearRef = useRef(debouncedYear)
+  debouncedYearRef.current = debouncedYear
+  const preferredLanguageRef = useRef(preferredLanguage)
+  preferredLanguageRef.current = preferredLanguage
 
   // Use external control if provided, otherwise use internal state
   const showHeatmap = externalShowHeatmap !== undefined ? externalShowHeatmap : internalShowHeatmap
@@ -187,17 +221,21 @@ export function GlobeContainer({
   }, [showHeatmap, onHeatmapToggle])
 
   // Track altitude changes + viewport bounds
+  // Uses ref for altitude to avoid re-render every frame during rotation
   const handleZoom = useCallback(() => {
     if (globeRef.current) {
       const pov = globeRef.current.pointOfView()
       if (pov && typeof pov.altitude === 'number') {
-        setAltitude(pov.altitude)
+        altitudeRef.current = pov.altitude
+
+        // Only trigger state update when zoom level actually changes
+        const newZoom = getZoomLevel(pov.altitude)
+        setCurrentZoomLevel(prev => prev === newZoom ? prev : newZoom)
 
         // Update camera position in store
         setCameraPosition({ lat: pov.lat, lng: pov.lng, altitude: pov.altitude })
 
         // Compute approximate viewport bounds from altitude and center point
-        // Rough: visible degrees ~ altitude * 40 (at altitude 2.5 ~ ±100 degrees)
         const latSpan = Math.min(90, pov.altitude * 40)
         const lngSpan = Math.min(180, pov.altitude * 50)
         setViewportBounds({
@@ -268,6 +306,7 @@ export function GlobeContainer({
     },
     staleTime: 10 * 60 * 1000, // 10 minutes - locations don't change often
   })
+  anchorLocationsRef.current = anchorLocations
 
   // Fetch location nodes for node-based display
   const zoomParam = currentZoomLevel === 'cosmic' ? 'cosmic'
@@ -286,6 +325,22 @@ export function GlobeContainer({
       return res.data
     },
     staleTime: 30 * 1000, // 30s - changes with year
+  })
+
+  // Fetch smart markers (hero cards + cluster bubbles) for zoom-aware display
+  const { data: smartMarkers } = useQuery<SmartMarkersResponse>({
+    queryKey: ['smart-markers', debouncedYear, currentZoomLevel],
+    queryFn: async () => {
+      const timeRange = 100 // Uniform ±100yr across all zoom levels
+      const res = await smartMarkersApi.get({
+        year_start: debouncedYear - timeRange,
+        year_end: debouncedYear + timeRange,
+        zoom: currentZoomLevel,
+      })
+      return res.data
+    },
+    staleTime: 30 * 1000,
+    placeholderData: (prev) => prev, // Keep previous data during refetch to prevent flicker
   })
 
   // Fetch arcs for selected event (Historical Chain connections)
@@ -310,16 +365,17 @@ export function GlobeContainer({
   useEffect(() => {
     if (eventsData) {
       setEvents(eventsData)
+      eventsDataRef.current = eventsData
     }
   }, [eventsData, setEvents])
 
-  // Auto-rotate globe (only in orbit mode + cosmic/continental zoom)
+  // Auto-rotate globe (only in orbit mode + cosmic zoom + store toggle)
   useEffect(() => {
     if (globeRef.current) {
       const controls = globeRef.current.controls()
       if (cameraMode === 'orbit') {
-        // Auto-rotate only at cosmic zoom
-        const shouldAutoRotate = currentZoomLevel === 'cosmic'
+        // Auto-rotate only at cosmic zoom AND if store allows it
+        const shouldAutoRotate = currentZoomLevel === 'cosmic' && storeAutoRotate
         controls.autoRotate = shouldAutoRotate
         controls.autoRotateSpeed = 0.3
         controls.enableRotate = true
@@ -331,7 +387,7 @@ export function GlobeContainer({
         controls.enableZoom = false
       }
     }
-  }, [cameraMode, currentZoomLevel])
+  }, [cameraMode, currentZoomLevel, storeAutoRotate])
 
   // Fly to location when flyTarget changes (from Navigator tabs, SHEBA episodes, etc.)
   useEffect(() => {
@@ -346,7 +402,8 @@ export function GlobeContainer({
       )
       clearFlyTarget()
     }
-  }, [flyTarget, cameraMode, clearFlyTarget])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flyTarget])
 
   // Focus on selected event - rotate globe to that location
   useEffect(() => {
@@ -360,20 +417,61 @@ export function GlobeContainer({
           globeRef.current.controls().autoRotate = false
         }
 
-        // Rotate globe to focus on the location
-        globeRef.current.pointOfView({ lat, lng, altitude: 2 }, 1000)
+        // Rotate globe to focus on the location (0.8 = regional zoom, clearly focused but shows context)
+        globeRef.current.pointOfView({ lat, lng, altitude: 0.8 }, 1000)
 
         // Set focused location for ring effect
         setFocusedLocation({ lat, lng })
       }
     } else {
-      // Resume auto-rotate when no selection (only in orbit mode)
-      if (globeRef.current && cameraMode === 'orbit') {
-        globeRef.current.controls().autoRotate = true
+      // Resume auto-rotate when no selection (only in orbit mode + store allows it)
+      if (globeRef.current && cameraMode === 'orbit' && storeAutoRotate) {
+        globeRef.current.controls().autoRotate = currentZoomLevel === 'cosmic'
       }
       setFocusedLocation(null)
     }
-  }, [selectedEvent, cameraMode])
+  }, [selectedEvent, cameraMode, storeAutoRotate, currentZoomLevel])
+
+  // Update hero card highlight state via DOM when selection changes
+  // Uses CSS classes instead of recreating DOM elements
+  // Also re-applies when htmlElements changes (zoom triggers new DOM elements)
+  useEffect(() => {
+    const applyClasses = () => {
+      const container = document.querySelector('.globe-container')
+      if (!container) return
+
+      // Clear previous selection highlights
+      container.querySelectorAll('.hero-selected, .hero-arc-target').forEach(el => {
+        el.classList.remove('hero-selected')
+        el.classList.remove('hero-arc-target')
+      })
+
+      if (selectedEvent) {
+        // Highlight the selected hero card
+        const heroEl = container.querySelector(`[data-hero-id="${selectedEvent.id}"]`)
+        if (heroEl) heroEl.classList.add('hero-selected')
+
+        // Mark arc-connected events as visible
+        if (eventArcs) {
+          const arcEventIds = new Set<number>()
+          eventArcs.forEach(arc => {
+            arcEventIds.add(arc.source_event_id)
+            arcEventIds.add(arc.target_event_id)
+          })
+          arcEventIds.delete(selectedEvent.id as number)
+          arcEventIds.forEach(id => {
+            const arcEl = container.querySelector(`[data-hero-id="${id}"]`)
+            if (arcEl) arcEl.classList.add('hero-arc-target')
+          })
+        }
+      }
+    }
+
+    // Apply immediately + after short delay (three-globe DOM update is async)
+    applyClasses()
+    const timer = setTimeout(applyClasses, 100)
+    return () => clearTimeout(timer)
+  }, [selectedEvent, eventArcs, smartMarkers, currentZoomLevel])
 
   // Sync globe markers to store (for Map view to consume)
   useEffect(() => {
@@ -422,77 +520,526 @@ export function GlobeContainer({
   // Clustering disabled - location nodes only
 
   // Visible anchor locations filtered by zoom level (tier system)
+  // Use discrete currentZoomLevel instead of continuous altitude to avoid recalc every frame
   const visibleAnchors = useMemo(() => {
     if (!anchorLocations) return []
-    // Show tier 1 always, tier 2 only when zoomed in
-    const maxTier = altitude > 2.0 ? 1 : altitude > 0.8 ? 2 : 3
+    const maxTier = currentZoomLevel === 'cosmic' ? 1
+      : currentZoomLevel === 'continental' ? 2 : 3
     return anchorLocations.filter(loc => loc.tier <= maxTier)
-  }, [anchorLocations, altitude])
+  }, [anchorLocations, currentZoomLevel])
 
   // Visible location nodes filtered by zoom + activity
+  // By default only show cities with events in the current time range
+  // Toggle showAllCities to see all cities regardless
   const visibleNodes = useMemo(() => {
     if (!locationNodes) return []
     return locationNodes.filter(node => {
-      // At cosmic/continental zoom: only show nodes with events in current time range
+      if (!showAllCities && node.active_event_count === 0) return false
+
       if (currentZoomLevel === 'cosmic') {
-        return node.active_event_count > 0 && node.event_count >= 20
+        return showAllCities ? node.event_count >= 10 : node.event_count >= 20
       }
       if (currentZoomLevel === 'continental') {
-        return node.active_event_count > 0 && node.event_count >= 5
+        return showAllCities ? node.event_count >= 3 : node.event_count >= 5
       }
-      // At regional zoom: show active nodes, plus inactive with many total events
       if (currentZoomLevel === 'regional') {
-        if (node.active_event_count > 0) return node.event_count >= 1
-        return node.event_count >= 20 // Only show major inactive cities
+        return node.event_count >= 1
       }
-      // Local zoom: show all
+      // Local zoom: show all active
       return true
     })
-  }, [locationNodes, currentZoomLevel])
+  }, [locationNodes, currentZoomLevel, showAllCities])
 
-  // Merge anchor locations + nodes + SHEBA highlighted locations for htmlElementsData
+  // Merge all marker types for htmlElementsData
+  // Priority: SHEBA highlights > Hero cards > Cluster bubbles > Location nodes > Anchors
   const htmlElements = useMemo(() => {
-    // SHEBA highlights take priority
+    const elements: Array<Record<string, unknown>> = []
+
+    // 1. SHEBA highlights (highest priority)
     if (highlightedLocations.length > 0) {
-      return highlightedLocations.map(loc => ({
+      elements.push(...highlightedLocations.map(loc => ({
         ...loc,
         kind: 'highlight' as const,
-      }))
+      })))
     }
 
-    // Use location nodes as primary labels (with event counts)
+    // 2. Hero cards (important events)
+    if (smartMarkers?.heroes) {
+      elements.push(...smartMarkers.heroes.map(h => ({
+        ...h,
+        title: getLocalizedText(h as unknown as Record<string, unknown>, 'title', preferredLanguage) || h.title,
+        kind: 'hero' as const,
+      })))
+    }
+
+    // 2b. Arc target events (connected events shown as hero cards even if low importance)
+    if (eventArcs && eventArcs.length > 0) {
+      const heroIds = new Set(smartMarkers?.heroes?.map(h => h.id) || [])
+      eventArcs.forEach(arc => {
+        // Add both source and target if not already in heroes
+        if (!heroIds.has(arc.target_event_id)) {
+          heroIds.add(arc.target_event_id)
+          elements.push({
+            id: arc.target_event_id,
+            type: 'event',
+            lat: arc.target_lat,
+            lng: arc.target_lng,
+            title: arc.target_title,
+            year: arc.target_year,
+            importance: 3,
+            child_count: 0,
+            kind: 'hero' as const,
+            is_arc_target: true,
+          })
+        }
+        if (!heroIds.has(arc.source_event_id)) {
+          heroIds.add(arc.source_event_id)
+          elements.push({
+            id: arc.source_event_id,
+            type: 'event',
+            lat: arc.source_lat,
+            lng: arc.source_lng,
+            title: arc.source_title,
+            year: arc.source_year,
+            importance: 3,
+            child_count: 0,
+            kind: 'hero' as const,
+            is_arc_target: true,
+          })
+        }
+      })
+    }
+
+    // 3. Cluster bubbles (with top_events for browse panel)
+    if (smartMarkers?.clusters) {
+      elements.push(...smartMarkers.clusters.map(c => ({
+        ...c,
+        top_events: c.top_events || [],
+        kind: 'cluster' as const,
+      })))
+    }
+
+    // 4. Location nodes (city labels)
     if (visibleNodes.length > 0) {
-      return visibleNodes.map(node => ({
+      elements.push(...visibleNodes.map(node => ({
         lat: node.lat,
         lng: node.lng,
-        title: node.name,
+        title: getLocalizedText(node as unknown as Record<string, unknown>, 'name', preferredLanguage) || node.name,
         event_count: node.event_count,
         active_count: node.active_event_count,
         tier: node.tier,
         node_id: node.id,
         top_event: node.top_event,
         kind: 'node' as const,
-      }))
+      })))
     }
 
-    // Fallback to anchor locations
-    return visibleAnchors.map(loc => ({
-      lat: loc.lat,
-      lng: loc.lng,
-      title: loc.name,
-      event_count: loc.event_count,
-      tier: loc.tier,
-      kind: 'anchor' as const,
-    }))
-  }, [highlightedLocations, visibleNodes, visibleAnchors])
+    // 5. Anchor locations (fallback if no nodes)
+    if (elements.length === 0) {
+      elements.push(...visibleAnchors.map(loc => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        title: getLocalizedText(loc as unknown as Record<string, unknown>, 'name', preferredLanguage) || loc.name,
+        event_count: loc.event_count,
+        tier: loc.tier,
+        kind: 'anchor' as const,
+      })))
+    }
+
+    // 6. Event browse mini modal (anchored to globe coordinates)
+    if (clusterPanel && clusterPanel.events.length > 0) {
+      elements.push({
+        lat: clusterPanel.lat,
+        lng: clusterPanel.lng,
+        events: clusterPanel.events,
+        locationName: clusterPanel.locationName,
+        kind: 'event-panel' as const,
+      })
+    }
+
+    return elements
+  }, [highlightedLocations, smartMarkers, eventArcs, visibleNodes, visibleAnchors, preferredLanguage, clusterPanel])
+
+  // Stable htmlElement callback - uses refs to avoid function reference changes
+  // that would cause three-globe to destroy and recreate all DOM elements
+  const htmlElementFn = useCallback((d: object) => {
+    const item = d as Record<string, unknown>
+    const el = document.createElement('div')
+
+    if (item.kind === 'highlight') {
+      // SHEBA search highlight (pulsing gold)
+      el.innerHTML = `
+        <div style="
+          background: rgba(255, 215, 0, 0.9);
+          color: #000;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: bold;
+          white-space: nowrap;
+          cursor: pointer;
+          box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+          animation: pulse 1.5s infinite;
+        ">
+          ${item.title}
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+      el.onclick = () => {
+        const event = eventsRef.current.find(e =>
+          Math.abs((e.latitude || 0) - (item.lat as number)) < 0.1 &&
+          Math.abs((e.longitude || 0) - (item.lng as number)) < 0.1
+        )
+        if (event) onEventClickRef.current(event)
+      }
+    } else if (item.kind === 'hero') {
+      // Hero card: important event displayed as floating card
+      const heroItem = item as { id: number; title: string; title_ko?: string; title_ja?: string; year?: number; year_end?: number; category?: string; importance: number; location_name?: string; location_name_ko?: string; location_name_ja?: string; location_id?: number; lat: number; lng: number; child_count: number; kind: 'hero' }
+      const categoryClass = heroItem.category ? `hero-card--${heroItem.category.toLowerCase()}` : ''
+      const formatYear = (y?: number) => {
+        if (y === undefined || y === null) return ''
+        return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
+      }
+      const stars = Array.from({ length: 5 }, (_, i) =>
+        i < heroItem.importance
+          ? '<span class="star">\u2605</span>'
+          : '<span class="star-empty">\u2605</span>'
+      ).join('')
+
+      // Localize location name
+      const lang = preferredLanguageRef.current
+      const locName = (lang === 'ko' && heroItem.location_name_ko) ? heroItem.location_name_ko
+        : (lang === 'ja' && heroItem.location_name_ja) ? heroItem.location_name_ja
+        : heroItem.location_name
+
+      // Localize hero title
+      const heroTitle = (lang === 'ko' && heroItem.title_ko) ? heroItem.title_ko
+        : (lang === 'ja' && heroItem.title_ja) ? heroItem.title_ja
+        : heroItem.title
+
+      // Fade/highlight is handled via CSS (.shifted .hero-card) + useEffect (.hero-selected)
+      el.innerHTML = `
+        <div class="hero-card ${categoryClass}" data-hero-id="${heroItem.id}">
+          <div class="hero-card-title">${heroTitle}</div>
+          <div class="hero-card-meta">
+            <span class="hero-card-year">${formatYear(heroItem.year)}</span>
+            ${locName ? `<span class="hero-card-location" data-location-id="${heroItem.location_id || ''}">${locName}</span>` : ''}
+          </div>
+          <div class="hero-card-importance">${stars}</div>
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+
+      el.onclick = async (e) => {
+        // Check if location name was clicked (using closest for reliable detection)
+        const clickedLoc = (e.target as HTMLElement).closest?.('[data-location-id]') as HTMLElement | null
+        if (clickedLoc && heroItem.location_id) {
+          // Location name click → close event panel + show location mini modal
+          if (selectedEventRef.current) {
+            setSelectedEventRef.current(null)
+          }
+          // Pan to location
+          if (globeRef.current) {
+            globeRef.current.pointOfView(
+              { lat: heroItem.lat, lng: heroItem.lng, altitude: altitudeRef.current },
+              600
+            )
+          }
+          // Fetch events at this location
+          try {
+            const year = debouncedYearRef.current
+            const params: Record<string, number> = { limit: 10, year_start: year - 100, year_end: year + 100 }
+            const res = await nodesApi.getEvents(heroItem.location_id, params)
+            const events = (res.data?.events || []).map((ev: Record<string, unknown>) => ({
+              id: ev.id as number,
+              title: ev.title as string,
+              title_ko: ev.title_ko as string | undefined,
+              title_ja: ev.title_ja as string | undefined,
+              year: ev.date_start as number | undefined,
+              importance: ev.importance as number | undefined,
+              category: ev.category as string | undefined,
+            }))
+            if (events.length > 0) {
+              setClusterPanelRef.current({
+                events,
+                lat: heroItem.lat,
+                lng: heroItem.lng,
+                locationName: locName || undefined,
+              })
+            }
+          } catch (err) {
+            console.error('Failed to fetch location events:', heroItem.location_id, err)
+          }
+          return
+        }
+
+        // Card body click → open event detail
+        try {
+          setLoadingMarkerId(heroItem.id)
+          const cached = eventsDataRef.current?.find((ev: Event) => ev.id === heroItem.id)
+          if (cached) {
+            onEventClickRef.current(cached)
+          } else {
+            const res = await eventsApi.get(heroItem.id)
+            onEventClickRef.current(res.data)
+          }
+        } catch (err) {
+          console.error('Failed to fetch hero event:', heroItem.id, err)
+        } finally {
+          setLoadingMarkerId(null)
+        }
+      }
+    } else if (item.kind === 'cluster') {
+      // Cluster bubble: grouped events
+      const clusterItem = item as { lat: number; lng: number; count: number; top_events?: ClusterEvent[]; kind: 'cluster' }
+      const size = Math.max(28, Math.min(52, 20 + Math.log2(clusterItem.count) * 8))
+      // Fade handled via CSS (.shifted .cluster-bubble)
+      el.innerHTML = `
+        <div class="cluster-bubble" style="
+          width: ${size}px;
+          height: ${size}px;
+          transform: translate(-${size / 2}px, -${size / 2}px);
+        ">
+          ${clusterItem.count}
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+      el.onclick = () => {
+        if (globeRef.current) {
+          // Always zoom in by 40% (guaranteed to never zoom out)
+          const currentAlt = altitudeRef.current
+          const targetAlt = Math.max(0.08, currentAlt * 0.6)
+          globeRef.current.pointOfView(
+            { lat: clusterItem.lat, lng: clusterItem.lng, altitude: targetAlt },
+            800
+          )
+          // Show mini modal with events above the cluster
+          if (clusterItem.top_events && clusterItem.top_events.length > 0) {
+            setClusterPanelRef.current({
+              events: clusterItem.top_events,
+              lat: clusterItem.lat,
+              lng: clusterItem.lng,
+            })
+          }
+        }
+      }
+    } else if (item.kind === 'node') {
+      // Location node with event count badge
+      const nodeItem = item as { tier: number; event_count: number; active_count: number; title: string; lat: number; lng: number; node_id: number; top_event: string | null; kind: 'node' }
+      const isTier1 = nodeItem.tier === 1
+      const hasActive = nodeItem.active_count > 0
+      const textColor = hasActive
+        ? (isTier1 ? 'rgba(0, 212, 255, 0.95)' : 'rgba(200, 220, 230, 0.85)')
+        : 'rgba(120, 140, 150, 0.5)'
+      const fontSize = isTier1 ? '11px' : '9px'
+      const badgeColor = hasActive ? '#00d4ff' : '#3a4a5a'
+      const countText = nodeItem.active_count > 0
+        ? nodeItem.active_count
+        : nodeItem.event_count
+      el.innerHTML = `
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          white-space: nowrap;
+          pointer-events: auto;
+          cursor: pointer;
+          transform: translateY(-8px);
+        ">
+          <span style="
+            color: ${textColor};
+            font-size: ${fontSize};
+            font-weight: ${isTier1 ? '700' : '500'};
+            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
+            letter-spacing: 0.02em;
+          ">${nodeItem.title}</span>
+          <span style="
+            background: ${badgeColor};
+            color: ${hasActive ? '#000' : '#8a9ab0'};
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 8px;
+            min-width: 16px;
+            text-align: center;
+          ">${countText}</span>
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+      el.onclick = async () => {
+        // Close any open event detail panel so mini modal isn't faded
+        if (selectedEventRef.current) {
+          setSelectedEventRef.current(null)
+        }
+        // Pan to location center
+        if (globeRef.current) {
+          const currentAlt = altitudeRef.current
+          globeRef.current.pointOfView(
+            { lat: nodeItem.lat, lng: nodeItem.lng, altitude: currentAlt },
+            600
+          )
+        }
+        // Always fetch events at this location (regardless of importance)
+        try {
+          const year = debouncedYearRef.current
+          const hasActive = nodeItem.active_count > 0
+          // If there are active events in the time range, use time filter
+          // Otherwise, fetch ALL events at this location (no time filter)
+          const params: Record<string, number> = { limit: 10 }
+          if (hasActive) {
+            params.year_start = year - 100
+            params.year_end = year + 100
+          }
+          const res = await nodesApi.getEvents(nodeItem.node_id, params)
+          const events = (res.data?.events || []).map((e: Record<string, unknown>) => ({
+            id: e.id as number,
+            title: e.title as string,
+            title_ko: e.title_ko as string | undefined,
+            title_ja: e.title_ja as string | undefined,
+            year: e.date_start as number | undefined,
+            importance: e.importance as number | undefined,
+            category: e.category as string | undefined,
+          }))
+          if (events.length > 0) {
+            setClusterPanelRef.current({
+              events,
+              lat: nodeItem.lat,
+              lng: nodeItem.lng,
+              locationName: nodeItem.title,
+            })
+          }
+        } catch (err) {
+          console.error('Failed to fetch node events:', nodeItem.node_id, err)
+        }
+      }
+    } else if (item.kind === 'event-panel') {
+      // Mini modal floating above a city on the globe
+      const panelItem = item as { lat: number; lng: number; events: ClusterEvent[]; locationName?: string; kind: 'event-panel' }
+      const evtList = panelItem.events
+      const formatYear = (y?: number) => {
+        if (y === undefined || y === null) return ''
+        return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
+      }
+      const lang = preferredLanguageRef.current
+      const eventCards = evtList.map(evt => {
+        const title = (lang === 'ko' && evt.title_ko) ? evt.title_ko
+          : (lang === 'ja' && evt.title_ja) ? evt.title_ja
+          : evt.title
+        const cat = (evt.category || 'default').toLowerCase()
+        const stars = evt.importance ? '★'.repeat(Math.min(evt.importance, 5)) : ''
+        return `
+          <div class="globe-mini-modal-item globe-mini-modal-item--${cat}" data-event-id="${evt.id}">
+            <div class="globe-mini-modal-item-title">${title}</div>
+            <div class="globe-mini-modal-item-meta">
+              <span class="globe-mini-modal-item-year">${formatYear(evt.year)}</span>
+              ${stars ? `<span class="globe-mini-modal-item-stars">${stars}</span>` : ''}
+            </div>
+          </div>
+        `
+      }).join('')
+
+      const headerText = panelItem.locationName
+        ? `${panelItem.locationName} · ${evtList.length}`
+        : `${evtList.length} Events`
+
+      el.innerHTML = `
+        <div class="globe-mini-modal">
+          <div class="globe-mini-modal-header">
+            <span class="globe-mini-modal-title">${headerText}</span>
+            <button class="globe-mini-modal-close" data-close="true">✕</button>
+          </div>
+          <div class="globe-mini-modal-list">
+            ${eventCards}
+          </div>
+          <div class="globe-mini-modal-arrow"></div>
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+
+      // Close button
+      const closeBtn = el.querySelector('[data-close]')
+      if (closeBtn) {
+        (closeBtn as HTMLElement).onclick = (e) => {
+          e.stopPropagation()
+          setClusterPanelRef.current(null)
+        }
+      }
+
+      // Event item clicks
+      el.querySelectorAll('[data-event-id]').forEach(itemEl => {
+        (itemEl as HTMLElement).onclick = async (e) => {
+          e.stopPropagation()
+          const eventId = parseInt((itemEl as HTMLElement).dataset.eventId || '0')
+          if (eventId) {
+            try {
+              const res = await eventsApi.get(eventId)
+              onEventClickRef.current(res.data)
+              setClusterPanelRef.current(null)
+            } catch (err) {
+              console.error('Failed to fetch event:', eventId, err)
+            }
+          }
+        }
+      })
+    } else {
+      // Anchor location fallback (subtle, always-visible city label)
+      const anchorItem = item as { tier: number; event_count: number; title: string; lat: number; lng: number; kind: 'anchor' }
+      const isTier1 = anchorItem.tier === 1
+      const opacity = isTier1 ? 0.85 : 0.65
+      const fontSize = isTier1 ? '10px' : '9px'
+      el.innerHTML = `
+        <div style="
+          color: rgba(200, 220, 230, ${opacity});
+          font-size: ${fontSize};
+          font-weight: ${isTier1 ? '600' : '400'};
+          white-space: nowrap;
+          text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+          pointer-events: auto;
+          cursor: pointer;
+          letter-spacing: 0.02em;
+          transform: translateY(-6px);
+        ">
+          ${anchorItem.title}
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+      el.onclick = () => {
+        if (onLocationClickRef.current) {
+          const anchor = anchorLocationsRef.current?.find(a => a.lat === anchorItem.lat && a.lng === anchorItem.lng)
+          if (anchor) onLocationClickRef.current(anchor.id)
+        }
+      }
+    }
+    return el
+  }, []) // Empty deps = stable function reference, uses refs for all mutable values
 
   // Points layer disabled - location nodes only
 
   // Note: Arc particle effects are achieved through dynamic arcDashLength,
   // arcDashGap, and arcDashAnimateTime props based on connection strength
 
-  const globeTexture = GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.default
+  // LOD texture: use high-res when zoomed in, low-res when zoomed out
+  const isZoomedIn = currentZoomLevel === 'regional' || currentZoomLevel === 'local'
+  const globeTexture = isZoomedIn
+    ? (GLOBE_TEXTURES_HI[globeStyle] || GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
+    : (GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
   const isHoloStyle = globeStyle === 'holo'
+
+  // Preload high-res texture at continental zoom so it's ready when user zooms in further
+  useEffect(() => {
+    if (currentZoomLevel === 'continental') {
+      const hiUrl = GLOBE_TEXTURES_HI[globeStyle]
+      if (hiUrl) {
+        const img = new Image()
+        img.src = hiUrl
+      }
+    }
+  }, [currentZoomLevel, globeStyle])
+
+  // Dismiss mini modal on time change (not zoom - zoom animation would close it)
+  useEffect(() => {
+    setClusterPanel(null)
+  }, [debouncedYear])
 
   // Atmosphere color based on style
   const atmosphereColor = '#00d4ff'
@@ -646,117 +1193,16 @@ export function GlobeContainer({
         htmlElementsData={htmlElements}
         htmlLat={(d) => (d as { lat: number }).lat}
         htmlLng={(d) => (d as { lng: number }).lng}
-        htmlAltitude={0.02}
-        htmlElement={(d) => {
-          const item = d as (typeof htmlElements)[0]
-          const el = document.createElement('div')
-
-          if (item.kind === 'highlight') {
-            // SHEBA search highlight (pulsing gold)
-            el.innerHTML = `
-              <div style="
-                background: rgba(255, 215, 0, 0.9);
-                color: #000;
-                padding: 4px 8px;
-                border-radius: 4px;
-                font-size: 11px;
-                font-weight: bold;
-                white-space: nowrap;
-                cursor: pointer;
-                box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-                animation: pulse 1.5s infinite;
-              ">
-                ${item.title}
-              </div>
-            `
-            el.style.pointerEvents = 'auto'
-            el.onclick = () => {
-              const event = events.find(e =>
-                Math.abs((e.latitude || 0) - item.lat) < 0.1 &&
-                Math.abs((e.longitude || 0) - item.lng) < 0.1
-              )
-              if (event) onEventClick(event)
-            }
-          } else if (item.kind === 'node') {
-            // Location node with event count badge
-            const nodeItem = item as { tier: number; event_count: number; active_count: number; title: string; lat: number; lng: number; node_id: number; top_event: string | null; kind: 'node' }
-            const isTier1 = nodeItem.tier === 1
-            const hasActive = nodeItem.active_count > 0
-            const textColor = hasActive
-              ? (isTier1 ? 'rgba(0, 212, 255, 0.95)' : 'rgba(200, 220, 230, 0.85)')
-              : 'rgba(120, 140, 150, 0.5)'
-            const fontSize = isTier1 ? '11px' : '9px'
-            const badgeColor = hasActive ? '#00d4ff' : '#3a4a5a'
-            const countText = nodeItem.active_count > 0
-              ? nodeItem.active_count
-              : nodeItem.event_count
-            el.innerHTML = `
-              <div style="
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                white-space: nowrap;
-                pointer-events: auto;
-                cursor: pointer;
-                transform: translateY(-8px);
-              ">
-                <span style="
-                  color: ${textColor};
-                  font-size: ${fontSize};
-                  font-weight: ${isTier1 ? '700' : '500'};
-                  text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
-                  letter-spacing: 0.02em;
-                ">${nodeItem.title}</span>
-                <span style="
-                  background: ${badgeColor};
-                  color: ${hasActive ? '#000' : '#8a9ab0'};
-                  font-size: 9px;
-                  font-weight: 700;
-                  padding: 1px 5px;
-                  border-radius: 8px;
-                  min-width: 16px;
-                  text-align: center;
-                ">${countText}</span>
-              </div>
-            `
-            el.style.pointerEvents = 'auto'
-            el.onclick = () => {
-              if (onLocationClick) {
-                onLocationClick(nodeItem.node_id)
-              }
-            }
-          } else {
-            // Anchor location fallback (subtle, always-visible city label)
-            const anchorItem = item as { tier: number; event_count: number; title: string; lat: number; lng: number; kind: 'anchor' }
-            const isTier1 = anchorItem.tier === 1
-            const opacity = isTier1 ? 0.85 : 0.65
-            const fontSize = isTier1 ? '10px' : '9px'
-            el.innerHTML = `
-              <div style="
-                color: rgba(200, 220, 230, ${opacity});
-                font-size: ${fontSize};
-                font-weight: ${isTier1 ? '600' : '400'};
-                white-space: nowrap;
-                text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
-                pointer-events: auto;
-                cursor: pointer;
-                letter-spacing: 0.02em;
-                transform: translateY(-6px);
-              ">
-                ${anchorItem.title}
-              </div>
-            `
-            el.style.pointerEvents = 'auto'
-            el.onclick = () => {
-              if (onLocationClick) {
-                // Find the location id from anchor data
-                const anchor = anchorLocations?.find(a => a.lat === anchorItem.lat && a.lng === anchorItem.lng)
-                if (anchor) onLocationClick(anchor.id)
-              }
-            }
-          }
-          return el
+        htmlAltitude={(d) => {
+          const item = d as Record<string, unknown>
+          if (item.kind === 'event-panel') return 0.08  // floating mini modal - highest
+          if (item.kind === 'highlight') return 0.06
+          if (item.kind === 'hero') return 0.04
+          if (item.kind === 'cluster') return 0.03
+          return 0.01 // nodes and anchors below heroes
         }}
+        htmlTransitionDuration={0}
+        htmlElement={htmlElementFn}
         // Historical Chain Arcs - connections between events with particle animation
         arcsData={eventArcs || []}
         arcStartLat={(d) => (d as GlobeArc).source_lat}
@@ -766,12 +1212,10 @@ export function GlobeContainer({
         arcColor={(d: object) => {
           const arc = d as GlobeArc
           const color = LAYER_COLORS[arc.layer_type] || '#00d4ff'
-          // Create glowing gradient effect
           return [`${color}ff`, `${color}88`, `${color}ff`]
         }}
         arcStroke={(d: object) => {
           const arc = d as GlobeArc
-          // Dynamic stroke width based on strength (1.0 to 3.5)
           return Math.min(3.5, Math.max(1.0, arc.strength / 7))
         }}
         arcDashLength={(d: object) => {
@@ -908,19 +1352,22 @@ export function GlobeContainer({
       <button
         onClick={handleHeatmapToggle}
         title={showHeatmap ? 'Hide heatmap' : 'Show heatmap'}
-        className={`absolute bottom-20 right-16 z-10 flex items-center gap-1.5
-                    bg-chaldea-panel/80 backdrop-blur-xl border rounded-lg px-3 py-1.5
-                    text-[10px] font-medium transition-all
-                    ${showHeatmap
-                      ? 'border-chaldea-cyan/30 text-chaldea-cyan'
-                      : 'border-chaldea-border/30 text-chaldea-text/60 hover:border-chaldea-cyan/20 hover:text-chaldea-text'}`}
+        className={`heatmap-toggle ${showHeatmap ? 'active' : ''}`}
       >
         {showHeatmap ? 'Heatmap ON' : 'Heatmap'}
       </button>
 
-      {/* Camera Mode Toggle */}
-      <CameraModeToggle className="absolute top-3 left-3 z-10" />
+      {/* Show All Cities Toggle */}
+      <button
+        onClick={() => setShowAllCities(prev => !prev)}
+        title={showAllCities ? 'Show only active cities' : 'Show all cities'}
+        className={`globe-overlay-btn ${showAllCities ? 'active' : ''}`}
+      >
+        {showAllCities ? 'Cities ON' : 'Cities'}
+      </button>
 
+      {/* Camera Mode Toggle */}
+      <CameraModeToggle />
 
     </div>
   )

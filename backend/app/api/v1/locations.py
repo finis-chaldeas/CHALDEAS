@@ -173,6 +173,8 @@ def get_location(
         {
             "id": e.id,
             "title": e.title,
+            "title_ko": e.title_ko,
+            "title_ja": e.title_ja,
             "date_start": e.date_start,
             "date_end": e.date_end,
         }
