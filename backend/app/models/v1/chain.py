@@ -42,7 +42,7 @@ class HistoricalChain(Base, TimestampMixin):
     chain_type = Column(
         String(20),
         CheckConstraint(
-            "chain_type IN ('person_story', 'place_story', 'era_story', 'causal_chain')"
+            "chain_type IN ('person_story', 'place_story', 'era_story', 'causal_chain', 'aggregate')"
         ),
         nullable=False,
         index=True
@@ -98,6 +98,13 @@ class HistoricalChain(Base, TimestampMixin):
     quality_score = Column(Float)  # AI-assessed coherence (0-1)
     human_reviewed = Column(Boolean, default=False)
 
+    # === Shift extension fields ===
+    display_type = Column(String(10), default='modal')
+    chapter_count = Column(Integer, default=1)
+    globe_importance = Column(Integer, default=3)
+    thumbnail_url = Column(String(500))
+    parent_shift_id = Column(Integer, ForeignKey("historical_chains.id"), nullable=True)
+
     # Creator info (optional)
     created_by_master_id = Column(Integer, ForeignKey("masters.id"), nullable=True)
 
@@ -110,12 +117,18 @@ class HistoricalChain(Base, TimestampMixin):
         "ChainSegment",
         back_populates="chain",
         order_by="ChainSegment.sequence_number",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        foreign_keys="[ChainSegment.chain_id]"
     )
     entity_roles = relationship(
         "ChainEntityRole",
         back_populates="chain",
         cascade="all, delete-orphan"
+    )
+    parent_shift = relationship(
+        "HistoricalChain",
+        remote_side=[id],
+        foreign_keys=[parent_shift_id],
     )
 
     def __repr__(self):
@@ -129,6 +142,7 @@ class HistoricalChain(Base, TimestampMixin):
             'place_story': self.focal_location,
             'era_story': self.focal_period,
             'causal_chain': self.focal_event,
+            'aggregate': self.focal_event,
         }
         return mapping.get(self.chain_type)
 
@@ -198,6 +212,14 @@ class ChainSegment(Base):
     transition_strength = Column(Integer)  # 1-5: causal strength
     transition_narrative = Column(Text)  # "This led to..." connector text
 
+    # === Shift page fields ===
+    chapter_title = Column(String(200))
+    chapter_number = Column(Integer, default=1)
+    page_narrative = Column(Text)
+    page_narrative_ko = Column(Text)
+    sub_shift_id = Column(Integer, ForeignKey("historical_chains.id"), nullable=True)
+    media_url = Column(String(500))
+
     # Importance within chain context
     importance = Column(
         Integer,
@@ -210,11 +232,12 @@ class ChainSegment(Base):
     created_at = Column(DateTime, default=func.now())
 
     # Relationships
-    chain = relationship("HistoricalChain", back_populates="segments")
+    chain = relationship("HistoricalChain", back_populates="segments", foreign_keys=[chain_id])
     event = relationship("Event")
     person = relationship("Person")
     location = relationship("Location")
     period = relationship("Period")
+    sub_shift = relationship("HistoricalChain", foreign_keys=[sub_shift_id])
 
     __table_args__ = (
         UniqueConstraint('chain_id', 'sequence_number', name='uq_chain_segment_order'),

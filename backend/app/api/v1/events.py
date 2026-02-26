@@ -403,7 +403,9 @@ def get_event(
     # Add entity narrative
     from sqlalchemy import text
     narrative_row = db.execute(text('''
-        SELECT narrative, significance, causes, consequences, model_used, source_url
+        SELECT narrative, significance, causes, consequences,
+               narrative_ko, significance_ko, causes_ko, consequences_ko,
+               narrative_ja, significance_ja, causes_ja, consequences_ja
         FROM entity_narratives
         WHERE entity_type = 'event' AND entity_id = :eid
         LIMIT 1
@@ -414,6 +416,14 @@ def get_event(
         result["significance"] = narrative_row[1]
         result["causes"] = narrative_row[2]
         result["consequences"] = narrative_row[3]
+        result["narrative_ko"] = narrative_row[4]
+        result["significance_ko"] = narrative_row[5]
+        result["causes_ko"] = narrative_row[6]
+        result["consequences_ko"] = narrative_row[7]
+        result["narrative_ja"] = narrative_row[8]
+        result["significance_ja"] = narrative_row[9]
+        result["causes_ja"] = narrative_row[10]
+        result["consequences_ja"] = narrative_row[11]
 
     # Add sources
     sources_query = db.execute(text('''
