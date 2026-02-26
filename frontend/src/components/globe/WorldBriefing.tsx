@@ -54,7 +54,16 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
   const topEvents = (period?.events ?? []).slice(0, 3) as PeriodEvent[]
   const topPersons = (period?.persons ?? []).slice(0, 3) as PeriodPerson[]
   const isCompact = zoomLevel === 'cosmic' || zoomLevel === 'continental'
-  const headline = period?.headline || `${formatYear(periodStart)} \u2013 ${formatYear(periodStart + 50)}`
+  // Language-aware headline
+  const rawHeadline = preferredLanguage === 'ko'
+    ? (period?.headline_ko || period?.headline)
+    : period?.headline
+  const headline = rawHeadline || `${formatYear(periodStart)} \u2013 ${formatYear(periodStart + 50)}`
+
+  // Language-aware narrative
+  const rawNarrative = preferredLanguage === 'ko'
+    ? ((period as unknown as Record<string, string>)?.narrative_ko || period?.narrative)
+    : period?.narrative
 
   return (
     <>
@@ -80,8 +89,8 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
         {/* Expanded detail */}
         {expanded && !isCompact && (
           <div className="world-briefing-expanded">
-            {period?.narrative && (
-              <p className="world-briefing-narrative">{period.narrative}</p>
+            {rawNarrative && (
+              <p className="world-briefing-narrative">{rawNarrative}</p>
             )}
             {period?.defining_moment && (
               <p className="world-briefing-moment">{period.defining_moment}</p>

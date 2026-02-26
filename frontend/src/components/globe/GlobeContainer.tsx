@@ -5,6 +5,7 @@ import { useTimelineStore } from '../../store/timelineStore'
 import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFlyMode } from '../../hooks/useFlyMode'
+import { useGlobeTiles, type TileData } from '../../hooks/useGlobeTiles'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, eventsApi, personsApi, locationsApi, nodesApi, smartMarkersApi } from '../../api/client'
 import type { Event, SmartMarkersResponse, ClusterEvent } from '../../types'
@@ -158,18 +159,20 @@ export function GlobeContainer({
     selectedEvent,
     setSelectedEvent,
     highlightedLocations,
-    cameraMode,
     autoRotate: storeAutoRotate,
     setViewportBounds,
     setCameraPosition,
+    cameraPosition,
     flyTarget,
     clearFlyTarget,
     setGlobeMarkers,
-    viewMode,
+    activeShift,
+    activePageIndex,
+    shiftMaxAltitude,
   } = useGlobeStore()
 
-  // Fly mode controls (WASD navigation)
-  useFlyMode({ globeRef, enabled: cameraMode === 'fly' })
+  // WASD navigation (always active in globe view)
+  useFlyMode({ globeRef, enabled: true })
   const { currentYear } = useTimelineStore()
   const { preferredLanguage } = useSettingsStore()
   const debouncedYear = useDebounce(currentYear, 150) // Debounce API calls during timeline drag (150ms for snappier response)
@@ -180,6 +183,7 @@ export function GlobeContainer({
   // Use ref for continuous altitude (avoids re-render every frame)
   // Only update state-based zoom level when it actually changes threshold
   const altitudeRef = useRef(2.5)
+  const shiftMaxAltRef = useRef<number | null>(null)
   const [currentZoomLevel, setCurrentZoomLevel] = useState<ReturnType<typeof getZoomLevel>>('cosmic')
   const [, setLoadingMarkerId] = useState<number | null>(null)
   const [clusterPanel, setClusterPanel] = useState<{ events: ClusterEvent[]; lat: number; lng: number; locationName?: string } | null>(null)
@@ -187,6 +191,19 @@ export function GlobeContainer({
   clusterPanelRef.current = clusterPanel
   const setClusterPanelRef = useRef(setClusterPanel)
   setClusterPanelRef.current = setClusterPanel
+
+  // High-resolution tile loading for REGIONAL/LOCAL zoom
+  const tilesEnabled = currentZoomLevel === 'regional' || currentZoomLevel === 'local'
+  const { tilesData: globeTilesData } = useGlobeTiles(
+    cameraPosition.lat, cameraPosition.lng, cameraPosition.altitude,
+    globeStyle, tilesEnabled,
+  )
+
+  // Ref for activePageIndex — used inside htmlElementFn to avoid
+  // including activePageIndex in htmlElements useMemo deps (which would
+  // cause three-globe to destroy+recreate all DOM elements on every page change)
+  const activePageIndexRef = useRef(activePageIndex)
+  activePageIndexRef.current = activePageIndex
 
   // Refs for values used inside htmlElement callback
   // Keeps the callback reference stable to prevent three-globe from
@@ -226,6 +243,16 @@ export function GlobeContainer({
     if (globeRef.current) {
       const pov = globeRef.current.pointOfView()
       if (pov && typeof pov.altitude === 'number') {
+        // Enforce shift zoom-out limit
+        const maxAlt = shiftMaxAltRef.current
+        if (maxAlt != null && pov.altitude > maxAlt) {
+          globeRef.current.pointOfView(
+            { lat: pov.lat, lng: pov.lng, altitude: maxAlt },
+            300
+          )
+          return
+        }
+
         altitudeRef.current = pov.altitude
 
         // Only trigger state update when zoom level actually changes
@@ -318,8 +345,8 @@ export function GlobeContainer({
     queryFn: async () => {
       const res = await nodesApi.list({
         zoom: zoomParam,
-        year_start: debouncedYear - 200,
-        year_end: debouncedYear + 200,
+        year_start: debouncedYear - 100,
+        year_end: debouncedYear + 100,
         limit: zoomParam === 'cosmic' ? 200 : zoomParam === 'continental' ? 500 : 2000,
       })
       return res.data
@@ -369,33 +396,39 @@ export function GlobeContainer({
     }
   }, [eventsData, setEvents])
 
-  // Auto-rotate globe (only in orbit mode + cosmic zoom + store toggle)
+  // Auto-rotate globe (cosmic zoom + store toggle)
   useEffect(() => {
     if (globeRef.current) {
       const controls = globeRef.current.controls()
-      if (cameraMode === 'orbit') {
-        // Auto-rotate only at cosmic zoom AND if store allows it
-        const shouldAutoRotate = currentZoomLevel === 'cosmic' && storeAutoRotate
-        controls.autoRotate = shouldAutoRotate
-        controls.autoRotateSpeed = 0.3
-        controls.enableRotate = true
-        controls.enableZoom = true
+      const shouldAutoRotate = currentZoomLevel === 'cosmic' && storeAutoRotate
+      controls.autoRotate = shouldAutoRotate
+      controls.autoRotateSpeed = 0.3
+      controls.enableRotate = true
+      controls.enableZoom = true
+    }
+  }, [currentZoomLevel, storeAutoRotate])
+
+  // Shift mode: lock max zoom-out to fit-all altitude
+  useEffect(() => {
+    shiftMaxAltRef.current = shiftMaxAltitude
+    if (globeRef.current) {
+      const controls = globeRef.current.controls() as unknown as { maxDistance?: number; minDistance?: number }
+      if (shiftMaxAltitude != null) {
+        // react-globe.gl: distance ≈ (1 + altitude) * GLOBE_RADIUS
+        // GLOBE_RADIUS default = 100 in three-globe
+        controls.maxDistance = (1 + shiftMaxAltitude) * 100
       } else {
-        // Disable orbit controls in fly mode
-        controls.autoRotate = false
-        controls.enableRotate = false
-        controls.enableZoom = false
+        // Reset to default (very far)
+        controls.maxDistance = Infinity
       }
     }
-  }, [cameraMode, currentZoomLevel, storeAutoRotate])
+  }, [shiftMaxAltitude])
 
   // Fly to location when flyTarget changes (from Navigator tabs, SHEBA episodes, etc.)
   useEffect(() => {
     if (flyTarget && globeRef.current) {
       // Stop auto-rotate when flying to a location
-      if (cameraMode === 'orbit') {
-        globeRef.current.controls().autoRotate = false
-      }
+      globeRef.current.controls().autoRotate = false
       globeRef.current.pointOfView(
         { lat: flyTarget.lat, lng: flyTarget.lng, altitude: flyTarget.altitude },
         1000
@@ -412,25 +445,23 @@ export function GlobeContainer({
       const lng = selectedEvent.longitude || selectedEvent.location?.longitude
 
       if (lat && lng) {
-        // Stop auto-rotate when focusing (only in orbit mode)
-        if (cameraMode === 'orbit') {
-          globeRef.current.controls().autoRotate = false
-        }
+        globeRef.current.controls().autoRotate = false
 
-        // Rotate globe to focus on the location (0.8 = regional zoom, clearly focused but shows context)
-        globeRef.current.pointOfView({ lat, lng, altitude: 0.8 }, 1000)
+        // Rotate globe to focus on the location — never zoom OUT from current position
+        const targetAlt = Math.min(altitudeRef.current, 0.8)
+        globeRef.current.pointOfView({ lat, lng, altitude: targetAlt }, 1000)
 
         // Set focused location for ring effect
         setFocusedLocation({ lat, lng })
       }
     } else {
-      // Resume auto-rotate when no selection (only in orbit mode + store allows it)
-      if (globeRef.current && cameraMode === 'orbit' && storeAutoRotate) {
+      // Resume auto-rotate when no selection
+      if (globeRef.current && storeAutoRotate) {
         globeRef.current.controls().autoRotate = currentZoomLevel === 'cosmic'
       }
       setFocusedLocation(null)
     }
-  }, [selectedEvent, cameraMode, storeAutoRotate, currentZoomLevel])
+  }, [selectedEvent, storeAutoRotate, currentZoomLevel])
 
   // Update hero card highlight state via DOM when selection changes
   // Uses CSS classes instead of recreating DOM elements
@@ -473,29 +504,29 @@ export function GlobeContainer({
     return () => clearTimeout(timer)
   }, [selectedEvent, eventArcs, smartMarkers, currentZoomLevel])
 
+  // Update shift marker highlight via DOM when activePageIndex changes
+  // This avoids recreating all markers (which causes floating/jumping)
+  useEffect(() => {
+    if (!activeShift) return
+    const container = document.querySelector('.globe-container')
+    if (!container) return
+
+    container.querySelectorAll('[data-page-index]').forEach(el => {
+      const idx = parseInt((el as HTMLElement).dataset.pageIndex || '-1')
+      if (idx === activePageIndex) {
+        el.className = 'shift-marker shift-marker--active'
+      } else {
+        el.className = 'shift-marker shift-marker--inactive'
+      }
+    })
+  }, [activeShift, activePageIndex])
+
   // Sync globe markers to store (for Map view to consume)
   useEffect(() => {
     if (globeMarkers) setGlobeMarkers(globeMarkers)
   }, [globeMarkers, setGlobeMarkers])
 
-  // Pause Three.js renderer when in map mode (performance)
-  useEffect(() => {
-    if (globeRef.current) {
-      const renderer = globeRef.current.renderer()
-      if (renderer) {
-        if (viewMode === 'map') {
-          renderer.setAnimationLoop(null)
-        } else {
-          // Re-enable - the globe library manages its own animation loop
-          // Just trigger a re-render by changing POV slightly
-          const pov = globeRef.current.pointOfView()
-          if (pov) {
-            globeRef.current.pointOfView(pov, 0)
-          }
-        }
-      }
-    }
-  }, [viewMode])
+  // (Map mode removed — globe always active)
 
   // Filter globe markers for current time (from new API)
   const visibleMarkers = useMemo(() => {
@@ -552,8 +583,50 @@ export function GlobeContainer({
 
   // Merge all marker types for htmlElementsData
   // Priority: SHEBA highlights > Hero cards > Cluster bubbles > Location nodes > Anchors
+  // SHIFT MODE: Only shift page markers shown
   const htmlElements = useMemo(() => {
     const elements: Array<Record<string, unknown>> = []
+
+    // ── SHIFT MODE: only show shift page markers ──
+    if (activeShift) {
+      const pages = activeShift.pages || []
+      // Detect overlapping coordinates and spread them in a circle
+      const coordKey = (lat: number, lng: number) => `${lat.toFixed(4)},${lng.toFixed(4)}`
+      const coordGroups = new Map<string, number[]>()
+      pages.forEach((page, idx) => {
+        if (page.lat == null || page.lng == null) return
+        const key = coordKey(page.lat, page.lng)
+        if (!coordGroups.has(key)) coordGroups.set(key, [])
+        coordGroups.get(key)!.push(idx)
+      })
+
+      pages.forEach((page, idx) => {
+        if (page.lat == null || page.lng == null) return
+        let lat = page.lat
+        let lng = page.lng
+        // Offset overlapping markers in a circle pattern
+        const key = coordKey(page.lat, page.lng)
+        const group = coordGroups.get(key)!
+        if (group.length > 1) {
+          const posInGroup = group.indexOf(idx)
+          const angle = (2 * Math.PI * posInGroup) / group.length
+          const radius = 0.15 + 0.05 * Math.min(group.length, 8) // adaptive radius
+          lat += radius * Math.cos(angle)
+          lng += radius * Math.sin(angle)
+        }
+        elements.push({
+          lat,
+          lng,
+          title: page.title || `${idx + 1}`,
+          year_start: page.year_start,
+          page_index: idx,
+          kind: 'shift-page' as const,
+        })
+      })
+      return elements
+    }
+
+    // ── NORMAL MODE ──
 
     // 1. SHEBA highlights (highest priority)
     if (highlightedLocations.length > 0) {
@@ -658,7 +731,9 @@ export function GlobeContainer({
     }
 
     return elements
-  }, [highlightedLocations, smartMarkers, eventArcs, visibleNodes, visibleAnchors, preferredLanguage, clusterPanel])
+  // NOTE: activePageIndex intentionally excluded — tracked via ref + DOM updates
+  // to prevent three-globe from destroying/recreating all marker DOM elements
+  }, [activeShift, highlightedLocations, smartMarkers, eventArcs, visibleNodes, visibleAnchors, preferredLanguage, clusterPanel])
 
   // Stable htmlElement callback - uses refs to avoid function reference changes
   // that would cause three-globe to destroy and recreate all DOM elements
@@ -666,7 +741,32 @@ export function GlobeContainer({
     const item = d as Record<string, unknown>
     const el = document.createElement('div')
 
-    if (item.kind === 'highlight') {
+    if (item.kind === 'shift-page') {
+      // History Shift page marker — styling updated via DOM in useEffect
+      const sp = item as { lat: number; lng: number; title: string; year_start?: number; page_index: number }
+      const isCurrent = sp.page_index === activePageIndexRef.current
+      const formatYear = (y?: number) => {
+        if (y == null) return ''
+        return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
+      }
+      const yearStr = formatYear(sp.year_start)
+      el.setAttribute('data-page-index', String(sp.page_index))
+      el.className = `shift-marker ${isCurrent ? 'shift-marker--active' : 'shift-marker--inactive'}`
+      el.innerHTML = `
+        <div class="shift-marker-inner">
+          <div class="shift-marker-dot"></div>
+          <div class="shift-marker-label">
+            <span class="shift-marker-title">${sp.page_index + 1}. ${sp.title}</span>
+            ${yearStr ? `<span class="shift-marker-year">${yearStr}</span>` : ''}
+          </div>
+        </div>
+      `
+      el.style.pointerEvents = 'auto'
+      el.onclick = () => {
+        const store = useGlobeStore.getState()
+        store.goToPage(sp.page_index)
+      }
+    } else if (item.kind === 'highlight') {
       // SHEBA search highlight (pulsing gold)
       el.innerHTML = `
         <div style="
@@ -871,6 +971,10 @@ export function GlobeContainer({
         if (selectedEventRef.current) {
           setSelectedEventRef.current(null)
         }
+        // Open LocationDetailView on the right
+        if (onLocationClickRef.current) {
+          onLocationClickRef.current(nodeItem.node_id)
+        }
         // Pan to location center
         if (globeRef.current) {
           const currentAlt = altitudeRef.current
@@ -1018,16 +1122,20 @@ export function GlobeContainer({
   // Note: Arc particle effects are achieved through dynamic arcDashLength,
   // arcDashGap, and arcDashAnimateTime props based on connection strength
 
-  // LOD texture: use high-res when zoomed in, low-res when zoomed out
-  const isZoomedIn = currentZoomLevel === 'regional' || currentZoomLevel === 'local'
-  const globeTexture = isZoomedIn
-    ? (GLOBE_TEXTURES_HI[globeStyle] || GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
-    : (GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
+  // LOD texture: use high-res from continental zoom onwards
+  // When tiles are active, keep low-res background (tiles overlay on top)
+  const isZoomedIn = currentZoomLevel === 'continental' || currentZoomLevel === 'regional' || currentZoomLevel === 'local'
+  const hasTiles = tilesEnabled && globeTilesData.length > 0
+  const globeTexture = hasTiles
+    ? (GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
+    : isZoomedIn
+      ? (GLOBE_TEXTURES_HI[globeStyle] || GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
+      : (GLOBE_TEXTURES_LO[globeStyle] || GLOBE_TEXTURES_LO.default)
   const isHoloStyle = globeStyle === 'holo'
 
-  // Preload high-res texture at continental zoom so it's ready when user zooms in further
+  // Preload high-res texture at cosmic zoom so it's ready when user zooms in
   useEffect(() => {
-    if (currentZoomLevel === 'continental') {
+    if (currentZoomLevel === 'cosmic' || currentZoomLevel === 'continental') {
       const hiUrl = GLOBE_TEXTURES_HI[globeStyle]
       if (hiUrl) {
         const img = new Image()
@@ -1045,9 +1153,10 @@ export function GlobeContainer({
   const atmosphereColor = '#00d4ff'
 
   const isShifted = !!selectedEvent
+  const isInShiftMode = !!activeShift
 
   return (
-    <div className={`globe-container style-${globeStyle} ${isShifted ? 'shifted' : ''}`} key={globeStyle}>
+    <div className={`globe-container style-${globeStyle} ${isShifted ? 'shifted' : ''} ${isInShiftMode ? 'shift-mode' : ''}`} key={globeStyle}>
       <Globe
         ref={globeRef}
         // Globe appearance based on style
@@ -1193,14 +1302,7 @@ export function GlobeContainer({
         htmlElementsData={htmlElements}
         htmlLat={(d) => (d as { lat: number }).lat}
         htmlLng={(d) => (d as { lng: number }).lng}
-        htmlAltitude={(d) => {
-          const item = d as Record<string, unknown>
-          if (item.kind === 'event-panel') return 0.08  // floating mini modal - highest
-          if (item.kind === 'highlight') return 0.06
-          if (item.kind === 'hero') return 0.04
-          if (item.kind === 'cluster') return 0.03
-          return 0.01 // nodes and anchors below heroes
-        }}
+        htmlAltitude={() => 0}
         htmlTransitionDuration={0}
         htmlElement={htmlElementFn}
         // Historical Chain Arcs - connections between events with particle animation
@@ -1346,6 +1448,24 @@ export function GlobeContainer({
             </div>
           `
         }}
+        // Tiles Layer - high-resolution slippy map tiles for REGIONAL/LOCAL zoom
+        tilesData={globeTilesData}
+        tileLat={(d: object) => (d as TileData).lat}
+        tileLng={(d: object) => (d as TileData).lng}
+        tileWidth={(d: object) => (d as TileData).widthDeg}
+        tileHeight={(d: object) => (d as TileData).heightDeg}
+        tileAltitude={0.0001}
+        tileMaterial={(d: object) => (d as TileData).material}
+        tileCurvatureResolution={(d: object) => {
+          // Degrees per segment — lower = more segments = smoother sphere conformance
+          // Large tiles (z=3, ~45°) need very fine resolution; small tiles (z=9) can be coarser
+          const w = (d as TileData).widthDeg
+          if (w > 20) return 0.5   // z=3-4: ~45-90 segments per tile
+          if (w > 5) return 1      // z=5-6: ~10-20 segments
+          return 2                  // z=7-9: ~2-5 segments (tiles small enough)
+        }}
+        tileUseGlobeProjection={true}
+        tilesTransitionDuration={0}
       />
 
       {/* Heatmap Toggle */}
@@ -1368,6 +1488,33 @@ export function GlobeContainer({
 
       {/* Camera Mode Toggle */}
       <CameraModeToggle />
+
+      {/* Zoom Controls */}
+      <div className="globe-zoom-controls">
+        <button
+          className="globe-zoom-btn"
+          onClick={() => {
+            if (globeRef.current) {
+              const pov = globeRef.current.pointOfView()
+              const newAlt = Math.max(0.05, pov.altitude * 0.6)
+              globeRef.current.pointOfView({ ...pov, altitude: newAlt }, 500)
+            }
+          }}
+          title="Zoom in"
+        >+</button>
+        <button
+          className="globe-zoom-btn"
+          onClick={() => {
+            if (globeRef.current) {
+              const pov = globeRef.current.pointOfView()
+              const maxAlt = shiftMaxAltRef.current
+              const newAlt = Math.min(maxAlt ?? 4.0, pov.altitude * 1.7)
+              globeRef.current.pointOfView({ ...pov, altitude: newAlt }, 500)
+            }
+          }}
+          title="Zoom out"
+        >&minus;</button>
+      </div>
 
     </div>
   )

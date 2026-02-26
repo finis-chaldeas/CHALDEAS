@@ -565,6 +565,7 @@ body {
   justify-content: center;
 }
 
+
 .globe-container {
   position: absolute;
   inset: 0;
@@ -4291,7 +4292,7 @@ textarea:focus-visible {
 .viewport-feed-pill {
   position: fixed;
   left: 12px;
-  top: 48px;
+  bottom: 90px;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -4323,8 +4324,8 @@ textarea:focus-visible {
 .viewport-feed {
   position: fixed;
   left: 12px;
-  top: 48px;
-  bottom: 80px;
+  top: 60px;
+  bottom: 90px;
   width: 224px;
   z-index: 20;
   display: flex;
@@ -4856,6 +4857,46 @@ textarea:focus-visible {
 .globe-overlay-btn.active {
   border-color: rgba(0, 212, 255, 0.3);
   color: var(--chaldea-cyan);
+}
+
+/* ─── Zoom +/- Controls ─── */
+.globe-zoom-controls {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.globe-zoom-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(var(--overlay-blur));
+  border: 1px solid var(--overlay-border);
+  border-radius: 6px;
+  color: var(--chaldea-cyan);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.globe-zoom-btn:hover {
+  border-color: var(--overlay-border-hover);
+  background: rgba(0, 212, 255, 0.1);
+  color: #fff;
+}
+
+.globe-zoom-btn:active {
+  transform: scale(0.92);
 }
 
 /* ─── Heatmap Toggle ─── */

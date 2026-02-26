@@ -11,7 +11,7 @@ interface FloatingButtonsProps {
 const BUTTONS = [
   { id: 'search', icon: '\uD83D\uDD0D', label: 'Search' },
   { id: 'showcase', icon: '\u2726', label: 'TRISMEGISTUS' },
-  { id: 'rayshift', icon: '\u21E8', label: 'Rayshift' },
+  { id: 'rayshift', icon: '\u21E8', label: 'History Shift' },
   { id: 'chat', icon: '\u25C8', label: 'LAPLACE' },
   { id: 'menu', icon: '\u2699', label: 'Settings' },
 ] as const

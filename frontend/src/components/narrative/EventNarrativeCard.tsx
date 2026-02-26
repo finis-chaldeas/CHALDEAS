@@ -121,10 +121,22 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLoc
 
   if (!event) return null
 
-  const narrative = (event as Event & { narrative?: string }).narrative
-  const significance = (event as Event & { significance?: string }).significance
-  const causes = (event as Event & { causes?: string | string[] }).causes
-  const consequences = (event as Event & { consequences?: string | string[] }).consequences
+  // Localized narrative fields from entity_narratives
+  const eventAny = event as Event & {
+    narrative?: string; narrative_ko?: string; narrative_ja?: string
+    significance?: string; significance_ko?: string; significance_ja?: string
+    causes?: string | string[]; causes_ko?: string | string[]; causes_ja?: string | string[]
+    consequences?: string | string[]; consequences_ko?: string | string[]; consequences_ja?: string | string[]
+    details?: { description_ko?: string; description_ja?: string; description?: string }
+  }
+  const pick = <T,>(en: T | undefined, ko: T | undefined, ja: T | undefined): T | undefined =>
+    preferredLanguage === 'ko' ? (ko || en) : preferredLanguage === 'ja' ? (ja || en) : en
+
+  const narrative = pick(eventAny.narrative, eventAny.narrative_ko, eventAny.narrative_ja)
+    || pick(eventAny.details?.description, eventAny.details?.description_ko, eventAny.details?.description_ja)
+  const significance = pick(eventAny.significance, eventAny.significance_ko, eventAny.significance_ja)
+  const causes = pick(eventAny.causes, eventAny.causes_ko, eventAny.causes_ja)
+  const consequences = pick(eventAny.consequences, eventAny.consequences_ko, eventAny.consequences_ja)
   const hasNarrative = !!narrative
 
   return (
@@ -187,7 +199,7 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLoc
           )}
         </div>
       ) : (
-        event.description && <p className="nc-description">{getLocalizedText(event as unknown as Record<string, unknown>, 'description', preferredLanguage) || event.description}</p>
+        event.description && <p className="nc-description">{pick(eventAny.details?.description, eventAny.details?.description_ko, eventAny.details?.description_ja) || event.description}</p>
       )}
 
       {/* Key Figures */}

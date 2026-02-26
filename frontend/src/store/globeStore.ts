@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Event, Location, Category } from '../types'
+import type { Event, Location, Category, HistoryShift } from '../types'
 
 // Camera mode types
 // CHALDEAS = orbit (3D globe), SHEBA = map (2D Leaflet), Fly = WASD navigation
@@ -120,6 +120,11 @@ interface GlobeState {
   // Rayshift steps overlay
   rayshiftSteps: { lat: number; lng: number; label: string }[] | null
 
+  // History Shift state
+  activeShift: HistoryShift | null
+  activePageIndex: number
+  shiftMaxAltitude: number | null  // zoom-out limit when shift is active
+
   // Filters
   selectedCategories: number[]
   minImportance: number
@@ -146,6 +151,13 @@ interface GlobeState {
   setRayshiftSteps: (steps: { lat: number; lng: number; label: string }[]) => void
   clearRayshiftSteps: () => void
   returnToCosmic: () => void
+
+  // Shift actions
+  openShift: (shift: HistoryShift) => void
+  closeShift: () => void
+  goToPage: (index: number) => void
+  nextPage: () => void
+  prevPage: () => void
 }
 
 export const useGlobeStore = create<GlobeState>((set, get) => ({
@@ -166,6 +178,9 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   zoomLevel: 'cosmic',
   flyTarget: null,
   rayshiftSteps: null,
+  activeShift: null,
+  activePageIndex: 0,
+  shiftMaxAltitude: null,
   selectedCategories: [],
   minImportance: 1,
 
@@ -259,4 +274,84 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
       zoomLevel: 'cosmic',
       viewMode: 'globe',
     }),
+
+  // Shift actions
+  openShift: (shift) => {
+    set({ activeShift: shift, activePageIndex: 0, autoRotate: false })
+    // Fly to fit all page locations
+    const coords = (shift.pages || [])
+      .filter(p => p.lat != null && p.lng != null)
+      .map(p => ({ lat: p.lat!, lng: p.lng! }))
+    if (coords.length === 0) return
+
+    // Calculate bounding box
+    const lats = coords.map(c => c.lat)
+    const lngs = coords.map(c => c.lng)
+    const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2
+    const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2
+    const latSpan = Math.max(...lats) - Math.min(...lats)
+    const lngSpan = Math.max(...lngs) - Math.min(...lngs)
+    const maxSpan = Math.max(latSpan, lngSpan)
+
+    // Altitude formula: events should fill ~60% of the visible globe face
+    // At altitude a, visible cone ≈ 2·arccos(1/(1+a))
+    // Linear mapping: span → altitude, tuned so events dominate the screen
+    //   span  0° → 0.08  (same-location: close regional view)
+    //   span 10° → 0.12  (single country)
+    //   span 30° → 0.26  (continental)
+    //   span 45° → 0.37  (Punic Wars: Mediterranean fills screen)
+    //   span 90° → 0.68  (global)
+    //   span 180° → 1.31  (whole world)
+    const altitude = Math.max(0.08, Math.min(1.5, 0.05 + maxSpan * 0.007))
+
+    set({
+      shiftMaxAltitude: altitude,
+      cameraPosition: { lat: centerLat, lng: centerLng, altitude },
+      flyTarget: { lat: centerLat, lng: centerLng, altitude, ts: Date.now() },
+    })
+  },
+
+  closeShift: () => set({ activeShift: null, activePageIndex: 0, shiftMaxAltitude: null }),
+
+  goToPage: (index) => {
+    const shift = get().activeShift
+    if (!shift?.pages) return
+    const clamped = Math.max(0, Math.min(index, shift.pages.length - 1))
+    const prevPage = shift.pages[get().activePageIndex]
+    set({ activePageIndex: clamped })
+    const page = shift.pages[clamped]
+    if (page?.lat != null && page?.lng != null) {
+      // Calculate distance-based altitude for smooth transition
+      const prevLat = prevPage?.lat ?? page.lat
+      const prevLng = prevPage?.lng ?? page.lng
+      const dist = Math.sqrt(
+        Math.pow(page.lat - prevLat, 2) + Math.pow(page.lng - prevLng, 2)
+      )
+      // For nearby pages, keep current altitude; for far pages, zoom out slightly then in
+      const currentAlt = get().cameraPosition.altitude
+      const maxAlt = get().shiftMaxAltitude ?? 2.0
+      // Fly altitude: stay at current for short hops, go to maxAlt for long jumps
+      const flyAlt = dist < 1 ? currentAlt : Math.min(maxAlt, currentAlt + dist * 0.01)
+
+      set({
+        cameraPosition: { lat: page.lat, lng: page.lng, altitude: flyAlt },
+        flyTarget: { lat: page.lat, lng: page.lng, altitude: flyAlt, ts: Date.now() },
+      })
+    }
+  },
+
+  nextPage: () => {
+    const { activeShift, activePageIndex } = get()
+    if (!activeShift?.pages) return
+    if (activePageIndex < activeShift.pages.length - 1) {
+      get().goToPage(activePageIndex + 1)
+    }
+  },
+
+  prevPage: () => {
+    const { activePageIndex } = get()
+    if (activePageIndex > 0) {
+      get().goToPage(activePageIndex - 1)
+    }
+  },
 }))

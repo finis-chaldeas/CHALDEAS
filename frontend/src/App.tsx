@@ -15,7 +15,7 @@ import { TourOverlay } from './components/tour'
 import { HistoryViewer, HistoryEditor } from './components/history'
 import { NarrativePanel } from './components/narrative'
 import { SourceBrowser } from './components/sources'
-import Rayshift from './components/rayshift/Rayshift'
+import { loadJourney } from './utils/journeyLoader'
 import WorldBriefing from './components/globe/WorldBriefing'
 import ViewportFeed from './components/globe/ViewportFeed'
 import FloatingButtons from './components/globe/FloatingButtons'
@@ -27,15 +27,17 @@ import { useGlobeStore } from './store/globeStore'
 import { useSettingsStore } from './store/settingsStore'
 import { useObservationStore, getEraFromYear } from './store/observationStore'
 import { useQuery } from '@tanstack/react-query'
-import { api, locationsApi } from './api/client'
+import { api, locationsApi, shiftsApi } from './api/client'
 import type { Event } from './types'
 
 // Lazy load heavy components (Three.js/Globe, panels)
 const GlobeContainer = lazy(() => import('./components/globe/GlobeContainer').then(m => ({ default: m.GlobeContainer })))
-const MapView = lazy(() => import('./components/map/MapContainer').then(m => ({ default: m.MapView })))
+// MapView removed — 2D map view disabled (no proper support yet)
 const LocationDetailView = lazy(() => import('./components/detail/LocationDetailView').then(m => ({ default: m.LocationDetailView })))
 const ChainPanel = lazy(() => import('./components/chain/ChainPanel'))
 const HierarchyExplorer = lazy(() => import('./components/hierarchy/HierarchyExplorer').then(m => ({ default: m.HierarchyExplorer })))
+const ShiftPanel = lazy(() => import('./components/shift/ShiftPanel'))
+const ShiftBrowser = lazy(() => import('./components/shift/ShiftBrowser'))
 
 // Loading fallback components
 const GlobeLoader = () => (
@@ -66,7 +68,7 @@ function App() {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
   const { currentYear, setCurrentYear } = useTimelineStore()
-  const { selectedEvent, setSelectedEvent, flyToLocation, viewMode, globeMarkers } = useGlobeStore()
+  const { selectedEvent, setSelectedEvent, flyToLocation, globeMarkers, activeShift, openShift } = useGlobeStore()
   const { globeStyle } = useSettingsStore()
   const { recordEventView, recordPersonView } = useObservationStore()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -95,9 +97,8 @@ function App() {
   const [narrativePersonId, setNarrativePersonId] = useState<number | null>(null)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
-  // Rayshift state
-  const [rayshiftMode, setRayshiftMode] = useState<'causal' | 'life' | 'tour' | 'hierarchy' | null>(null)
-  const [rayshiftEntityId, setRayshiftEntityId] = useState<number | null>(null)
+  // Shift browser state
+  const [isShiftBrowserOpen, setIsShiftBrowserOpen] = useState(false)
 
   // Handlers for entity detail views
   const handlePersonClick = (personId: number) => {
@@ -111,15 +112,19 @@ function App() {
     setLocationDetailId(locationId)
   }
 
-  // Narrative panel location click: fly globe to location
+  // Narrative panel location click: close event modal + fly to location + open LocationDetailView
   const handleNarrativeLocationClick = async (locationId: number) => {
     try {
+      // Close event/person panels
+      setNarrativeEventId(null)
+      setNarrativePersonId(null)
+      setSelectedEvent(null)
+      // Open LocationDetailView on the right
+      setLocationDetailId(locationId)
+      // Fly globe to location
       const res = await locationsApi.get(locationId)
       const loc = res.data
       if (loc?.latitude && loc?.longitude) {
-        setNarrativeEventId(null)
-        setNarrativePersonId(null)
-        setSelectedEvent(null)
         flyToLocation(loc.latitude, loc.longitude)
       }
     } catch (err) {
@@ -214,7 +219,7 @@ function App() {
         <>
           {/* Globe / Map (fullscreen) */}
           <main className="globe-section" role="main">
-            <div className={`view-layer ${viewMode === 'globe' ? 'view-active' : 'view-hidden'}`}>
+            <div className="view-layer view-active">
               <Suspense fallback={<GlobeLoader />}>
                 <GlobeContainer
                   onEventClick={handleEventClick}
@@ -224,22 +229,11 @@ function App() {
                 />
               </Suspense>
             </div>
-            <div className={`view-layer ${viewMode === 'map' ? 'view-active' : 'view-hidden'}`}>
-              {viewMode === 'map' && (
-                <Suspense fallback={<GlobeLoader />}>
-                  <MapView
-                    markers={globeMarkers}
-                    onEventClick={handleEventClick}
-                    onPersonClick={handlePersonClick}
-                    onLocationClick={handleLocationClick}
-                    isShifted={!!selectedEvent}
-                  />
-                </Suspense>
-              )}
-            </div>
-            <div className="unified-timeline-wrapper">
-              <UnifiedTimeline events={timelineEvents || []} />
-            </div>
+            {!activeShift && (
+              <div className="unified-timeline-wrapper">
+                <UnifiedTimeline events={timelineEvents || []} />
+              </div>
+            )}
           </main>
 
           {/* Overlays - outside main so Tailwind fixed works */}
@@ -256,9 +250,10 @@ function App() {
             onSearchClick={() => setIsSearchOpen(true)}
             onShowcaseClick={() => setShowShowcase(true)}
             onRayshiftClick={() => {
-              if (rayshiftMode) {
-                setRayshiftMode(null)
-                setRayshiftEntityId(null)
+              if (activeShift) {
+                useGlobeStore.getState().closeShift()
+              } else {
+                setIsShiftBrowserOpen(true)
               }
             }}
             onChatClick={() => setIsChatOpen(true)}
@@ -323,9 +318,30 @@ function App() {
           setSourceBrowserSourceId(sourceId)
           setIsSourceBrowserOpen(true)
         }}
-        onRayshift={(mode, entityId) => {
-          setRayshiftMode(mode)
-          setRayshiftEntityId(entityId)
+        onRayshift={async (mode, entityId) => {
+          // Hierarchy: try DB shift first, fallback to on-the-fly
+          if (mode === 'hierarchy') {
+            try {
+              const res = await shiftsApi.list({ chain_type: 'aggregate', limit: 1, focal_event_id: entityId })
+              const shifts = res.data?.items || []
+              if (shifts.length > 0) {
+                const detail = await shiftsApi.get(shifts[0].id)
+                if (detail.data?.pages?.length > 0) {
+                  openShift(detail.data)
+                  return
+                }
+              }
+            } catch { /* fall through */ }
+          }
+          // All modes: load journey data → open as shift
+          try {
+            const shift = await loadJourney(mode as 'causal' | 'life' | 'hierarchy', entityId)
+            if (shift && shift.pages.length > 0) {
+              openShift(shift)
+            }
+          } catch (err) {
+            console.error('Failed to load journey:', err)
+          }
         }}
       />
 
@@ -522,19 +538,22 @@ function App() {
         initialSourceId={sourceBrowserSourceId}
       />
 
-      {/* Rayshift Navigation Bar */}
-      {rayshiftMode && rayshiftEntityId && (
-        <Rayshift
-          mode={rayshiftMode}
-          entityId={rayshiftEntityId}
-          onClose={() => {
-            setRayshiftMode(null)
-            setRayshiftEntityId(null)
-          }}
-          onEventClick={handleNarrativeEventClick}
-          onPersonClick={handleNarrativePersonClick}
-        />
+      {/* Shift Panel Modal */}
+      {activeShift && (
+        <Suspense fallback={<PanelLoader />}>
+          <ShiftPanel />
+        </Suspense>
       )}
+
+      {/* Shift Browser Modal */}
+      <Suspense fallback={null}>
+        <ShiftBrowser
+          isOpen={isShiftBrowserOpen}
+          onClose={() => setIsShiftBrowserOpen(false)}
+        />
+      </Suspense>
+
+      {/* (Rayshift removed — unified into History Shift system) */}
 
       {/* Hierarchy Explorer */}
       {isHierarchyOpen && (

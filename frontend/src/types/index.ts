@@ -532,6 +532,47 @@ export interface PersonSource {
   mentions?: { mention_text: string; context_text?: string; confidence?: number; chunk_index?: number }[]
 }
 
+// History Shift (page-based sequential narrative)
+export interface HistoryShift {
+  id: number
+  chain_type: 'person_story' | 'place_story' | 'era_story' | 'causal_chain' | 'aggregate'
+  title: string
+  title_ko?: string
+  summary?: string
+  summary_ko?: string
+  year_start: number
+  year_end?: number
+  globe_importance: number
+  chapter_count: number
+  page_count: number
+  display_type?: string
+  thumbnail_url?: string
+  status?: string
+  parent_shift_id?: number
+  pages: ShiftPage[]
+}
+
+export interface ShiftPage {
+  sequence_number: number
+  title?: string
+  chapter_number: number
+  chapter_title?: string
+  page_narrative?: string
+  page_narrative_ko?: string
+  narrative?: string
+  narrative_ko?: string
+  year_start?: number
+  year_end?: number
+  lat?: number
+  lng?: number
+  event_id?: number
+  person_id?: number
+  location_id?: number
+  importance: number
+  media_url?: string
+  sub_shift_id?: number
+}
+
 // Smart Markers (Globe hero cards + cluster bubbles)
 export interface HeroMarker {
   id: number

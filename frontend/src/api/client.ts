@@ -135,6 +135,14 @@ export const servantsApi = {
   getStats: () => api.get('/servants/stats'),
 }
 
+// Shifts API (page-based historical narratives)
+export const shiftsApi = {
+  list: (params?: Record<string, unknown>) => api.get('/shifts', { params }),
+  get: (id: number) => api.get(`/shifts/${id}`),
+  getPages: (id: number) => api.get(`/shifts/${id}/pages`),
+  getPage: (id: number, seq: number) => api.get(`/shifts/${id}/pages/${seq}`),
+}
+
 // Feed API (unified importance-ranked events + persons)
 export const feedApi = {
   get: (params?: Record<string, unknown>) => api.get('/feed', { params }),

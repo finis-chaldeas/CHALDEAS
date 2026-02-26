@@ -1,0 +1,331 @@
+/* ═══ Singularity Banner (top-left, FGO-style with decorative tail) ═══ */
+
+.shift-singularity {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  z-index: 70;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 280px;
+  max-width: 520px;
+  background: linear-gradient(
+    to right,
+    rgba(5, 8, 16, 0.88) 0%,
+    rgba(5, 8, 16, 0.82) 60%,
+    rgba(5, 8, 16, 0.4) 85%,
+    transparent 100%
+  );
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  padding: 10px 40px 10px 16px;
+  /* Decorative left accent bar (FGO singularity style) */
+  border-left: 3px solid #ffd700;
+}
+
+.shift-singularity::after {
+  /* Gradient tail fading to the right */
+  content: '';
+  position: absolute;
+  right: -60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(
+    to right,
+    rgba(5, 8, 16, 0.35),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.shift-singularity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.shift-singularity-era {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #ffd700;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.shift-singularity-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #d0e8f0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shift-singularity-year {
+  font-size: 0.65rem;
+  color: #00d4ff;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.shift-singularity-close {
+  background: none;
+  border: 1px solid rgba(255, 51, 102, 0.25);
+  color: #ff3366;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.shift-singularity-close:hover {
+  background: rgba(255, 51, 102, 0.15);
+  border-color: #ff3366;
+  opacity: 1;
+}
+
+/* ═══ Bottom Panel (text + nav) ═══ */
+
+.shift-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(5, 8, 16, 0.15) 15%,
+    rgba(5, 8, 16, 0.75) 50%,
+    rgba(5, 8, 16, 0.95) 100%
+  );
+  padding: 60px 0 14px;
+}
+
+.shift-bottom-inner {
+  pointer-events: auto;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Page info */
+.shift-page-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.shift-page-year {
+  color: #00d4ff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.shift-page-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.shift-page-text {
+  color: var(--chaldea-text-bright);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* Navigation bar */
+.shift-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shift-nav-btn {
+  padding: 4px 10px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 4px;
+  background: transparent;
+  color: #00d4ff;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.shift-nav-btn:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.15);
+}
+
+.shift-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* Dots */
+.shift-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 2px 0;
+}
+
+.shift-dot {
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s;
+}
+
+.shift-dot:hover {
+  background: rgba(0, 212, 255, 0.5);
+}
+
+.shift-dot.visited {
+  background: rgba(0, 212, 255, 0.45);
+}
+
+.shift-dot.active {
+  background: #00d4ff;
+  box-shadow: 0 0 6px #00d4ff;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+}
+
+/* Counter (>25 pages) */
+.shift-counter {
+  color: var(--chaldea-text);
+  font-size: 0.7rem;
+  flex: 1;
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.shift-counter .current {
+  color: #00d4ff;
+  font-weight: 600;
+}
+
+/* ═══ Shift Markers on Globe ═══ */
+
+.shift-marker {
+  transition: opacity 0.3s ease;
+}
+
+.shift-marker--active {
+  opacity: 1;
+}
+
+.shift-marker--inactive {
+  opacity: 0.6;
+}
+
+.shift-marker--inactive:hover {
+  opacity: 0.85;
+}
+
+.shift-marker-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translateY(-12px);
+}
+
+.shift-marker-dot {
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+/* Active marker dot */
+.shift-marker--active .shift-marker-dot {
+  width: 12px;
+  height: 12px;
+  background: #00d4ff;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.8), 0 0 24px rgba(0, 212, 255, 0.4);
+}
+
+/* Inactive marker dot */
+.shift-marker--inactive .shift-marker-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(0, 212, 255, 0.6);
+  box-shadow: 0 0 4px rgba(0, 212, 255, 0.3);
+}
+
+.shift-marker-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.shift-marker-title {
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);
+  transition: all 0.3s ease;
+}
+
+.shift-marker--active .shift-marker-title {
+  color: #d0e8f0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.shift-marker--inactive .shift-marker-title {
+  color: rgba(200, 220, 230, 0.8);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.shift-marker-year {
+  font-family: 'Roboto Mono', monospace;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  transition: all 0.3s ease;
+}
+
+.shift-marker--active .shift-marker-year {
+  color: #00d4ff;
+  font-size: 9px;
+}
+
+.shift-marker--inactive .shift-marker-year {
+  color: rgba(0, 212, 255, 0.5);
+  font-size: 8px;
+}
