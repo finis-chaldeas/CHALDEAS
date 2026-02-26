@@ -20,6 +20,7 @@
 | [DB_RATIONALE.md](./DB_RATIONALE.md) | 이 DB 구조가 존재하는 이유 |
 | [HOOKS.md](./HOOKS.md) | 역사를 모르는 사람이 왜 이걸 열어보는가 |
 | [TRAINING_WHEELS.md](./TRAINING_WHEELS.md) | 초보자의 보조바퀴: 가이드 투어, FGO 서번트, 오늘의 역사 |
+| [**HISTORY_SHIFT.md**](./HISTORY_SHIFT.md) | **히스토리 시프트: 시나리오 탐색의 통합 시스템** |
 | [DATA_FILLING_PLAN.md](./DATA_FILLING_PLAN.md) | 핵심 데이터 채우기 기획서: 4개 갭, 실행 방법, 비용 |
 
 ### frontend/ — 프론트엔드 구현을 위한 백엔드 이해 문서
@@ -44,10 +45,11 @@
 6. **DB_RATIONALE** — 위의 모든 경험을 가능하게 하는 데이터 구조를 이해한다
 7. **HOOKS** — 역사를 모르는 사람을 어떻게 끌어들이는가
 8. **TRAINING_WHEELS** — 초보자가 시작할 수 있는 구체적 시스템들
+9. **HISTORY_SHIFT** — Rayshift, Histories, Historical Chain, Event Hierarchy를 통합한 시나리오 시스템
 
 ### 프론트엔드 구현 시
-9. **frontend/BACKEND_INVENTORY** — 백엔드에 어떤 데이터가 있는지 파악
-10. **frontend/DESIGN_RATIONALE** — 왜 이렇게 설계되었는지 이해
-11. **frontend/HISTORY_SYSTEM** — History 에세이 시스템 이해
-12. **frontend/API_CAPABILITIES** — 어떤 API를 쓸 수 있는지 확인
-13. **frontend/FRONTEND_SPEC** — 구현 수준의 기획서 (이것을 보고 코딩)
+10. **frontend/BACKEND_INVENTORY** — 백엔드에 어떤 데이터가 있는지 파악
+11. **frontend/DESIGN_RATIONALE** — 왜 이렇게 설계되었는지 이해
+12. **frontend/HISTORY_SYSTEM** — History 에세이 시스템 이해 (→ HISTORY_SHIFT로 통합됨)
+13. **frontend/API_CAPABILITIES** — 어떤 API를 쓸 수 있는지 확인
+14. **frontend/FRONTEND_SPEC** — 구현 수준의 기획서 (Rayshift → HISTORY_SHIFT로 통합됨)

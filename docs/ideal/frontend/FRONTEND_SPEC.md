@@ -518,6 +518,11 @@ API: `GET /events/{id}/relationships` → causes/enables/follows
 
 ## 9. Rayshift — 순차 탐색 모드
 
+> **통합 안내**: Rayshift는 **히스토리 시프트**의 네비게이션 엔진으로 통합되었습니다.
+> 하단 오버레이 UI → 전체화면 모달로 변경. 데이터 모델은 HistoricalChain → HistoryShift로 리네이밍.
+> 최신 기획은 → [HISTORY_SHIFT.md](../HISTORY_SHIFT.md) 참조.
+> 아래 내용은 이전 기획으로, 참고용으로 유지됩니다.
+
 **핵심 신규 기능**: 히스토리 체인, 생애 흐름, 가이드 투어를 하나의 인터페이스로.
 
 ### 9.1 컨셉

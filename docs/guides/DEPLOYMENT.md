@@ -1,364 +1,295 @@
-# CHALDEAS Google Cloud 배포 가이드
+# CHALDEAS 배포 운영 가이드
 
 ## 개요
 
-이 가이드는 CHALDEAS를 Google Cloud Run에 배포하는 방법을 설명합니다.
+CHALDEAS는 GCP Cloud Run + Cloud SQL로 운영된다.
+이 문서는 **실제 배포 절차**를 순서대로 정리한 운영 매뉴얼이다.
 
 ---
 
-## 중요: 리전 설정
-
-### Frontend는 us-central1에 배포해야 함!
-
-**문제**: Cloud Run의 커스텀 도메인 매핑은 특정 리전에서만 지원됩니다.
-
-| 리전 | 도메인 매핑 지원 |
-|------|-----------------|
-| us-central1 | **지원** |
-| asia-northeast3 (서울) | **미지원** |
-
-따라서 `www.chaldeas.site` 도메인은 반드시 **us-central1** 리전의 Cloud Run 서비스에 연결되어야 합니다.
-
-### 현재 배포 구조
-
-| 서비스 | 리전 | 용도 | 도메인 |
-|--------|------|------|--------|
-| chaldeas-backend | asia-northeast3 | API 서버 | - |
-| chaldeas-frontend | asia-northeast3 | 프론트엔드 (백업) | - |
-| chaldeas-frontend | **us-central1** | 프론트엔드 (메인) | www.chaldeas.site |
-
-### DNS 흐름
+## 아키텍처
 
 ```
-www.chaldeas.site
-    ↓ CNAME
-ghs.googlehosted.com
-    ↓
-Cloud Run (us-central1)  ← Frontend
-    ↓ API calls
-Cloud Run (asia-northeast3)  ← Backend
-    ↓
-Cloud SQL (asia-northeast3)
+www.chaldeas.site (CNAME → ghs.googlehosted.com)
+       │
+       ▼
+┌─────────────────────────┐        ┌─────────────────────────┐
+│  Cloud Run (Frontend)   │        │  Cloud Run (Backend)    │
+│  us-central1            │──API──▶│  asia-northeast3        │
+│  nginx + SPA            │        │  FastAPI + gunicorn     │
+│  512Mi / 0-3 instances  │        │  1Gi / 0-5 instances    │
+└─────────────────────────┘        └──────────┬──────────────┘
+                                              │
+                                   ┌──────────▼──────────────┐
+                                   │  Cloud SQL (PostgreSQL) │
+                                   │  asia-northeast3        │
+                                   │  db-g1-small + pgvector │
+                                   │  ~2.2GB                 │
+                                   └─────────────────────────┘
 ```
 
-### cloudbuild.yaml 설정
-
-`cloudbuild.yaml`은 Frontend를 **양쪽 리전 모두**에 배포합니다:
-- `asia-northeast3`: 백업/테스트용
-- `us-central1`: 도메인 연결용 (실제 서비스)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    배포 아키텍처                              │
-│                                                              │
-│    GitHub ──→ Cloud Build ──→ Container Registry            │
-│                    │                                         │
-│         ┌─────────┴─────────┐                               │
-│         ▼                   ▼                                │
-│    Cloud Run            Cloud Run                            │
-│    (Backend)           (Frontend)                            │
-│         │                                                    │
-│         ▼                                                    │
-│    Cloud SQL (PostgreSQL + pgvector)                         │
-│                                                              │
-│    Secret Manager (API Keys)                                 │
-└─────────────────────────────────────────────────────────────┘
-```
+| 항목 | 값 |
+|------|-----|
+| GCP Project | `chaldeas-archive` |
+| Frontend Region | `us-central1` (도메인 매핑 필수) |
+| Backend Region | `asia-northeast3` |
+| Cloud SQL Instance | `chaldeas-db` |
+| Artifact Registry | `asia-northeast3-docker.pkg.dev/chaldeas-archive/chaldeas` |
+| GCS Bucket (DB sync) | `gs://chaldeas-archive-db-sync` |
+| 도메인 | `www.chaldeas.site` |
 
 ---
 
-## 사전 요구사항
+## 배포 시나리오별 절차
 
-- Google Cloud 계정 및 프로젝트
-- `gcloud` CLI 설치 및 인증
-- Docker 설치 (로컬 테스트용)
+### A. 코드만 변경 (프론트엔드/백엔드)
 
----
+DB 변경 없이 코드만 배포할 때.
 
-## Step 1: Google Cloud 프로젝트 설정
-
-```bash
-# 1. 프로젝트 생성 (또는 기존 프로젝트 사용)
-gcloud projects create chaldeas-prod --name="CHALDEAS"
-
-# 2. 프로젝트 선택
-gcloud config set project chaldeas-prod
-
-# 3. 결제 계정 연결 (필수)
-gcloud billing accounts list
-gcloud billing projects link chaldeas-prod --billing-account=YOUR_BILLING_ACCOUNT_ID
-
-# 4. 필요한 API 활성화
-gcloud services enable \
-  cloudbuild.googleapis.com \
-  run.googleapis.com \
-  sqladmin.googleapis.com \
-  secretmanager.googleapis.com \
-  containerregistry.googleapis.com
-```
-
----
-
-## Step 2: Cloud SQL 설정 (PostgreSQL + pgvector)
-
-```bash
-# 1. Cloud SQL 인스턴스 생성 (db-g1-small 권장)
-gcloud sql instances create chaldeas-db \
-  --database-version=POSTGRES_15 \
-  --tier=db-g1-small \
-  --region=asia-northeast3 \
-  --storage-size=10GB \
-  --storage-type=SSD \
-  --database-flags=cloudsql.enable_pgvector=on
-
-# 2. 데이터베이스 생성
-gcloud sql databases create chaldeas --instance=chaldeas-db
-
-# 3. 사용자 생성
-gcloud sql users create chaldeas \
-  --instance=chaldeas-db \
-  --password=YOUR_SECURE_PASSWORD
-
-# 4. pgvector 확장 활성화 (Cloud SQL에 접속 후)
-gcloud sql connect chaldeas-db --user=chaldeas
-# SQL> CREATE EXTENSION IF NOT EXISTS vector;
-```
-
----
-
-## Step 3: Secret Manager 설정
-
-```bash
-# 1. 데이터베이스 URL 저장
-echo -n "postgresql://chaldeas:YOUR_PASSWORD@/chaldeas?host=/cloudsql/chaldeas-prod:asia-northeast3:chaldeas-db" | \
-  gcloud secrets create chaldeas-database-url --data-file=-
-
-# 2. OpenAI API Key 저장
-echo -n "sk-your-openai-api-key" | \
-  gcloud secrets create chaldeas-openai-key --data-file=-
-
-# 3. Anthropic API Key 저장
-echo -n "sk-ant-your-anthropic-api-key" | \
-  gcloud secrets create chaldeas-anthropic-key --data-file=-
-
-# 4. Cloud Run 서비스 계정에 권한 부여
-PROJECT_NUMBER=$(gcloud projects describe chaldeas-prod --format='value(projectNumber)')
-gcloud secrets add-iam-policy-binding chaldeas-database-url \
-  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
-  --role="roles/secretmanager.secretAccessor"
-
-gcloud secrets add-iam-policy-binding chaldeas-openai-key \
-  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
-  --role="roles/secretmanager.secretAccessor"
-
-gcloud secrets add-iam-policy-binding chaldeas-anthropic-key \
-  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
-  --role="roles/secretmanager.secretAccessor"
-```
-
----
-
-## Step 4: 수동 배포 (처음 한 번)
-
-```bash
+```powershell
 # 프로젝트 루트에서 실행
+# 전체 배포 (Backend → Frontend 순서, ~15분)
+.\scripts\deploy.ps1 all
 
-# 1. Backend 빌드 및 배포
-gcloud builds submit --tag gcr.io/chaldeas-prod/chaldeas-backend backend \
-  --dockerfile=backend/Dockerfile.prod
-
-gcloud run deploy chaldeas-backend \
-  --image gcr.io/chaldeas-prod/chaldeas-backend \
-  --region asia-northeast3 \
-  --platform managed \
-  --allow-unauthenticated \
-  --memory 1Gi \
-  --set-secrets "DATABASE_URL=chaldeas-database-url:latest,OPENAI_API_KEY=chaldeas-openai-key:latest,ANTHROPIC_API_KEY=chaldeas-anthropic-key:latest" \
-  --add-cloudsql-instances chaldeas-prod:asia-northeast3:chaldeas-db
-
-# 2. Backend URL 확인
-BACKEND_URL=$(gcloud run services describe chaldeas-backend --region asia-northeast3 --format='value(status.url)')
-echo "Backend URL: $BACKEND_URL"
-
-# 3. Frontend 빌드 및 배포
-gcloud builds submit --tag gcr.io/chaldeas-prod/chaldeas-frontend frontend \
-  --dockerfile=frontend/Dockerfile.prod \
-  --build-arg VITE_API_URL=$BACKEND_URL
-
-gcloud run deploy chaldeas-frontend \
-  --image gcr.io/chaldeas-prod/chaldeas-frontend \
-  --region asia-northeast3 \
-  --platform managed \
-  --allow-unauthenticated \
-  --memory 256Mi
-
-# 4. Frontend URL 확인
-gcloud run services describe chaldeas-frontend --region asia-northeast3 --format='value(status.url)'
+# 또는 개별 배포
+.\scripts\deploy.ps1 backend    # 백엔드만 (~7분)
+.\scripts\deploy.ps1 frontend   # 프론트엔드만 (~7분)
 ```
 
----
+내부 동작:
+1. Docker 빌드 (Dockerfile.prod)
+2. Artifact Registry에 push
+3. Cloud Run에 새 revision 배포
+4. 프론트엔드는 asia-northeast3 + us-central1 양쪽 배포
 
-## Step 5: CI/CD 설정 (자동 배포)
+### B. 데이터 변경 (DB 동기화)
 
-### Option A: Cloud Build Trigger
+로컬 DB 데이터를 클라우드로 올릴 때. **전체 교체 방식**.
 
-```bash
-# 1. GitHub 저장소 연결
-# Cloud Console > Cloud Build > 트리거 > 저장소 연결
+```powershell
+# 1. 로컬 DB가 Compact(C:\PostgreSQL\data)인지 확인
+.\tools\switch-db.ps1 status
 
-# 2. 트리거 생성
-gcloud builds triggers create github \
-  --repo-name=CHALDEAS \
-  --repo-owner=finis-chaldeas \
-  --branch-pattern="^main$" \
-  --build-config=cloudbuild.yaml \
-  --substitutions=_BACKEND_URL=https://chaldeas-backend-xxxxx.run.app
+# 2. DB 동기화 (Local → Cloud)
+.\scripts\sync-db.ps1 up
 ```
 
-### Option B: GitHub Actions
+내부 동작:
+1. `pg_dump` 로컬 DB → SQL 파일 (~2.2GB, data-only)
+2. 비호환 SET 명령 필터링
+3. GCS 버킷에 업로드
+4. `gcloud sql import sql`로 Cloud SQL에 import
+5. 권한 GRANT (Cloud SQL Proxy 사용)
+6. 임시 파일 정리
 
-`.github/workflows/deploy.yml` 생성:
+**예상 시간**: ~15-20분 (dump 3분 + 업로드 5분 + import 10분)
+**주의**: Cloud SQL import는 기존 데이터를 덮어쓴다 (INSERT, ON CONFLICT 없음)
 
-```yaml
-name: Deploy to Cloud Run
+### C. 스키마 변경 (마이그레이션)
 
-on:
-  push:
-    branches: [main]
+테이블 구조가 바뀔 때. **sync-db.ps1 전에 해야 한다.**
 
-env:
-  PROJECT_ID: chaldeas-prod
-  REGION: asia-northeast3
+```powershell
+# 1. Cloud SQL Proxy 실행 (별도 터미널)
+C:\tools\cloud-sql-proxy.exe chaldeas-archive:asia-northeast3:chaldeas-db --port=5433
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - uses: google-github-actions/setup-gcloud@v2
-
-      - name: Build and Deploy
-        run: |
-          gcloud builds submit --config cloudbuild.yaml \
-            --substitutions=_BACKEND_URL=${{ secrets.BACKEND_URL }}
-```
-
----
-
-## Step 6: 데이터 마이그레이션
-
-```bash
-# 1. 로컬에서 Cloud SQL Proxy 실행
-cloud-sql-proxy chaldeas-prod:asia-northeast3:chaldeas-db &
-
-# 2. 데이터베이스 마이그레이션 (백엔드 스크립트 실행)
+# 2. 마이그레이션 실행
 cd backend
-python -m app.scripts.init_db
+$env:DATABASE_URL = "postgresql://postgres:postgres_gcp_2025@localhost:5433/chaldeas"
+python -m alembic upgrade head
 
-# 3. 기존 데이터 임포트
-python -m app.scripts.import_data --source ../data/json
+# 또는 수동 ALTER
+$env:PGPASSWORD = "postgres_gcp_2025"
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -h localhost -p 5433 -d chaldeas -c "ALTER TABLE entity_narratives ALTER COLUMN significance TYPE TEXT;"
+```
+
+### D. 전체 배포 (코드 + DB + 스키마)
+
+가장 일반적인 배포 시나리오. 순서가 중요하다.
+
+```powershell
+# Step 1: 스키마 변경이 있으면 먼저 Cloud SQL에 적용
+#   (위 C 절차 따라)
+
+# Step 2: DB 데이터 동기화
+.\scripts\sync-db.ps1 up
+
+# Step 3: 코드 배포
+.\scripts\deploy.ps1 all
+
+# Step 4: 확인
+.\scripts\deploy.ps1 status
+```
+
+**순서 규칙:**
+```
+스키마 변경 → DB 동기화 → 백엔드 배포 → 프론트엔드 배포
+```
+
+스키마를 먼저 바꿔야 데이터가 들어가고, 백엔드를 먼저 배포해야 프론트엔드가 새 API를 사용할 수 있다.
+
+---
+
+## 로컬 DB 관리
+
+### Compact vs Archive
+
+| DB | 경로 | 크기 | 용도 |
+|----|------|------|------|
+| Compact | `C:\PostgreSQL\data` | ~2.2GB | 개발/배포 (SSD) |
+| Archive | `E:\PostgreSQL\data` | 44GB | 전체 Wikidata (HDD) |
+
+```powershell
+.\tools\switch-db.ps1 compact    # Compact 사용
+.\tools\switch-db.ps1 archive    # Archive 사용
+.\tools\switch-db.ps1 status     # 현재 상태
+```
+
+### Compact DB 재구축 (Archive → Compact)
+
+Archive에서 필요한 데이터만 추출:
+
+```powershell
+.\tools\switch-db.ps1 archive
+cd backend
+python scripts/export_compact.py      # CSV 추출 → data/compact_export/
+.\tools\switch-db.ps1 compact
+python -m alembic upgrade head        # 스키마 생성
+python scripts/import_compact.py      # CSV 임포트
 ```
 
 ---
 
-## 비용 최적화 팁
+## 현재 스키마 변경 이력 (Alembic 외)
 
-### 1. min-instances=0 설정
+sync-db.ps1은 data-only dump이므로 스키마 변경은 별도로 적용해야 한다.
+아래는 Alembic 마이그레이션 없이 직접 ALTER한 내역:
 
-```bash
-gcloud run services update chaldeas-backend \
-  --min-instances=0 \
-  --region asia-northeast3
+```sql
+-- 2026-02-24: significance 컬럼 VARCHAR(500) → TEXT 확장
+ALTER TABLE entity_narratives ALTER COLUMN significance TYPE TEXT;
+ALTER TABLE entity_narratives ALTER COLUMN significance_ko TYPE TEXT;
+ALTER TABLE entity_narratives ALTER COLUMN significance_ja TYPE TEXT;
 ```
 
-### 2. Cloud SQL 자동 중지 (개발 환경)
-
-```bash
-# 인스턴스 중지 (수동)
-gcloud sql instances patch chaldeas-db --activation-policy=NEVER
-
-# 인스턴스 시작
-gcloud sql instances patch chaldeas-db --activation-policy=ALWAYS
-```
-
-### 3. 트래픽 기반 스케일링
-
-```bash
-gcloud run services update chaldeas-backend \
-  --max-instances=10 \
-  --concurrency=80
-```
+**배포 전 Cloud SQL에 이 ALTER를 먼저 실행해야 한다.**
 
 ---
 
-## 모니터링 및 로깅
+## 검증 체크리스트
 
-```bash
-# Cloud Run 로그 확인
-gcloud run services logs read chaldeas-backend --region asia-northeast3
+### 배포 후 확인
 
-# Cloud SQL 모니터링
-gcloud sql operations list --instance=chaldeas-db
+```powershell
+# 1. 서비스 URL 확인
+.\scripts\deploy.ps1 status
+
+# 2. 백엔드 헬스체크
+curl https://chaldeas-backend-951004107180.asia-northeast3.run.app/health
+
+# 3. API 응답 확인
+curl "https://chaldeas-backend-951004107180.asia-northeast3.run.app/api/v1/events?limit=3"
+
+# 4. 프론트엔드 접속
+# 브라우저에서 https://www.chaldeas.site 열기
+
+# 5. DB 동기화 상태 비교
+.\scripts\sync-db.ps1 status
 ```
 
----
+### DB 동기화 후 확인 (Cloud SQL Proxy 필요)
 
-## 커스텀 도메인 설정 (선택)
+```powershell
+# Cloud SQL Proxy 실행 (별도 터미널)
+C:\tools\cloud-sql-proxy.exe chaldeas-archive:asia-northeast3:chaldeas-db --port=5433
 
-```bash
-# 1. 도메인 매핑
-gcloud run domain-mappings create \
-  --service chaldeas-frontend \
-  --domain chaldeas.yourdomain.com \
-  --region asia-northeast3
-
-# 2. DNS 설정 안내 확인
-gcloud run domain-mappings describe \
-  --domain chaldeas.yourdomain.com \
-  --region asia-northeast3
+# 주요 테이블 row count 비교
+$env:PGPASSWORD = "postgres_gcp_2025"
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -h localhost -p 5433 -d chaldeas -c "
+    SELECT 'events' as t, COUNT(*) FROM events
+    UNION ALL SELECT 'persons', COUNT(*) FROM persons
+    UNION ALL SELECT 'locations', COUNT(*) FROM locations
+    UNION ALL SELECT 'entity_narratives', COUNT(*) FROM entity_narratives
+    ORDER BY t;
+"
 ```
 
 ---
 
 ## 트러블슈팅
 
-### Cloud SQL 연결 실패
+### Cloud SQL import 실패
 
-```bash
-# Cloud SQL Admin API 활성화 확인
-gcloud services list --enabled | grep sqladmin
-
-# 서비스 계정 권한 확인
-gcloud projects get-iam-policy chaldeas-prod \
-  --format='table(bindings.role)' \
-  --filter="bindings.members:compute@developer.gserviceaccount.com"
+```
+ERROR: duplicate key value violates unique constraint
 ```
 
-### Cold Start 최적화
+→ Cloud SQL에 기존 데이터가 있으면 충돌. 전체 TRUNCATE 후 재시도:
 
-```bash
-# 최소 인스턴스 1개 유지 (비용 증가)
-gcloud run services update chaldeas-backend \
-  --min-instances=1 \
-  --region asia-northeast3
+```powershell
+# Cloud SQL Proxy 연결 후
+psql -U postgres -h localhost -p 5433 -d chaldeas -c "
+    DO \$\$ DECLARE r RECORD;
+    BEGIN
+        FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
+            EXECUTE 'TRUNCATE TABLE ' || r.tablename || ' CASCADE';
+        END LOOP;
+    END \$\$;
+"
+# 그 다음 sync-db.ps1 up 재실행
+```
+
+### Cold Start 느림 (첫 요청 5-10초)
+
+```powershell
+# 최소 인스턴스 1개 유지 (월 ~$15 추가)
+gcloud run services update chaldeas-backend --min-instances=1 --region=asia-northeast3
+```
+
+### Cloud SQL Proxy 없음
+
+```powershell
+# 다운로드: https://cloud.google.com/sql/docs/postgres/sql-proxy
+# 설치 경로: C:\tools\cloud-sql-proxy.exe
+# 인증: gcloud auth application-default login
+```
+
+### Cloud SQL 인스턴스 중지/시작 (비용 절감)
+
+```powershell
+gcloud sql instances patch chaldeas-db --activation-policy=NEVER    # 중지
+gcloud sql instances patch chaldeas-db --activation-policy=ALWAYS   # 시작
 ```
 
 ---
 
-## 예상 월 비용 (프로덕션)
+## 스크립트 정리
 
-| 서비스 | 스펙 | 예상 비용 |
-|--------|------|-----------|
-| Cloud Run (Backend) | 1 vCPU, 1GB | $15-30 |
-| Cloud Run (Frontend) | 1 vCPU, 256MB | $5-10 |
-| Cloud SQL | db-g1-small | $25-35 |
-| Secret Manager | 3 secrets | ~$0.10 |
-| Container Registry | ~1GB | ~$0.10 |
-| **합계** | | **$45-75/월** |
+| 스크립트 | 용도 | 사용 시점 |
+|----------|------|-----------|
+| `scripts/deploy.ps1 all` | 코드 배포 (Cloud Build) | 코드 변경 후 |
+| `scripts/deploy.ps1 backend` | 백엔드만 배포 | API 변경 후 |
+| `scripts/deploy.ps1 frontend` | 프론트엔드만 배포 | UI 변경 후 |
+| `scripts/sync-db.ps1 up` | 로컬 DB → Cloud SQL | 데이터 변경 후 |
+| `scripts/sync-db.ps1 down` | Cloud SQL → 로컬 DB | 클라우드 데이터 받기 |
+| `scripts/sync-db.ps1 status` | DB 비교 | 동기화 상태 확인 |
+| `scripts/gcp-setup.ps1` | GCP 초기 설정 | 최초 1회 |
+| `tools/switch-db.ps1` | Compact/Archive DB 전환 | DB 전환 시 |
 
-무료 티어 활용 시: **$10-30/월** 가능
+---
+
+## 비용
+
+| 서비스 | 스펙 | 월 예상 |
+|--------|------|---------|
+| Cloud Run Backend | 1 vCPU, 1GB, 0-5 inst | $15-30 |
+| Cloud Run Frontend | 1 vCPU, 512MB, 0-3 inst | $8-15 |
+| Cloud SQL | db-g1-small, 10GB SSD | $25-35 |
+| 기타 (GCS, Secrets, Registry) | - | ~$1 |
+| **합계** | | **$49-81/월** |
+| **Free Tier 활용 시** | | **$10-30/월** |
+
+### 비용 절감 팁
+- `min-instances=0` 유지 (cold start 감수)
+- 사용 안 할 때 Cloud SQL 중지: `--activation-policy=NEVER`
+- 프론트엔드 CDN 연결 시 Cloud Run Frontend 비용 절감 가능
