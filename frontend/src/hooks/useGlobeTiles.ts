@@ -10,7 +10,7 @@ import {
 // default: darken + slight blue to match Blue Marble aesthetic
 // holo/night: already dark tiles, no adjustment needed
 const TILE_TINT: Record<string, Color> = {
-  default: new Color(0.45, 0.48, 0.55),  // dark blue-grey, matches Blue Marble
+  default: new Color(0.52, 0.54, 0.58),  // slightly warm blue-grey, closer to Blue Marble
   holo: new Color(1, 1, 1),
   night: new Color(1, 1, 1),
 }
@@ -24,10 +24,12 @@ export interface TileData {
   key: string
 }
 
-const MAX_CONCURRENT_LOADS = 6
-const DEBOUNCE_MS = 80
+const MAX_CONCURRENT_LOADS = 8
+const DEBOUNCE_MS = 30
 const RETRY_DELAY_MS = 2000
 const FALLBACK_COLOR = 0x1a1e2e
+// How often (ms) the RAF altitude monitor checks for zoom changes
+const ALTITUDE_POLL_MS = 60
 
 function createFallbackMaterial(): MeshBasicMaterial {
   return new MeshBasicMaterial({ color: FALLBACK_COLOR })
@@ -63,13 +65,16 @@ export function useGlobeTiles(
   // Pending tiles: accumulate new zoom tiles here, swap in when all loaded
   const pendingBatchRef = useRef<{ z: number; total: number; loaded: Set<string> } | null>(null)
 
-  // Track latest camera values
+  // Track latest camera values (updated both from props AND from RAF monitor)
   const latRef = useRef(lat)
   const lngRef = useRef(lng)
   const altitudeRef = useRef(altitude)
   latRef.current = lat
   lngRef.current = lng
   altitudeRef.current = altitude
+
+  // Incrementing counter to force re-evaluation when RAF detects zoom change
+  const [rafTick, setRafTick] = useState(0)
 
   // Clear cache when style changes
   useEffect(() => {
@@ -92,6 +97,37 @@ export function useGlobeTiles(
       }
     }
   }, [])
+
+  // RAF-based altitude monitor: detects zoom level changes during animations
+  // (when cameraPosition state is frozen but globe.pointOfView is animating)
+  // Uses a polling approach since three-globe doesn't expose per-frame callbacks
+  // for the internal TWEEN animation.
+  useEffect(() => {
+    if (!enabled) return
+    let rafId: number
+    let lastCheck = 0
+    const lastZoomRef = { current: altitudeToTileZoom(altitude) }
+
+    const poll = (time: number) => {
+      if (!mountedRef.current) return
+      rafId = requestAnimationFrame(poll)
+
+      // Throttle checks to ALTITUDE_POLL_MS intervals
+      if (time - lastCheck < ALTITUDE_POLL_MS) return
+      lastCheck = time
+
+      const currentAlt = altitudeRef.current
+      const currentZoom = altitudeToTileZoom(currentAlt)
+      if (currentZoom !== lastZoomRef.current) {
+        lastZoomRef.current = currentZoom
+        // Bump tick to force main effect to re-evaluate
+        setRafTick(prev => prev + 1)
+      }
+    }
+
+    rafId = requestAnimationFrame(poll)
+    return () => cancelAnimationFrame(rafId)
+  }, [enabled, altitude])
 
   /** Build TileData[] from cache for current viewport at a specific zoom */
   const buildTilesForZoom = useCallback((camLat: number, camLng: number, camAlt: number, style: TileStyle): TileData[] => {
@@ -213,6 +249,8 @@ export function useGlobeTiles(
   }, [buildTilesForZoom, flushPendingBatch])
 
   // Main effect: debounce camera changes and compute visible tiles
+  // Uses altitudeRef.current for real-time altitude (tracks animations via RAF monitor)
+  // rafTick forces re-evaluation when RAF detects zoom level change during animation
   useEffect(() => {
     if (!enabled) {
       if (tilesData.length > 0) setTilesData([])
@@ -228,9 +266,14 @@ export function useGlobeTiles(
     debounceTimerRef.current = setTimeout(() => {
       if (!mountedRef.current) return
 
+      // Read real-time values from refs (tracks animations)
+      const camLat = latRef.current
+      const camLng = lngRef.current
+      const camAlt = altitudeRef.current
+
       const cache = cacheRef.current
       const style = globeStyle as TileStyle
-      const newZoom = altitudeToTileZoom(altitude)
+      const newZoom = altitudeToTileZoom(camAlt)
 
       if (newZoom === 0) {
         setTilesData([])
@@ -239,7 +282,7 @@ export function useGlobeTiles(
         return
       }
 
-      const visibleTiles = getVisibleTiles(lat, lng, altitude)
+      const visibleTiles = getVisibleTiles(camLat, camLng, camAlt)
       if (visibleTiles.length === 0) {
         setTilesData([])
         return
@@ -247,29 +290,26 @@ export function useGlobeTiles(
 
       // Sort by distance to camera center (closest first)
       visibleTiles.sort((a, b) => {
-        const distA = Math.abs(a.lat - lat) + Math.abs(a.lng - lng)
-        const distB = Math.abs(b.lat - lat) + Math.abs(b.lng - lng)
+        const distA = Math.abs(a.lat - camLat) + Math.abs(a.lng - camLng)
+        const distB = Math.abs(b.lat - camLat) + Math.abs(b.lng - camLng)
         return distA - distB
       })
 
       const zoomChanged = newZoom !== prevZoomRef.current
       prevZoomRef.current = newZoom
 
-      // Count cached vs uncached
+      // Find uncached tiles that need loading
       const toLoad: TileInfo[] = []
-      let cachedCount = 0
       for (const tile of visibleTiles) {
         const key = `${tile.z}/${tile.x}/${tile.y}/${style}`
-        if (cache.has(key)) {
-          cachedCount++
-        } else {
+        if (!cache.has(key)) {
           toLoad.push(tile)
         }
       }
 
       if (toLoad.length === 0) {
         // All cached — show immediately
-        const data = buildTilesForZoom(lat, lng, altitude, style)
+        const data = buildTilesForZoom(camLat, camLng, camAlt, style)
         setTilesData(data)
         pendingBatchRef.current = null
         return
@@ -289,7 +329,7 @@ export function useGlobeTiles(
         }
       } else {
         // Same zoom, panning: show cached immediately, load missing incrementally
-        const data = buildTilesForZoom(lat, lng, altitude, style)
+        const data = buildTilesForZoom(camLat, camLng, camAlt, style)
         setTilesData(data)
         pendingBatchRef.current = null
       }
@@ -306,7 +346,7 @@ export function useGlobeTiles(
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lng, altitude, globeStyle, enabled])
+  }, [lat, lng, altitude, globeStyle, enabled, rafTick])
 
   return { tilesData, isLoading }
 }

@@ -222,7 +222,7 @@
     "hideEmpty": "설명 없는 항목 숨기기",
     "reset": "모든 필터 초기화"
   },
-  "showcase": {
+  "trismegistos": {
     "types": {
       "singularity": "특이점",
       "lostbelt": "이문대",
@@ -239,7 +239,7 @@
       "panHuman": "범인류사"
     },
     "menu": {
-      "title": "트리스메기스투스",
+      "title": "트리스메기스토스",
       "subtitle": "레이시프트 라이브러리",
       "singularities": "특이점",
       "lostbelts": "이문대",

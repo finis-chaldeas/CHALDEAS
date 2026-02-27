@@ -1,11 +1,11 @@
 /**
- * Showcase Content Data
+ * Trismegistos Content Data
  * Sample data for Singularities, Lostbelts, and Servant columns
  */
-import type { ShowcaseContent } from '../components/showcase'
+import type { TrismegistosContent } from '../components/trismegistos'
 
 // Singularity Data
-export const singularities: ShowcaseContent[] = [
+export const singularities: TrismegistosContent[] = [
   {
     id: 'singularity-f',
     type: 'singularity',
@@ -103,7 +103,7 @@ export const singularities: ShowcaseContent[] = [
 ]
 
 // Lostbelt Data
-export const lostbelts: ShowcaseContent[] = [
+export const lostbelts: TrismegistosContent[] = [
   {
     id: 'lostbelt-1',
     type: 'lostbelt',
@@ -169,7 +169,7 @@ export const lostbelts: ShowcaseContent[] = [
 ]
 
 // Servant Column Data
-export const servantColumns: ShowcaseContent[] = [
+export const servantColumns: TrismegistosContent[] = [
   {
     id: 'servant-gilgamesh',
     type: 'servant',
@@ -257,7 +257,7 @@ export const servantColumns: ShowcaseContent[] = [
 ]
 
 // Pan-Human History - Historical Articles
-export const historyArticles: ShowcaseContent[] = [
+export const historyArticles: TrismegistosContent[] = [
   {
     id: 'history-crusades',
     type: 'article',
@@ -364,7 +364,7 @@ export const historyArticles: ShowcaseContent[] = [
 ]
 
 // Pan-Human History - Literature Articles
-export const literatureArticles: ShowcaseContent[] = [
+export const literatureArticles: TrismegistosContent[] = [
   {
     id: 'literature-iliad',
     type: 'article',
@@ -475,7 +475,7 @@ export const literatureArticles: ShowcaseContent[] = [
 ]
 
 // Pan-Human History - Music Articles
-export const musicArticles: ShowcaseContent[] = [
+export const musicArticles: TrismegistosContent[] = [
   {
     id: 'music-mozart',
     type: 'article',
@@ -580,8 +580,8 @@ export const musicArticles: ShowcaseContent[] = [
   }
 ]
 
-// Helper function to get all showcase content
-export function getAllShowcaseContent(): ShowcaseContent[] {
+// Helper function to get all trismegistos content
+export function getAllTrismegistosContent(): TrismegistosContent[] {
   return [
     ...singularities,
     ...lostbelts,
@@ -593,6 +593,6 @@ export function getAllShowcaseContent(): ShowcaseContent[] {
 }
 
 // Helper function to get content by ID
-export function getShowcaseContentById(id: string): ShowcaseContent | undefined {
-  return getAllShowcaseContent().find(content => content.id === id)
+export function getTrismegistosContentById(id: string): TrismegistosContent | undefined {
+  return getAllTrismegistosContent().find(content => content.id === id)
 }

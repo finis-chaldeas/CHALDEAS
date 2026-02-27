@@ -3,7 +3,7 @@
  *
  * Modal triggers:
  * - Timeline Explorer (fullscreen modal)
- * - Trismegistus Archive (showcase modal)
+ * - Trismegistos Archive (trismegistos modal)
  *
  * Tabs:
  * - Events (SHEBA): Curated episodes + importance-ranked events/persons
@@ -37,7 +37,7 @@ interface NavigatorProps {
   onSetCurrentYear?: (year: number) => void
   onStartTour?: (episode: ShebaEpisode) => void
   onOpenTimeline?: () => void
-  onOpenShowcase?: () => void
+  onOpenTrismegistos?: () => void
   onHistoryClick?: (historyId: number) => void
   onCreateHistory?: () => void
 }
@@ -61,7 +61,7 @@ export function Navigator({
   onSetCurrentYear,
   onStartTour,
   onOpenTimeline,
-  onOpenShowcase,
+  onOpenTrismegistos,
   onHistoryClick,
   onCreateHistory,
 }: NavigatorProps) {
@@ -82,10 +82,10 @@ export function Navigator({
         </button>
         <button
           className="navigator-trigger-btn trigger-fgo"
-          onClick={onOpenShowcase}
+          onClick={onOpenTrismegistos}
         >
           <span className="trigger-icon">{'\u2726'}</span>
-          <span className="trigger-label">Trismegistus</span>
+          <span className="trigger-label">Trismegistos</span>
         </button>
       </div>
 

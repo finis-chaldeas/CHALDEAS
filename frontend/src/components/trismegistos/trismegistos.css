@@ -1,6 +1,6 @@
-/* Showcase Modal - FGO Terminal Style */
+/* Trismegistos Modal - FGO Terminal Style */
 
-.showcase-overlay {
+.trismegistos-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
@@ -18,7 +18,7 @@
   to { opacity: 1; }
 }
 
-.showcase-modal {
+.trismegistos-modal {
   position: relative;
   width: 100%;
   max-width: 800px;
@@ -47,7 +47,7 @@
 }
 
 /* Scanline effect */
-.showcase-modal::before {
+.trismegistos-modal::before {
   content: '';
   position: absolute;
   top: 0;
@@ -66,7 +66,7 @@
 }
 
 /* Corner decorations */
-.showcase-modal::after {
+.trismegistos-modal::after {
   content: '';
   position: absolute;
   top: 8px;
@@ -80,7 +80,7 @@
 }
 
 /* Close Button */
-.showcase-close {
+.trismegistos-close {
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -99,14 +99,14 @@
   transition: all 0.2s;
 }
 
-.showcase-close:hover {
+.trismegistos-close:hover {
   border-color: var(--chaldea-magenta);
   color: var(--chaldea-magenta);
   background: rgba(255, 51, 102, 0.1);
 }
 
 /* Header */
-.showcase-header {
+.trismegistos-header {
   padding: 2rem 2rem 1.5rem;
   border-bottom: 1px solid var(--chaldea-border);
   border-left: 4px solid;
@@ -114,7 +114,7 @@
   position: relative;
 }
 
-.showcase-type {
+.trismegistos-type {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -137,7 +137,7 @@
   letter-spacing: 0.1em;
 }
 
-.showcase-title {
+.trismegistos-title {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--chaldea-text-bright);
@@ -145,14 +145,14 @@
   line-height: 1.3;
 }
 
-.showcase-subtitle {
+.trismegistos-subtitle {
   font-size: 1rem;
   color: var(--chaldea-text);
   margin-bottom: 1rem;
   font-style: italic;
 }
 
-.showcase-meta {
+.trismegistos-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -169,13 +169,13 @@
 }
 
 /* Body */
-.showcase-body {
+.trismegistos-body {
   flex: 1;
   padding: 1.5rem 2rem;
   overflow-y: auto;
 }
 
-.showcase-description {
+.trismegistos-description {
   font-size: 0.95rem;
   line-height: 1.8;
   color: var(--chaldea-text);
@@ -183,13 +183,13 @@
 }
 
 /* Sections */
-.showcase-section {
+.trismegistos-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--chaldea-border);
 }
 
-.showcase-section.historical {
+.trismegistos-section.historical {
   background: rgba(255, 149, 0, 0.05);
   margin: 1.5rem -2rem 0;
   padding: 1.5rem 2rem;
@@ -309,7 +309,7 @@
 }
 
 /* Sources */
-.showcase-sources {
+.trismegistos-sources {
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 1px dashed var(--chaldea-border);
@@ -338,7 +338,7 @@
 }
 
 /* Footer */
-.showcase-footer {
+.trismegistos-footer {
   padding: 1rem 2rem;
   border-top: 1px solid var(--chaldea-border);
   background: rgba(0, 0, 0, 0.3);
@@ -365,29 +365,29 @@
 }
 
 /* Scrollbar */
-.showcase-body::-webkit-scrollbar {
+.trismegistos-body::-webkit-scrollbar {
   width: 6px;
 }
 
-.showcase-body::-webkit-scrollbar-track {
+.trismegistos-body::-webkit-scrollbar-track {
   background: var(--chaldea-bg);
 }
 
-.showcase-body::-webkit-scrollbar-thumb {
+.trismegistos-body::-webkit-scrollbar-thumb {
   background: var(--chaldea-border);
   border-radius: 3px;
 }
 
-.showcase-body::-webkit-scrollbar-thumb:hover {
+.trismegistos-body::-webkit-scrollbar-thumb:hover {
   background: var(--chaldea-cyan-dim);
 }
 
-/* ===== Showcase Menu ===== */
-.showcase-menu-container {
+/* ===== Trismegistos Menu ===== */
+.trismegistos-menu-container {
   position: relative;
 }
 
-.showcase-menu-btn {
+.trismegistos-menu-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -403,19 +403,19 @@
   transition: all 0.2s;
 }
 
-.showcase-menu-btn:hover,
-.showcase-menu-btn.active {
+.trismegistos-menu-btn:hover,
+.trismegistos-menu-btn.active {
   border-color: var(--chaldea-cyan);
   color: var(--chaldea-cyan);
   background: rgba(0, 212, 255, 0.1);
 }
 
-.showcase-menu-btn .menu-icon {
+.trismegistos-menu-btn .menu-icon {
   font-size: 1rem;
   color: var(--chaldea-orange);
 }
 
-.showcase-menu-dropdown {
+.trismegistos-menu-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
@@ -442,7 +442,7 @@
 }
 
 /* Main Tabs (FGO / Pan-Human History) */
-.showcase-main-tabs {
+.trismegistos-main-tabs {
   display: flex;
   border-bottom: 1px solid var(--chaldea-border);
 }
@@ -494,7 +494,7 @@
 }
 
 /* Sub Tabs */
-.showcase-menu-tabs {
+.trismegistos-menu-tabs {
   display: flex;
   padding: 0.5rem;
   gap: 0.25rem;
@@ -546,13 +546,13 @@
 }
 
 /* Content List */
-.showcase-menu-list {
+.trismegistos-menu-list {
   max-height: 320px;
   overflow-y: auto;
   padding: 0.5rem;
 }
 
-.showcase-menu-item {
+.trismegistos-menu-item {
   display: block;
   width: 100%;
   padding: 0.75rem 1rem;
@@ -565,19 +565,19 @@
   margin-bottom: 0.25rem;
 }
 
-.showcase-menu-item:hover {
+.trismegistos-menu-item:hover {
   background: rgba(0, 212, 255, 0.08);
   border-color: var(--chaldea-border);
 }
 
-.showcase-menu-item .item-header {
+.trismegistos-menu-item .item-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
 }
 
-.showcase-menu-item .item-chapter {
+.trismegistos-menu-item .item-chapter {
   font-size: 0.6rem;
   color: var(--chaldea-orange);
   padding: 0.125rem 0.5rem;
@@ -586,20 +586,20 @@
   letter-spacing: 0.05em;
 }
 
-.showcase-menu-item .item-title {
+.trismegistos-menu-item .item-title {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--chaldea-text-bright);
 }
 
-.showcase-menu-item .item-subtitle {
+.trismegistos-menu-item .item-subtitle {
   font-size: 0.7rem;
   color: var(--chaldea-text);
   opacity: 0.8;
   margin-bottom: 0.25rem;
 }
 
-.showcase-menu-item .item-meta {
+.trismegistos-menu-item .item-meta {
   display: flex;
   gap: 0.75rem;
   font-size: 0.65rem;
@@ -608,19 +608,19 @@
 }
 
 /* Loading State */
-.showcase-loading {
+.trismegistos-loading {
   padding: 2rem;
   text-align: center;
 }
 
-.showcase-loading .loading-text {
+.trismegistos-loading .loading-text {
   font-size: 0.75rem;
   color: var(--chaldea-text);
   letter-spacing: 0.1em;
 }
 
-/* ===== Showcase Nav Bar (Back + Title + Close) ===== */
-.showcase-nav-bar {
+/* ===== Trismegistos Nav Bar (Back + Title + Close) ===== */
+.trismegistos-nav-bar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -632,7 +632,7 @@
   position: relative;
 }
 
-.showcase-back-btn {
+.trismegistos-back-btn {
   background: none;
   border: none;
   color: var(--chaldea-cyan);
@@ -642,11 +642,11 @@
   transition: color 0.2s;
 }
 
-.showcase-back-btn:hover {
+.trismegistos-back-btn:hover {
   color: var(--chaldea-text-bright);
 }
 
-.showcase-nav-title {
+.trismegistos-nav-title {
   flex: 1;
   font-size: 0.8rem;
   font-weight: 600;
@@ -655,7 +655,7 @@
   text-transform: uppercase;
 }
 
-.showcase-nav-bar .showcase-close {
+.trismegistos-nav-bar .trismegistos-close {
   position: static;
   width: 32px;
   height: 32px;
@@ -663,17 +663,17 @@
 }
 
 /* ===== Menu View ===== */
-.showcase-modal--menu {
+.trismegistos-modal--menu {
   max-width: 700px;
 }
 
-.showcase-menu-header {
+.trismegistos-menu-header {
   padding: 1.5rem 2rem 1rem;
   border-bottom: 1px solid var(--chaldea-border);
   background: linear-gradient(180deg, rgba(0, 212, 255, 0.06), transparent);
 }
 
-.showcase-menu-title {
+.trismegistos-menu-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--chaldea-text-bright);
@@ -682,13 +682,13 @@
 }
 
 /* ===== Hub Tabs (4-tab navigation in menu view) ===== */
-.showcase-hub-tabs {
+.trismegistos-hub-tabs {
   display: flex;
   gap: 0.25rem;
   margin-top: 0.75rem;
 }
 
-.showcase-hub-tab {
+.trismegistos-hub-tab {
   flex: 1;
   display: flex;
   align-items: center;
@@ -706,12 +706,12 @@
   transition: all 0.2s;
 }
 
-.showcase-hub-tab:hover {
+.trismegistos-hub-tab:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--chaldea-border);
 }
 
-.showcase-hub-tab.active {
+.trismegistos-hub-tab.active {
   background: rgba(0, 212, 255, 0.15);
   border-color: var(--chaldea-cyan);
   color: var(--chaldea-text-bright);
@@ -721,21 +721,21 @@
   font-size: 0.85rem;
 }
 
-.showcase-menu-body {
+.trismegistos-menu-body {
   flex: 1;
   overflow-y: auto;
   padding: 0;
 }
 
-.showcase-menu-body .showcase-menu-container {
+.trismegistos-menu-body .trismegistos-menu-container {
   position: static;
 }
 
-.showcase-menu-body .showcase-menu-btn {
+.trismegistos-menu-body .trismegistos-menu-btn {
   display: none;
 }
 
-.showcase-menu-body .showcase-menu-dropdown {
+.trismegistos-menu-body .trismegistos-menu-dropdown {
   position: static;
   min-width: unset;
   margin-top: 0;
@@ -746,44 +746,44 @@
   background: transparent;
 }
 
-.showcase-menu-body .showcase-menu-list {
+.trismegistos-menu-body .trismegistos-menu-list {
   max-height: 50vh;
 }
 
 /* ===== Servants View ===== */
-.showcase-modal--servants {
+.trismegistos-modal--servants {
   max-width: 700px;
 }
 
-.showcase-servants-body {
+.trismegistos-servants-body {
   flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-.showcase-servants-body .navigator-tab-content {
+.trismegistos-servants-body .navigator-tab-content {
   flex: 1;
   overflow: hidden;
 }
 
 /* Responsive */
 @media (max-width: 640px) {
-  .showcase-overlay {
+  .trismegistos-overlay {
     padding: 1rem;
   }
 
-  .showcase-modal {
+  .trismegistos-modal {
     max-height: 95vh;
   }
 
-  .showcase-header,
-  .showcase-body {
+  .trismegistos-header,
+  .trismegistos-body {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
 
-  .showcase-title {
+  .trismegistos-title {
     font-size: 1.4rem;
   }
 
@@ -791,7 +791,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .showcase-menu-dropdown {
+  .trismegistos-menu-dropdown {
     min-width: 280px;
     left: auto;
     right: 0;

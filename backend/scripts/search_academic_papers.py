@@ -121,10 +121,15 @@ def search_openalex(query: str, max_results: int = 20) -> list:
         try:
             resp = requests.get(f"{OPENALEX_BASE}/works", params=params, timeout=15)
             if resp.status_code == 429:
-                wait = 5 * (attempt + 1)
-                print(f"  [RATE LIMIT] waiting {wait}s...")
-                time.sleep(wait)
-                continue
+                if attempt < 2:
+                    wait = 10 * (attempt + 1)
+                    print(f"  [RATE LIMIT] waiting {wait}s...")
+                    time.sleep(wait)
+                    continue
+                else:
+                    # 3번 다 429면 일일 한도 소진 → 'BUDGET_EXHAUSTED' 시그널
+                    print(f"  [BUDGET EXHAUSTED] daily limit reached")
+                    return 'BUDGET_EXHAUSTED'
             resp.raise_for_status()
             data = resp.json()
             break
@@ -134,8 +139,7 @@ def search_openalex(query: str, max_results: int = 20) -> list:
                 return []
             time.sleep(3)
     else:
-        print(f"  [ERROR] {query}: rate limited after 3 retries")
-        return []
+        return 'BUDGET_EXHAUSTED'
 
     results = []
     for paper in data.get('results', []):
@@ -177,9 +181,12 @@ def search_openalex(query: str, max_results: int = 20) -> list:
     return results
 
 
-def search_for_event(event_title: str, event_id: int, importance: int) -> dict:
-    """하나의 이벤트에 대해 논문 검색"""
+def search_for_event(event_title: str, event_id: int, importance: int) -> dict | str:
+    """하나의 이벤트에 대해 논문 검색. 'BUDGET_EXHAUSTED' 반환 시 중단."""
     papers = search_openalex(event_title, max_results=20)
+
+    if papers == 'BUDGET_EXHAUSTED':
+        return 'BUDGET_EXHAUSTED'
 
     return {
         'event_id': event_id,
@@ -187,7 +194,7 @@ def search_for_event(event_title: str, event_id: int, importance: int) -> dict:
         'importance': importance,
         'query': event_title,
         'papers_found': len(papers),
-        'papers': papers[:10],  # 상위 10편만 저장
+        'papers': papers[:10],
         'searched_at': datetime.now().isoformat(),
     }
 
@@ -250,6 +257,18 @@ def main():
         print(f"\n[{progress}/{len(events)}] {title} (imp={imp})")
 
         result = search_for_event(title, eid, imp)
+
+        if result == 'BUDGET_EXHAUSTED':
+            print("\n  !!! 일일 한도 소진 — 체크포인트 저장 후 종료 !!!")
+            with open(checkpoint_file, 'w', encoding='utf-8') as f:
+                json.dump({
+                    'results': all_results,
+                    'saved_at': datetime.now().isoformat(),
+                }, f, ensure_ascii=False)
+            print(f"  체크포인트 저장: {len(all_results)}개 완료")
+            print(f"  내일 다시 실행하면 자동으로 이어서 진행합니다.")
+            break
+
         all_results.append(result)
 
         for p in result['papers']:

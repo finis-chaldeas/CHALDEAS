@@ -222,7 +222,7 @@
     "hideEmpty": "Hide items without descriptions",
     "reset": "Reset All Filters"
   },
-  "showcase": {
+  "trismegistos": {
     "types": {
       "singularity": "Singularity",
       "lostbelt": "Lostbelt",
@@ -239,7 +239,7 @@
       "panHuman": "Pan-Human History"
     },
     "menu": {
-      "title": "TRISMEGISTUS",
+      "title": "TRISMEGISTOS",
       "subtitle": "Rayshift Library",
       "singularities": "Singularities",
       "lostbelts": "Lostbelts",

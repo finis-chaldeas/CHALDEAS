@@ -1,0 +1,17 @@
+// Widget registration entry point.
+// Add one import per widget to register it.
+import './PrimaryQuote'
+import './FactionVs'
+import './DramaticStat'
+import './PersonCard'
+import './MiniTimeline'
+import './EraContext'
+import './BattleStats'
+import './TerritoryChange'
+import './AllianceDiagram'
+import './HistorianNote'
+import './WeDontKnow'
+import './ConflictingAccounts'
+import './ModernEquivalent'
+import './WhatIf'
+import './NarratorAside'

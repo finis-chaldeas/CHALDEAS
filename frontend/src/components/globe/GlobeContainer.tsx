@@ -6,9 +6,10 @@ import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFlyMode } from '../../hooks/useFlyMode'
 import { useGlobeTiles, type TileData } from '../../hooks/useGlobeTiles'
+import { useHeroOverlapResolver } from '../../hooks/useHeroOverlapResolver'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, eventsApi, personsApi, locationsApi, nodesApi, smartMarkersApi } from '../../api/client'
-import type { Event, SmartMarkersResponse, ClusterEvent } from '../../types'
+import type { Event, SmartMarkersResponse, ClusterEvent, NearbyEvent, NearbyPerson } from '../../types'
 import { CameraModeToggle } from './CameraModeToggle'
 import './GlobeHeatmap.css'
 
@@ -60,6 +61,10 @@ interface GlobeArc {
   target_event_id: number
   source_title: string
   target_title: string
+  source_title_ko?: string | null
+  target_title_ko?: string | null
+  source_title_ja?: string | null
+  target_title_ja?: string | null
   source_lat: number
   source_lng: number
   target_lat: number
@@ -78,6 +83,7 @@ const LAYER_COLORS: Record<string, string> = {
   location: '#34d399',  // Emerald
   causal: '#f472b6',    // Pink
   thematic: '#a78bfa',  // Purple
+  connector: '#64748b', // Slate (nearby event connector)
 }
 
 // GeoJSON type
@@ -142,6 +148,7 @@ function generateGraticules() {
 }
 
 const GRATICULES = generateGraticules()
+const EMPTY_ARRAY: never[] = []
 
 export function GlobeContainer({
   onEventClick,
@@ -171,8 +178,12 @@ export function GlobeContainer({
     shiftMaxAltitude,
   } = useGlobeStore()
 
+  const pinnedEvent = useGlobeStore(state => state.pinnedEvent)
+
   // WASD navigation (always active in globe view)
   useFlyMode({ globeRef, enabled: true })
+  // Screen-coordinate overlap resolver for hero cards (disabled during shift mode)
+  useHeroOverlapResolver(!activeShift)
   const { currentYear } = useTimelineStore()
   const { preferredLanguage } = useSettingsStore()
   const debouncedYear = useDebounce(currentYear, 150) // Debounce API calls during timeline drag (150ms for snappier response)
@@ -184,16 +195,19 @@ export function GlobeContainer({
   // Only update state-based zoom level when it actually changes threshold
   const altitudeRef = useRef(2.5)
   const shiftMaxAltRef = useRef<number | null>(null)
+  // Flag to suppress store updates during pointOfView animations
+  // (prevents re-renders that interfere with three-globe transitions)
+  const isAnimatingRef = useRef(false)
   const [currentZoomLevel, setCurrentZoomLevel] = useState<ReturnType<typeof getZoomLevel>>('cosmic')
   const [, setLoadingMarkerId] = useState<number | null>(null)
-  const [clusterPanel, setClusterPanel] = useState<{ events: ClusterEvent[]; lat: number; lng: number; locationName?: string } | null>(null)
+  const [clusterPanel, setClusterPanel] = useState<{ events: ClusterEvent[]; persons?: NearbyPerson[]; lat: number; lng: number; locationName?: string } | null>(null)
   const clusterPanelRef = useRef(clusterPanel)
   clusterPanelRef.current = clusterPanel
   const setClusterPanelRef = useRef(setClusterPanel)
   setClusterPanelRef.current = setClusterPanel
 
-  // High-resolution tile loading for REGIONAL/LOCAL zoom
-  const tilesEnabled = currentZoomLevel === 'regional' || currentZoomLevel === 'local'
+  // High-resolution tile loading from CONTINENTAL zoom onwards
+  const tilesEnabled = currentZoomLevel === 'continental' || currentZoomLevel === 'regional' || currentZoomLevel === 'local'
   const { tilesData: globeTilesData } = useGlobeTiles(
     cameraPosition.lat, cameraPosition.lng, cameraPosition.altitude,
     globeStyle, tilesEnabled,
@@ -217,6 +231,8 @@ export function GlobeContainer({
   onEventClickRef.current = onEventClick
   const onLocationClickRef = useRef(onLocationClick)
   onLocationClickRef.current = onLocationClick
+  const onPersonClickRef = useRef(onPersonClick)
+  onPersonClickRef.current = onPersonClick
   const anchorLocationsRef = useRef<AnchorLocation[] | undefined>(undefined)
   const setSelectedEventRef = useRef(setSelectedEvent)
   setSelectedEventRef.current = setSelectedEvent
@@ -224,6 +240,8 @@ export function GlobeContainer({
   debouncedYearRef.current = debouncedYear
   const preferredLanguageRef = useRef(preferredLanguage)
   preferredLanguageRef.current = preferredLanguage
+  const currentZoomLevelRef = useRef(currentZoomLevel)
+  currentZoomLevelRef.current = currentZoomLevel
 
   // Use external control if provided, otherwise use internal state
   const showHeatmap = externalShowHeatmap !== undefined ? externalShowHeatmap : internalShowHeatmap
@@ -255,9 +273,14 @@ export function GlobeContainer({
 
         altitudeRef.current = pov.altitude
 
-        // Only trigger state update when zoom level actually changes
+        // Always update zoom level — controls tilesEnabled and LOD texture selection
+        // (changes infrequently so won't cause excessive re-renders)
         const newZoom = getZoomLevel(pov.altitude)
         setCurrentZoomLevel(prev => prev === newZoom ? prev : newZoom)
+
+        // During pointOfView animations, skip heavier store updates to prevent
+        // re-renders that cause map/markers/camera to desync
+        if (isAnimatingRef.current) return
 
         // Update camera position in store
         setCameraPosition({ lat: pov.lat, lng: pov.lng, altitude: pov.altitude })
@@ -427,12 +450,25 @@ export function GlobeContainer({
   // Fly to location when flyTarget changes (from Navigator tabs, SHEBA episodes, etc.)
   useEffect(() => {
     if (flyTarget && globeRef.current) {
-      // Stop auto-rotate when flying to a location
       globeRef.current.controls().autoRotate = false
+      isAnimatingRef.current = true
+
+      const duration = 1000
       globeRef.current.pointOfView(
         { lat: flyTarget.lat, lng: flyTarget.lng, altitude: flyTarget.altitude },
-        1000
+        duration
       )
+
+      // After animation completes, sync store
+      setTimeout(() => {
+        isAnimatingRef.current = false
+        if (globeRef.current) {
+          const pov = globeRef.current.pointOfView()
+          if (pov) {
+            setCameraPosition({ lat: pov.lat, lng: pov.lng, altitude: pov.altitude })
+          }
+        }
+      }, duration + 50)
       clearFlyTarget()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -504,6 +540,14 @@ export function GlobeContainer({
     return () => clearTimeout(timer)
   }, [selectedEvent, eventArcs, smartMarkers, currentZoomLevel])
 
+  // Clear pinned event if it now appears as a regular hero in smart markers
+  useEffect(() => {
+    const pinned = useGlobeStore.getState().pinnedEvent
+    if (pinned && smartMarkers?.heroes?.some(h => h.id === pinned.id)) {
+      useGlobeStore.getState().clearPinnedEvent()
+    }
+  }, [smartMarkers])
+
   // Update shift marker highlight via DOM when activePageIndex changes
   // This avoids recreating all markers (which causes floating/jumping)
   useEffect(() => {
@@ -568,9 +612,15 @@ export function GlobeContainer({
       if (!showAllCities && node.active_event_count === 0) return false
 
       if (currentZoomLevel === 'cosmic') {
+        // Far zoom: only tier 1 cities with many events
+        if (node.tier !== 1) return false
         return showAllCities ? node.event_count >= 10 : node.event_count >= 20
       }
       if (currentZoomLevel === 'continental') {
+        // Mid zoom: tier 1 always, tier 2 only with high event count
+        if (node.tier !== 1) {
+          return showAllCities ? node.event_count >= 8 : node.event_count >= 12
+        }
         return showAllCities ? node.event_count >= 3 : node.event_count >= 5
       }
       if (currentZoomLevel === 'regional') {
@@ -581,52 +631,33 @@ export function GlobeContainer({
     })
   }, [locationNodes, currentZoomLevel, showAllCities])
 
-  // Merge all marker types for htmlElementsData
-  // Priority: SHEBA highlights > Hero cards > Cluster bubbles > Location nodes > Anchors
-  // SHIFT MODE: Only shift page markers shown
-  const htmlElements = useMemo(() => {
+  // ── SHIFT MODE markers — separate useMemo with minimal deps ──
+  // Only depends on activeShift (not smartMarkers, visibleNodes, etc.)
+  // so page navigation won't trigger new array references that cause
+  // three-globe to re-process and desync map/markers/camera.
+  const shiftHtmlElements = useMemo(() => {
+    if (!activeShift) return null
+    const pages = activeShift.pages || []
     const elements: Array<Record<string, unknown>> = []
-
-    // ── SHIFT MODE: only show shift page markers ──
-    if (activeShift) {
-      const pages = activeShift.pages || []
-      // Detect overlapping coordinates and spread them in a circle
-      const coordKey = (lat: number, lng: number) => `${lat.toFixed(4)},${lng.toFixed(4)}`
-      const coordGroups = new Map<string, number[]>()
-      pages.forEach((page, idx) => {
-        if (page.lat == null || page.lng == null) return
-        const key = coordKey(page.lat, page.lng)
-        if (!coordGroups.has(key)) coordGroups.set(key, [])
-        coordGroups.get(key)!.push(idx)
+    pages.forEach((page, idx) => {
+      if (page.lat == null || page.lng == null) return
+      elements.push({
+        lat: page.lat,
+        lng: page.lng,
+        title: page.title || `${idx + 1}`,
+        title_ko: page.title_ko,
+        year_start: page.year_start,
+        page_index: idx,
+        kind: 'shift-page' as const,
       })
+    })
+    return elements
+  }, [activeShift])
 
-      pages.forEach((page, idx) => {
-        if (page.lat == null || page.lng == null) return
-        let lat = page.lat
-        let lng = page.lng
-        // Offset overlapping markers in a circle pattern
-        const key = coordKey(page.lat, page.lng)
-        const group = coordGroups.get(key)!
-        if (group.length > 1) {
-          const posInGroup = group.indexOf(idx)
-          const angle = (2 * Math.PI * posInGroup) / group.length
-          const radius = 0.15 + 0.05 * Math.min(group.length, 8) // adaptive radius
-          lat += radius * Math.cos(angle)
-          lng += radius * Math.sin(angle)
-        }
-        elements.push({
-          lat,
-          lng,
-          title: page.title || `${idx + 1}`,
-          year_start: page.year_start,
-          page_index: idx,
-          kind: 'shift-page' as const,
-        })
-      })
-      return elements
-    }
-
-    // ── NORMAL MODE ──
+  // ── NORMAL MODE markers ──
+  const normalHtmlElements = useMemo(() => {
+    if (activeShift) return EMPTY_ARRAY
+    const elements: Array<Record<string, unknown>> = []
 
     // 1. SHEBA highlights (highest priority)
     if (highlightedLocations.length > 0) {
@@ -641,70 +672,123 @@ export function GlobeContainer({
       elements.push(...smartMarkers.heroes.map(h => ({
         ...h,
         title: getLocalizedText(h as unknown as Record<string, unknown>, 'title', preferredLanguage) || h.title,
+        nearby_events: h.nearby_events || [],
+        nearby_persons: h.nearby_persons || [],
         kind: 'hero' as const,
       })))
     }
 
     // 2b. Arc target events (connected events shown as hero cards even if low importance)
+    // Track hero positions for proximity checks
+    const heroCoords = elements
+      .filter(e => (e as Record<string, unknown>).kind === 'hero')
+      .map(e => ({ lat: e.lat as number, lng: e.lng as number }))
+
     if (eventArcs && eventArcs.length > 0) {
       const heroIds = new Set(smartMarkers?.heroes?.map(h => h.id) || [])
       eventArcs.forEach(arc => {
-        // Add both source and target if not already in heroes
+        // Add target if not already in heroes and not too close to existing hero
         if (!heroIds.has(arc.target_event_id)) {
-          heroIds.add(arc.target_event_id)
-          elements.push({
-            id: arc.target_event_id,
-            type: 'event',
-            lat: arc.target_lat,
-            lng: arc.target_lng,
-            title: arc.target_title,
-            year: arc.target_year,
-            importance: 3,
-            child_count: 0,
-            kind: 'hero' as const,
-            is_arc_target: true,
-          })
+          const tooClose = heroCoords.some(c =>
+            Math.sqrt((c.lat - arc.target_lat) ** 2 + (c.lng - arc.target_lng) ** 2) < 2
+          )
+          if (!tooClose) {
+            heroIds.add(arc.target_event_id)
+            heroCoords.push({ lat: arc.target_lat, lng: arc.target_lng })
+            elements.push({
+              id: arc.target_event_id,
+              type: 'event',
+              lat: arc.target_lat,
+              lng: arc.target_lng,
+              title: arc.target_title,
+              title_ko: arc.target_title_ko,
+              title_ja: arc.target_title_ja,
+              year: arc.target_year,
+              importance: 3,
+              child_count: 0,
+              kind: 'hero' as const,
+              is_arc_target: true,
+            })
+          }
         }
+        // Add source if not already in heroes and not too close
         if (!heroIds.has(arc.source_event_id)) {
-          heroIds.add(arc.source_event_id)
-          elements.push({
-            id: arc.source_event_id,
-            type: 'event',
-            lat: arc.source_lat,
-            lng: arc.source_lng,
-            title: arc.source_title,
-            year: arc.source_year,
-            importance: 3,
-            child_count: 0,
-            kind: 'hero' as const,
-            is_arc_target: true,
-          })
+          const tooClose = heroCoords.some(c =>
+            Math.sqrt((c.lat - arc.source_lat) ** 2 + (c.lng - arc.source_lng) ** 2) < 2
+          )
+          if (!tooClose) {
+            heroIds.add(arc.source_event_id)
+            heroCoords.push({ lat: arc.source_lat, lng: arc.source_lng })
+            elements.push({
+              id: arc.source_event_id,
+              type: 'event',
+              lat: arc.source_lat,
+              lng: arc.source_lng,
+              title: arc.source_title,
+              title_ko: arc.source_title_ko,
+              title_ja: arc.source_title_ja,
+              year: arc.source_year,
+              importance: 3,
+              child_count: 0,
+              kind: 'hero' as const,
+              is_arc_target: true,
+            })
+          }
         }
       })
     }
 
-    // 3. Cluster bubbles (with top_events for browse panel)
-    if (smartMarkers?.clusters) {
-      elements.push(...smartMarkers.clusters.map(c => ({
-        ...c,
-        top_events: c.top_events || [],
-        kind: 'cluster' as const,
-      })))
+    // 2c. Pinned event (clicked from badge modal → solo hero on globe)
+    if (pinnedEvent) {
+      const heroIds = new Set(elements.filter(e => e.kind === 'hero').map(e => e.id as number))
+      if (!heroIds.has(pinnedEvent.id)) {
+        elements.push({
+          id: pinnedEvent.id,
+          type: 'event',
+          lat: pinnedEvent.lat,
+          lng: pinnedEvent.lng,
+          title: pinnedEvent.title,
+          title_ko: pinnedEvent.title_ko,
+          title_ja: pinnedEvent.title_ja,
+          year: pinnedEvent.year,
+          importance: pinnedEvent.importance,
+          category: pinnedEvent.category,
+          child_count: 0,
+          kind: 'hero' as const,
+          is_pinned: true,
+        })
+        heroCoords.push({ lat: pinnedEvent.lat, lng: pinnedEvent.lng })
+      }
     }
 
-    // 4. Location nodes (city labels)
+    // 3. Location nodes (city labels) — suppress where heroes exist (by id or proximity)
+    const heroLocationIds = new Set(
+      (smartMarkers?.heroes || [])
+        .map(h => h.location_id)
+        .filter((id): id is number => id != null)
+    )
+    // heroCoords already built above (includes arc targets)
     if (visibleNodes.length > 0) {
-      elements.push(...visibleNodes.map(node => ({
-        lat: node.lat,
-        lng: node.lng,
-        title: getLocalizedText(node as unknown as Record<string, unknown>, 'name', preferredLanguage) || node.name,
-        event_count: node.event_count,
-        active_count: node.active_event_count,
-        tier: node.tier,
-        node_id: node.id,
-        top_event: node.top_event,
-        kind: 'node' as const,
-      })))
+      elements.push(...visibleNodes
+        .filter(node => {
+          if (heroLocationIds.has(node.id)) return false
+          // Geographic proximity check: suppress nodes too close to any hero
+          return !heroCoords.some(hp =>
+            Math.sqrt((hp.lat - node.lat) ** 2 + (hp.lng - node.lng) ** 2) < 1.5
+          )
+        })
+        .map(node => ({
+          lat: node.lat,
+          lng: node.lng,
+          title: getLocalizedText(node as unknown as Record<string, unknown>, 'name', preferredLanguage) || node.name,
+          event_count: node.event_count,
+          active_count: node.active_event_count,
+          tier: node.tier,
+          node_id: node.id,
+          top_event: node.top_event,
+          kind: 'node' as const,
+        }))
+      )
     }
 
     // 5. Anchor locations (fallback if no nodes)
@@ -720,44 +804,57 @@ export function GlobeContainer({
     }
 
     // 6. Event browse mini modal (anchored to globe coordinates)
-    if (clusterPanel && clusterPanel.events.length > 0) {
+    if (clusterPanel && (clusterPanel.events.length > 0 || (clusterPanel.persons && clusterPanel.persons.length > 0))) {
       elements.push({
         lat: clusterPanel.lat,
         lng: clusterPanel.lng,
         events: clusterPanel.events,
+        persons: clusterPanel.persons,
         locationName: clusterPanel.locationName,
         kind: 'event-panel' as const,
       })
     }
 
     return elements
+  }, [activeShift, highlightedLocations, smartMarkers, eventArcs, visibleNodes, visibleAnchors, preferredLanguage, clusterPanel, pinnedEvent])
+
+  // Use shift markers (stable ref) or normal markers
   // NOTE: activePageIndex intentionally excluded — tracked via ref + DOM updates
   // to prevent three-globe from destroying/recreating all marker DOM elements
-  }, [activeShift, highlightedLocations, smartMarkers, eventArcs, visibleNodes, visibleAnchors, preferredLanguage, clusterPanel])
+  const htmlElements = shiftHtmlElements || normalHtmlElements
 
   // Stable htmlElement callback - uses refs to avoid function reference changes
   // that would cause three-globe to destroy and recreate all DOM elements
   const htmlElementFn = useCallback((d: object) => {
     const item = d as Record<string, unknown>
     const el = document.createElement('div')
+    // CRITICAL: CSS2DRenderer sets el.style.transform every frame.
+    // Any CSS transition on transform causes DOM elements to lag behind
+    // the WebGL globe surface. Force no transitions on the root element.
+    el.style.transition = 'none'
 
     if (item.kind === 'shift-page') {
-      // History Shift page marker — styling updated via DOM in useEffect
-      const sp = item as { lat: number; lng: number; title: string; year_start?: number; page_index: number }
+      // History Shift page marker — mini card styling, updated via DOM in useEffect
+      const sp = item as { lat: number; lng: number; title: string; title_ko?: string; year_start?: number; page_index: number }
       const isCurrent = sp.page_index === activePageIndexRef.current
       const formatYear = (y?: number) => {
         if (y == null) return ''
         return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
       }
       const yearStr = formatYear(sp.year_start)
+      // Use localized title based on preferred language
+      const lang = useSettingsStore.getState().preferredLanguage
+      const rawTitle = (lang === 'ko' && sp.title_ko) ? sp.title_ko : (sp.title || '')
+      const safeTitle = rawTitle.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const truncTitle = safeTitle.length > 28 ? safeTitle.slice(0, 26) + '…' : safeTitle
       el.setAttribute('data-page-index', String(sp.page_index))
       el.className = `shift-marker ${isCurrent ? 'shift-marker--active' : 'shift-marker--inactive'}`
       el.innerHTML = `
-        <div class="shift-marker-inner">
-          <div class="shift-marker-dot"></div>
-          <div class="shift-marker-label">
-            <span class="shift-marker-title">${sp.page_index + 1}. ${sp.title}</span>
-            ${yearStr ? `<span class="shift-marker-year">${yearStr}</span>` : ''}
+        <div class="shift-card">
+          <div class="shift-card-badge">${sp.page_index + 1}</div>
+          <div class="shift-card-body">
+            <span class="shift-card-title">${truncTitle}</span>
+            ${yearStr ? `<span class="shift-card-year">${yearStr}</span>` : ''}
           </div>
         </div>
       `
@@ -793,8 +890,8 @@ export function GlobeContainer({
         if (event) onEventClickRef.current(event)
       }
     } else if (item.kind === 'hero') {
-      // Hero card: important event displayed as floating card
-      const heroItem = item as { id: number; title: string; title_ko?: string; title_ja?: string; year?: number; year_end?: number; category?: string; importance: number; location_name?: string; location_name_ko?: string; location_name_ja?: string; location_id?: number; lat: number; lng: number; child_count: number; kind: 'hero' }
+      // Hero card: important event displayed as floating card with region badge
+      const heroItem = item as { id: number; title: string; title_ko?: string; title_ja?: string; year?: number; year_end?: number; category?: string; importance: number; location_name?: string; location_name_ko?: string; location_name_ja?: string; location_id?: number; lat: number; lng: number; child_count: number; nearby_events?: NearbyEvent[]; nearby_event_count?: number; nearby_persons?: NearbyPerson[]; nearby_person_count?: number; kind: 'hero' }
       const categoryClass = heroItem.category ? `hero-card--${heroItem.category.toLowerCase()}` : ''
       const formatYear = (y?: number) => {
         if (y === undefined || y === null) return ''
@@ -817,20 +914,141 @@ export function GlobeContainer({
         : (lang === 'ja' && heroItem.title_ja) ? heroItem.title_ja
         : heroItem.title
 
-      // Fade/highlight is handled via CSS (.shifted .hero-card) + useEffect (.hero-selected)
+      const nearbyEvents = heroItem.nearby_events || []
+      const nearbyPersons = heroItem.nearby_persons || []
+
+      // Companion lines: high-importance nearby events shown directly on card
+      const companions = nearbyEvents.filter(e =>
+        e.importance >= heroItem.importance - 1 && e.importance >= 4
+      ).slice(0, 2)
+
+      // Use real counts (may exceed list length due to cap)
+      const eventCount = heroItem.nearby_event_count ?? nearbyEvents.length
+      const personCount = heroItem.nearby_person_count ?? nearbyPersons.length
+      const totalNearby = eventCount + personCount
+
+      // Category color map for chip borders
+      const catColors: Record<string, string> = {
+        battle: '#ef4444', war: '#dc2626', treaty: '#3b82f6',
+        discovery: '#22c55e', cultural: '#a855f7', political: '#f59e0b',
+        religious: '#8b5cf6', science: '#00d4ff',
+      }
+
+      // Build region badge HTML (stacked chip design)
+      // Hide badge if companions cover everything and no persons
+      let badgeHtml = ''
+      if (totalNearby > 0 && (eventCount > 0 || personCount > 0)) {
+        // Extract top category colors from nearby_events
+        const topCats = nearbyEvents.slice(0, 3).map(e => (e.category || '').toLowerCase())
+        const cat1Color = catColors[topCats[0]] || 'rgba(0, 212, 255, 0.4)'
+        const cat2Color = catColors[topCats[1]] || catColors[topCats[0]] || 'rgba(0, 212, 255, 0.4)'
+        const cat3Color = catColors[topCats[2]] || catColors[topCats[1]] || catColors[topCats[0]] || 'rgba(0, 212, 255, 0.4)'
+
+        // Back chips: 0 if total=1, 1 if total=2, 2 if total>=3
+        const chip2 = totalNearby >= 3 ? `<div class="hero-region-chip hero-region-chip--2" style="border-color:${cat3Color}"></div>` : ''
+        const chip1 = totalNearby >= 2 ? `<div class="hero-region-chip hero-region-chip--1" style="border-color:${cat2Color}"></div>` : ''
+
+        // Count text
+        const countParts: string[] = []
+        if (eventCount > 0) countParts.push(`\ud83d\udccb${eventCount}`)
+        if (personCount > 0) countParts.push(`\ud83d\udc64${personCount}`)
+
+        badgeHtml = `
+          <div class="hero-region-badge" data-region-badge="true">
+            ${chip2}
+            ${chip1}
+            <div class="hero-region-chip hero-region-chip--front" style="border-color:${cat1Color}">
+              ${countParts.map(c => `<span class="hero-region-count">${c}</span>`).join('')}
+            </div>
+          </div>
+        `
+      }
+
+      // Build companion lines HTML
+      let companionHtml = ''
+      if (companions.length > 0) {
+        const companionItems = companions.map(c => {
+          const cTitle = (lang === 'ko' && c.title_ko) ? c.title_ko
+            : (lang === 'ja' && c.title_ja) ? c.title_ja
+            : c.title
+          const safeCTitle = cTitle.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          return `<div class="hero-card-companion" data-event-id="${c.id}">+ ${safeCTitle}</div>`
+        }).join('')
+        companionHtml = `<div class="hero-card-companions">${companionItems}</div>`
+      }
+
+      // Compact mode at cosmic/continental zoom: smaller card, fewer details
+      const zoomLevel = currentZoomLevelRef.current
+      const isCompact = zoomLevel === 'cosmic' || zoomLevel === 'continental'
+      const isPinned = !!(heroItem as Record<string, unknown>).is_pinned
+      const compactClass = isCompact && !isPinned ? 'hero-card--compact' : ''
+      const pinnedClass = isPinned ? 'hero-card--pinned' : ''
+      // Truncate title in compact mode (never truncate pinned)
+      const displayTitle = isCompact && !isPinned && heroTitle.length > 14
+        ? heroTitle.slice(0, 13) + '…'
+        : heroTitle
+
       el.innerHTML = `
-        <div class="hero-card ${categoryClass}" data-hero-id="${heroItem.id}">
-          <div class="hero-card-title">${heroTitle}</div>
+        <div class="hero-card ${categoryClass} ${compactClass} ${pinnedClass}" data-hero-id="${heroItem.id}" data-importance="${heroItem.importance}">
+          <div class="hero-card-title">${displayTitle}</div>
           <div class="hero-card-meta">
             <span class="hero-card-year">${formatYear(heroItem.year)}</span>
-            ${locName ? `<span class="hero-card-location" data-location-id="${heroItem.location_id || ''}">${locName}</span>` : ''}
+            ${!isCompact && locName ? `<span class="hero-card-location" data-location-id="${heroItem.location_id || ''}">${locName}</span>` : ''}
           </div>
-          <div class="hero-card-importance">${stars}</div>
+          ${!isCompact ? `<div class="hero-card-importance">${stars}</div>` : ''}
+          ${!isCompact ? companionHtml : ''}
+          ${badgeHtml}
         </div>
       `
       el.style.pointerEvents = 'auto'
 
       el.onclick = async (e) => {
+        // Check if companion line was clicked → open that event
+        const companionEl = (e.target as HTMLElement).closest?.('.hero-card-companion') as HTMLElement | null
+        if (companionEl) {
+          e.stopPropagation()
+          const eventId = parseInt(companionEl.dataset.eventId || '0')
+          if (eventId) {
+            try {
+              const res = await eventsApi.get(eventId)
+              onEventClickRef.current(res.data)
+            } catch (err) {
+              console.error('Failed to fetch companion event:', eventId, err)
+            }
+          }
+          return
+        }
+
+        // Check if region badge was clicked → open region modal
+        const badge = (e.target as HTMLElement).closest?.('[data-region-badge]') as HTMLElement | null
+        if (badge) {
+          e.stopPropagation()
+          // Convert nearby_events to ClusterEvent format for the mini modal
+          const clusterEvents: ClusterEvent[] = nearbyEvents
+            .map(ne => ({
+              id: ne.id,
+              title: ne.title,
+              title_ko: ne.title_ko,
+              title_ja: ne.title_ja,
+              year: ne.year,
+              importance: ne.importance,
+              category: ne.category,
+              location_name: ne.location_name,
+              location_name_ko: ne.location_name_ko,
+              location_name_ja: ne.location_name_ja,
+              lat: ne.lat,
+              lng: ne.lng,
+            }))
+          setClusterPanelRef.current({
+            events: clusterEvents,
+            persons: nearbyPersons.length > 0 ? nearbyPersons : undefined,
+            lat: heroItem.lat,
+            lng: heroItem.lng,
+            locationName: locName || undefined,
+          })
+          return
+        }
+
         // Check if location name was clicked (using closest for reliable detection)
         const clickedLoc = (e.target as HTMLElement).closest?.('[data-location-id]') as HTMLElement | null
         if (clickedLoc && heroItem.location_id) {
@@ -850,6 +1068,7 @@ export function GlobeContainer({
             const year = debouncedYearRef.current
             const params: Record<string, number> = { limit: 10, year_start: year - 100, year_end: year + 100 }
             const res = await nodesApi.getEvents(heroItem.location_id, params)
+            const locLabel = (res.data?.location_name as string) || locName
             const events = (res.data?.events || []).map((ev: Record<string, unknown>) => ({
               id: ev.id as number,
               title: ev.title as string,
@@ -858,6 +1077,7 @@ export function GlobeContainer({
               year: ev.date_start as number | undefined,
               importance: ev.importance as number | undefined,
               category: ev.category as string | undefined,
+              location_name: locLabel,
             }))
             if (events.length > 0) {
               setClusterPanelRef.current({
@@ -889,80 +1109,25 @@ export function GlobeContainer({
           setLoadingMarkerId(null)
         }
       }
-    } else if (item.kind === 'cluster') {
-      // Cluster bubble: grouped events
-      const clusterItem = item as { lat: number; lng: number; count: number; top_events?: ClusterEvent[]; kind: 'cluster' }
-      const size = Math.max(28, Math.min(52, 20 + Math.log2(clusterItem.count) * 8))
-      // Fade handled via CSS (.shifted .cluster-bubble)
-      el.innerHTML = `
-        <div class="cluster-bubble" style="
-          width: ${size}px;
-          height: ${size}px;
-          transform: translate(-${size / 2}px, -${size / 2}px);
-        ">
-          ${clusterItem.count}
-        </div>
-      `
-      el.style.pointerEvents = 'auto'
-      el.onclick = () => {
-        if (globeRef.current) {
-          // Always zoom in by 40% (guaranteed to never zoom out)
-          const currentAlt = altitudeRef.current
-          const targetAlt = Math.max(0.08, currentAlt * 0.6)
-          globeRef.current.pointOfView(
-            { lat: clusterItem.lat, lng: clusterItem.lng, altitude: targetAlt },
-            800
-          )
-          // Show mini modal with events above the cluster
-          if (clusterItem.top_events && clusterItem.top_events.length > 0) {
-            setClusterPanelRef.current({
-              events: clusterItem.top_events,
-              lat: clusterItem.lat,
-              lng: clusterItem.lng,
-            })
-          }
-        }
-      }
     } else if (item.kind === 'node') {
-      // Location node with event count badge
+      // City pin: pin-head + stem + label
       const nodeItem = item as { tier: number; event_count: number; active_count: number; title: string; lat: number; lng: number; node_id: number; top_event: string | null; kind: 'node' }
       const isTier1 = nodeItem.tier === 1
       const hasActive = nodeItem.active_count > 0
-      const textColor = hasActive
-        ? (isTier1 ? 'rgba(0, 212, 255, 0.95)' : 'rgba(200, 220, 230, 0.85)')
-        : 'rgba(120, 140, 150, 0.5)'
-      const fontSize = isTier1 ? '11px' : '9px'
-      const badgeColor = hasActive ? '#00d4ff' : '#3a4a5a'
+      const tierClass = isTier1 ? 'city-pin--tier1' : 'city-pin--tier2'
+      const activeClass = hasActive ? 'city-pin--active' : 'city-pin--inactive'
       const countText = nodeItem.active_count > 0
         ? nodeItem.active_count
         : nodeItem.event_count
       el.innerHTML = `
-        <div style="
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          white-space: nowrap;
-          pointer-events: auto;
-          cursor: pointer;
-          transform: translateY(-8px);
-        ">
-          <span style="
-            color: ${textColor};
-            font-size: ${fontSize};
-            font-weight: ${isTier1 ? '700' : '500'};
-            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
-            letter-spacing: 0.02em;
-          ">${nodeItem.title}</span>
-          <span style="
-            background: ${badgeColor};
-            color: ${hasActive ? '#000' : '#8a9ab0'};
-            font-size: 9px;
-            font-weight: 700;
-            padding: 1px 5px;
-            border-radius: 8px;
-            min-width: 16px;
-            text-align: center;
-          ">${countText}</span>
+        <div class="city-pin ${tierClass} ${activeClass}">
+          <div class="city-pin-label">
+            ${nodeItem.title} <span class="city-pin-count">${countText}</span>
+          </div>
+          <div class="city-pin-stem"></div>
+          <div class="city-pin-head">
+            ${hasActive ? '<div class="city-pin-pulse"></div>' : ''}
+          </div>
         </div>
       `
       el.style.pointerEvents = 'auto'
@@ -995,6 +1160,7 @@ export function GlobeContainer({
             params.year_end = year + 100
           }
           const res = await nodesApi.getEvents(nodeItem.node_id, params)
+          const nodeLoc = (res.data?.location_name as string) || nodeItem.title
           const events = (res.data?.events || []).map((e: Record<string, unknown>) => ({
             id: e.id as number,
             title: e.title as string,
@@ -1003,6 +1169,7 @@ export function GlobeContainer({
             year: e.date_start as number | undefined,
             importance: e.importance as number | undefined,
             category: e.category as string | undefined,
+            location_name: nodeLoc,
           }))
           if (events.length > 0) {
             setClusterPanelRef.current({
@@ -1017,20 +1184,30 @@ export function GlobeContainer({
         }
       }
     } else if (item.kind === 'event-panel') {
-      // Mini modal floating above a city on the globe
-      const panelItem = item as { lat: number; lng: number; events: ClusterEvent[]; locationName?: string; kind: 'event-panel' }
+      // Mini modal floating above a city on the globe (events + persons)
+      const panelItem = item as { lat: number; lng: number; events: ClusterEvent[]; persons?: NearbyPerson[]; locationName?: string; kind: 'event-panel' }
       const evtList = panelItem.events
+      const personList = panelItem.persons || []
       const formatYear = (y?: number) => {
         if (y === undefined || y === null) return ''
         return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
       }
       const lang = preferredLanguageRef.current
-      const eventCards = evtList.map(evt => {
+      const heroLocName = panelItem.locationName || ''
+
+      // Helper: localized location name for an event
+      const evtLocName = (evt: ClusterEvent) =>
+        (lang === 'ko' && evt.location_name_ko) ? evt.location_name_ko
+        : (lang === 'ja' && evt.location_name_ja) ? evt.location_name_ja
+        : evt.location_name || ''
+
+      // Helper: render a single event card
+      const renderEventCard = (evt: ClusterEvent) => {
         const title = (lang === 'ko' && evt.title_ko) ? evt.title_ko
           : (lang === 'ja' && evt.title_ja) ? evt.title_ja
           : evt.title
         const cat = (evt.category || 'default').toLowerCase()
-        const stars = evt.importance ? '★'.repeat(Math.min(evt.importance, 5)) : ''
+        const stars = evt.importance ? '\u2605'.repeat(Math.min(evt.importance, 5)) : ''
         return `
           <div class="globe-mini-modal-item globe-mini-modal-item--${cat}" data-event-id="${evt.id}">
             <div class="globe-mini-modal-item-title">${title}</div>
@@ -1040,25 +1217,98 @@ export function GlobeContainer({
             </div>
           </div>
         `
+      }
+
+      // Group events by location_name
+      // If location_name is missing: use hero's location ONLY if event has no
+      // separate coordinates, otherwise use "Nearby"
+      const locationGroups = new Map<string, ClusterEvent[]>()
+      for (const evt of evtList) {
+        let locKey = evtLocName(evt)
+        if (!locKey) {
+          // No location name: check if event is at a different position from hero
+          if (evt.lat != null && evt.lng != null) {
+            const dist = Math.sqrt((evt.lat - panelItem.lat) ** 2 + (evt.lng - panelItem.lng) ** 2)
+            locKey = dist < 0.5 ? (heroLocName || 'Nearby') : 'Nearby'
+          } else {
+            locKey = heroLocName || 'Nearby'
+          }
+        }
+        if (!locationGroups.has(locKey)) locationGroups.set(locKey, [])
+        locationGroups.get(locKey)!.push(evt)
+      }
+
+      // Distance helper (haversine approximation for sorting)
+      const degDist = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+        const dlat = lat1 - lat2, dlng = lng1 - lng2
+        return dlat * dlat + dlng * dlng
+      }
+      const avgDist = (events: ClusterEvent[], refLat: number, refLng: number) => {
+        let sum = 0, count = 0
+        for (const e of events) {
+          if (e.lat != null && e.lng != null) { sum += degDist(e.lat, e.lng, refLat, refLng); count++ }
+        }
+        return count > 0 ? sum / count : 9999
+      }
+
+      // Sort: hero location first, then by distance from hero
+      const sortedGroups = [...locationGroups.entries()].sort((a, b) => {
+        const aIsHero = a[0] === heroLocName
+        const bIsHero = b[0] === heroLocName
+        if (aIsHero && !bIsHero) return -1
+        if (!aIsHero && bIsHero) return 1
+        return avgDist(a[1], panelItem.lat, panelItem.lng) - avgDist(b[1], panelItem.lat, panelItem.lng)
+      })
+
+      // Render grouped event cards
+      const groupedEventsHtml = sortedGroups.map(([locName, events]) => {
+        const isHeroLoc = locName === heroLocName
+        const remoteClass = isHeroLoc ? '' : ' globe-mini-modal-loc-group--remote'
+        const header = `<div class="globe-mini-modal-loc-group${remoteClass}">\ud83d\udccd ${locName} <span class="globe-mini-modal-loc-count">(${events.length})</span></div>`
+        return header + events.map(renderEventCard).join('')
       }).join('')
 
+      // Person section (only if there are persons)
+      const personSectionLabel = personList.length > 0 ? `<div class="globe-mini-modal-section-label">\ud83d\udc64 Persons</div>` : ''
+      const personCards = personList.map(p => {
+        const name = (lang === 'ko' && p.name_ko) ? p.name_ko
+          : (lang === 'ja' && p.name_ja) ? p.name_ja
+          : p.name
+        const years = (p.birth_year != null || p.death_year != null)
+          ? `${formatYear(p.birth_year)}\u2013${formatYear(p.death_year)}`
+          : ''
+        return `
+          <div class="globe-mini-modal-person" data-person-id="${p.id}">
+            <div class="globe-mini-modal-person-name">${name}</div>
+            <div class="globe-mini-modal-person-meta">
+              ${p.role ? `<span class="globe-mini-modal-person-role">${p.role}</span>` : ''}
+              ${years ? `<span class="globe-mini-modal-person-years">${years}</span>` : ''}
+            </div>
+          </div>
+        `
+      }).join('')
+
+      const totalCount = evtList.length + personList.length
       const headerText = panelItem.locationName
-        ? `${panelItem.locationName} · ${evtList.length}`
-        : `${evtList.length} Events`
+        ? `${panelItem.locationName} \u00b7 ${totalCount}`
+        : `${totalCount} Items`
 
       el.innerHTML = `
         <div class="globe-mini-modal">
           <div class="globe-mini-modal-header">
             <span class="globe-mini-modal-title">${headerText}</span>
-            <button class="globe-mini-modal-close" data-close="true">✕</button>
+            <button class="globe-mini-modal-close" data-close="true">\u2715</button>
           </div>
           <div class="globe-mini-modal-list">
-            ${eventCards}
+            ${groupedEventsHtml}
+            ${personSectionLabel}
+            ${personCards}
           </div>
           <div class="globe-mini-modal-arrow"></div>
         </div>
       `
       el.style.pointerEvents = 'auto'
+      el.style.zIndex = '10000'  // Always above hero cards
 
       // Close button
       const closeBtn = el.querySelector('[data-close]')
@@ -1069,18 +1319,71 @@ export function GlobeContainer({
         }
       }
 
-      // Event item clicks
+      // Build event lookup for fly+pin
+      const evtById = new Map(evtList.map(ev => [ev.id, ev]))
+
+      // Event item clicks → fly to event + pin on globe + open NarrativePanel
       el.querySelectorAll('[data-event-id]').forEach(itemEl => {
         (itemEl as HTMLElement).onclick = async (e) => {
           e.stopPropagation()
           const eventId = parseInt((itemEl as HTMLElement).dataset.eventId || '0')
-          if (eventId) {
+          if (!eventId) return
+          const clusterEvt = evtById.get(eventId)
+          try {
+            const res = await eventsApi.get(eventId)
+            onEventClickRef.current(res.data)
+            setClusterPanelRef.current(null)
+            // Pin event on globe + fly to it
+            if (clusterEvt?.lat != null && clusterEvt?.lng != null) {
+              useGlobeStore.getState().setPinnedEvent({
+                id: eventId,
+                title: clusterEvt.title,
+                title_ko: clusterEvt.title_ko,
+                title_ja: clusterEvt.title_ja,
+                lat: clusterEvt.lat,
+                lng: clusterEvt.lng,
+                year: clusterEvt.year,
+                category: clusterEvt.category,
+                importance: clusterEvt.importance || 3,
+              })
+              useGlobeStore.getState().flyToLocation(clusterEvt.lat, clusterEvt.lng)
+            } else if (res.data?.latitude != null && res.data?.longitude != null) {
+              // Fallback: use coordinates from full event data
+              useGlobeStore.getState().setPinnedEvent({
+                id: eventId,
+                title: res.data.title,
+                title_ko: res.data.title_ko,
+                lat: res.data.latitude,
+                lng: res.data.longitude,
+                year: res.data.date_start,
+                importance: res.data.importance || 3,
+              })
+              useGlobeStore.getState().flyToLocation(res.data.latitude, res.data.longitude)
+            }
+          } catch (err) {
+            console.error('Failed to fetch event:', eventId, err)
+          }
+        }
+      })
+
+      // Person item clicks
+      el.querySelectorAll('[data-person-id]').forEach(itemEl => {
+        (itemEl as HTMLElement).onclick = async (e) => {
+          e.stopPropagation()
+          const personId = parseInt((itemEl as HTMLElement).dataset.personId || '0')
+          if (!personId) return
+          setClusterPanelRef.current(null)
+          if (onPersonClickRef.current) {
+            onPersonClickRef.current(personId)
+          } else {
+            // Fallback: fetch person's events and open first one
             try {
-              const res = await eventsApi.get(eventId)
-              onEventClickRef.current(res.data)
-              setClusterPanelRef.current(null)
+              const res = await personsApi.getEvents(personId)
+              if (res.data?.length > 0) {
+                onEventClickRef.current(res.data[0])
+              }
             } catch (err) {
-              console.error('Failed to fetch event:', eventId, err)
+              console.error('Failed to fetch person events:', personId, err)
             }
           }
         }
@@ -1152,6 +1455,53 @@ export function GlobeContainer({
   // Atmosphere color based on style
   const atmosphereColor = '#00d4ff'
 
+  // Memoize ringsData to prevent new array references on every render
+  const ringsData = useMemo(() => [
+    ...(focusedLocation ? [{ ...focusedLocation, type: 'focused' }] : []),
+    ...highlightedLocations.map(loc => ({ lat: loc.lat, lng: loc.lng, title: loc.title, type: 'highlighted' })),
+    ...(isHoloStyle && !focusedLocation && highlightedLocations.length === 0 ? [{ lat: 0, lng: 0, type: 'ambient' }] : [])
+  ], [focusedLocation, highlightedLocations, isHoloStyle])
+
+  // Memoize other array props to prevent unnecessary three-globe re-processing
+  const pathsData = useMemo(() => isHoloStyle ? GRATICULES : EMPTY_ARRAY, [isHoloStyle])
+  const polygonsData = useMemo(() => isHoloStyle ? countries : EMPTY_ARRAY, [isHoloStyle, countries])
+  const hexBinData = useMemo(() => showHeatmap ? visibleMarkers : EMPTY_ARRAY, [showHeatmap, visibleMarkers])
+  // Connector arcs: hero → distant nearby event original positions
+  const connectorArcs = useMemo(() => {
+    if (!smartMarkers?.heroes || activeShift) return EMPTY_ARRAY
+    const arcs: GlobeArc[] = []
+    for (const hero of smartMarkers.heroes) {
+      for (const ne of (hero.nearby_events || [])) {
+        if (ne.lat == null || ne.lng == null) continue
+        const dist = Math.sqrt((hero.lat - ne.lat) ** 2 + (hero.lng - ne.lng) ** 2)
+        if (dist < 0.5) continue // same location — no arc needed
+        arcs.push({
+          connection_id: -ne.id, // negative to avoid collision with real arcs
+          source_event_id: hero.id,
+          target_event_id: ne.id,
+          source_title: hero.title,
+          target_title: ne.title,
+          source_lat: hero.lat,
+          source_lng: hero.lng,
+          target_lat: ne.lat,
+          target_lng: ne.lng,
+          source_year: hero.year ?? null,
+          target_year: ne.year ?? null,
+          layer_type: 'connector',
+          connection_type: null,
+          direction: 'none',
+          strength: 1,
+        })
+      }
+    }
+    return arcs
+  }, [smartMarkers, activeShift])
+
+  const arcsDataMemo = useMemo(() => {
+    const base = eventArcs || EMPTY_ARRAY
+    return connectorArcs.length ? [...base, ...connectorArcs] : base
+  }, [eventArcs, connectorArcs])
+
   const isShifted = !!selectedEvent
   const isInShiftMode = !!activeShift
 
@@ -1168,18 +1518,18 @@ export function GlobeContainer({
         atmosphereColor={atmosphereColor}
         atmosphereAltitude={isHoloStyle ? 0.25 : 0.22}
         // For holo: show graticule lines
-        pathsData={isHoloStyle ? GRATICULES : []}
+        pathsData={pathsData}
         pathPoints="coords"
         pathColor={() => 'rgba(0, 212, 255, 0.5)'}
         pathStroke={1.5}
         // Polygons Layer (Countries) - for HOLO mode
-        polygonsData={isHoloStyle ? countries : []}
+        polygonsData={polygonsData}
         polygonCapColor={() => 'rgba(0, 180, 220, 0.6)'}
         polygonSideColor={() => 'rgba(0, 212, 255, 0.2)'}
         polygonStrokeColor={() => 'rgba(0, 212, 255, 0.8)'}
         polygonAltitude={0.01}
         // Points Layer - disabled (location nodes only)
-        pointsData={[]}
+        pointsData={EMPTY_ARRAY}
         pointLat={(d) => (d as GlobeMarker).lat}
         pointLng={(d) => (d as GlobeMarker).lng}
         pointColor={() => '#00d4ff'}
@@ -1255,7 +1605,7 @@ export function GlobeContainer({
           }
         }}
         // Labels Layer removed - location nodes provide context instead
-        labelsData={[]}
+        labelsData={EMPTY_ARRAY}
         onPointHover={(point) => {
           if (!point) return
           const marker = point as GlobeMarker
@@ -1285,11 +1635,7 @@ export function GlobeContainer({
         }}
         onZoom={handleZoom}
         // Ring effect - for focused location and highlighted locations from SHEBA search
-        ringsData={[
-          ...(focusedLocation ? [{ ...focusedLocation, type: 'focused' }] : []),
-          ...highlightedLocations.map(loc => ({ lat: loc.lat, lng: loc.lng, title: loc.title, type: 'highlighted' })),
-          ...(isHoloStyle && !focusedLocation && highlightedLocations.length === 0 ? [{ lat: 0, lng: 0, type: 'ambient' }] : [])
-        ]}
+        ringsData={ringsData}
         ringColor={(d: { type?: string }) =>
           d.type === 'focused' ? 'rgba(255, 51, 102, 0.6)' :
           d.type === 'highlighted' ? 'rgba(255, 215, 0, 0.8)' :  // Golden glow for SHEBA results
@@ -1302,49 +1648,64 @@ export function GlobeContainer({
         htmlElementsData={htmlElements}
         htmlLat={(d) => (d as { lat: number }).lat}
         htmlLng={(d) => (d as { lng: number }).lng}
-        htmlAltitude={() => 0}
-        htmlTransitionDuration={0}
+        htmlAltitude={(d) => {
+          const item = d as { kind?: string }
+          if (item.kind === 'event-panel') return 0.012
+          if (item.kind === 'highlight') return 0.01
+          if (item.kind === 'shift-page') return 0.008
+          if (item.kind === 'hero') return 0.005
+          if (item.kind === 'node') return 0.002
+          return 0 // anchor
+        }}
+        htmlTransitionDuration={1}
         htmlElement={htmlElementFn}
         // Historical Chain Arcs - connections between events with particle animation
-        arcsData={eventArcs || []}
+        arcsData={arcsDataMemo}
         arcStartLat={(d) => (d as GlobeArc).source_lat}
         arcStartLng={(d) => (d as GlobeArc).source_lng}
         arcEndLat={(d) => (d as GlobeArc).target_lat}
         arcEndLng={(d) => (d as GlobeArc).target_lng}
         arcColor={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return ['#64748b44', '#64748b22', '#64748b44']
           const color = LAYER_COLORS[arc.layer_type] || '#00d4ff'
           return [`${color}ff`, `${color}88`, `${color}ff`]
         }}
         arcStroke={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return 0.4
           return Math.min(3.5, Math.max(1.0, arc.strength / 7))
         }}
         arcDashLength={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return 0.8
           // Dynamic dash length - shorter for person links, longer for causal
           const baseLength = arc.layer_type === 'person' ? 0.15 : arc.layer_type === 'causal' ? 0.4 : 0.25
           return baseLength + (arc.strength / 50)
         }}
         arcDashGap={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return 0.01
           // Dynamic gap - creates particle-like effect
           const baseGap = arc.layer_type === 'person' ? 0.3 : 0.15
           return baseGap
         }}
         arcDashAnimateTime={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return 0 // no animation
           // Faster animation for stronger connections (600-2500ms)
           const baseSpeed = 2500 - (arc.strength * 80)
           return Math.max(600, Math.min(2500, baseSpeed))
         }}
         arcAltitudeAutoScale={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return 0.03
           // Higher arcs for stronger/longer connections
           return 0.3 + (arc.strength / 50)
         }}
         arcLabel={(d: object) => {
           const arc = d as GlobeArc
+          if (arc.layer_type === 'connector') return ''
           const formatYear = (y: number | null) => {
             if (y === null) return '?'
             return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
@@ -1395,7 +1756,7 @@ export function GlobeContainer({
           }
         }}
         // Heatmap Layer - Event density visualization using hex bins
-        hexBinPointsData={showHeatmap ? visibleMarkers : []}
+        hexBinPointsData={hexBinData}
         hexBinPointLat={(d: object) => (d as GlobeMarker).lat}
         hexBinPointLng={(d: object) => (d as GlobeMarker).lng}
         hexBinPointWeight={() => 1}
@@ -1458,11 +1819,12 @@ export function GlobeContainer({
         tileMaterial={(d: object) => (d as TileData).material}
         tileCurvatureResolution={(d: object) => {
           // Degrees per segment — lower = more segments = smoother sphere conformance
-          // Large tiles (z=3, ~45°) need very fine resolution; small tiles (z=9) can be coarser
+          // Large tiles (z=2, ~90°) need very fine resolution; small tiles (z=9+) can be coarser
           const w = (d as TileData).widthDeg
-          if (w > 20) return 0.5   // z=3-4: ~45-90 segments per tile
+          if (w > 45) return 0.3   // z=2: ~90° tiles, need many segments
+          if (w > 20) return 0.5   // z=3-4: ~45° tiles
           if (w > 5) return 1      // z=5-6: ~10-20 segments
-          return 2                  // z=7-9: ~2-5 segments (tiles small enough)
+          return 2                  // z=7+: tiles small enough
         }}
         tileUseGlobeProjection={true}
         tilesTransitionDuration={0}

@@ -532,6 +532,16 @@ export interface PersonSource {
   mentions?: { mention_text: string; context_text?: string; confidence?: number; chunk_index?: number }[]
 }
 
+// Widget System (modular shift page components)
+export type WidgetSlotPosition = 'left' | 'right' | 'bottom' | 'overlay'
+
+export interface PageWidget {
+  type: string
+  slot: WidgetSlotPosition
+  data: Record<string, unknown>
+  priority?: number
+}
+
 // History Shift (page-based sequential narrative)
 export interface HistoryShift {
   id: number
@@ -555,6 +565,7 @@ export interface HistoryShift {
 export interface ShiftPage {
   sequence_number: number
   title?: string
+  title_ko?: string
   chapter_number: number
   chapter_title?: string
   page_narrative?: string
@@ -568,12 +579,41 @@ export interface ShiftPage {
   event_id?: number
   person_id?: number
   location_id?: number
+  location_name?: string
+  location_name_ko?: string
   importance: number
   media_url?: string
   sub_shift_id?: number
+  widgets?: PageWidget[] | null
 }
 
 // Smart Markers (Globe hero cards + cluster bubbles)
+export interface NearbyEvent {
+  id: number
+  title: string
+  title_ko?: string
+  title_ja?: string
+  year?: number
+  category?: string
+  importance: number
+  location_name?: string
+  location_name_ko?: string
+  location_name_ja?: string
+  lat?: number
+  lng?: number
+}
+
+export interface NearbyPerson {
+  id: number
+  name: string
+  name_ko?: string
+  name_ja?: string
+  birth_year?: number
+  death_year?: number
+  role?: string
+  importance: number
+}
+
 export interface HeroMarker {
   id: number
   type: 'event'
@@ -592,6 +632,10 @@ export interface HeroMarker {
   location_name_ko?: string
   location_name_ja?: string
   location_id?: number
+  nearby_events: NearbyEvent[]
+  nearby_event_count: number
+  nearby_persons: NearbyPerson[]
+  nearby_person_count: number
 }
 
 export interface ClusterEvent {
@@ -602,21 +646,15 @@ export interface ClusterEvent {
   year?: number
   importance?: number
   category?: string
-}
-
-export interface ClusterBubble {
-  lat: number
-  lng: number
-  count: number
-  top_event_title?: string
-  top_importance?: number
-  year_range: (number | null)[]
-  top_events: ClusterEvent[]
+  location_name?: string
+  location_name_ko?: string
+  location_name_ja?: string
+  lat?: number
+  lng?: number
 }
 
 export interface SmartMarkersResponse {
   heroes: HeroMarker[]
-  clusters: ClusterBubble[]
   zoom: string
   total_events: number
 }

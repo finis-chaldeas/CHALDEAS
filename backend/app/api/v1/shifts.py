@@ -12,15 +12,30 @@ from typing import Optional
 
 from app.db.session import get_db
 from app.models.v1.chain import HistoricalChain, ChainSegment
+from app.models.event import Event
 
 router = APIRouter()
 
 
 def _serialize_page(seg: ChainSegment) -> dict:
     """Serialize a ChainSegment as a shift page."""
+    # Derive localized title from linked entity
+    title_ko = None
+    location_name = None
+    location_name_ko = None
+    if seg.event:
+        title_ko = seg.event.title_ko
+    if seg.location:
+        location_name = seg.location.name
+        location_name_ko = getattr(seg.location, 'name_ko', None)
+    elif seg.event and seg.event.primary_location:
+        location_name = seg.event.primary_location.name
+        location_name_ko = getattr(seg.event.primary_location, 'name_ko', None)
+
     result = {
         "sequence_number": seg.sequence_number,
         "title": seg.title,
+        "title_ko": title_ko,
         "chapter_number": seg.chapter_number,
         "chapter_title": seg.chapter_title,
         "page_narrative": seg.page_narrative,
@@ -31,22 +46,25 @@ def _serialize_page(seg: ChainSegment) -> dict:
         "year_end": seg.year_end,
         "importance": seg.importance or 3,
         "media_url": seg.media_url,
+        "widgets": seg.widgets,
         "sub_shift_id": seg.sub_shift_id,
         "event_id": seg.event_id,
         "person_id": seg.person_id,
         "location_id": seg.location_id,
+        "location_name": location_name,
+        "location_name_ko": location_name_ko,
         "lat": None,
         "lng": None,
     }
 
-    # Populate coordinates from linked event or location
-    if seg.event and hasattr(seg.event, 'location') and seg.event.location:
-        loc = seg.event.location
-        result["lat"] = loc.latitude
-        result["lng"] = loc.longitude
-    elif seg.location:
+    # Populate coordinates from linked location or event's primary_location
+    if seg.location:
         result["lat"] = seg.location.latitude
         result["lng"] = seg.location.longitude
+    elif seg.event and seg.event.primary_location:
+        loc = seg.event.primary_location
+        result["lat"] = loc.latitude
+        result["lng"] = loc.longitude
 
     return result
 
@@ -124,7 +142,8 @@ def get_shift(
         db.query(HistoricalChain)
         .options(
             joinedload(HistoricalChain.segments)
-            .joinedload(ChainSegment.event),
+            .joinedload(ChainSegment.event)
+            .joinedload(Event.primary_location),
             joinedload(HistoricalChain.segments)
             .joinedload(ChainSegment.location),
         )
@@ -156,7 +175,8 @@ def list_shift_pages(
     segments = (
         db.query(ChainSegment)
         .options(
-            joinedload(ChainSegment.event),
+            joinedload(ChainSegment.event)
+            .joinedload(Event.primary_location),
             joinedload(ChainSegment.location),
         )
         .filter(ChainSegment.chain_id == shift_id)
@@ -181,7 +201,8 @@ def get_shift_page(
     segment = (
         db.query(ChainSegment)
         .options(
-            joinedload(ChainSegment.event),
+            joinedload(ChainSegment.event)
+            .joinedload(Event.primary_location),
             joinedload(ChainSegment.location),
         )
         .filter(

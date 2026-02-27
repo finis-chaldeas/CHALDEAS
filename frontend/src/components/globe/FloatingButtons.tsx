@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 interface FloatingButtonsProps {
   onSearchClick: () => void
-  onShowcaseClick: () => void
+  onTrismegistosClick: () => void
   onRayshiftClick: () => void
   onChatClick: () => void
   onMenuClick: () => void
@@ -10,19 +10,19 @@ interface FloatingButtonsProps {
 
 const BUTTONS = [
   { id: 'search', icon: '\uD83D\uDD0D', label: 'Search' },
-  { id: 'showcase', icon: '\u2726', label: 'TRISMEGISTUS' },
+  { id: 'trismegistos', icon: '\u2726', label: 'TRISMEGISTOS' },
   { id: 'rayshift', icon: '\u21E8', label: 'History Shift' },
   { id: 'chat', icon: '\u25C8', label: 'LAPLACE' },
   { id: 'menu', icon: '\u2699', label: 'Settings' },
 ] as const
 
 export default function FloatingButtons({
-  onSearchClick, onShowcaseClick, onRayshiftClick, onChatClick, onMenuClick,
+  onSearchClick, onTrismegistosClick, onRayshiftClick, onChatClick, onMenuClick,
 }: FloatingButtonsProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   const handlers: Record<string, () => void> = {
-    search: onSearchClick, showcase: onShowcaseClick,
+    search: onSearchClick, trismegistos: onTrismegistosClick,
     rayshift: onRayshiftClick, chat: onChatClick, menu: onMenuClick,
   }
 

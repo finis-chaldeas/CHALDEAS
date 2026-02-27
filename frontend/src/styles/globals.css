@@ -221,11 +221,11 @@ body {
   background: linear-gradient(180deg, rgba(0, 212, 255, 0.03), transparent);
 }
 
-.archive-menu-section .showcase-menu-container {
+.archive-menu-section .trismegistos-menu-container {
   width: 100%;
 }
 
-.archive-menu-section .showcase-menu-btn {
+.archive-menu-section .trismegistos-menu-btn {
   width: 100%;
   justify-content: flex-start;
   padding: 0.625rem 1rem;
@@ -252,7 +252,7 @@ body {
   letter-spacing: 0.05em;
 }
 
-.archive-menu-section .showcase-menu-dropdown {
+.archive-menu-section .trismegistos-menu-dropdown {
   position: absolute;
   left: 1.25rem;
   right: 1.25rem;
@@ -5708,6 +5708,7 @@ textarea:focus-visible {
 
 /* ========== Smart Markers: Hero Cards ========== */
 .hero-card {
+  position: relative;
   background: rgba(10, 16, 24, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -5715,7 +5716,7 @@ textarea:focus-visible {
   border-radius: 6px;
   padding: 6px 10px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   white-space: nowrap;
   pointer-events: auto;
   max-width: 220px;
@@ -5786,6 +5787,55 @@ textarea:focus-visible {
   margin-right: 4px;
 }
 
+/* ========== Hero Card Compact Mode (cosmic/continental zoom) ========== */
+.hero-card--compact {
+  max-width: 130px;
+  padding: 4px 7px;
+}
+.hero-card--compact .hero-card-title {
+  font-size: 10px;
+  max-width: 110px;
+}
+.hero-card--compact .hero-card-meta {
+  font-size: 8px;
+}
+.hero-card--compact .hero-card-year {
+  font-size: 8px;
+}
+.hero-card--compact .hero-region-badge {
+  top: -8px;
+  right: -8px;
+}
+
+/* ========== Pinned Hero Card (solo marker from badge modal click) ========== */
+.hero-card--pinned {
+  border: 1px solid rgba(255, 215, 0, 0.6) !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3), 0 0 4px rgba(0, 212, 255, 0.2);
+  animation: pinned-pulse 2s ease-in-out infinite;
+}
+@keyframes pinned-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.3), 0 0 4px rgba(0, 212, 255, 0.2); }
+  50% { box-shadow: 0 0 18px rgba(255, 215, 0, 0.5), 0 0 8px rgba(0, 212, 255, 0.3); }
+}
+
+/* ========== Hero Card Companion Lines ========== */
+.hero-card-companions {
+  margin-top: 2px;
+}
+.hero-card-companion {
+  font-size: 9px;
+  color: rgba(200, 220, 230, 0.65);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  cursor: pointer;
+  padding: 1px 0;
+}
+.hero-card-companion:hover {
+  color: rgba(0, 212, 255, 0.9);
+}
+
 /* Hero Card Category Colors (border-left accent) */
 .hero-card--battle { border-left: 3px solid #ef4444; }
 .hero-card--war { border-left: 3px solid #dc2626; }
@@ -5796,27 +5846,168 @@ textarea:focus-visible {
 .hero-card--religious { border-left: 3px solid #8b5cf6; }
 .hero-card--science { border-left: 3px solid #00d4ff; }
 
-/* ========== Smart Markers: Cluster Bubbles ========== */
-.cluster-bubble {
+/* ========== Hero Region Badge (stacked chip design) ========== */
+.hero-region-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 48px;
+  height: 28px;
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.hero-region-badge:hover {
+  transform: scale(1.12);
+}
+/* Back chips (empty rectangles, slightly rotated/offset) */
+.hero-region-chip {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: rgba(10, 16, 24, 0.75);
+  border: 1.5px solid; /* color set via inline style */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.hero-region-chip--2 {
+  transform: rotate(8deg) translate(3px, -3px);
+  opacity: 0.5;
+}
+.hero-region-chip--1 {
+  transform: rotate(4deg) translate(1.5px, -1.5px);
+  opacity: 0.7;
+}
+/* Front chip (count text) */
+.hero-region-chip--front {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: rgba(10, 16, 24, 0.92);
+  border: 1.5px solid rgba(0, 212, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: rgba(0, 212, 255, 0.2);
-  border: 1.5px solid rgba(0, 212, 255, 0.4);
-  color: var(--chaldea-cyan);
-  font-size: 11px;
-  font-weight: 700;
-  font-family: 'Roboto Mono', monospace;
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.25s ease;
+  gap: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
-.cluster-bubble:hover {
-  background: rgba(0, 212, 255, 0.35);
-  border-color: rgba(0, 212, 255, 0.7);
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
-  transform: scale(1.1);
+.hero-region-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: #e2e8f0;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+.hero-region-badge:hover .hero-region-chip--front {
+  border-color: rgba(0, 212, 255, 0.9);
+  background: rgba(0, 212, 255, 0.12);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.25);
+}
+
+/* ========== City Pin (location node markers) ========== */
+.city-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translateY(-100%);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.city-pin:hover {
+  opacity: 1;
+}
+.city-pin-head {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--chaldea-cyan, #00d4ff);
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.6);
+  position: relative;
+  flex-shrink: 0;
+}
+.city-pin-stem {
+  width: 1px;
+  height: 16px;
+  background: linear-gradient(to bottom, rgba(0, 212, 255, 0.6), rgba(0, 212, 255, 0.1));
+  flex-shrink: 0;
+}
+.city-pin-label {
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 212, 255, 0.85);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.city-pin-count {
+  background: var(--chaldea-cyan, #00d4ff);
+  color: #000;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  min-width: 16px;
+  text-align: center;
+}
+/* Tier 2: smaller pin, subtler label (always visible) */
+.city-pin--tier2 .city-pin-head {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 3px rgba(0, 212, 255, 0.4);
+}
+.city-pin--tier2 .city-pin-stem {
+  height: 10px;
+}
+.city-pin--tier2 .city-pin-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(200, 220, 230, 0.85);
+}
+/* Inactive (no events in current time range) */
+.city-pin--inactive .city-pin-head {
+  background: #3a4a5a;
+  box-shadow: 0 0 3px rgba(58, 74, 90, 0.4);
+}
+.city-pin--inactive .city-pin-stem {
+  background: linear-gradient(to bottom, rgba(58, 74, 90, 0.5), rgba(58, 74, 90, 0.1));
+}
+.city-pin--inactive .city-pin-label {
+  color: rgba(120, 140, 150, 0.5);
+}
+.city-pin--inactive .city-pin-count {
+  background: #3a4a5a;
+  color: #8a9ab0;
+}
+/* Active pulse ring */
+.city-pin-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  transform: translate(-50%, -50%);
+  animation: cityPinPulse 2s infinite;
+  pointer-events: none;
+}
+@keyframes cityPinPulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+/* Hover effect */
+.city-pin:hover .city-pin-head {
+  transform: scale(1.4);
+}
+/* Shifted state */
+.globe-container.shifted .city-pin {
+  opacity: 0.15;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 /* ========== Selection State: Fade non-selected markers when event is open ========== */
@@ -5837,10 +6028,38 @@ textarea:focus-visible {
   opacity: 1;
   pointer-events: auto;
 }
-.globe-container.shifted .cluster-bubble {
-  opacity: 0.2;
+
+/* ========== Hero Displacement Pin + Stem ========== */
+.hero-pin {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.7);
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  animation: hero-pin-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hero-pin-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(0, 212, 255, 0.4); }
+  50% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.3); }
+}
+
+.hero-stem {
+  position: absolute;
+  height: 1px;
+  background: rgba(0, 212, 255, 0.35);
+  transform-origin: 0 50%;
+  z-index: -1;
+}
+
+/* Occluded: merged into nearest visible hero */
+.hero-card--occluded {
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 /* ========== Globe Mini Modal (event list above city) ========== */
@@ -5930,6 +6149,11 @@ textarea:focus-visible {
   color: rgba(0, 212, 255, 0.7);
   font-size: 10px;
 }
+.globe-mini-modal-item-loc {
+  color: rgba(200, 220, 230, 0.45);
+  font-size: 9px;
+  font-style: italic;
+}
 .globe-mini-modal-item-stars {
   color: #fbbf24;
   font-size: 8px;
@@ -5956,6 +6180,72 @@ textarea:focus-visible {
 .globe-mini-modal-item--political { border-left-color: #f59e0b; }
 .globe-mini-modal-item--religious { border-left-color: #8b5cf6; }
 .globe-mini-modal-item--science { border-left-color: #00d4ff; }
+/* Section labels (Events / Persons headers) */
+.globe-mini-modal-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(200, 220, 230, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 10px 3px;
+}
+/* Person items (gold left border) */
+.globe-mini-modal-person {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-left: 3px solid var(--chaldea-gold, #fbbf24);
+  margin-bottom: 3px;
+}
+.globe-mini-modal-person:hover {
+  background: rgba(251, 191, 36, 0.08);
+}
+.globe-mini-modal-person-name {
+  color: #e2e8f0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+.globe-mini-modal-person-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.globe-mini-modal-person-role {
+  color: var(--chaldea-gold, #fbbf24);
+  font-size: 10px;
+  font-weight: 500;
+}
+.globe-mini-modal-person-years {
+  color: rgba(200, 220, 230, 0.5);
+  font-size: 9px;
+  font-family: 'Roboto Mono', monospace;
+}
+/* Location group header in mini modal */
+.globe-mini-modal-loc-group {
+  padding: 5px 10px 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 212, 255, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-top: 1px solid rgba(0, 212, 255, 0.08);
+  margin-top: 4px;
+}
+.globe-mini-modal-loc-group:first-child {
+  border-top: none;
+  margin-top: 0;
+}
+.globe-mini-modal-loc-count {
+  color: rgba(200, 220, 230, 0.4);
+  font-weight: 400;
+}
+.globe-mini-modal-loc-group--remote {
+  color: rgba(200, 220, 230, 0.5);
+}
 /* Mini modal stays visible even when event panel is open (event panel closes on node click) */
 
 /* ========== Mobile: Hero Card Deck ========== */

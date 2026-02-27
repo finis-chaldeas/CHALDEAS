@@ -1,17 +1,17 @@
 /**
- * ShowcaseMenu - Menu for accessing showcase content
+ * TrismegistosMenu - Menu for accessing trismegistos content
  * Split into FGO content and Pan-Human History content
  * Now fetches from backend API with i18n support
  */
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import type { ShowcaseContent } from './ShowcaseModal'
-import { showcaseApi } from '../../api/client'
-import './showcase.css'
+import type { TrismegistosContent } from './TrismegistosModal'
+import { trismegistosApi } from '../../api/client'
+import './trismegistos.css'
 
 interface Props {
-  onSelectContent: (content: ShowcaseContent) => void
+  onSelectContent: (content: TrismegistosContent) => void
   onOpenServantPanel?: () => void
   alwaysOpen?: boolean
 }
@@ -31,8 +31,8 @@ function getLocalizedField(item: Record<string, unknown>, field: string, lang: s
   return (item[field] as string) || ''
 }
 
-// Transform API response to ShowcaseContent format with i18n
-function transformApiItem(item: Record<string, unknown>, lang: string): ShowcaseContent {
+// Transform API response to TrismegistosContent format with i18n
+function transformApiItem(item: Record<string, unknown>, lang: string): TrismegistosContent {
   // Transform sections with localization
   const rawSections = (item.sections as Array<Record<string, unknown>>) || []
   const sections = rawSections.map(s => ({
@@ -42,7 +42,7 @@ function transformApiItem(item: Record<string, unknown>, lang: string): Showcase
 
   return {
     id: item.id as string,
-    type: item.type as ShowcaseContent['type'],
+    type: item.type as TrismegistosContent['type'],
     title: getLocalizedField(item, 'title', lang),
     subtitle: getLocalizedField(item, 'subtitle', lang) || undefined,
     chapter: item.chapter as string | undefined,
@@ -66,7 +66,7 @@ function transformApiItem(item: Record<string, unknown>, lang: string): Showcase
   }
 }
 
-export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen = false }: Props) {
+export function TrismegistosMenu({ onSelectContent, onOpenServantPanel, alwaysOpen = false }: Props) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
   const [isOpen, setIsOpen] = useState(alwaysOpen)
@@ -74,50 +74,50 @@ export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen =
   const [fgoSubTab, setFgoSubTab] = useState<FgoSubTab>('singularity')
   const [panHumanSubTab, setPanHumanSubTab] = useState<PanHumanSubTab>('history')
 
-  // Fetch all showcase data (include lang in queryKey for refetch on language change)
+  // Fetch all trismegistos data (include lang in queryKey for refetch on language change)
   const { data: singularitiesData } = useQuery({
-    queryKey: ['showcases', 'singularities', lang],
-    queryFn: () => showcaseApi.getSingularities(),
+    queryKey: ['trismegistos', 'singularities', lang],
+    queryFn: () => trismegistosApi.getSingularities(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   })
 
   const { data: lostbeltsData } = useQuery({
-    queryKey: ['showcases', 'lostbelts', lang],
-    queryFn: () => showcaseApi.getLostbelts(),
+    queryKey: ['trismegistos', 'lostbelts', lang],
+    queryFn: () => trismegistosApi.getLostbelts(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000,
   })
 
   const { data: servantsData } = useQuery({
-    queryKey: ['showcases', 'servants', lang],
-    queryFn: () => showcaseApi.getServants(),
+    queryKey: ['trismegistos', 'servants', lang],
+    queryFn: () => trismegistosApi.getServants(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000,
   })
 
   const { data: historyData } = useQuery({
-    queryKey: ['showcases', 'history', lang],
-    queryFn: () => showcaseApi.getHistory(),
+    queryKey: ['trismegistos', 'history', lang],
+    queryFn: () => trismegistosApi.getHistory(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000,
   })
 
   const { data: literatureData } = useQuery({
-    queryKey: ['showcases', 'literature', lang],
-    queryFn: () => showcaseApi.getLiterature(),
+    queryKey: ['trismegistos', 'literature', lang],
+    queryFn: () => trismegistosApi.getLiterature(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000,
   })
 
   const { data: musicData } = useQuery({
-    queryKey: ['showcases', 'music', lang],
-    queryFn: () => showcaseApi.getMusic(),
+    queryKey: ['trismegistos', 'music', lang],
+    queryFn: () => trismegistosApi.getMusic(),
     select: (res) => res.data.items.map((item: Record<string, unknown>) => transformApiItem(item, lang)),
     staleTime: 5 * 60 * 1000,
   })
 
-  const getContentList = useMemo((): ShowcaseContent[] => {
+  const getContentList = useMemo((): TrismegistosContent[] => {
     if (mainTab === 'fgo') {
       switch (fgoSubTab) {
         case 'singularity': return singularitiesData || []
@@ -133,46 +133,46 @@ export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen =
     }
   }, [mainTab, fgoSubTab, panHumanSubTab, singularitiesData, lostbeltsData, servantsData, historyData, literatureData, musicData])
 
-  const handleSelect = (content: ShowcaseContent) => {
+  const handleSelect = (content: TrismegistosContent) => {
     onSelectContent(content)
     setIsOpen(false)
   }
 
   return (
-    <div className="showcase-menu-container">
+    <div className="trismegistos-menu-container">
       <button
-        className={`showcase-menu-btn ${isOpen ? 'active' : ''}`}
+        className={`trismegistos-menu-btn ${isOpen ? 'active' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="menu-icon">◈</span>
         <span className="menu-text-group">
-          <span className="menu-title">{t('showcase.menu.title')}</span>
-          <span className="menu-subtitle">{t('showcase.menu.subtitle')}</span>
+          <span className="menu-title">{t('trismegistos.menu.title')}</span>
+          <span className="menu-subtitle">{t('trismegistos.menu.subtitle')}</span>
         </span>
       </button>
 
       {isOpen && (
-        <div className="showcase-menu-dropdown">
+        <div className="trismegistos-menu-dropdown">
           {/* Main Tabs: FGO vs Pan-Human History */}
-          <div className="showcase-main-tabs">
+          <div className="trismegistos-main-tabs">
             <button
               className={`main-tab ${mainTab === 'fgo' ? 'active' : ''}`}
               onClick={() => setMainTab('fgo')}
             >
               <span className="main-tab-icon">◎</span>
-              {t('showcase.tabs.fgo')}
+              {t('trismegistos.tabs.fgo')}
             </button>
             <button
               className={`main-tab ${mainTab === 'panHuman' ? 'active' : ''}`}
               onClick={() => setMainTab('panHuman')}
             >
               <span className="main-tab-icon">◉</span>
-              {t('showcase.tabs.panHuman')}
+              {t('trismegistos.tabs.panHuman')}
             </button>
           </div>
 
           {/* Sub Tabs */}
-          <div className="showcase-menu-tabs">
+          <div className="trismegistos-menu-tabs">
             {mainTab === 'fgo' ? (
               <>
                 <button
@@ -180,21 +180,21 @@ export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen =
                   onClick={() => setFgoSubTab('singularity')}
                 >
                   <span className="tab-icon" style={{ color: 'var(--chaldea-orange)' }}>▸</span>
-                  {t('showcase.menu.singularities')}
+                  {t('trismegistos.menu.singularities')}
                 </button>
                 <button
                   className={`menu-tab ${fgoSubTab === 'lostbelt' ? 'active' : ''}`}
                   onClick={() => setFgoSubTab('lostbelt')}
                 >
                   <span className="tab-icon" style={{ color: 'var(--chaldea-magenta)' }}>▸</span>
-                  {t('showcase.menu.lostbelts')}
+                  {t('trismegistos.menu.lostbelts')}
                 </button>
                 <button
                   className={`menu-tab ${fgoSubTab === 'servant' ? 'active' : ''}`}
                   onClick={() => setFgoSubTab('servant')}
                 >
                   <span className="tab-icon" style={{ color: 'var(--chaldea-gold)' }}>▸</span>
-                  {t('showcase.menu.servants')}
+                  {t('trismegistos.menu.servants')}
                 </button>
                 {onOpenServantPanel && (
                   <button
@@ -205,7 +205,7 @@ export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen =
                     }}
                   >
                     <span className="tab-icon" style={{ color: '#22c55e' }}>📚</span>
-                    {t('showcase.menu.servantBooks', '서번트 원전')}
+                    {t('trismegistos.menu.servantBooks', '서번트 원전')}
                   </button>
                 )}
               </>
@@ -216,37 +216,37 @@ export function ShowcaseMenu({ onSelectContent, onOpenServantPanel, alwaysOpen =
                   onClick={() => setPanHumanSubTab('history')}
                 >
                   <span className="tab-icon" style={{ color: 'var(--chaldea-cyan)' }}>▸</span>
-                  {t('showcase.menu.history')}
+                  {t('trismegistos.menu.history')}
                 </button>
                 <button
                   className={`menu-tab ${panHumanSubTab === 'literature' ? 'active' : ''}`}
                   onClick={() => setPanHumanSubTab('literature')}
                 >
                   <span className="tab-icon" style={{ color: 'var(--chaldea-green)' }}>▸</span>
-                  {t('showcase.menu.literature')}
+                  {t('trismegistos.menu.literature')}
                 </button>
                 <button
                   className={`menu-tab ${panHumanSubTab === 'music' ? 'active' : ''}`}
                   onClick={() => setPanHumanSubTab('music')}
                 >
                   <span className="tab-icon" style={{ color: '#9966ff' }}>▸</span>
-                  {t('showcase.menu.music')}
+                  {t('trismegistos.menu.music')}
                 </button>
               </>
             )}
           </div>
 
           {/* Content List */}
-          <div className="showcase-menu-list">
+          <div className="trismegistos-menu-list">
             {getContentList.length === 0 ? (
-              <div className="showcase-loading">
-                <span className="loading-text">{t('showcase.loading', 'Loading...')}</span>
+              <div className="trismegistos-loading">
+                <span className="loading-text">{t('trismegistos.loading', 'Loading...')}</span>
               </div>
             ) : (
               getContentList.map((content) => (
                 <button
                   key={content.id}
-                  className="showcase-menu-item"
+                  className="trismegistos-menu-item"
                   onClick={() => handleSelect(content)}
                 >
                   <div className="item-header">

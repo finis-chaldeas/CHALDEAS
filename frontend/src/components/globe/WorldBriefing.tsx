@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { timelineApi } from '../../api/client'
 import { useTimelineStore } from '../../store/timelineStore'
 import { useGlobeStore } from '../../store/globeStore'
-import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { useSettingsStore, getLocalizedText, getEffectiveLanguage } from '../../store/settingsStore'
 import type { PeriodDetail, PeriodEvent, PeriodPerson } from '../../types'
 import PeriodDrawer from './PeriodDrawer'
 
@@ -54,15 +54,17 @@ export default function WorldBriefing({ onEventClick, onPersonClick, onOpenDeepR
   const topEvents = (period?.events ?? []).slice(0, 3) as PeriodEvent[]
   const topPersons = (period?.persons ?? []).slice(0, 3) as PeriodPerson[]
   const isCompact = zoomLevel === 'cosmic' || zoomLevel === 'continental'
+  const lang = getEffectiveLanguage(preferredLanguage)
   // Language-aware headline
-  const rawHeadline = preferredLanguage === 'ko'
-    ? (period?.headline_ko || period?.headline)
+  const p = period as unknown as Record<string, string> | undefined
+  const rawHeadline = lang !== 'en'
+    ? (p?.[`headline_${lang}`] || period?.headline)
     : period?.headline
   const headline = rawHeadline || `${formatYear(periodStart)} \u2013 ${formatYear(periodStart + 50)}`
 
   // Language-aware narrative
-  const rawNarrative = preferredLanguage === 'ko'
-    ? ((period as unknown as Record<string, string>)?.narrative_ko || period?.narrative)
+  const rawNarrative = lang !== 'en'
+    ? (p?.[`narrative_${lang}`] || period?.narrative)
     : period?.narrative
 
   return (

@@ -11,14 +11,13 @@ interface UseFlyModeOptions {
 const toRad = (deg: number) => (deg * Math.PI) / 180
 
 // WASD keys only (no arrow keys — those are used by ShiftPanel nav)
-const WASD_KEYS = new Set(['w', 'a', 's', 'd', 'q', 'e', 'r', 'f',
-                            'W', 'A', 'S', 'D', 'Q', 'E', 'R', 'F'])
+const WASD_KEYS = new Set(['w', 'a', 's', 'd', 'q', 'e',
+                            'W', 'A', 'S', 'D', 'Q', 'E'])
 
 /**
  * WASD navigation for the globe (integrated into orbit mode)
  * WASD: Move forward/backward/left/right
  * Q/E: Turn left/right (yaw)
- * R/F: Ascend/descend (altitude)
  * Shift: Speed boost
  */
 export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
@@ -28,7 +27,6 @@ export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
 
   const BASE_SPEED = 0.5
   const TURN_SPEED = 2
-  const ALT_SPEED = 0.02
 
   const updatePosition = useCallback(() => {
     if (!enabled || !globeRef.current) return
@@ -79,14 +77,6 @@ export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
       lng += direction * moveSpeed * 0.7 * Math.sin(strafeHeading) / Math.cos(toRad(lat))
       lat = Math.max(-85, Math.min(85, lat))
       lng = ((lng + 180) % 360 + 360) % 360 - 180
-    }
-
-    // Ascend/descend (R/F)
-    if (keys.has('r') || keys.has('R')) {
-      altitude = Math.min(4.0, altitude + ALT_SPEED * speedMultiplier)
-    }
-    if (keys.has('f') || keys.has('F')) {
-      altitude = Math.max(0.05, altitude - ALT_SPEED * speedMultiplier)
     }
 
     setCameraPosition({ lat, lng, altitude })

@@ -3,7 +3,7 @@
  *
  * Top: 2D Map (50%)
  * Bottom: Feed/content (50%)
- * Bottom tab bar: Map / Feed / Search / TRISMEGISTUS / Menu
+ * Bottom tab bar: Map / Feed / Search / TRISMEGISTOS / Menu
  */
 import { useState, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +15,7 @@ import type { GlobeMarkerData } from '../../store/globeStore'
 
 const MapView = lazy(() => import('../map/MapContainer').then(m => ({ default: m.MapView })))
 
-type MobileTab = 'map' | 'feed' | 'search' | 'showcase' | 'menu'
+type MobileTab = 'map' | 'feed' | 'search' | 'trismegistos' | 'menu'
 
 interface MobileLayoutProps {
   markers: GlobeMarkerData[]
@@ -25,7 +25,7 @@ interface MobileLayoutProps {
   onNarrativeEventClick: (eventId: number) => void
   onNarrativePersonClick: (personId: number) => void
   onSearchOpen: () => void
-  onShowcaseOpen: () => void
+  onTrismegistosOpen: () => void
   onMenuOpen: () => void
   onDeepReadOpen: () => void
   selectedEvent: Event | null
@@ -39,7 +39,7 @@ export function MobileLayout({
   onNarrativeEventClick,
   onNarrativePersonClick,
   onSearchOpen,
-  onShowcaseOpen,
+  onTrismegistosOpen,
   onMenuOpen,
   onDeepReadOpen,
   selectedEvent,
@@ -51,7 +51,7 @@ export function MobileLayout({
     { id: 'map', icon: '\uD83C\uDF0D', label: t('mobile.map', 'Map') },
     { id: 'feed', icon: '\u2261', label: t('mobile.feed', 'Feed') },
     { id: 'search', icon: '\u2315', label: t('mobile.search', 'Search') },
-    { id: 'showcase', icon: '\u2606', label: 'Archive' },
+    { id: 'trismegistos', icon: '\u2606', label: 'Archive' },
     { id: 'menu', icon: '\u2699', label: t('mobile.menu', 'Menu') },
   ]
 
@@ -60,8 +60,8 @@ export function MobileLayout({
       onSearchOpen()
       return
     }
-    if (tab === 'showcase') {
-      onShowcaseOpen()
+    if (tab === 'trismegistos') {
+      onTrismegistosOpen()
       return
     }
     if (tab === 'menu') {

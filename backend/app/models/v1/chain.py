@@ -18,6 +18,7 @@ from sqlalchemy import (
     Column, Integer, String, Text, Boolean, Float, ForeignKey,
     CheckConstraint, DateTime, UniqueConstraint
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -219,6 +220,7 @@ class ChainSegment(Base):
     page_narrative_ko = Column(Text)
     sub_shift_id = Column(Integer, ForeignKey("historical_chains.id"), nullable=True)
     media_url = Column(String(500))
+    widgets = Column(JSONB, nullable=True, default=None)
 
     # Importance within chain context
     importance = Column(

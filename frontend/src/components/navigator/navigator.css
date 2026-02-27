@@ -777,7 +777,7 @@
   color: var(--chaldea-cyan);
 }
 
-.footer-btn.showcase-btn:hover {
+.footer-btn.trismegistos-btn:hover {
   border-color: var(--chaldea-orange);
   color: var(--chaldea-orange);
 }
@@ -1595,7 +1595,7 @@
   border-color: rgba(255, 215, 0, 0.4);
 }
 
-/* ========== Servant Tab (TRISMEGISTUS) ========== */
+/* ========== Servant Tab (TRISMEGISTOS) ========== */
 .servant-tab-header {
   padding: 0.5rem 0.625rem 0.375rem;
   border-bottom: 1px solid var(--chaldea-border);

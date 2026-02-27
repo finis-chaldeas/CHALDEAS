@@ -122,6 +122,6 @@ export const AnalyticsEvents = {
 
   // Feature usage
   SHEBA_CHAT_OPENED: 'sheba_chat_opened',
-  SHOWCASE_VIEWED: 'showcase_viewed',
+  TRISMEGISTOS_VIEWED: 'trismegistos_viewed',
   FILTER_APPLIED: 'filter_applied',
 } as const

@@ -1,5 +1,5 @@
 /**
- * ServantTab - TRISMEGISTUS servant browser (inline, not modal)
+ * ServantTab - TRISMEGISTOS servant browser (inline, not modal)
  *
  * Displays FGO servants with class filters, search, and inline detail view.
  * Replaces the old ServantPanel modal.

@@ -84,6 +84,18 @@ interface HighlightedLocation {
   year?: number
 }
 
+export interface PinnedEvent {
+  id: number
+  title: string
+  title_ko?: string
+  title_ja?: string
+  lat: number
+  lng: number
+  year?: number
+  category?: string
+  importance: number
+}
+
 export interface ViewportBounds {
   north: number
   south: number
@@ -117,6 +129,9 @@ interface GlobeState {
   // Fly-to target (consumed by GlobeContainer)
   flyTarget: FlyTarget | null
 
+  // Pinned event (clicked from badge modal → shown as solo hero on globe)
+  pinnedEvent: PinnedEvent | null
+
   // Rayshift steps overlay
   rayshiftSteps: { lat: number; lng: number; label: string }[] | null
 
@@ -148,6 +163,8 @@ interface GlobeState {
   setViewportBounds: (bounds: ViewportBounds | null) => void
   setViewMode: (mode: ViewMode) => void
   setGlobeMarkers: (markers: GlobeMarkerData[]) => void
+  setPinnedEvent: (event: PinnedEvent) => void
+  clearPinnedEvent: () => void
   setRayshiftSteps: (steps: { lat: number; lng: number; label: string }[]) => void
   clearRayshiftSteps: () => void
   returnToCosmic: () => void
@@ -177,6 +194,7 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   viewportBounds: null,
   zoomLevel: 'cosmic',
   flyTarget: null,
+  pinnedEvent: null,
   rayshiftSteps: null,
   activeShift: null,
   activePageIndex: 0,
@@ -263,6 +281,10 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
 
   setGlobeMarkers: (markers) => set({ globeMarkers: markers }),
 
+  setPinnedEvent: (event) => set({ pinnedEvent: event }),
+
+  clearPinnedEvent: () => set({ pinnedEvent: null }),
+
   setRayshiftSteps: (steps) => set({ rayshiftSteps: steps }),
 
   clearRayshiftSteps: () => set({ rayshiftSteps: null }),
@@ -317,25 +339,13 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
     const shift = get().activeShift
     if (!shift?.pages) return
     const clamped = Math.max(0, Math.min(index, shift.pages.length - 1))
-    const prevPage = shift.pages[get().activePageIndex]
     set({ activePageIndex: clamped })
     const page = shift.pages[clamped]
     if (page?.lat != null && page?.lng != null) {
-      // Calculate distance-based altitude for smooth transition
-      const prevLat = prevPage?.lat ?? page.lat
-      const prevLng = prevPage?.lng ?? page.lng
-      const dist = Math.sqrt(
-        Math.pow(page.lat - prevLat, 2) + Math.pow(page.lng - prevLng, 2)
-      )
-      // For nearby pages, keep current altitude; for far pages, zoom out slightly then in
+      // Keep current altitude — just pan to the page location
       const currentAlt = get().cameraPosition.altitude
-      const maxAlt = get().shiftMaxAltitude ?? 2.0
-      // Fly altitude: stay at current for short hops, go to maxAlt for long jumps
-      const flyAlt = dist < 1 ? currentAlt : Math.min(maxAlt, currentAlt + dist * 0.01)
-
       set({
-        cameraPosition: { lat: page.lat, lng: page.lng, altitude: flyAlt },
-        flyTarget: { lat: page.lat, lng: page.lng, altitude: flyAlt, ts: Date.now() },
+        flyTarget: { lat: page.lat, lng: page.lng, altitude: currentAlt, ts: Date.now() },
       })
     }
   },

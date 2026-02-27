@@ -177,8 +177,8 @@ export const reportsApi = {
     api.post('/reports', data),
 }
 
-// Showcase/Archive API
-export const showcaseApi = {
+// Trismegistos/Archive API
+export const trismegistosApi = {
   // FGO content
   getSingularities: () => api.get('/showcases/fgo/singularities'),
   getLostbelts: () => api.get('/showcases/fgo/lostbelts'),

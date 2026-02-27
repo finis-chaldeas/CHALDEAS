@@ -100,6 +100,7 @@ poc/data/batch/
 poc/data/pilot/
 poc/data/test_v3/
 poc/data/archivist_results/
+poc/data/book_contexts/
 poc/data/*.jsonl
 poc/data/*.json
 poc/data/*.json.bak

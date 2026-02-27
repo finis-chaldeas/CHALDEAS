@@ -64,7 +64,8 @@ export function tileDimensions(x: number, y: number, z: number): { widthDeg: num
 
 /** Map globe altitude to appropriate tile zoom level. Returns 0 if tiles shouldn't be shown. */
 export function altitudeToTileZoom(altitude: number): number {
-  if (altitude > 1.0) return 0
+  if (altitude > 1.5) return 0  // cosmic — base texture only
+  if (altitude > 1.0) return 2  // continental overview
   if (altitude > 0.6) return 3
   if (altitude > 0.35) return 4
   if (altitude > 0.2) return 5

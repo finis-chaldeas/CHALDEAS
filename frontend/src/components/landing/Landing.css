@@ -645,13 +645,13 @@
   border-color: #a855f7;
 }
 
-.fgo-action-showcase {
+.fgo-action-trismegistos {
   border-color: rgba(0, 212, 255, 0.3);
   color: #00d4ff;
   background: rgba(0, 212, 255, 0.08);
 }
 
-.fgo-action-showcase:hover {
+.fgo-action-trismegistos:hover {
   border-color: #00d4ff;
   background: rgba(0, 212, 255, 0.15);
 }

@@ -6,7 +6,9 @@ SHEBA History Agent - 역사 질의 처리 에이전트
 2. 검색 전략 수립
 3. 검색 실행
 4. 응답 생성
-5. 정합성 검증
+5. 출처 보강 (← LAPLACE에서 통합)
+6. 신뢰도 검증 (← PAPERMOON에서 통합)
+7. 후속 질문 생성 (← LAPLACE에서 통합)
 """
 
 import json
@@ -91,10 +93,12 @@ class HistoryAgent:
 
     Flow:
     1. analyze_query() - 쿼리 의도/엔티티 분석
-    2. plan_search() - 검색 전략 수립
-    3. execute_search() - 검색 실행
+    2. execute_search() - 검색 실행
+    3. filter_relevant_results() - 관련성 필터링
     4. generate_response() - 응답 생성
-    5. validate_response() - 정합성 검증
+    5. enhance_sources() - 출처 보강 (LAPLACE 통합)
+    6. adjust_confidence() - 신뢰도 검증 (PAPERMOON 통합)
+    7. generate_followup_suggestions() - 후속 질문 (LAPLACE 통합)
     """
 
     ANALYSIS_PROMPT = """당신은 역사 질의 분석 전문가입니다.
@@ -478,6 +482,127 @@ class HistoryAgent:
             navigation=navigation if navigation else None
         )
 
+    # ============================================================
+    # Post-processing (통합된 LAPLACE/PAPERMOON 로직)
+    # ============================================================
+
+    def enhance_sources(self, response: StructuredResponse) -> StructuredResponse:
+        """
+        출처 보강 — LAPLACE _find_sources() 로직 통합.
+
+        검색 결과의 소스 목록을 보강하고, 출처가 없으면 기본 참조 아카이브를 추가.
+        """
+        if response.sources:
+            # 기존 소스에 출처 유형 태깅
+            for source in response.sources:
+                if not source.get("source_type"):
+                    source["source_type"] = "database"
+            return response
+
+        # 출처가 없으면 기본 참조 아카이브 폴백 (LAPLACE 패턴)
+        default_sources = [
+            {
+                "id": 0,
+                "title": "Perseus Digital Library",
+                "source_type": "digital_archive",
+                "url": "https://www.perseus.tufts.edu/",
+                "similarity": 0.3,
+            },
+            {
+                "id": 0,
+                "title": "Chinese Text Project",
+                "source_type": "digital_archive",
+                "url": "https://ctext.org/",
+                "similarity": 0.3,
+            },
+        ]
+        response.sources = default_sources
+        return response
+
+    def adjust_confidence(
+        self,
+        response: StructuredResponse,
+        analysis: QueryAnalysis,
+        search_results: List[SearchResult],
+    ) -> StructuredResponse:
+        """
+        신뢰도 검증 — PAPERMOON verify() 로직 통합.
+
+        컨텍스트 사용 여부, 엔티티 언급 검증으로 신뢰도를 조정.
+        """
+        adjustments = []
+
+        # 검색 결과 0건 → 신뢰도 하락 (PAPERMOON: "No database context")
+        total_results = sum(sr.result_count for sr in search_results)
+        if total_results == 0:
+            adjustments.append(-0.3)
+
+        # 엔티티 언급 검증 (PAPERMOON: event/person mention check)
+        answer_lower = response.answer.lower()
+
+        if analysis.entities.events:
+            if any(evt.lower() in answer_lower for evt in analysis.entities.events):
+                adjustments.append(0.1)
+
+        if analysis.entities.persons:
+            if any(p.lower() in answer_lower for p in analysis.entities.persons):
+                adjustments.append(0.1)
+
+        # 최종 신뢰도 계산
+        confidence = response.confidence
+        for adj in adjustments:
+            confidence += adj
+        response.confidence = max(0.1, min(1.0, confidence))
+
+        return response
+
+    def generate_followup_suggestions(
+        self,
+        response: StructuredResponse,
+        analysis: QueryAnalysis,
+    ) -> StructuredResponse:
+        """
+        후속 질문 생성 — LAPLACE _generate_suggestions() 로직 통합.
+
+        분석된 엔티티(인물, 시대, 장소) 기반으로 맥락적 후속 질문 생성.
+        LLM이 생성한 followup이 있으면 보강, 없으면 엔티티 기반 생성.
+        """
+        contextual_suggestions = []
+
+        # 관련 인물 기반
+        if analysis.entities.persons:
+            person = analysis.entities.persons[0]
+            contextual_suggestions.append(f"Tell me more about {person}")
+
+        # 시대 기반
+        if analysis.entities.time_periods:
+            tp = analysis.entities.time_periods[0]
+            label = tp.get("label", "")
+            year_from = tp.get("from")
+            if year_from is not None:
+                year_display = f"{abs(year_from)} {'BCE' if year_from < 0 else 'CE'}"
+                contextual_suggestions.append(f"What else happened around {year_display}?")
+
+        # 장소 기반
+        if analysis.entities.locations:
+            loc = analysis.entities.locations[0]
+            contextual_suggestions.append(f"What is the history of {loc}?")
+
+        # LLM이 생성한 followup이 있으면 앞에 두고, 엔티티 기반은 보충
+        existing = response.suggested_followups or []
+        merged = existing[:2] + [s for s in contextual_suggestions if s not in existing]
+        response.suggested_followups = merged[:4]
+
+        # 아무것도 없으면 기본 제안
+        if not response.suggested_followups:
+            response.suggested_followups = [
+                "What major events happened in ancient Greece?",
+                "Tell me about famous philosophers",
+                "What scientific discoveries were made in antiquity?",
+            ]
+
+        return response
+
     def process(self, query: str, language: str = "en") -> Dict[str, Any]:
         """
         전체 파이프라인 실행
@@ -506,6 +631,15 @@ class HistoryAgent:
 
         # 4. 응답 생성
         response = self.generate_response(analysis, filtered_results)
+
+        # 5. 출처 보강 (LAPLACE)
+        response = self.enhance_sources(response)
+
+        # 6. 신뢰도 검증 (PAPERMOON)
+        response = self.adjust_confidence(response, analysis, filtered_results)
+
+        # 7. 후속 질문 보강 (LAPLACE)
+        response = self.generate_followup_suggestions(response, analysis)
 
         return {
             "analysis": asdict(analysis),

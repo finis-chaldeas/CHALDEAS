@@ -6,6 +6,6 @@ export { LocationTab } from './LocationTab'
 export { TimelineModal } from './TimelineModal'
 export { PeriodDetailPanel } from './PeriodDetailPanel'
 export { FeedbackModal } from './FeedbackModal'
-// ServantTab/ServantTabDetail still exported for use in ShowcaseModal
+// ServantTab/ServantTabDetail still exported for use in TrismegistosModal
 export { ServantTab } from './ServantTab'
 export { ServantTabDetail } from './ServantTabDetail'

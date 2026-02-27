@@ -1,11 +1,11 @@
 /**
- * ShowcaseModal - Trismegistus Archive Content Showcase
+ * TrismegistosModal - Trismegistos Archive Content Trismegistos
  * Displays curated content like Singularities, Lostbelts, Servant columns.
- * When content is null, shows ShowcaseMenu for browsing.
+ * When content is null, shows TrismegistosMenu for browsing.
  */
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ShowcaseMenu } from './ShowcaseMenu'
+import { TrismegistosMenu } from './TrismegistosMenu'
 import { ServantTab } from '../navigator/ServantTab'
 import { EraTab } from '../navigator/EraTab'
 import { HistoryTab } from '../navigator/HistoryTab'
@@ -13,9 +13,9 @@ import { PersonTab } from '../navigator/PersonTab'
 import { useGlobeStore } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
 import type { Event } from '../../types'
-import './showcase.css'
+import './trismegistos.css'
 
-export interface ShowcaseContent {
+export interface TrismegistosContent {
   id: string
   type: 'singularity' | 'lostbelt' | 'servant' | 'article'
   title: string
@@ -46,7 +46,7 @@ export interface ShowcaseContent {
 
 interface Props {
   isOpen: boolean
-  content: ShowcaseContent | null
+  content: TrismegistosContent | null
   onClose: () => void
   onEventClick?: (eventId: number) => void
   onPersonClick?: (personId: number) => void
@@ -56,17 +56,17 @@ interface Props {
   onCreateHistory?: () => void
 }
 
-type ShowcaseView = 'menu' | 'content' | 'servants'
-type ShowcaseTab = 'era' | 'fgo' | 'reading' | 'explore'
+type TrismegistosView = 'menu' | 'content' | 'servants'
+type TrismegistosTab = 'era' | 'fgo' | 'reading' | 'explore'
 
-export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPersonClick, onFlyToLocation, onSetCurrentYear, onHistoryClick, onCreateHistory }: Props) {
+export function TrismegistosModal({ isOpen, content, onClose, onEventClick, onPersonClick, onFlyToLocation, onSetCurrentYear, onHistoryClick, onCreateHistory }: Props) {
   const { t } = useTranslation()
   const currentYear = useTimelineStore((s) => s.currentYear)
   const viewportBounds = useGlobeStore((s) => s.viewportBounds)
   const zoomLevel = useGlobeStore((s) => s.zoomLevel)
-  const [internalContent, setInternalContent] = useState<ShowcaseContent | null>(null)
-  const [view, setView] = useState<ShowcaseView>('menu')
-  const [activeTab, setActiveTab] = useState<ShowcaseTab>('fgo')
+  const [internalContent, setInternalContent] = useState<TrismegistosContent | null>(null)
+  const [view, setView] = useState<TrismegistosView>('menu')
+  const [activeTab, setActiveTab] = useState<TrismegistosTab>('fgo')
 
   // Sync external content prop
   useEffect(() => {
@@ -106,7 +106,7 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
   if (!isOpen) return null
 
-  const handleSelectContent = (selected: ShowcaseContent) => {
+  const handleSelectContent = (selected: TrismegistosContent) => {
     setInternalContent(selected)
     setView('content')
   }
@@ -133,28 +133,28 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
     handleClose()
   }
 
-  const TABS: { id: ShowcaseTab; label: string; icon: string }[] = [
-    { id: 'era', label: t('showcase.tabs.era', 'Era'), icon: '\u26F0' },
-    { id: 'fgo', label: t('showcase.tabs.fgo', 'FGO'), icon: '\u25CE' },
-    { id: 'reading', label: t('showcase.tabs.reading', 'Reading'), icon: '\uD83D\uDCDC' },
-    { id: 'explore', label: t('showcase.tabs.explore', 'Explore'), icon: '\uD83D\uDD0D' },
+  const TABS: { id: TrismegistosTab; label: string; icon: string }[] = [
+    { id: 'era', label: t('trismegistos.tabs.era', 'Era'), icon: '\u26F0' },
+    { id: 'fgo', label: t('trismegistos.tabs.fgo', 'FGO'), icon: '\u25CE' },
+    { id: 'reading', label: t('trismegistos.tabs.reading', 'Reading'), icon: '\uD83D\uDCDC' },
+    { id: 'explore', label: t('trismegistos.tabs.explore', 'Explore'), icon: '\uD83D\uDD0D' },
   ]
 
   // Menu view - 4-tab hub
   if (view === 'menu') {
     return (
-      <div className="showcase-overlay" onClick={handleClose}>
-        <div className="showcase-modal showcase-modal--menu" onClick={(e) => e.stopPropagation()}>
-          <button className="showcase-close" onClick={handleClose}>
+      <div className="trismegistos-overlay" onClick={handleClose}>
+        <div className="trismegistos-modal trismegistos-modal--menu" onClick={(e) => e.stopPropagation()}>
+          <button className="trismegistos-close" onClick={handleClose}>
             {'\u2715'}
           </button>
-          <div className="showcase-menu-header">
-            <h2 className="showcase-menu-title">{t('showcase.archiveTitle', 'TRISMEGISTUS')}</h2>
-            <div className="showcase-hub-tabs">
+          <div className="trismegistos-menu-header">
+            <h2 className="trismegistos-menu-title">{t('trismegistos.archiveTitle', 'TRISMEGISTOS')}</h2>
+            <div className="trismegistos-hub-tabs">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
-                  className={`showcase-hub-tab ${activeTab === tab.id ? 'active' : ''}`}
+                  className={`trismegistos-hub-tab ${activeTab === tab.id ? 'active' : ''}`}
                   onClick={() => setActiveTab(tab.id)}
                 >
                   <span className="hub-tab-icon">{tab.icon}</span>
@@ -163,12 +163,12 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
               ))}
             </div>
           </div>
-          <div className="showcase-menu-body">
+          <div className="trismegistos-menu-body">
             {activeTab === 'era' && (
               <EraTab onEventClick={handleEraEventClick} />
             )}
             {activeTab === 'fgo' && (
-              <ShowcaseMenu
+              <TrismegistosMenu
                 onSelectContent={handleSelectContent}
                 onOpenServantPanel={() => setView('servants')}
                 alwaysOpen
@@ -206,18 +206,18 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
   // Servants browser view
   if (view === 'servants') {
     return (
-      <div className="showcase-overlay" onClick={handleClose}>
-        <div className="showcase-modal showcase-modal--servants" onClick={(e) => e.stopPropagation()}>
-          <div className="showcase-nav-bar">
-            <button className="showcase-back-btn" onClick={handleBack}>
+      <div className="trismegistos-overlay" onClick={handleClose}>
+        <div className="trismegistos-modal trismegistos-modal--servants" onClick={(e) => e.stopPropagation()}>
+          <div className="trismegistos-nav-bar">
+            <button className="trismegistos-back-btn" onClick={handleBack}>
               {'\u2190'} Back
             </button>
-            <span className="showcase-nav-title">Servant Archive</span>
-            <button className="showcase-close" onClick={handleClose}>
+            <span className="trismegistos-nav-title">Servant Archive</span>
+            <button className="trismegistos-close" onClick={handleClose}>
               {'\u2715'}
             </button>
           </div>
-          <div className="showcase-servants-body">
+          <div className="trismegistos-servants-body">
             <ServantTab
               onPersonClick={(personId) => {
                 onPersonClick?.(personId)
@@ -243,10 +243,10 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
   const getTypeLabel = () => {
     switch (displayContent.type) {
-      case 'singularity': return t('showcase.types.singularity')
-      case 'lostbelt': return t('showcase.types.lostbelt')
-      case 'servant': return t('showcase.types.servant')
-      case 'article': return t('showcase.types.article')
+      case 'singularity': return t('trismegistos.types.singularity')
+      case 'lostbelt': return t('trismegistos.types.lostbelt')
+      case 'servant': return t('trismegistos.types.servant')
+      case 'article': return t('trismegistos.types.article')
       default: return ''
     }
   }
@@ -266,31 +266,31 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
   }
 
   return (
-    <div className="showcase-overlay" onClick={handleClose}>
-      <div className="showcase-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="trismegistos-overlay" onClick={handleClose}>
+      <div className="trismegistos-modal" onClick={(e) => e.stopPropagation()}>
         {/* Nav Bar with Back + Close */}
-        <div className="showcase-nav-bar">
-          <button className="showcase-back-btn" onClick={handleBack}>
+        <div className="trismegistos-nav-bar">
+          <button className="trismegistos-back-btn" onClick={handleBack}>
             {'\u2190'} Back
           </button>
-          <span className="showcase-nav-title">{getTypeLabel()}</span>
-          <button className="showcase-close" onClick={handleClose}>
+          <span className="trismegistos-nav-title">{getTypeLabel()}</span>
+          <button className="trismegistos-close" onClick={handleClose}>
             {'\u2715'}
           </button>
         </div>
 
         {/* Header */}
-        <div className="showcase-header" style={{ borderColor: getTypeColor() }}>
-          <div className="showcase-type" style={{ color: getTypeColor() }}>
+        <div className="trismegistos-header" style={{ borderColor: getTypeColor() }}>
+          <div className="trismegistos-type" style={{ color: getTypeColor() }}>
             <span className="type-icon">{'\u25C8'}</span>
             {getTypeLabel()}
             {displayContent.chapter && <span className="chapter-badge">{displayContent.chapter}</span>}
           </div>
-          <h1 className="showcase-title">{displayContent.title}</h1>
+          <h1 className="trismegistos-title">{displayContent.title}</h1>
           {displayContent.subtitle && (
-            <div className="showcase-subtitle">{displayContent.subtitle}</div>
+            <div className="trismegistos-subtitle">{displayContent.subtitle}</div>
           )}
-          <div className="showcase-meta">
+          <div className="trismegistos-meta">
             {displayContent.era && <span className="meta-item">{displayContent.era}</span>}
             {displayContent.year && (
               <span className="meta-item">
@@ -302,15 +302,15 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
         </div>
 
         {/* Content Body */}
-        <div className="showcase-body">
+        <div className="trismegistos-body">
           {/* Main Description */}
-          <div className="showcase-description">
+          <div className="trismegistos-description">
             {displayContent.description}
           </div>
 
           {/* Sections */}
           {displayContent.sections?.map((section, idx) => (
-            <div key={idx} className="showcase-section">
+            <div key={idx} className="trismegistos-section">
               <h3 className="section-title">
                 <span className="section-marker">{'\u25B8'}</span>
                 {section.title}
@@ -321,10 +321,10 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
           {/* Historical Basis */}
           {displayContent.historicalBasis && (
-            <div className="showcase-section historical">
+            <div className="trismegistos-section historical">
               <h3 className="section-title">
                 <span className="section-marker">{'\u25B8'}</span>
-                {t('showcase.historicalBasis')}
+                {t('trismegistos.historicalBasis')}
               </h3>
               <div className="section-content">{displayContent.historicalBasis}</div>
             </div>
@@ -332,10 +332,10 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
           {/* Related Servants */}
           {displayContent.relatedServants && displayContent.relatedServants.length > 0 && (
-            <div className="showcase-section">
+            <div className="trismegistos-section">
               <h3 className="section-title">
                 <span className="section-marker">{'\u25B8'}</span>
-                {t('showcase.relatedServants')}
+                {t('trismegistos.relatedServants')}
               </h3>
               <div className="servant-grid">
                 {displayContent.relatedServants.map((servant, idx) => (
@@ -353,10 +353,10 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
           {/* Related Events */}
           {displayContent.relatedEvents && displayContent.relatedEvents.length > 0 && (
-            <div className="showcase-section">
+            <div className="trismegistos-section">
               <h3 className="section-title">
                 <span className="section-marker">{'\u25B8'}</span>
-                {t('showcase.relatedEvents')}
+                {t('trismegistos.relatedEvents')}
               </h3>
               <div className="related-events-list">
                 {displayContent.relatedEvents.map((event) => (
@@ -378,8 +378,8 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
 
           {/* Sources */}
           {displayContent.sources && displayContent.sources.length > 0 && (
-            <div className="showcase-sources">
-              <div className="sources-label">{t('showcase.sources')}</div>
+            <div className="trismegistos-sources">
+              <div className="sources-label">{t('trismegistos.sources')}</div>
               <div className="sources-list">
                 {displayContent.sources.map((source, idx) => (
                   <span key={idx} className="source-item">{source}</span>
@@ -390,7 +390,7 @@ export function ShowcaseModal({ isOpen, content, onClose, onEventClick, onPerson
         </div>
 
         {/* Footer */}
-        <div className="showcase-footer">
+        <div className="trismegistos-footer">
           <div className="footer-decoration">
             <span className="deco-line"></span>
             <span className="deco-text">CHALDEAS ARCHIVE</span>

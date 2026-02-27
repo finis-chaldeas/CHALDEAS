@@ -1,19 +1,13 @@
 """
-CHALDEA Core Systems - World-Centric Architecture
+CHALDEA Core Systems
 
-This module implements the World-Centric Architecture for AI agents:
+Active:
+  sheba/history_agent.py  — 프로덕션 AI 에이전트 (검색 + 응답 + 출처귀속 + 신뢰도검증 + 후속질문)
+  sheba/observer.py       — DB 기반 쿼리 관찰 (향후 활용 가능)
 
-- CHALDEAS: World state management (immutable snapshots)
-- SHEBA: Observation and pattern detection
-- LAPLACE: Explanation and source attribution
-- TRISMEGISTUS: System orchestration
-- PAPERMOON: Proposal verification (Authority)
-- LOGOS: LLM-based action proposer
-- ANIMA: Learning and improvement (future)
-
-Principles:
-1. World is explicit and immutable
-2. Intelligence proposes, never executes
-3. All values can answer "why?"
-4. System stability is independent of model size
+Deprecated (core/_deprecated/):
+  이전 7-Layer World-Centric Architecture의 LOGOS, LAPLACE, PAPERMOON,
+  구 TRISMEGISTUS 오케스트레이터는 HistoryAgent로 통합되어 _deprecated/로 이동됨.
+  TRISMEGISTOS는 이제 프론트엔드 ShowcaseModal(아카이브 허브)의 공식 명칭.
+  상세: core/_deprecated/README.md
 """

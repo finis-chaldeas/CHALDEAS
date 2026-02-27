@@ -55,7 +55,7 @@ app = FastAPI(
     - **CHALDEAS**: World state management (immutable snapshots)
     - **SHEBA**: Observation and query processing
     - **LAPLACE**: Explanation and source attribution
-    - **TRISMEGISTUS**: System orchestration
+    - **TRISMEGISTOS**: Content showcase & archive
     - **PAPERMOON**: Proposal verification
     - **LOGOS**: LLM-based action proposer
     """,
@@ -130,7 +130,7 @@ async def root():
             "chaldeas": "online",  # World state
             "sheba": "standby",    # Observer
             "laplace": "standby",  # Explainer
-            "trismegistus": "online",  # Orchestrator
+            "trismegistos": "online",  # Archive showcase
             "papermoon": "standby",    # Authority
             "logos": "standby",        # Actor
         }

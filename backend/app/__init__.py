@@ -8,7 +8,7 @@ Systems:
 - CHALDEAS: World state management (immutable snapshots)
 - SHEBA: Observation and query processing
 - LAPLACE: Explanation and source attribution
-- TRISMEGISTUS: System orchestration
+- TRISMEGISTOS: Content showcase & archive
 - PAPERMOON: Proposal verification
 - LOGOS: LLM-based action proposer
 - ANIMA: Learning and improvement (future)

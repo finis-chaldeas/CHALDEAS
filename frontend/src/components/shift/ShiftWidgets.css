@@ -1,0 +1,826 @@
+/* ═══ Widget Slot Containers ═══ */
+
+.widget-slot {
+  position: fixed;
+  z-index: 65;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.widget-slot > * {
+  pointer-events: auto;
+}
+
+/* Left slot: left side, vertically centered */
+.widget-slot--left {
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 280px;
+}
+
+/* Right slot: right side, vertically centered */
+.widget-slot--right {
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 280px;
+}
+
+/* Bottom slot: above shift-bottom, center-aligned */
+.widget-slot--bottom {
+  left: 50%;
+  bottom: 160px;
+  transform: translateX(-50%);
+  max-width: 680px;
+  width: calc(100% - 48px);
+  align-items: center;
+}
+
+/* Overlay slot: dead center */
+.widget-slot--overlay {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 520px;
+  width: calc(100% - 48px);
+  align-items: center;
+}
+
+/* Hide side slots on narrow screens */
+@media (max-width: 900px) {
+  .widget-slot--left,
+  .widget-slot--right {
+    display: none;
+  }
+}
+
+/* ═══ Widget Card (base) ═══ */
+
+.widget-card {
+  background: var(--overlay-bg);
+  backdrop-filter: blur(var(--overlay-blur));
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius);
+  padding: 14px 16px;
+  color: var(--chaldea-text-bright);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+/* ═══ PrimaryQuote ═══ */
+
+.widget-quote {
+  border-left: 3px solid var(--chaldea-gold);
+  padding-left: 16px;
+}
+
+.widget-quote-text {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--chaldea-text-bright);
+}
+
+.widget-quote-attr {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--chaldea-text);
+}
+
+.widget-quote-speaker {
+  color: var(--chaldea-gold);
+  font-weight: 600;
+}
+
+.widget-quote-speaker::after {
+  content: ',';
+  margin-right: 2px;
+}
+
+.widget-quote-source {
+  font-style: italic;
+}
+
+.widget-quote-year {
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-cyan);
+  opacity: 0.8;
+}
+
+/* ═══ FactionVs ═══ */
+
+.widget-fvs-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.widget-fvs-side {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.widget-fvs-left {
+  text-align: left;
+}
+
+.widget-fvs-right {
+  text-align: right;
+}
+
+.widget-fvs-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.widget-fvs-left .widget-fvs-name {
+  color: var(--chaldea-cyan);
+}
+
+.widget-fvs-right .widget-fvs-name {
+  color: var(--chaldea-magenta);
+}
+
+.widget-fvs-cmd {
+  font-size: 0.72rem;
+  color: var(--chaldea-text);
+}
+
+.widget-fvs-str {
+  font-size: 0.72rem;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-text);
+  opacity: 0.85;
+}
+
+.widget-fvs-detail {
+  font-size: 0.68rem;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+}
+
+.widget-fvs-vs {
+  font-weight: 900;
+  font-size: 0.9rem;
+  color: var(--chaldea-gold);
+  align-self: center;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.widget-fvs-outcome {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-border);
+  font-size: 0.72rem;
+  color: var(--chaldea-gold);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ═══ DramaticStat ═══ */
+
+.widget-stat {
+  text-align: center;
+  padding: 18px 16px;
+}
+
+.widget-stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-cyan);
+  line-height: 1.1;
+  text-shadow: 0 0 16px rgba(0, 212, 255, 0.3);
+}
+
+.widget-stat-affix {
+  font-size: 1.2rem;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.widget-stat-label {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--chaldea-text);
+}
+
+.widget-stat-context {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--chaldea-text);
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+/* ═══ PersonCard ═══ */
+
+.widget-person {
+  padding: 14px 16px;
+}
+
+.widget-person-header {
+  margin-bottom: 6px;
+}
+
+.widget-person-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--chaldea-gold);
+  line-height: 1.2;
+}
+
+.widget-person-role {
+  margin-top: 2px;
+  font-size: 0.72rem;
+  color: var(--chaldea-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.widget-person-life {
+  font-size: 0.7rem;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-text);
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.widget-person-summary {
+  font-size: 0.76rem;
+  color: var(--chaldea-text);
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+/* ═══ MiniTimeline ═══ */
+
+.widget-tl {
+  padding: 14px 16px;
+}
+
+.widget-tl-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-text);
+  margin-bottom: 10px;
+}
+
+.widget-tl-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 14px;
+}
+
+/* Vertical line */
+.widget-tl-track::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 5px;
+  bottom: 5px;
+  width: 1px;
+  background: var(--overlay-border);
+}
+
+.widget-tl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 5px 0;
+  position: relative;
+}
+
+.widget-tl-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--chaldea-text);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.widget-tl-item--hl .widget-tl-dot {
+  background: var(--chaldea-gold);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.widget-tl-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.widget-tl-year {
+  font-size: 0.65rem;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-cyan);
+  opacity: 0.8;
+}
+
+.widget-tl-label {
+  font-size: 0.76rem;
+  color: var(--chaldea-text-bright);
+  line-height: 1.4;
+}
+
+.widget-tl-item--hl .widget-tl-label {
+  color: var(--chaldea-gold);
+  font-weight: 600;
+}
+
+/* ═══ EraContext ═══ */
+
+.widget-era {
+  padding: 14px 16px;
+}
+
+.widget-era-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-gold);
+  margin-bottom: 10px;
+}
+
+.widget-era-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.widget-era-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.widget-era-region {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--chaldea-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.widget-era-text {
+  font-size: 0.76rem;
+  color: var(--chaldea-text);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ═══ BattleStats ═══ */
+
+.widget-bstat {
+  padding: 14px 16px;
+}
+
+.widget-bstat-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-gold);
+  margin-bottom: 10px;
+}
+
+.widget-bstat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.widget-bstat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.widget-bstat-label {
+  font-size: 0.7rem;
+  color: var(--chaldea-text);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.widget-bstat-value {
+  font-size: 0.78rem;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--chaldea-cyan);
+  text-align: right;
+}
+
+.widget-bstat-sig {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-border);
+  font-size: 0.72rem;
+  color: var(--chaldea-text);
+  line-height: 1.5;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* ═══ TerritoryChange ═══ */
+
+.widget-terr {
+  padding: 14px 16px;
+}
+
+.widget-terr-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-gold);
+  margin-bottom: 10px;
+}
+
+.widget-terr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.widget-terr-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.widget-terr-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--chaldea-text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.widget-terr-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.widget-terr-before {
+  font-size: 0.76rem;
+  color: var(--chaldea-magenta);
+  opacity: 0.8;
+}
+
+.widget-terr-arrow {
+  font-size: 0.8rem;
+  color: var(--chaldea-gold);
+  flex-shrink: 0;
+}
+
+.widget-terr-after {
+  font-size: 0.76rem;
+  color: var(--chaldea-cyan);
+  font-weight: 600;
+}
+
+/* ═══ AllianceDiagram ═══ */
+
+.widget-ally {
+  padding: 14px 16px;
+}
+
+.widget-ally-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-gold);
+  margin-bottom: 10px;
+}
+
+.widget-ally-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.widget-ally-group {
+  border-left: 3px solid;
+  padding-left: 10px;
+}
+
+.widget-ally-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.widget-ally-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+
+.widget-ally-member {
+  font-size: 0.7rem;
+  color: var(--chaldea-text);
+  opacity: 0.85;
+}
+
+.widget-ally-member:not(:last-child)::after {
+  content: ',';
+}
+
+/* ═══ HistorianNote ═══ */
+
+.widget-hnote {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.widget-hnote-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.widget-hnote-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.widget-hnote-text {
+  font-size: 0.76rem;
+  color: var(--chaldea-text);
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+.widget-hnote--caution {
+  border-left: 3px solid var(--chaldea-gold);
+}
+
+.widget-hnote--caution .widget-hnote-text {
+  color: var(--chaldea-gold);
+  opacity: 0.85;
+}
+
+.widget-hnote--praise {
+  border-left: 3px solid var(--chaldea-cyan);
+}
+
+.widget-hnote-attr {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+}
+
+.widget-hnote-who {
+  font-weight: 600;
+}
+
+.widget-hnote-who::after {
+  content: ',';
+  margin-right: 2px;
+}
+
+.widget-hnote-work {
+  font-style: italic;
+}
+
+/* ═══ WeDontKnow ═══ */
+
+.widget-wdk {
+  padding: 14px 16px;
+  border: 1px dashed var(--chaldea-gold);
+  background: rgba(255, 215, 0, 0.03);
+}
+
+.widget-wdk-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.widget-wdk-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--chaldea-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--chaldea-gold);
+  flex-shrink: 0;
+}
+
+.widget-wdk-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-gold);
+  opacity: 0.8;
+}
+
+.widget-wdk-question {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.widget-wdk-detail {
+  font-size: 0.74rem;
+  color: var(--chaldea-text);
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+.widget-wdk-theories {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--chaldea-text);
+  line-height: 1.5;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* ═══ ConflictingAccounts ═══ */
+
+.widget-conf {
+  padding: 14px 16px;
+}
+
+.widget-conf-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-magenta);
+  margin-bottom: 10px;
+}
+
+.widget-conf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.widget-conf-item {
+  padding-left: 10px;
+  border-left: 2px solid var(--overlay-border);
+}
+
+.widget-conf-source {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--chaldea-cyan);
+  margin-bottom: 2px;
+}
+
+.widget-conf-claim {
+  font-size: 0.74rem;
+  color: var(--chaldea-text);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.widget-conf-verdict {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-border);
+  font-size: 0.72rem;
+  color: var(--chaldea-gold);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ═══ ModernEquivalent ═══ */
+
+.widget-meq {
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.widget-meq-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chaldea-cyan);
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.widget-meq-compare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.widget-meq-ancient {
+  font-size: 0.78rem;
+  color: var(--chaldea-text);
+  opacity: 0.8;
+}
+
+.widget-meq-arrow {
+  font-size: 1.1rem;
+  color: var(--chaldea-gold);
+  flex-shrink: 0;
+}
+
+.widget-meq-modern {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--chaldea-cyan);
+}
+
+.widget-meq-explain {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--chaldea-text);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* ═══ WhatIf ═══ */
+
+.widget-wif {
+  padding: 14px 16px;
+  border-left: 3px solid var(--chaldea-magenta);
+  background: rgba(255, 0, 128, 0.03);
+}
+
+.widget-wif-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--chaldea-magenta);
+  margin-bottom: 6px;
+}
+
+.widget-wif-hypo {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  line-height: 1.5;
+}
+
+.widget-wif-cons {
+  margin-top: 6px;
+  font-size: 0.74rem;
+  color: var(--chaldea-text);
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+/* ═══ NarratorAside ═══ */
+
+.widget-naside {
+  padding: 12px 16px;
+  border-left: 2px solid var(--chaldea-text);
+  opacity: 0.75;
+}
+
+.widget-naside-text {
+  font-size: 0.76rem;
+  font-style: italic;
+  color: var(--chaldea-text);
+  line-height: 1.6;
+}

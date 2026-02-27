@@ -2,8 +2,8 @@ import { useState, useEffect, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MobileLayout } from './components/mobile/MobileLayout'
 import { ChatPanel } from './components/chat'
-import { ShowcaseModal } from './components/showcase'
-import type { ShowcaseContent } from './components/showcase'
+import { TrismegistosModal } from './components/trismegistos'
+import type { TrismegistosContent } from './components/trismegistos'
 import { SearchAutocomplete } from './components/search'
 import { UnifiedTimeline } from './components/timeline'
 import { SettingsPage } from './components/settings'
@@ -34,6 +34,7 @@ import type { Event } from './types'
 const GlobeContainer = lazy(() => import('./components/globe/GlobeContainer').then(m => ({ default: m.GlobeContainer })))
 // MapView removed — 2D map view disabled (no proper support yet)
 const LocationDetailView = lazy(() => import('./components/detail/LocationDetailView').then(m => ({ default: m.LocationDetailView })))
+const PersonDetailView = lazy(() => import('./components/detail/PersonDetailView').then(m => ({ default: m.PersonDetailView })))
 const ChainPanel = lazy(() => import('./components/chain/ChainPanel'))
 const HierarchyExplorer = lazy(() => import('./components/hierarchy/HierarchyExplorer').then(m => ({ default: m.HierarchyExplorer })))
 const ShiftPanel = lazy(() => import('./components/shift/ShiftPanel'))
@@ -77,11 +78,11 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [initialChatQuery, setInitialChatQuery] = useState<string | null>(null)
   const [isChainOpen, setIsChainOpen] = useState(false)
-  const [, setPersonDetailId] = useState<number | null>(null)
+  const [personDetailId, setPersonDetailId] = useState<number | null>(null)
   const [locationDetailId, setLocationDetailId] = useState<number | null>(null)
   const [showLanding, setShowLanding] = useState(() => !localStorage.getItem('chaldeas-explored'))
-  const [showcaseContent, setShowcaseContent] = useState<ShowcaseContent | null>(null)
-  const [showShowcase, setShowShowcase] = useState(false)
+  const [trismegistosContent, setTrismegistosContent] = useState<TrismegistosContent | null>(null)
+  const [showTrismegistos, setShowTrismegistos] = useState(false)
   const [isTimelineOpen, setIsTimelineOpen] = useState(false)
   const [storyPersonId, setStoryPersonId] = useState<number | null>(null)
   const [tourEpisode, setTourEpisode] = useState<ShebaEpisode | null>(null)
@@ -174,15 +175,15 @@ function App() {
     setLocationDetailId(null)
   }
 
-  const handleShowcaseEventClick = async (eventId: number) => {
+  const handleTrismegistosEventClick = async (eventId: number) => {
     try {
       const res = await api.get(`/events/${eventId}`)
       if (res.data) {
         handleEventClick(res.data)
-        setShowShowcase(false)
+        setShowTrismegistos(false)
       }
     } catch (err) {
-      console.error('Failed to fetch event from showcase:', err)
+      console.error('Failed to fetch event from trismegistos:', err)
     }
   }
 
@@ -207,7 +208,7 @@ function App() {
           onNarrativeEventClick={handleNarrativeEventClick}
           onNarrativePersonClick={handleNarrativePersonClick}
           onSearchOpen={() => setIsSearchOpen(true)}
-          onShowcaseOpen={() => setShowShowcase(true)}
+          onTrismegistosOpen={() => setShowTrismegistos(true)}
           onMenuOpen={() => setIsSettingsOpen(true)}
           onDeepReadOpen={() => setIsDeepReadOpen(true)}
           selectedEvent={selectedEvent}
@@ -248,7 +249,7 @@ function App() {
           />
           <FloatingButtons
             onSearchClick={() => setIsSearchOpen(true)}
-            onShowcaseClick={() => setShowShowcase(true)}
+            onTrismegistosClick={() => setShowTrismegistos(true)}
             onRayshiftClick={() => {
               if (activeShift) {
                 useGlobeStore.getState().closeShift()
@@ -383,23 +384,23 @@ function App() {
         </div>
       )}
 
-      {/* Showcase Modal (TRISMEGISTUS - FGO content + Era + Reading + Explore) */}
-      <ShowcaseModal
-        isOpen={showShowcase}
-        content={showcaseContent}
-        onClose={() => { setShowShowcase(false); setShowcaseContent(null) }}
-        onEventClick={handleShowcaseEventClick}
+      {/* TRISMEGISTOS Modal (FGO content + Era + Reading + Explore) */}
+      <TrismegistosModal
+        isOpen={showTrismegistos}
+        content={trismegistosContent}
+        onClose={() => { setShowTrismegistos(false); setTrismegistosContent(null) }}
+        onEventClick={handleTrismegistosEventClick}
         onPersonClick={handlePersonClick}
         onFlyToLocation={flyToLocation}
         onSetCurrentYear={setCurrentYear}
-        onHistoryClick={(historyId) => {
+        onHistoryClick={(historyId: number) => {
           setHistoryViewId(historyId)
-          setShowShowcase(false)
+          setShowTrismegistos(false)
         }}
         onCreateHistory={() => {
           setIsHistoryEditorOpen(true)
           setEditingHistoryId(null)
-          setShowShowcase(false)
+          setShowTrismegistos(false)
         }}
       />
 
@@ -438,7 +439,7 @@ function App() {
           onReadStories={() => {
             setShowLanding(false)
             localStorage.setItem('chaldeas-explored', '1')
-            setShowShowcase(true)
+            setShowTrismegistos(true)
           }}
           onClose={() => {
             setShowLanding(false)
@@ -455,6 +456,18 @@ function App() {
             onClose={handleCloseEntityView}
             onEventClick={handleEventClick}
             onLocationClick={handleLocationClick}
+          />
+        </Suspense>
+      )}
+
+      {/* Person Detail View */}
+      {personDetailId && (
+        <Suspense fallback={<PanelLoader />}>
+          <PersonDetailView
+            personId={personDetailId}
+            onClose={handleCloseEntityView}
+            onEventClick={handleEventClick}
+            onPersonClick={handlePersonClick}
           />
         </Suspense>
       )}
@@ -476,7 +489,7 @@ function App() {
           personId={storyPersonId}
           onClose={() => setStoryPersonId(null)}
           onEventClick={(eventId) => {
-            handleShowcaseEventClick(eventId)
+            handleTrismegistosEventClick(eventId)
             setStoryPersonId(null)
           }}
         />

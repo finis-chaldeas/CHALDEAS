@@ -526,6 +526,10 @@ class GlobeArc(BaseModel):
     target_event_id: int
     source_title: str
     target_title: str
+    source_title_ko: Optional[str] = None
+    target_title_ko: Optional[str] = None
+    source_title_ja: Optional[str] = None
+    target_title_ja: Optional[str] = None
     source_lat: float
     source_lng: float
     target_lat: float
@@ -581,7 +585,11 @@ async def get_event_arcs(
             ec.layer_type,
             ec.connection_type,
             ec.direction,
-            ec.strength_score
+            ec.strength_score,
+            ea.title_ko as title_a_ko,
+            eb.title_ko as title_b_ko,
+            ea.title_ja as title_a_ja,
+            eb.title_ja as title_b_ja
         FROM event_connections ec
         JOIN events ea ON ec.event_a_id = ea.id
         JOIN events eb ON ec.event_b_id = eb.id
@@ -604,6 +612,10 @@ async def get_event_arcs(
                 target_event_id=row[2],
                 source_title=row[3],
                 target_title=row[4],
+                source_title_ko=row[15],
+                target_title_ko=row[16],
+                source_title_ja=row[17],
+                target_title_ja=row[18],
                 source_lat=float(row[5]),
                 source_lng=float(row[6]),
                 target_lat=float(row[7]),
@@ -623,6 +635,10 @@ async def get_event_arcs(
                 target_event_id=row[1],
                 source_title=row[4],
                 target_title=row[3],
+                source_title_ko=row[16],
+                target_title_ko=row[15],
+                source_title_ja=row[18],
+                target_title_ja=row[17],
                 source_lat=float(row[7]),
                 source_lng=float(row[8]),
                 target_lat=float(row[5]),
@@ -695,6 +711,34 @@ async def get_marker_clusters(
 
 # ============== Smart Markers System ==============
 
+class NearbyEvent(BaseModel):
+    """Event near a hero (too close to display separately)."""
+    id: int
+    title: str
+    title_ko: Optional[str] = None
+    title_ja: Optional[str] = None
+    year: Optional[int] = None
+    category: Optional[str] = None
+    importance: int
+    location_name: Optional[str] = None
+    location_name_ko: Optional[str] = None
+    location_name_ja: Optional[str] = None
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+
+
+class NearbyPerson(BaseModel):
+    """Person attributed to a nearby hero marker."""
+    id: int
+    name: str
+    name_ko: Optional[str] = None
+    name_ja: Optional[str] = None
+    birth_year: Optional[int] = None
+    death_year: Optional[int] = None
+    role: Optional[str] = None
+    importance: int  # global_score mapped to 1-5 scale
+
+
 class HeroMarker(BaseModel):
     """Hero marker: important event displayed as a card on the globe."""
     id: int
@@ -714,34 +758,15 @@ class HeroMarker(BaseModel):
     location_name_ko: Optional[str] = None
     location_name_ja: Optional[str] = None
     location_id: Optional[int] = None
-
-
-class ClusterEvent(BaseModel):
-    """Single event within a cluster bubble."""
-    id: int
-    title: str
-    title_ko: Optional[str] = None
-    title_ja: Optional[str] = None
-    year: Optional[int] = None
-    importance: Optional[int] = None
-    category: Optional[str] = None
-
-
-class ClusterBubble(BaseModel):
-    """Cluster bubble: grouped events shown as a count bubble."""
-    lat: float
-    lng: float
-    count: int
-    top_event_title: Optional[str] = None
-    top_importance: Optional[int] = None
-    year_range: List[Optional[int]]  # [min_year, max_year]
-    top_events: List[ClusterEvent] = []  # Top events for browse panel
+    nearby_events: List[NearbyEvent] = []
+    nearby_event_count: int = 0    # actual total (may exceed len(nearby_events))
+    nearby_persons: List[NearbyPerson] = []
+    nearby_person_count: int = 0   # actual total
 
 
 class SmartMarkersResponse(BaseModel):
-    """Combined response with hero cards and cluster bubbles."""
+    """Response with hero cards for zoom-aware display."""
     heroes: List[HeroMarker]
-    clusters: List[ClusterBubble]
     zoom: str
     total_events: int
 
@@ -753,59 +778,87 @@ def _haversine_approx(lat1: float, lng1: float, lat2: float, lng2: float) -> flo
     return (dlat * dlat + dlng * dlng) ** 0.5
 
 
-def _select_heroes(candidates: list, max_count: int, min_distance_deg: float, zoom: str = "cosmic") -> list:
-    """Select heroes with monotonic inclusion guarantee.
+def _select_heroes(candidates: list, max_count: int, min_distance_deg: float, zoom: str = "cosmic") -> tuple:
+    """Select heroes with overlap prevention and stacking (2-pass).
 
-    Two-pass approach ensures events visible at coarser zoom levels
-    remain visible when zooming in (no flip-flopping).
+    Pass 1: iterate candidates (sorted by importance DESC),
+    accept if far enough from all existing heroes, otherwise attribute
+    (stack) to the nearest hero. Orphans (too far, over limit) collected.
 
-    Pass 1: Select 'anchor' heroes using cosmic-level distance (these
-            persist across all zoom levels for consistency).
-    Pass 2: Fill remaining slots at the current zoom's min_distance,
-            never displacing anchors.
+    Pass 2: imp>=4 orphans force-attributed to nearest hero so they
+    don't silently disappear.
+
+    Returns: (heroes_list, dropped_map) where dropped_map maps
+             winner hero id -> list of dropped candidate dicts.
     """
-    # Anchor distance = cosmic level (largest), ensures stable core set
-    ANCHOR_DISTANCE = 15  # matches cosmic min_distance
-    anchor_max = ZOOM_CONFIG["cosmic"]["max_heroes"]
+    heroes: list = []
+    hero_ids: set = set()
+    dropped_map: dict = {}  # hero_id -> [dropped_candidate, ...]
+    orphans: list = []  # candidates that couldn't be attributed
+    # Max distance for attribution: beyond this, candidate goes to orphans
+    max_attr_dist = min_distance_deg * 3
 
-    # Pass 1: Anchor heroes (importance 5+ with large spacing)
-    anchors = []
     for c in candidates:
-        if c["importance"] < 5:
+        if c["id"] in hero_ids:
             continue
-        too_close = any(
-            _haversine_approx(c["lat"], c["lng"], h["lat"], h["lng"]) < ANCHOR_DISTANCE
-            for h in anchors
-        )
-        if not too_close:
-            anchors.append(c)
-        if len(anchors) >= anchor_max:
-            break
+        # Find nearest hero
+        nearest_hero = None
+        nearest_dist = float("inf")
+        for h in heroes:
+            d = _haversine_approx(c["lat"], c["lng"], h["lat"], h["lng"])
+            if d < nearest_dist:
+                nearest_dist = d
+                nearest_hero = h
 
-    # Pass 2: Fill with remaining candidates at current zoom's distance
-    heroes = list(anchors)
-    anchor_ids = {h["id"] for h in anchors}
-    for c in candidates:
-        if c["id"] in anchor_ids:
-            continue
-        if len(heroes) >= max_count:
-            break
-        too_close = any(
-            _haversine_approx(c["lat"], c["lng"], h["lat"], h["lng"]) < min_distance_deg
-            for h in heroes
-        )
-        if not too_close:
+        if nearest_dist < min_distance_deg and nearest_hero:
+            # Too close to existing hero: attribute as nearby
+            dropped_map.setdefault(nearest_hero["id"], []).append(c)
+        elif len(heroes) >= max_count:
+            # Over limit: attribute to nearest hero ONLY if within max range
+            if nearest_hero and nearest_dist < max_attr_dist:
+                dropped_map.setdefault(nearest_hero["id"], []).append(c)
+            else:
+                orphans.append(c)
+        else:
             heroes.append(c)
+            hero_ids.add(c["id"])
 
-    return heroes
+    # Pass 2: imp>=4 orphans → attribute if close to hero, else promote to hero
+    for o in orphans:
+        if o.get("importance", 0) < 4:
+            continue
+        # Check against all heroes (including newly promoted)
+        nearest = None
+        nearest_dist = float("inf")
+        for h in heroes:
+            d = _haversine_approx(o["lat"], o["lng"], h["lat"], h["lng"])
+            if d < nearest_dist:
+                nearest_dist = d
+                nearest = h
+        if nearest and nearest_dist < min_distance_deg:
+            # Close enough → stack onto nearest hero
+            dropped_map.setdefault(nearest["id"], []).append(o)
+        elif nearest and nearest_dist < max_attr_dist:
+            # Within attribution range → stack (shows in badge)
+            dropped_map.setdefault(nearest["id"], []).append(o)
+        else:
+            # Too far from any hero → promote to independent hero
+            heroes.append(o)
+            hero_ids.add(o["id"])
+
+    return heroes, dropped_map
 
 
 # Zoom-level configuration
+# min_distance calibrated to prevent visual overlap of hero cards:
+#   continental: card ~130px compact, ~23px/° → need ~6° separation, set 10° for margin
+#   regional:    card ~180px full, ~45px/° → need ~4° separation
+#   local:       card ~180px full, ~150px/° → need ~1.2° separation
 ZOOM_CONFIG = {
-    "cosmic":      {"min_importance": 5, "max_heroes": 12, "grid_size": 30, "min_distance": 15},
-    "continental": {"min_importance": 4, "max_heroes": 20, "grid_size": 10, "min_distance": 5},
-    "regional":    {"min_importance": 3, "max_heroes": 25, "grid_size": 3,  "min_distance": 2},
-    "local":       {"min_importance": 2, "max_heroes": 30, "grid_size": 1,  "min_distance": 0.5},
+    "cosmic":      {"min_importance": 4, "max_heroes": 10,  "min_distance": 20},
+    "continental": {"min_importance": 4, "max_heroes": 15,  "min_distance": 8},
+    "regional":    {"min_importance": 3, "max_heroes": 25,  "min_distance": 3},
+    "local":       {"min_importance": 2, "max_heroes": 40,  "min_distance": 1.0},
 }
 
 
@@ -816,18 +869,16 @@ async def get_smart_markers(
     zoom: str = Query("cosmic", description="Zoom level: cosmic/continental/regional/local"),
     bounds: Optional[str] = Query(None, description="lat1,lng1,lat2,lng2 viewport bounds"),
     limit_heroes: int = Query(15, ge=1, le=50),
-    limit_clusters: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
     """
     Smart Markers: zoom-level-aware event display.
 
-    Returns hero cards (important events) and cluster bubbles (grouped minor events).
+    Returns hero cards (important events) with nearby event stacking.
     Hero selection uses importance-based filtering with overlap prevention.
     """
     config = ZOOM_CONFIG.get(zoom, ZOOM_CONFIG["cosmic"])
     min_importance = config["min_importance"]
-    grid_size = config["grid_size"]
     min_distance = config["min_distance"]
     max_heroes = min(config["max_heroes"], limit_heroes)
 
@@ -851,7 +902,7 @@ async def get_smart_markers(
             raise HTTPException(status_code=400, detail="Invalid bounds format")
 
     # Step 1: Get hero candidates (high importance events)
-    candidate_limit = max_heroes * 3  # Fetch extra for overlap filtering
+    candidate_limit = max(max_heroes * 10, 150)  # Fetch enough to never lose imp>=4 events
     params_heroes: dict = {
         "year_start": year_start,
         "year_end": year_end,
@@ -905,11 +956,32 @@ async def get_smart_markers(
         })
 
     # Step 2: Select heroes with overlap prevention
-    selected = _select_heroes(candidates, max_heroes, min_distance, zoom)
+    selected, dropped_map = _select_heroes(candidates, max_heroes, min_distance, zoom)
     hero_ids = [h["id"] for h in selected]
 
-    heroes = [
-        HeroMarker(
+    heroes = []
+    for h in selected:
+        # Build nearby_events from dropped candidates (max 50, importance desc)
+        raw_nearby = dropped_map.get(h["id"], [])
+        raw_nearby.sort(key=lambda x: x.get("importance", 0), reverse=True)
+        nearby_events = [
+            NearbyEvent(
+                id=s["id"],
+                title=s["title"],
+                title_ko=s.get("title_ko"),
+                title_ja=s.get("title_ja"),
+                year=s.get("year"),
+                category=s.get("category"),
+                importance=s.get("importance", 0),
+                location_name=s.get("location_name"),
+                location_name_ko=s.get("location_name_ko"),
+                location_name_ja=s.get("location_name_ja"),
+                lat=s.get("lat"),
+                lng=s.get("lng"),
+            )
+            for s in raw_nearby[:50]
+        ]
+        heroes.append(HeroMarker(
             id=h["id"],
             lat=h["lat"],
             lng=h["lng"],
@@ -926,9 +998,9 @@ async def get_smart_markers(
             location_name_ko=h.get("location_name_ko"),
             location_name_ja=h.get("location_name_ja"),
             location_id=h.get("location_id"),
-        )
-        for h in selected
-    ]
+            nearby_events=nearby_events,
+            nearby_event_count=len(raw_nearby),
+        ))
 
     # Step 3: Get total event count for this time range
     params_total: dict = {"year_start": year_start, "year_end": year_end}
@@ -942,118 +1014,73 @@ async def get_smart_markers(
           {bounds_filter}
     """), params_total).scalar() or 0
 
-    # Step 4: Get cluster bubbles (non-hero events grouped by grid)
-    params_clusters: dict = {
-        "year_start": year_start,
-        "year_end": year_end,
-        "grid_size": float(grid_size),
-        "limit_clusters": limit_clusters,
-    }
-    params_clusters.update(bounds_params)
-
-    # Build hero exclusion clause
-    hero_exclude = ""
-    if hero_ids:
-        # Use ANY array for hero exclusion
-        hero_id_list = ",".join(str(hid) for hid in hero_ids)
-        hero_exclude = f"AND e.id NOT IN ({hero_id_list})"
-
-    cluster_result = db.execute(text(f"""
-        SELECT
-            FLOOR(l.latitude / :grid_size) * :grid_size + :grid_size / 2 as center_lat,
-            FLOOR(l.longitude / :grid_size) * :grid_size + :grid_size / 2 as center_lng,
-            COUNT(*) as count,
-            MIN(e.date_start) as min_year,
-            MAX(e.date_start) as max_year,
-            MAX(e.importance) as top_importance
-        FROM events e
-        JOIN locations l ON e.primary_location_id = l.id
-        WHERE e.date_start >= :year_start AND e.date_start <= :year_end
-          AND l.latitude IS NOT NULL
-          AND l.longitude IS NOT NULL
-          {hero_exclude}
-          {bounds_filter}
-        GROUP BY FLOOR(l.latitude / :grid_size), FLOOR(l.longitude / :grid_size)
-        HAVING COUNT(*) >= 2
-        ORDER BY COUNT(*) DESC
-        LIMIT :limit_clusters
-    """), params_clusters)
-
-    clusters = []
-    cluster_grid_keys = []  # Track grid keys for event matching
-    for row in cluster_result:
-        cluster = ClusterBubble(
-            lat=float(row[0]),
-            lng=float(row[1]),
-            count=row[2],
-            year_range=[row[3], row[4]],
-            top_importance=row[5],
-        )
-        clusters.append(cluster)
-        # Grid key = (floor(lat/grid), floor(lng/grid))
-        grid_lat = int((float(row[0]) - grid_size / 2) / grid_size)
-        grid_lng = int((float(row[1]) - grid_size / 2) / grid_size)
-        cluster_grid_keys.append((grid_lat, grid_lng))
-
-    # Step 5: Fetch top events per cluster grid cell (up to 7 per cell)
-    if clusters:
-        params_events: dict = {
+    # Step 4: Attribute persons to nearest heroes
+    if heroes and zoom != "cosmic":
+        person_min_score = {"continental": 70, "regional": 50, "local": 30}.get(zoom, 70)
+        params_persons: dict = {
             "year_start": year_start,
             "year_end": year_end,
-            "grid_size": float(grid_size),
+            "person_min_score": person_min_score,
+            "person_limit": max_heroes * 5,
         }
-        params_events.update(bounds_params)
+        params_persons.update(bounds_params)
 
-        events_result = db.execute(text(f"""
-            WITH grid_events AS (
-                SELECT e.id, e.title, e.title_ko, e.title_ja,
-                       e.date_start, e.importance,
-                       c.name as category,
-                       FLOOR(l.latitude / :grid_size) as grid_lat,
-                       FLOOR(l.longitude / :grid_size) as grid_lng,
-                       ROW_NUMBER() OVER (
-                           PARTITION BY FLOOR(l.latitude / :grid_size), FLOOR(l.longitude / :grid_size)
-                           ORDER BY e.importance DESC NULLS LAST, e.date_start ASC NULLS LAST
-                       ) as rn
-                FROM events e
-                JOIN locations l ON e.primary_location_id = l.id
-                LEFT JOIN categories c ON e.category_id = c.id
-                WHERE e.date_start >= :year_start AND e.date_start <= :year_end
-                  AND l.latitude IS NOT NULL AND l.longitude IS NOT NULL
-                  {hero_exclude}
-                  {bounds_filter}
-            )
-            SELECT id, title, title_ko, title_ja, date_start, importance, category,
-                   grid_lat, grid_lng
-            FROM grid_events
-            WHERE rn <= 7
-            ORDER BY grid_lat, grid_lng, rn
-        """), params_events)
+        person_bounds = bounds_filter.replace("l.", "bl.") if bounds_filter else ""
 
-        # Build grid_key → events map
-        grid_events_map: dict = {}
-        for row in events_result:
-            key = (int(row[7]), int(row[8]))
-            if key not in grid_events_map:
-                grid_events_map[key] = []
-            grid_events_map[key].append(ClusterEvent(
-                id=row[0],
-                title=row[1] or "Unknown",
-                title_ko=row[2],
-                title_ja=row[3],
-                year=row[4],
-                importance=row[5],
-                category=row[6],
-            ))
+        person_result = db.execute(text(f"""
+            SELECT p.id, p.name, p.name_ko, p.name_ja,
+                   p.birth_year, p.death_year,
+                   bl.latitude, bl.longitude,
+                   COALESCE(p.global_score, 0), p.role
+            FROM persons p
+            JOIN locations bl ON p.birthplace_id = bl.id
+            WHERE bl.latitude IS NOT NULL AND bl.longitude IS NOT NULL
+              AND COALESCE(p.global_score, 0) >= :person_min_score
+              AND p.birth_year <= :year_end
+              AND COALESCE(p.death_year, p.birth_year + 80) >= :year_start
+              {person_bounds}
+            ORDER BY p.global_score DESC NULLS LAST
+            LIMIT :person_limit
+        """), params_persons)
 
-        # Match events to clusters
-        for i, cluster in enumerate(clusters):
-            key = cluster_grid_keys[i]
-            cluster.top_events = grid_events_map.get(key, [])
+        # Build person_map: hero_id -> [NearbyPerson, ...]
+        person_map: dict = {}
+        hero_dicts = [{"id": h.id, "lat": h.lat, "lng": h.lng} for h in heroes]
+        for row in person_result:
+            p_lat, p_lng = float(row[6]), float(row[7])
+            # Find nearest hero
+            nearest_hero = None
+            nearest_dist = float("inf")
+            for hd in hero_dicts:
+                d = _haversine_approx(p_lat, p_lng, hd["lat"], hd["lng"])
+                if d < nearest_dist:
+                    nearest_dist = d
+                    nearest_hero = hd
+            # Only attribute if within reasonable distance (min_distance * 3)
+            if nearest_hero and nearest_dist < min_distance * 3:
+                hid = nearest_hero["id"]
+                if hid not in person_map:
+                    person_map[hid] = []
+                person_map[hid].append(NearbyPerson(
+                    id=row[0],
+                    name=row[1] or "Unknown",
+                    name_ko=row[2],
+                    name_ja=row[3],
+                    birth_year=row[4],
+                    death_year=row[5],
+                    role=row[9],
+                    importance=min(5, max(1, (row[8] or 0) // 20)),
+                ))
+
+        # Attach nearby_persons to heroes (max 5 in list, but track real count)
+        for hero in heroes:
+            persons = person_map.get(hero.id, [])
+            persons.sort(key=lambda p: p.importance, reverse=True)
+            hero.nearby_persons = persons[:5]
+            hero.nearby_person_count = len(persons)
 
     return SmartMarkersResponse(
         heroes=heroes,
-        clusters=clusters,
         zoom=zoom,
         total_events=total_events,
     )

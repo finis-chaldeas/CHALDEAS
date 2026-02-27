@@ -3,7 +3,10 @@ import { useGlobeStore } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
 import { useSettingsStore } from '../../store/settingsStore'
 import type { ShiftPage } from '../../types'
+import WidgetSlot from './widgets/WidgetSlot'
+import './widgets'
 import './ShiftPanel.css'
+import './ShiftWidgets.css'
 
 function formatYear(year: number | undefined | null): string {
   if (year == null) return ''
@@ -54,6 +57,8 @@ export default function ShiftPanel() {
 
   if (!activeShift || !currentPage) return null
 
+  const pageWidgets = currentPage.widgets || []
+
   // Language-aware narrative: prefer _ko fields when language is Korean
   const narrativeText = preferredLanguage === 'ko'
     ? (currentPage.page_narrative_ko || currentPage.narrative_ko || currentPage.page_narrative || currentPage.narrative || '')
@@ -78,7 +83,18 @@ export default function ShiftPanel() {
         <button className="shift-singularity-close" onClick={closeShift}>{'\u2715'}</button>
       </div>
 
+      {/* ── Widget slots ── */}
+      {pageWidgets.length > 0 && <>
+        <WidgetSlot widgets={pageWidgets} position="left" />
+        <WidgetSlot widgets={pageWidgets} position="right" />
+        <WidgetSlot widgets={pageWidgets} position="overlay" />
+      </>}
+
       {/* ── Bottom: text + navigation ── */}
+      {pageWidgets.length > 0 && (
+        <WidgetSlot widgets={pageWidgets} position="bottom" />
+      )}
+
       <div className="shift-bottom">
         <div className="shift-bottom-inner">
           {/* Current page info */}
@@ -87,7 +103,9 @@ export default function ShiftPanel() {
               <span className="shift-page-year">{formatYear(currentPage.year_start)}</span>
             )}
             {currentPage.title && (
-              <h3 className="shift-page-title">{currentPage.title}</h3>
+              <h3 className="shift-page-title">
+                {(preferredLanguage === 'ko' && currentPage.title_ko) ? currentPage.title_ko : currentPage.title}
+              </h3>
             )}
             {narrativeText && (
               <p className="shift-page-text">{narrativeText}</p>
