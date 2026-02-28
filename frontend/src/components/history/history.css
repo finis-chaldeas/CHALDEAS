@@ -547,6 +547,18 @@
   white-space: nowrap;
 }
 
+.autocomplete-meta {
+  font-size: 0.65rem;
+  color: var(--chaldea-text-dim, #888);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* Entity tag colors for shift/item/collection */
+.entity-tag-shift { color: #00d4ff; font-weight: 600; }
+.entity-tag-item { color: #e0c068; }
+.entity-tag-collection { color: #ff6b9d; }
+
 
 /* ========== Navigator History Tab Cards ========== */
 

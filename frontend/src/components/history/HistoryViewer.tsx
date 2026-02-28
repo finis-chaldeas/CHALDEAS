@@ -17,15 +17,19 @@ interface HistoryViewerProps {
   onPersonClick: (personId: number) => void
   onEventClick: (eventId: number) => void
   onLocationClick: (locationId: number) => void
+  onShiftClick?: (shiftId: number) => void
+  onItemClick?: (slug: string) => void
+  onCollectionClick?: (slug: string) => void
   onEdit: (historyId: number) => void
 }
 
+// Matches all 6 entity types: person, event, location, shift, item, collection
 const ENTITY_TAG_RE = /(\[[^\]]+\]\(entity:[^)]+\))/
 
-function parseEntityTag(tag: string): { name: string; type: string; id: number } | null {
-  const match = tag.match(/\[([^\]]+)\]\(entity:(person|event|location):(\d+)\)/)
+function parseEntityTag(tag: string): { name: string; type: string; id: string } | null {
+  const match = tag.match(/\[([^\]]+)\]\(entity:(person|event|location|shift|item|collection):([^)]+)\)/)
   if (!match) return null
-  return { name: match[1], type: match[2], id: parseInt(match[3], 10) }
+  return { name: match[1], type: match[2], id: match[3] }
 }
 
 function formatEra(start?: number, end?: number): string {
@@ -38,7 +42,7 @@ function formatEra(start?: number, end?: number): string {
 
 function RenderBody({ body, onEntityClick }: {
   body: string
-  onEntityClick: (type: string, id: number) => void
+  onEntityClick: (type: string, id: string) => void
 }) {
   const parts = body.split(ENTITY_TAG_RE)
 
@@ -72,6 +76,9 @@ export function HistoryViewer({
   onPersonClick,
   onEventClick,
   onLocationClick,
+  onShiftClick,
+  onItemClick,
+  onCollectionClick,
   onEdit,
 }: HistoryViewerProps) {
   const { preferredLanguage } = useSettingsStore()
@@ -82,10 +89,13 @@ export function HistoryViewer({
     select: (res) => res.data as History,
   })
 
-  const handleEntityClick = (type: string, id: number) => {
-    if (type === 'person') onPersonClick(id)
-    else if (type === 'event') onEventClick(id)
-    else if (type === 'location') onLocationClick(id)
+  const handleEntityClick = (type: string, id: string) => {
+    if (type === 'person') onPersonClick(parseInt(id, 10))
+    else if (type === 'event') onEventClick(parseInt(id, 10))
+    else if (type === 'location') onLocationClick(parseInt(id, 10))
+    else if (type === 'shift') onShiftClick?.(parseInt(id, 10))
+    else if (type === 'item') onItemClick?.(id)
+    else if (type === 'collection') onCollectionClick?.(id)
   }
 
   if (isLoading || !history) {
@@ -149,7 +159,7 @@ export function HistoryViewer({
               <span
                 key={i}
                 className={`entity-chip entity-chip-${e.entity_type}`}
-                onClick={() => handleEntityClick(e.entity_type, e.entity_id)}
+                onClick={() => handleEntityClick(e.entity_type, String(e.entity_id))}
                 role="button"
                 tabIndex={0}
               >

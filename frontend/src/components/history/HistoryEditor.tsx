@@ -7,7 +7,7 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { historiesApi, searchApi } from '../../api/client'
+import { historiesApi, portalApi } from '../../api/client'
 import type { History } from '../../types'
 import './history.css'
 
@@ -24,9 +24,10 @@ interface EntityChip {
 }
 
 interface SearchResult {
-  id: number
-  type: 'person' | 'event' | 'location'
+  id: number | string
+  type: 'person' | 'event' | 'location' | 'shift' | 'item' | 'collection'
   name: string
+  meta?: string
 }
 
 const CATEGORY_OPTIONS = ['essay', 'biography', 'causal_chain', 'era_overview', 'comparison']
@@ -102,7 +103,7 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
     }
   }, [existing])
 
-  // Debounced search for autocomplete
+  // Debounced search for autocomplete via /portal/resolve (6 entity types)
   useEffect(() => {
     if (!autocompleteQuery || autocompleteQuery.length < 2) {
       setAutocompleteResults([])
@@ -110,24 +111,15 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
     }
     const timeout = setTimeout(async () => {
       try {
-        const res = await searchApi.search(autocompleteQuery, { type: 'all', limit: 8 })
-        const results: SearchResult[] = []
-        const data = res.data?.results || res.data
-        if (data?.persons) {
-          for (const p of data.persons.slice(0, 3)) {
-            results.push({ id: p.id, type: 'person', name: p.name })
-          }
-        }
-        if (data?.events) {
-          for (const e of data.events.slice(0, 3)) {
-            results.push({ id: e.id, type: 'event', name: e.title })
-          }
-        }
-        if (data?.locations) {
-          for (const l of data.locations.slice(0, 2)) {
-            results.push({ id: l.id, type: 'location', name: l.name })
-          }
-        }
+        const res = await portalApi.resolve(autocompleteQuery, { limit: 10 })
+        const results: SearchResult[] = (res.data?.results || []).map(
+          (r: { type: string; id: number | string; name: string; meta?: string }) => ({
+            id: r.id,
+            type: r.type as SearchResult['type'],
+            name: r.name,
+            meta: r.meta,
+          })
+        )
         setAutocompleteResults(results)
       } catch {
         setAutocompleteResults([])
@@ -136,7 +128,7 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
     return () => clearTimeout(timeout)
   }, [autocompleteQuery])
 
-  // Debounced search for chip adding
+  // Debounced search for chip adding via /portal/resolve
   useEffect(() => {
     if (!chipSearchQuery || chipSearchQuery.length < 2) {
       setChipSearchResults([])
@@ -144,32 +136,19 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
     }
     const timeout = setTimeout(async () => {
       try {
-        const res = await searchApi.search(chipSearchQuery, { type: 'all', limit: 8 })
-        const results: SearchResult[] = []
-        const data = res.data?.results || res.data
-        if (chipSearchTarget === 'location') {
-          if (data?.locations) {
-            for (const l of data.locations.slice(0, 5)) {
-              results.push({ id: l.id, type: 'location', name: l.name })
-            }
-          }
-        } else {
-          if (data?.persons) {
-            for (const p of data.persons.slice(0, 3)) {
-              results.push({ id: p.id, type: 'person', name: p.name })
-            }
-          }
-          if (data?.events) {
-            for (const e of data.events.slice(0, 3)) {
-              results.push({ id: e.id, type: 'event', name: e.title })
-            }
-          }
-          if (data?.locations) {
-            for (const l of data.locations.slice(0, 2)) {
-              results.push({ id: l.id, type: 'location', name: l.name })
-            }
-          }
-        }
+        const typeFilter = chipSearchTarget === 'location' ? 'location' : undefined
+        const res = await portalApi.resolve(chipSearchQuery, {
+          type_filter: typeFilter,
+          limit: chipSearchTarget === 'location' ? 5 : 8,
+        })
+        const results: SearchResult[] = (res.data?.results || []).map(
+          (r: { type: string; id: number | string; name: string; meta?: string }) => ({
+            id: r.id,
+            type: r.type as SearchResult['type'],
+            name: r.name,
+            meta: r.meta,
+          })
+        )
         setChipSearchResults(results)
       } catch {
         setChipSearchResults([])
@@ -239,11 +218,11 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
     }
   }
 
-  // Add chip entity
+  // Add chip entity (chips only support numeric IDs: person/event/location)
   const handleAddChip = (result: SearchResult) => {
     const chip: EntityChip = {
       entity_type: result.type,
-      entity_id: result.id,
+      entity_id: typeof result.id === 'number' ? result.id : parseInt(String(result.id), 10),
       entity_name: result.name,
     }
 
@@ -458,7 +437,14 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
                 <div className="history-editor-chip-results">
                   {chipSearchResults.map(r => (
                     <button key={`${r.type}-${r.id}`} onClick={() => handleAddChip(r)}>
-                      <span className="chip-result-type">{r.type === 'person' ? '\u263E' : r.type === 'event' ? '\u25CE' : '\uD83D\uDCCD'}</span>
+                      <span className="chip-result-type">
+                        {r.type === 'person' ? '\u263E'
+                          : r.type === 'event' ? '\u25CE'
+                          : r.type === 'location' ? '\uD83D\uDCCD'
+                          : r.type === 'shift' ? '\u25B6'
+                          : r.type === 'item' ? '\uD83D\uDCD6'
+                          : '\uD83C\uDFDB'}
+                      </span>
                       {r.name}
                     </button>
                   ))}
@@ -496,9 +482,15 @@ export function HistoryEditor({ historyId, onClose, onSaved }: HistoryEditorProp
                       }}
                     >
                       <span className="autocomplete-type">
-                        {r.type === 'person' ? '\u263E' : r.type === 'event' ? '\u25CE' : '\uD83D\uDCCD'}
+                        {r.type === 'person' ? '\u263E'
+                          : r.type === 'event' ? '\u25CE'
+                          : r.type === 'location' ? '\uD83D\uDCCD'
+                          : r.type === 'shift' ? '\u25B6'
+                          : r.type === 'item' ? '\uD83D\uDCD6'
+                          : '\uD83C\uDFDB'}
                       </span>
                       <span className="autocomplete-name">{r.name}</span>
+                      {r.meta && <span className="autocomplete-meta">{r.meta}</span>}
                     </button>
                   ))}
                 </div>

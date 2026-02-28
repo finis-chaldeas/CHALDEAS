@@ -54,7 +54,7 @@ class HistoryEntity(Base):
     history_id = Column(Integer, ForeignKey("histories.id", ondelete="CASCADE"), nullable=False)
 
     # Linked entity
-    entity_type = Column(String(10), nullable=False)  # person, event, location
+    entity_type = Column(String(20), nullable=False)  # person, event, location, shift
     entity_id = Column(Integer, nullable=False)
     entity_name = Column(String(255))  # Display name snapshot
 

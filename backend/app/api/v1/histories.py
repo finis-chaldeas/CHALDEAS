@@ -20,21 +20,36 @@ from app.schemas.history import (
 router = APIRouter()
 
 # Pattern to extract [name](entity:type:id) tags from body text
-ENTITY_TAG_PATTERN = re.compile(r'\[([^\]]+)\]\(entity:(person|event|location):(\d+)\)')
+# Supports 6 entity types: person, event, location, shift, item, collection
+# ID can be numeric (person/event/location/shift) or slug string (item/collection)
+ENTITY_TAG_PATTERN = re.compile(
+    r'\[([^\]]+)\]\(entity:(person|event|location|shift|item|collection):([^)]+)\)'
+)
 
 
 def extract_mentioned_entities(body: str) -> list[dict]:
-    """Extract [name](entity:type:id) patterns from body text."""
+    """Extract [name](entity:type:id) patterns from body text.
+
+    Only person/event/location/shift are synced to history_entities
+    (numeric IDs). item/collection use slug strings and are rendered
+    inline but not tracked in the junction table.
+    """
     mentions = []
     seen = set()
     for match in ENTITY_TAG_PATTERN.finditer(body):
-        key = (match.group(2), int(match.group(3)))
+        entity_type = match.group(2)
+        raw_id = match.group(3)
+        # Skip item/collection — slug IDs don't fit integer entity_id column
+        if entity_type in ("item", "collection"):
+            continue
+        entity_id = int(raw_id)
+        key = (entity_type, entity_id)
         if key not in seen:
             seen.add(key)
             mentions.append({
                 "entity_name": match.group(1),
-                "entity_type": match.group(2),
-                "entity_id": int(match.group(3)),
+                "entity_type": entity_type,
+                "entity_id": entity_id,
                 "role": "mentioned",
             })
     return mentions
