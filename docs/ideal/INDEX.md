@@ -23,6 +23,17 @@
 | [**HISTORY_SHIFT.md**](./HISTORY_SHIFT.md) | **히스토리 시프트: 시나리오 탐색의 통합 시스템** |
 | [DATA_FILLING_PLAN.md](./DATA_FILLING_PLAN.md) | 핵심 데이터 채우기 기획서: 4개 갭, 실행 방법, 비용 |
 
+### TRISMEGISTOS 포털 — 정보 종합 포털 기획
+
+| 문서 | 내용 |
+|------|------|
+| [TRISMEGISTOS.md](./TRISMEGISTOS.md) | 컨셉: 2-Layer 포털 (매거진 홈 + 컬렉션) |
+| [TRISMEGISTOS_FRONTEND.md](./TRISMEGISTOS_FRONTEND.md) | 통합 프론트엔드 기획서 (구, 아래 4문서로 분할) |
+| [**PORTAL_01_ARCHITECTURE.md**](./PORTAL_01_ARCHITECTURE.md) | **아키텍처: 중첩 모달 스택, portalStore, z-index, 키보드, 글로브 연결** |
+| [**PORTAL_02_MAGAZINE_HOME.md**](./PORTAL_02_MAGAZINE_HOME.md) | **매거진 홈: TodayHero, RecommendationRow, FgoSection, ReadingSection, CollectionGrid** |
+| [**PORTAL_03_COLLECTIONS.md**](./PORTAL_03_COLLECTIONS.md) | **컬렉션 페이지 + 아이템 상세: 중첩 모달 Layer 2~3, FGO 특수 레이아웃** |
+| [**PORTAL_04_RECOMMENDATIONS.md**](./PORTAL_04_RECOMMENDATIONS.md) | **추천 엔진: 오늘의 역사, 이번 주 추천, "이런 것도 좋아하실 걸요", 맞춤 추천** |
+
 ### frontend/ — 프론트엔드 구현을 위한 백엔드 이해 문서
 
 | 문서 | 내용 |
