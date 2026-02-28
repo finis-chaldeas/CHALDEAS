@@ -24,15 +24,16 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
 
     # CORS - CHALDEAS fixed ports
+    # NOTE: "*" + allow_credentials=True is rejected by browsers. List explicit origins only.
     backend_cors_origins: list[str] = [
-        "*",  # Allow all in dev
         "http://localhost:5200",  # Chaldeas frontend (fixed)
         "http://localhost:5173",
         "http://localhost:3000",
         "https://chaldeas.site",  # Production domain
         "https://www.chaldeas.site",
-        "https://chaldeas-frontend-951004107180.asia-northeast3.run.app",  # Cloud Run
-        "https://*.run.app",  # All Cloud Run domains
+        "https://chaldeas-frontend-951004107180.asia-northeast3.run.app",  # Cloud Run asia
+        "https://chaldeas-frontend-951004107180.us-central1.run.app",  # Cloud Run us
+        "https://chaldeas-backend-uh6woizycq-du.a.run.app",  # Backend self
     ]
 
     class Config:

@@ -87,8 +87,9 @@ export function getEffectiveLanguage(preferredLanguage: PreferredLanguage): 'ko'
  * Get localized text from an entity with multilingual fields.
  * Falls back to English if preferred language is not available.
  */
-export function getLocalizedText<T extends Record<string, unknown>>(
-  entity: T,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getLocalizedText(
+  entity: any,
   fieldPrefix: string,
   preferredLanguage: PreferredLanguage
 ): string {

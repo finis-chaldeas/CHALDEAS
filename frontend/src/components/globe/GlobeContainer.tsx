@@ -2,7 +2,7 @@ import { useRef, useMemo, useEffect, useState, useCallback } from 'react'
 import Globe, { GlobeMethods } from 'react-globe.gl'
 import { useGlobeStore, getZoomLevel } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
-import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { useSettingsStore, getLocalizedText, getEffectiveLanguage } from '../../store/settingsStore'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFlyMode } from '../../hooks/useFlyMode'
 import { useGlobeTiles, type TileData } from '../../hooks/useGlobeTiles'
@@ -843,7 +843,7 @@ export function GlobeContainer({
       }
       const yearStr = formatYear(sp.year_start)
       // Use localized title based on preferred language
-      const lang = useSettingsStore.getState().preferredLanguage
+      const lang = getEffectiveLanguage(useSettingsStore.getState().preferredLanguage)
       const rawTitle = (lang === 'ko' && sp.title_ko) ? sp.title_ko : (sp.title || '')
       const safeTitle = rawTitle.replace(/</g, '&lt;').replace(/>/g, '&gt;')
       const truncTitle = safeTitle.length > 28 ? safeTitle.slice(0, 26) + '…' : safeTitle
@@ -904,7 +904,7 @@ export function GlobeContainer({
       ).join('')
 
       // Localize location name
-      const lang = preferredLanguageRef.current
+      const lang = getEffectiveLanguage(preferredLanguageRef.current)
       const locName = (lang === 'ko' && heroItem.location_name_ko) ? heroItem.location_name_ko
         : (lang === 'ja' && heroItem.location_name_ja) ? heroItem.location_name_ja
         : heroItem.location_name
@@ -1192,7 +1192,7 @@ export function GlobeContainer({
         if (y === undefined || y === null) return ''
         return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`
       }
-      const lang = preferredLanguageRef.current
+      const lang = getEffectiveLanguage(preferredLanguageRef.current)
       const heroLocName = panelItem.locationName || ''
 
       // Helper: localized location name for an event
