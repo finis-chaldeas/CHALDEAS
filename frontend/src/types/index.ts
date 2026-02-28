@@ -703,6 +703,139 @@ export interface SourcePerson {
   mention_count: number
 }
 
+// === Trismegistus Portal Types ===
+
+export interface PortalLayer {
+  type: 'home' | 'collection' | 'detail'
+  slug?: string
+  scrollY?: number
+}
+
+export interface PortalItemSummary {
+  id: number
+  slug: string
+  item_type: string
+  title: string
+  title_ko?: string
+  title_ja?: string
+  subtitle?: string
+  subtitle_ko?: string
+  subtitle_ja?: string
+  chapter?: string
+  era?: string
+  year?: number
+  location?: string
+  is_featured: boolean
+  thumbnail_url?: string
+  sort_order: number
+}
+
+export interface PortalItemDetail extends PortalItemSummary {
+  description: string
+  description_ko?: string
+  description_ja?: string
+  historical_basis?: string
+  historical_basis_ko?: string
+  historical_basis_ja?: string
+  sections: Array<{
+    title: string
+    title_ko?: string
+    title_ja?: string
+    content: string
+    content_ko?: string
+    content_ja?: string
+  }>
+  related_servants: Array<{ name: string; class?: string; rarity?: number }>
+  related_event_ids: number[]
+  sources: string[]
+}
+
+export interface CollectionSummary {
+  id: number
+  slug: string
+  collection_type: string
+  title: string
+  title_ko?: string
+  title_ja?: string
+  description?: string
+  description_ko?: string
+  description_ja?: string
+  icon?: string
+  cover_image_url?: string
+  sort_order: number
+  is_featured: boolean
+  tags: string[]
+  year_start?: number
+  year_end?: number
+  region?: string
+  entry_count: number
+}
+
+export interface CollectionDetail extends CollectionSummary {
+  entries: CollectionEntrySummary[]
+}
+
+export interface CollectionEntrySummary {
+  id: number
+  entry_type: string
+  sort_order: number
+  is_highlighted: boolean
+  note?: string
+  note_ko?: string
+  portal_item?: PortalItemSummary
+  shift_summary?: PortalShiftSummary
+  person_summary?: PortalPersonSummary
+  event_summary?: PortalEventSummary
+  shift_id?: number
+  person_id?: number
+  event_id?: number
+  period_id?: number
+}
+
+export interface PortalShiftSummary {
+  id: number
+  title: string
+  title_ko?: string
+  chain_type?: string
+  year_start?: number
+  year_end?: number
+  segment_count?: number
+}
+
+export interface PortalPersonSummary {
+  id: number
+  name: string
+  name_ko?: string
+  birth_year?: number
+  death_year?: number
+}
+
+export interface PortalEventSummary {
+  id: number
+  title: string
+  title_ko?: string
+  date_start?: number
+}
+
+export interface RecommendationItem {
+  type: 'shift' | 'portal_item' | 'collection'
+  id?: number
+  slug?: string
+  title: string
+  title_ko?: string
+  subtitle?: string
+  item_type?: string
+  chain_type?: string
+  icon?: string
+  segment_count?: number
+}
+
+export interface PortalFeaturedResponse {
+  items: PortalItemSummary[]
+  collections: CollectionSummary[]
+  recommendations: RecommendationItem[]
+}
+
 // Timeline / Period Types
 export interface PeriodSummary {
   period_start: number

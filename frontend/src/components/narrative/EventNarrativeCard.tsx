@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { eventsApi } from '../../api/client'
-import type { Event, EventRelationship, EventHierarchyNode } from '../../types'
-import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { eventsApi, portalApi } from '../../api/client'
+import type { Event, EventRelationship, EventHierarchyNode, PortalItemSummary } from '../../types'
+import { useSettingsStore, getLocalizedText, getEffectiveLanguage } from '../../store/settingsStore'
+import { usePortalStore } from '../../store/portalStore'
+import { useGlobeStore } from '../../store/globeStore'
+import { useTimelineStore } from '../../store/timelineStore'
 import { ReportButton } from './ReportButton'
 
 function formatYear(year: number | undefined): string {
@@ -109,6 +112,23 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLoc
     retry: false,
   })
 
+  const { data: portalItems } = useQuery<PortalItemSummary[]>({
+    queryKey: ['portal-items-by-event', eventId],
+    queryFn: async () => {
+      const res = await portalApi.getItemsByEvent(eventId)
+      return res.data
+    },
+    retry: false,
+  })
+
+  const handleOpenPortalItem = (slug: string) => {
+    const { lat, lng } = useGlobeStore.getState().cameraPosition
+    const year = useTimelineStore.getState().currentYear
+    const store = usePortalStore.getState()
+    store.open({ lat, lng, year })
+    store.pushDetail(slug)
+  }
+
   if (isLoading) {
     return (
       <div className="nc-loading">
@@ -129,8 +149,9 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLoc
     consequences?: string | string[]; consequences_ko?: string | string[]; consequences_ja?: string | string[]
     details?: { description_ko?: string; description_ja?: string; description?: string }
   }
+  const lang = getEffectiveLanguage(preferredLanguage)
   const pick = <T,>(en: T | undefined, ko: T | undefined, ja: T | undefined): T | undefined =>
-    preferredLanguage === 'ko' ? (ko || en) : preferredLanguage === 'ja' ? (ja || en) : en
+    lang === 'ko' ? (ko || en) : lang === 'ja' ? (ja || en) : en
 
   const narrative = pick(eventAny.narrative, eventAny.narrative_ko, eventAny.narrative_ja)
     || pick(eventAny.details?.description, eventAny.details?.description_ko, eventAny.details?.description_ja)
@@ -265,6 +286,24 @@ export function EventNarrativeCard({ eventId, onEventClick, onPersonClick, onLoc
                 </button>
               )
             })}
+          </div>
+        </div>
+      )}
+
+      {/* Related Portal Articles */}
+      {portalItems && portalItems.length > 0 && (
+        <div className="nc-section">
+          <div className="nc-section-header">{'\u2726'} Trismegistus</div>
+          <div className="nc-link-list">
+            {portalItems.map((item) => (
+              <button key={item.slug} onClick={() => handleOpenPortalItem(item.slug)} className="nc-link-item">
+                <span className="nc-link-arrow">{'\u2726'}</span>
+                <span className="nc-link-title">
+                  {getLocalizedText(item as unknown as Record<string, unknown>, 'title', preferredLanguage) || item.title}
+                </span>
+                <span className="nc-link-year">{item.item_type.replace('_', ' ')}</span>
+              </button>
+            ))}
           </div>
         </div>
       )}

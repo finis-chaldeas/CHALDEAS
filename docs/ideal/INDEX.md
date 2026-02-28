@@ -33,6 +33,8 @@
 | [**PORTAL_02_MAGAZINE_HOME.md**](./PORTAL_02_MAGAZINE_HOME.md) | **매거진 홈: TodayHero, RecommendationRow, FgoSection, ReadingSection, CollectionGrid** |
 | [**PORTAL_03_COLLECTIONS.md**](./PORTAL_03_COLLECTIONS.md) | **컬렉션 페이지 + 아이템 상세: 중첩 모달 Layer 2~3, FGO 특수 레이아웃** |
 | [**PORTAL_04_RECOMMENDATIONS.md**](./PORTAL_04_RECOMMENDATIONS.md) | **추천 엔진: 오늘의 역사, 이번 주 추천, "이런 것도 좋아하실 걸요", 맞춤 추천** |
+| [**PORTAL_05_ARTICLES.md**](./PORTAL_05_ARTICLES.md) | **아티클 엔티티 링크: 6종 `[Name](entity:type:id)`, /resolve, /suggest-links API** |
+| [**PORTAL_06_BIDIRECTIONAL.md**](./PORTAL_06_BIDIRECTIONAL.md) | **SHEBA ↔ Trismegistus 양방향 모드 전환: suspend/resume, 컨텍스트 전달, 상단 모드 바** |
 
 ### frontend/ — 프론트엔드 구현을 위한 백엔드 이해 문서
 

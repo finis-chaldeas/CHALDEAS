@@ -1,0 +1,1037 @@
+/* === Trismegistus Portal — Layered Modal System === */
+
+/* Backdrop — fullscreen takeover */
+.portal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: var(--chaldea-bg);
+}
+
+/* Layer container */
+.portal-layer-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.portal-layer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.portal-layer--dimmed {
+  opacity: 0.3;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.portal-layer--top {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+
+/* Modal frame — fullscreen */
+.portal-modal {
+  width: 100%;
+  height: 100%;
+  background: var(--chaldea-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  animation: portalFadeIn 0.25s ease-out;
+}
+
+.portal-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 255, 0.012) 2px,
+    rgba(0, 212, 255, 0.012) 4px
+  );
+}
+
+@keyframes portalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Header */
+.portal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--chaldea-border);
+  flex-shrink: 0;
+  max-width: calc(960px + 48px);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.portal-header__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portal-header__back {
+  background: none;
+  border: 1px solid var(--chaldea-border);
+  color: var(--chaldea-text);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.portal-header__back:hover {
+  border-color: var(--chaldea-cyan);
+  color: var(--chaldea-cyan);
+}
+
+.portal-header__title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--chaldea-cyan);
+}
+
+.portal-header__close {
+  background: none;
+  border: none;
+  color: var(--chaldea-text);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.portal-header__close:hover {
+  color: var(--chaldea-text-bright);
+}
+
+/* Scrollable body */
+.portal-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+}
+
+/* Magazine wrapper */
+.portal-magazine {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* === Newspaper Page Tabs === */
+.portal-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 24px;
+  max-width: calc(960px + 48px);
+  margin: 0 auto;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.portal-tabs::-webkit-scrollbar {
+  height: 0;
+}
+
+.portal-tab {
+  position: relative;
+  padding: 10px 20px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--chaldea-text);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
+.portal-tab:hover {
+  opacity: 0.9;
+  color: var(--chaldea-text-bright);
+}
+
+.portal-tab--active {
+  opacity: 1;
+  color: var(--chaldea-cyan);
+  border-bottom-color: var(--chaldea-cyan);
+}
+
+/* Thin separator line between tabs and content */
+.portal-tabs-border {
+  border-bottom: 1px solid var(--chaldea-border);
+}
+
+.portal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.portal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.portal-scroll::-webkit-scrollbar-thumb {
+  background: var(--chaldea-border);
+  border-radius: 3px;
+}
+
+/* Section headers */
+.portal-section {
+  margin-bottom: 28px;
+}
+
+.portal-section__title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--chaldea-text);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(26, 58, 74, 0.5);
+}
+
+/* === Globe Context Banner === */
+.portal-context-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 8px;
+}
+
+.portal-context-banner__text {
+  font-size: 12px;
+  color: var(--chaldea-cyan);
+  letter-spacing: 0.5px;
+}
+
+.portal-context-banner__return {
+  background: none;
+  border: none;
+  color: var(--chaldea-text);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 8px;
+  transition: color 0.2s;
+}
+
+.portal-context-banner__return:hover {
+  color: var(--chaldea-cyan);
+}
+
+/* === Hero Card === */
+.portal-hero-card {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(255, 51, 102, 0.04) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+
+.portal-hero-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.portal-hero-badge--singularity { background: rgba(255, 149, 0, 0.15); color: var(--chaldea-orange); }
+.portal-hero-badge--lostbelt { background: rgba(255, 51, 102, 0.15); color: var(--chaldea-magenta); }
+.portal-hero-badge--servant_column { background: rgba(255, 215, 0, 0.15); color: var(--chaldea-gold); }
+.portal-hero-badge--history { background: rgba(0, 212, 255, 0.15); color: var(--chaldea-cyan); }
+.portal-hero-badge--literature { background: rgba(0, 255, 136, 0.12); color: var(--chaldea-green); }
+.portal-hero-badge--music { background: rgba(180, 130, 255, 0.15); color: #b482ff; }
+.portal-hero-badge--essay { background: rgba(200, 200, 200, 0.1); color: var(--chaldea-text); }
+
+.portal-hero-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.portal-hero-meta {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.portal-hero-excerpt {
+  font-size: 14px;
+  color: var(--chaldea-text);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.portal-hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.portal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+
+.portal-btn--primary {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--chaldea-cyan);
+  color: var(--chaldea-cyan);
+}
+
+.portal-btn--primary:hover {
+  background: rgba(0, 212, 255, 0.2);
+}
+
+.portal-btn--secondary {
+  background: transparent;
+  border-color: var(--chaldea-border);
+  color: var(--chaldea-text);
+}
+
+.portal-btn--secondary:hover {
+  border-color: var(--chaldea-text);
+  color: var(--chaldea-text-bright);
+}
+
+/* === Recommendation Row === */
+.portal-rec-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+  margin: 0 -4px;
+}
+
+.portal-rec-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.portal-rec-row::-webkit-scrollbar-thumb {
+  background: var(--chaldea-border);
+  border-radius: 2px;
+}
+
+.portal-rec-card {
+  flex: 0 0 200px;
+  scroll-snap-align: start;
+  background: rgba(10, 16, 24, 0.8);
+  border: 1px solid var(--chaldea-border);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.portal-rec-card:hover {
+  border-color: var(--chaldea-cyan);
+  transform: translateY(-2px);
+}
+
+.portal-rec-card__type {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--chaldea-cyan);
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.portal-rec-card__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.portal-rec-card__subtitle {
+  font-size: 11px;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+}
+
+/* === FGO Section === */
+.portal-fgo-subsection {
+  margin-bottom: 18px;
+}
+
+.portal-fgo-subsection__title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.portal-fgo-subsection__title--singularity { color: var(--chaldea-orange); }
+.portal-fgo-subsection__title--lostbelt { color: var(--chaldea-magenta); }
+.portal-fgo-subsection__title--servant_column { color: var(--chaldea-gold); }
+
+.portal-fgo-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+}
+
+.portal-fgo-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.portal-fgo-scroll::-webkit-scrollbar-thumb {
+  background: var(--chaldea-border);
+  border-radius: 2px;
+}
+
+.portal-fgo-card {
+  flex: 0 0 160px;
+  scroll-snap-align: start;
+  background: rgba(10, 16, 24, 0.7);
+  border: 1px solid var(--chaldea-border);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.portal-fgo-card:hover {
+  border-color: var(--chaldea-cyan);
+}
+
+.portal-fgo-card__chapter {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.portal-fgo-card__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.portal-fgo-card__meta {
+  font-size: 10px;
+  color: var(--chaldea-text);
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+.portal-fgo-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--chaldea-cyan);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.portal-fgo-link:hover {
+  opacity: 1;
+}
+
+/* === Reading Section === */
+.portal-filter-chips {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.portal-chip {
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--chaldea-border);
+  background: transparent;
+  color: var(--chaldea-text);
+  transition: all 0.2s;
+}
+
+.portal-chip--active {
+  border-color: var(--chaldea-cyan);
+  color: var(--chaldea-cyan);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.portal-reading-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.portal-reading-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(10, 16, 24, 0.6);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.portal-reading-item:hover {
+  border-color: var(--chaldea-border);
+  background: rgba(10, 16, 24, 0.9);
+}
+
+.portal-reading-item__badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.portal-reading-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.portal-reading-item__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--chaldea-text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.portal-reading-item__meta {
+  font-size: 11px;
+  color: var(--chaldea-text);
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.portal-show-more {
+  background: none;
+  border: none;
+  color: var(--chaldea-cyan);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 0;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.portal-show-more:hover {
+  opacity: 1;
+}
+
+/* === Collection Grid === */
+.portal-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.portal-collection-card {
+  background: rgba(10, 16, 24, 0.7);
+  border: 1px solid var(--chaldea-border);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  text-align: center;
+}
+
+.portal-collection-card:hover {
+  border-color: var(--chaldea-cyan);
+  transform: translateY(-2px);
+}
+
+.portal-collection-card__icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.portal-collection-card__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.portal-collection-card__count {
+  font-size: 11px;
+  color: var(--chaldea-text);
+  opacity: 0.6;
+}
+
+/* === Collection Page (Layer 2) === */
+.portal-collection-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.portal-entry-group__title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--chaldea-text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.portal-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.portal-entry-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(10, 16, 24, 0.6);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.portal-entry-item:hover {
+  border-color: var(--chaldea-border);
+  background: rgba(10, 16, 24, 0.9);
+}
+
+.portal-entry-item--highlighted {
+  border-color: rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.04);
+}
+
+.portal-entry-item__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.portal-entry-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.portal-entry-item__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--chaldea-text-bright);
+}
+
+.portal-entry-item__meta {
+  font-size: 11px;
+  color: var(--chaldea-text);
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.portal-entry-item__note {
+  font-size: 11px;
+  color: var(--chaldea-cyan);
+  opacity: 0.7;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* === Item Detail (Layer 3) === */
+.portal-detail {
+  padding-bottom: 40px;
+}
+
+.portal-detail__badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.portal-detail__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.portal-detail__subtitle {
+  font-size: 14px;
+  color: var(--chaldea-text);
+  margin-bottom: 8px;
+}
+
+.portal-detail__meta {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.portal-detail__description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--chaldea-text);
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+.portal-detail__historical {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--chaldea-text);
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(0, 212, 255, 0.03);
+  border-left: 3px solid rgba(0, 212, 255, 0.2);
+  border-radius: 0 6px 6px 0;
+  white-space: pre-line;
+}
+
+/* Sections accordion */
+.portal-section-item {
+  border: 1px solid var(--chaldea-border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.portal-section-item__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: rgba(10, 16, 24, 0.5);
+  transition: background 0.2s;
+}
+
+.portal-section-item__header:hover {
+  background: rgba(10, 16, 24, 0.8);
+}
+
+.portal-section-item__header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+}
+
+.portal-section-item__toggle {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  transition: transform 0.2s;
+}
+
+.portal-section-item__toggle--open {
+  transform: rotate(180deg);
+}
+
+.portal-section-item__content {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--chaldea-text);
+  border-top: 1px solid var(--chaldea-border);
+  white-space: pre-line;
+}
+
+/* Related servants */
+.portal-servants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.portal-servant-card {
+  background: rgba(10, 16, 24, 0.6);
+  border: 1px solid var(--chaldea-border);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+}
+
+.portal-servant-card__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 2px;
+}
+
+.portal-servant-card__class {
+  font-size: 10px;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+}
+
+/* Sources */
+.portal-sources-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.portal-sources-list li {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  padding: 4px 0;
+  opacity: 0.7;
+}
+
+.portal-sources-list li::before {
+  content: '\2022';
+  margin-right: 8px;
+  color: var(--chaldea-cyan);
+}
+
+/* === Preview Panel (right slide-in) === */
+.portal-preview {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 320px;
+  z-index: 9100;
+  background: var(--chaldea-bg);
+  border-left: 1px solid var(--chaldea-border);
+  animation: portalSlideInRight 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes portalSlideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.portal-preview__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--chaldea-border);
+  flex-shrink: 0;
+}
+
+.portal-preview__badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.portal-preview__close {
+  background: none;
+  border: none;
+  color: var(--chaldea-text);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: color 0.2s;
+}
+
+.portal-preview__close:hover {
+  color: var(--chaldea-text-bright);
+}
+
+.portal-preview__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.portal-preview__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--chaldea-text-bright);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.portal-preview__subtitle {
+  font-size: 13px;
+  color: var(--chaldea-text);
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.portal-preview__meta {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.portal-preview__location {
+  font-size: 12px;
+  color: var(--chaldea-text);
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.portal-preview__excerpt {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--chaldea-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.portal-preview__actions {
+  padding: 16px;
+  border-top: 1px solid var(--chaldea-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.portal-preview__actions .portal-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* === Skeleton loading === */
+.portal-skeleton {
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(26, 58, 74, 0.2) 25%,
+    rgba(26, 58, 74, 0.4) 50%,
+    rgba(26, 58, 74, 0.2) 75%
+  );
+  background-size: 200% 100%;
+  animation: portalShimmer 1.5s infinite;
+}
+
+@keyframes portalShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .portal-preview {
+    width: 280px;
+  }
+
+  .portal-tab {
+    padding: 8px 14px 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 640px) {
+  .portal-hero-title {
+    font-size: 18px;
+  }
+
+  .portal-rec-card {
+    flex: 0 0 170px;
+  }
+
+  .portal-fgo-card {
+    flex: 0 0 140px;
+  }
+
+  .portal-collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .portal-magazine {
+    max-width: 100%;
+  }
+
+  .portal-preview {
+    width: 100%;
+  }
+}

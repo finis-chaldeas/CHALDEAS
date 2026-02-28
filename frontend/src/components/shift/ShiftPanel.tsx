@@ -1,8 +1,11 @@
 import { useEffect, useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useGlobeStore } from '../../store/globeStore'
 import { useTimelineStore } from '../../store/timelineStore'
-import { useSettingsStore } from '../../store/settingsStore'
-import type { ShiftPage } from '../../types'
+import { useSettingsStore, getEffectiveLanguage } from '../../store/settingsStore'
+import { usePortalStore } from '../../store/portalStore'
+import { portalApi } from '../../api/client'
+import type { ShiftPage, PortalItemSummary } from '../../types'
 import WidgetSlot from './widgets/WidgetSlot'
 import './widgets'
 import './ShiftPanel.css'
@@ -33,9 +36,33 @@ export default function ShiftPanel() {
   const prevPage = useGlobeStore((s) => s.prevPage)
   const setCurrentYear = useTimelineStore((s) => s.setCurrentYear)
   const { preferredLanguage } = useSettingsStore()
+  const lang = getEffectiveLanguage(preferredLanguage)
 
   const pages = activeShift?.pages || []
   const currentPage: ShiftPage | undefined = pages[activePageIndex]
+
+  // Check if this shift has related portal articles
+  const { data: portalItems } = useQuery<PortalItemSummary[]>({
+    queryKey: ['portal-items-by-shift', activeShift?.id],
+    queryFn: async () => {
+      const res = await portalApi.getItemsByShift(activeShift!.id)
+      return res.data
+    },
+    enabled: !!activeShift?.id,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+
+  const handleOpenInPortal = () => {
+    if (!portalItems || portalItems.length === 0) return
+    const slug = portalItems[0].slug
+    const { lat, lng } = useGlobeStore.getState().cameraPosition
+    const year = useTimelineStore.getState().currentYear
+    const store = usePortalStore.getState()
+    closeShift()
+    store.open({ lat, lng, year })
+    store.pushDetail(slug)
+  }
 
   useEffect(() => {
     if (currentPage?.year_start != null) {
@@ -60,10 +87,10 @@ export default function ShiftPanel() {
   const pageWidgets = currentPage.widgets || []
 
   // Language-aware narrative: prefer _ko fields when language is Korean
-  const narrativeText = preferredLanguage === 'ko'
+  const narrativeText = lang === 'ko'
     ? (currentPage.page_narrative_ko || currentPage.narrative_ko || currentPage.page_narrative || currentPage.narrative || '')
     : (currentPage.page_narrative || currentPage.narrative || '')
-  const shiftTitle = (preferredLanguage === 'ko' && activeShift.title_ko)
+  const shiftTitle = (lang === 'ko' && activeShift.title_ko)
     ? activeShift.title_ko : activeShift.title
   const showDots = pages.length <= 25
   const era = getEraName(activeShift.year_start)
@@ -80,7 +107,14 @@ export default function ShiftPanel() {
           <div className="shift-singularity-title">{shiftTitle}</div>
           <div className="shift-singularity-year">{yearRange}</div>
         </div>
-        <button className="shift-singularity-close" onClick={closeShift}>{'\u2715'}</button>
+        <div className="shift-singularity-actions">
+          {portalItems && portalItems.length > 0 && (
+            <button className="shift-portal-link" onClick={handleOpenInPortal}>
+              {'\u2726'} Portal
+            </button>
+          )}
+          <button className="shift-singularity-close" onClick={closeShift}>{'\u2715'}</button>
+        </div>
       </div>
 
       {/* ── Widget slots ── */}
@@ -104,7 +138,7 @@ export default function ShiftPanel() {
             )}
             {currentPage.title && (
               <h3 className="shift-page-title">
-                {(preferredLanguage === 'ko' && currentPage.title_ko) ? currentPage.title_ko : currentPage.title}
+                {(lang === 'ko' && currentPage.title_ko) ? currentPage.title_ko : currentPage.title}
               </h3>
             )}
             {narrativeText && (

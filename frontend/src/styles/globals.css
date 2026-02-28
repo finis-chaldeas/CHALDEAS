@@ -4108,6 +4108,24 @@ textarea:focus-visible {
   animation: glowPulse 2s infinite;
 }
 
+.floating-btn--suspended {
+  position: relative;
+  border-color: rgba(0, 212, 255, 0.4);
+  color: var(--chaldea-cyan);
+}
+
+.floating-btn--suspended::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--chaldea-cyan);
+  box-shadow: 0 0 4px var(--chaldea-cyan);
+}
+
 .floating-btn-label {
   background: var(--overlay-bg);
   backdrop-filter: blur(var(--overlay-blur));
@@ -6299,4 +6317,90 @@ textarea:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ═══ Mobile Responsive (≤767px) ═══ */
+@media (max-width: 767px) {
+
+  /* FloatingButtons → 하단 수평 바 */
+  .floating-buttons {
+    flex-direction: row;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-around;
+    padding: 6px 0;
+    background: rgba(5, 8, 16, 0.95);
+    border-top: 1px solid rgba(0, 212, 255, 0.15);
+    gap: 0;
+  }
+  .floating-btn-row { flex-direction: column; align-items: center; }
+  .floating-btn-label { display: none; }
+  .floating-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  /* NarrativePanel → 전체 화면 */
+  .narrative-panel {
+    width: 100%;
+    bottom: 0;
+  }
+
+  /* WorldBriefing → 전체 폭 */
+  .world-briefing {
+    max-width: 100%;
+    width: calc(100% - 16px);
+  }
+
+  /* ViewportFeed → 모바일에서 숨김 (글로브에 집중) */
+  .viewport-feed, .viewport-feed-pill {
+    display: none !important;
+  }
+
+  /* EraFeed → 상단 한줄 컴팩트 바 */
+  .era-feed-tab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    writing-mode: horizontal-tb;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+    padding: 4px 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    transform: none;
+    width: 100%;
+    background: rgba(5, 8, 16, 0.92);
+    backdrop-filter: blur(8px);
+    z-index: 60;
+  }
+  .era-feed-tab-year {
+    writing-mode: horizontal-tb;
+    text-orientation: initial;
+  }
+  .era-feed-tab-label {
+    writing-mode: horizontal-tb;
+    text-orientation: initial;
+  }
+  .era-feed {
+    top: 28px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 50vh;
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* UnifiedTimeline → FloatingButtons 위로 */
+  .unified-timeline-wrapper {
+    bottom: 56px;
+  }
 }

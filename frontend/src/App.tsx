@@ -1,9 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MobileLayout } from './components/mobile/MobileLayout'
 import { ChatPanel } from './components/chat'
-import { TrismegistosModal } from './components/trismegistos'
-import type { TrismegistosContent } from './components/trismegistos'
 import { SearchAutocomplete } from './components/search'
 import { UnifiedTimeline } from './components/timeline'
 import { SettingsPage } from './components/settings'
@@ -28,6 +25,7 @@ import { useSettingsStore } from './store/settingsStore'
 import { useObservationStore, getEraFromYear } from './store/observationStore'
 import { useQuery } from '@tanstack/react-query'
 import { api, locationsApi, shiftsApi } from './api/client'
+import { usePortalStore } from './store/portalStore'
 import type { Event } from './types'
 
 // Lazy load heavy components (Three.js/Globe, panels)
@@ -39,6 +37,7 @@ const ChainPanel = lazy(() => import('./components/chain/ChainPanel'))
 const HierarchyExplorer = lazy(() => import('./components/hierarchy/HierarchyExplorer').then(m => ({ default: m.HierarchyExplorer })))
 const ShiftPanel = lazy(() => import('./components/shift/ShiftPanel'))
 const ShiftBrowser = lazy(() => import('./components/shift/ShiftBrowser'))
+const TrismegistosPortal = lazy(() => import('./components/trismegistos/TrismegistosPortal'))
 
 // Loading fallback components
 const GlobeLoader = () => (
@@ -54,7 +53,7 @@ const PanelLoader = () => (
   </div>
 )
 
-function useIsMobile(breakpoint = 768) {
+export function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
   useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`)
@@ -67,9 +66,8 @@ function useIsMobile(breakpoint = 768) {
 
 function App() {
   const { t } = useTranslation()
-  const isMobile = useIsMobile()
   const { currentYear, setCurrentYear } = useTimelineStore()
-  const { selectedEvent, setSelectedEvent, flyToLocation, globeMarkers, activeShift, openShift } = useGlobeStore()
+  const { setSelectedEvent, flyToLocation, activeShift, openShift } = useGlobeStore()
   const { globeStyle } = useSettingsStore()
   const { recordEventView, recordPersonView } = useObservationStore()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -81,8 +79,7 @@ function App() {
   const [personDetailId, setPersonDetailId] = useState<number | null>(null)
   const [locationDetailId, setLocationDetailId] = useState<number | null>(null)
   const [showLanding, setShowLanding] = useState(() => !localStorage.getItem('chaldeas-explored'))
-  const [trismegistosContent, setTrismegistosContent] = useState<TrismegistosContent | null>(null)
-  const [showTrismegistos, setShowTrismegistos] = useState(false)
+  const isPortalOpen = usePortalStore((s) => s.isOpen)
   const [isTimelineOpen, setIsTimelineOpen] = useState(false)
   const [storyPersonId, setStoryPersonId] = useState<number | null>(null)
   const [tourEpisode, setTourEpisode] = useState<ShebaEpisode | null>(null)
@@ -175,18 +172,6 @@ function App() {
     setLocationDetailId(null)
   }
 
-  const handleTrismegistosEventClick = async (eventId: number) => {
-    try {
-      const res = await api.get(`/events/${eventId}`)
-      if (res.data) {
-        handleEventClick(res.data)
-        setShowTrismegistos(false)
-      }
-    } catch (err) {
-      console.error('Failed to fetch event from trismegistos:', err)
-    }
-  }
-
   // Fetch events for timeline
   const { data: timelineEvents } = useQuery({
     queryKey: ['timeline-events', Math.round(currentYear / 50) * 50],
@@ -198,74 +183,56 @@ function App() {
 
   return (
     <div className="app-container" role="application" aria-label="CHALDEAS Historical Knowledge System">
-      {/* Mobile Layout */}
-      {isMobile && (
-        <MobileLayout
-          markers={globeMarkers}
-          onEventClick={handleEventClick}
-          onPersonClick={handlePersonClick}
-          onLocationClick={handleLocationClick}
-          onNarrativeEventClick={handleNarrativeEventClick}
-          onNarrativePersonClick={handleNarrativePersonClick}
-          onSearchOpen={() => setIsSearchOpen(true)}
-          onTrismegistosOpen={() => setShowTrismegistos(true)}
-          onMenuOpen={() => setIsSettingsOpen(true)}
-          onDeepReadOpen={() => setIsDeepReadOpen(true)}
-          selectedEvent={selectedEvent}
-        />
-      )}
+      {/* Globe (fullscreen) */}
+      <main className="globe-section" role="main">
+        <div className="view-layer view-active">
+          <Suspense fallback={<GlobeLoader />}>
+            <GlobeContainer
+              onEventClick={handleEventClick}
+              onPersonClick={handlePersonClick}
+              onLocationClick={handleLocationClick}
+              globeStyle={globeStyle}
+            />
+          </Suspense>
+        </div>
+        {!activeShift && (
+          <div className="unified-timeline-wrapper">
+            <UnifiedTimeline events={timelineEvents || []} />
+          </div>
+        )}
+      </main>
 
-      {/* Desktop Layout */}
-      {!isMobile && (
-        <>
-          {/* Globe / Map (fullscreen) */}
-          <main className="globe-section" role="main">
-            <div className="view-layer view-active">
-              <Suspense fallback={<GlobeLoader />}>
-                <GlobeContainer
-                  onEventClick={handleEventClick}
-                  onPersonClick={handlePersonClick}
-                  onLocationClick={handleLocationClick}
-                  globeStyle={globeStyle}
-                />
-              </Suspense>
-            </div>
-            {!activeShift && (
-              <div className="unified-timeline-wrapper">
-                <UnifiedTimeline events={timelineEvents || []} />
-              </div>
-            )}
-          </main>
-
-          {/* Overlays - outside main so Tailwind fixed works */}
-          <WorldBriefing
-            onEventClick={handleNarrativeEventClick}
-            onPersonClick={handleNarrativePersonClick}
-            onOpenDeepRead={() => setIsDeepReadOpen(true)}
-          />
-          <ViewportFeed
-            onEventClick={handleNarrativeEventClick}
-            onPersonClick={handleNarrativePersonClick}
-          />
-          <FloatingButtons
-            onSearchClick={() => setIsSearchOpen(true)}
-            onTrismegistosClick={() => setShowTrismegistos(true)}
-            onRayshiftClick={() => {
-              if (activeShift) {
-                useGlobeStore.getState().closeShift()
-              } else {
-                setIsShiftBrowserOpen(true)
-              }
-            }}
-            onChatClick={() => setIsChatOpen(true)}
-            onMenuClick={() => setIsSettingsOpen(true)}
-          />
-          <EraFeed
-            onEventClick={handleNarrativeEventClick}
-            onPersonClick={handleNarrativePersonClick}
-          />
-        </>
-      )}
+      {/* Overlays */}
+      <WorldBriefing
+        onEventClick={handleNarrativeEventClick}
+        onPersonClick={handleNarrativePersonClick}
+        onOpenDeepRead={() => setIsDeepReadOpen(true)}
+      />
+      <ViewportFeed
+        onEventClick={handleNarrativeEventClick}
+        onPersonClick={handleNarrativePersonClick}
+      />
+      <FloatingButtons
+        onSearchClick={() => setIsSearchOpen(true)}
+        onTrismegistosClick={() => {
+          const { lat, lng } = useGlobeStore.getState().cameraPosition
+          const year = useTimelineStore.getState().currentYear
+          usePortalStore.getState().open({ lat, lng, year })
+        }}
+        onRayshiftClick={() => {
+          if (activeShift) {
+            useGlobeStore.getState().closeShift()
+          } else {
+            setIsShiftBrowserOpen(true)
+          }
+        }}
+        onChatClick={() => setIsChatOpen(true)}
+        onMenuClick={() => setIsSettingsOpen(true)}
+      />
+      <EraFeed
+        onEventClick={handleNarrativeEventClick}
+        onPersonClick={handleNarrativePersonClick}
+      />
 
       {/* Search Overlay */}
       {isSearchOpen && (
@@ -384,25 +351,31 @@ function App() {
         </div>
       )}
 
-      {/* TRISMEGISTOS Modal (FGO content + Era + Reading + Explore) */}
-      <TrismegistosModal
-        isOpen={showTrismegistos}
-        content={trismegistosContent}
-        onClose={() => { setShowTrismegistos(false); setTrismegistosContent(null) }}
-        onEventClick={handleTrismegistosEventClick}
-        onPersonClick={handlePersonClick}
-        onFlyToLocation={flyToLocation}
-        onSetCurrentYear={setCurrentYear}
-        onHistoryClick={(historyId: number) => {
-          setHistoryViewId(historyId)
-          setShowTrismegistos(false)
-        }}
-        onCreateHistory={() => {
-          setIsHistoryEditorOpen(true)
-          setEditingHistoryId(null)
-          setShowTrismegistos(false)
-        }}
-      />
+      {/* TRISMEGISTOS Portal (Magazine Home → Collection → Detail) */}
+      {isPortalOpen && (
+        <Suspense fallback={<PanelLoader />}>
+          <TrismegistosPortal
+            onEventClick={handleNarrativeEventClick}
+            onPersonClick={handlePersonClick}
+            onFlyToLocation={flyToLocation}
+            onGlobeView={async ({ year, eventId }) => {
+              setCurrentYear(year)
+              if (eventId) {
+                // Auto-open NarrativePanel for the related event
+                await handleNarrativeEventClick(eventId)
+              }
+            }}
+            onOpenShift={async (shiftId) => {
+              try {
+                const detail = await shiftsApi.get(shiftId)
+                if (detail.data) openShift(detail.data)
+              } catch (err) {
+                console.error('Failed to open shift:', err)
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Timeline Modal (fullscreen period explorer) */}
       <TimelineModal
@@ -439,7 +412,7 @@ function App() {
           onReadStories={() => {
             setShowLanding(false)
             localStorage.setItem('chaldeas-explored', '1')
-            setShowTrismegistos(true)
+            usePortalStore.getState().open()
           }}
           onClose={() => {
             setShowLanding(false)
@@ -489,7 +462,7 @@ function App() {
           personId={storyPersonId}
           onClose={() => setStoryPersonId(null)}
           onEventClick={(eventId) => {
-            handleTrismegistosEventClick(eventId)
+            handleNarrativeEventClick(eventId)
             setStoryPersonId(null)
           }}
         />

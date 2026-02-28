@@ -177,7 +177,28 @@ export const reportsApi = {
     api.post('/reports', data),
 }
 
-// Trismegistos/Archive API
+// Portal API (Trismegistus curated content + entity link resolution)
+export const portalApi = {
+  // Items
+  listItems: (params?: Record<string, unknown>) => api.get('/portal/items', { params }),
+  getItem: (slug: string) => api.get(`/portal/items/${slug}`),
+  // Reverse lookups (Globe → Portal)
+  getItemsByEvent: (eventId: number) => api.get(`/portal/items/by-event/${eventId}`),
+  getItemsByShift: (shiftId: number) => api.get(`/portal/items/by-shift/${shiftId}`),
+  // Collections
+  listCollections: (params?: Record<string, unknown>) => api.get('/portal/collections', { params }),
+  getCollection: (slug: string) => api.get(`/portal/collections/${slug}`),
+  // Featured
+  getFeatured: () => api.get('/portal/featured'),
+  // Entity link resolution (autocomplete for [Name](entity:type:id) tags)
+  resolve: (q: string, params?: { type_filter?: string; limit?: number }) =>
+    api.get('/portal/resolve', { params: { q, ...params } }),
+  // Entity link suggestions (analyze text for potential links)
+  suggestLinks: (text: string, limit?: number) =>
+    api.post('/portal/suggest-links', { text, limit: limit || 10 }),
+}
+
+// Trismegistos/Archive API (legacy showcase endpoints)
 export const trismegistosApi = {
   // FGO content
   getSingularities: () => api.get('/showcases/fgo/singularities'),

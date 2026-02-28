@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { usePortalStore } from '../../store/portalStore'
 
 interface FloatingButtonsProps {
   onSearchClick: () => void
@@ -20,6 +21,7 @@ export default function FloatingButtons({
   onSearchClick, onTrismegistosClick, onRayshiftClick, onChatClick, onMenuClick,
 }: FloatingButtonsProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const isSuspended = usePortalStore((s) => s.isSuspended)
 
   const handlers: Record<string, () => void> = {
     search: onSearchClick, trismegistos: onTrismegistosClick,
@@ -34,7 +36,7 @@ export default function FloatingButtons({
             onClick={handlers[id]}
             onMouseEnter={() => setHoveredId(id)}
             onMouseLeave={() => setHoveredId(null)}
-            className="floating-btn"
+            className={`floating-btn ${id === 'trismegistos' && isSuspended ? 'floating-btn--suspended' : ''}`}
           >
             {icon}
           </button>

@@ -76,6 +76,34 @@
   opacity: 0.85;
 }
 
+.shift-singularity-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.shift-portal-link {
+  background: none;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.shift-portal-link:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
+  opacity: 1;
+}
+
 .shift-singularity-close {
   background: none;
   border: 1px solid rgba(255, 51, 102, 0.25);
@@ -370,4 +398,30 @@
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 6px solid rgba(0, 212, 255, 0.6);
+}
+
+/* ═══ Mobile Responsive (≤767px) ═══ */
+@media (max-width: 767px) {
+  .shift-singularity {
+    top: 8px;
+    max-width: calc(100% - 16px);
+    min-width: unset;
+    padding: 8px 32px 8px 12px;
+  }
+  .shift-singularity-title {
+    font-size: 0.85rem;
+  }
+  .shift-bottom {
+    padding-bottom: 60px; /* FloatingButtons 바 위로 */
+  }
+  .shift-bottom-inner {
+    padding: 0 16px;
+  }
+  .shift-page-info {
+    max-height: 120px;
+  }
+  .shift-page-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
 }
