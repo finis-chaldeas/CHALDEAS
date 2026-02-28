@@ -476,6 +476,117 @@ frontend/src/
 
 ---
 
+## 포털 ↔ 글로브 연결
+
+포털은 글로브 위에 뜨는 오버레이다. **"글로브에서 보기" CTA**를 누르면 포털이 닫히고 글로브가 해당 위치·시간으로 날아간다.
+
+### 플로우
+
+```
+[포털 아이템 상세] → "글로브에서 보기" 클릭
+  │
+  ├─ portalStore.close()              ← 모달 스택 전부 닫기
+  ├─ globeStore.flyToLocation(lat, lng, altitude)
+  ├─ timelineStore.setCurrentYear(year)
+  └─ (선택) shiftStore.openShift(shiftId)  ← 시프트 엔트리인 경우
+```
+
+### 좌표 해결 (Coordinate Resolution)
+
+포털 아이템과 엔트리는 자체 좌표가 없다. 연결된 엔티티에서 좌표를 빌려온다.
+
+| 엔트리 타입 | 좌표 소스 | 해결 방법 |
+|-------------|----------|-----------|
+| `portal_item` | `related_event_ids` | `related_event_ids[0]` → `events` → `event_locations` → `locations.lat/lng` |
+| `shift` | `chain_segments` | `chain_segments[0].lat`, `chain_segments[0].lng` (첫 페이지 좌표) |
+| `person` | `person_locations` | `person_locations` 중 `role='birth'` 또는 첫 번째 |
+| `event` | `event_locations` | `event_locations` 중 `role='primary'` 또는 첫 번째 |
+| `period` | `region` 문자열 | 기정의 region→좌표 매핑 (예: "Europe" → 48.0, 10.0) |
+
+**연도 결정**: portal_item은 `year` 컬럼, shift는 `year_start`, event는 `date_start`, person은 `birth_year`.
+
+### 프론트엔드 훅
+
+```typescript
+// useItemCoordinates(item: PortalItem)
+// → related_event_ids[0]로 이벤트 fetch → event_locations → {lat, lng, year}
+// 실패 시 null 반환 (CTA 버튼 비활성)
+
+// useEntryCoordinates(entry: CollectionEntry)
+// → entry_type에 따라 분기, 각 엔티티의 좌표·연도 추출
+```
+
+CTA 버튼은 좌표가 null이면 숨기거나 비활성화한다. 좌표가 있으면:
+
+```typescript
+const handleViewOnGlobe = () => {
+  portalStore.close()
+  globeStore.flyToLocation(coords.lat, coords.lng, 1.5)
+  timelineStore.setCurrentYear(coords.year)
+}
+```
+
+---
+
+## sections JSONB vs 위젯 시스템
+
+**두 시스템은 별개이며, 통합하지 않는다.**
+
+### portal_items.sections — 정적 콘텐츠
+
+```jsonc
+// portal_items.sections (JSONB)
+[
+  {
+    "title": "Historical Background",
+    "title_ko": "역사적 배경",
+    "content": "The Battle of Camlann...",
+    "content_ko": "카믈란 전투는..."
+  },
+  {
+    "title": "In Fate/Grand Order",
+    "title_ko": "페이트/그랜드 오더에서",
+    "content": "As the Lion King...",
+    "content_ko": "사자왕으로서..."
+  }
+]
+```
+
+- **용도**: 포털 아이템의 읽기 전용 텍스트 섹션 (아티클 본문)
+- **렌더링**: `sections.map(s => <section><h2>{s.title}</h2><p>{s.content}</p></section>)`
+- **편집**: 향후 ArticleEditor에서 섹션 단위 CRUD
+- **엔티티 링크**: 본문 안에 `[Name](entity:type:id)` 포함 가능 → HistoryViewer의 파서 재사용
+
+### History Shift 위젯 — 동적 컴포넌트
+
+```jsonc
+// chain_segments.widgets (JSONB)
+[
+  { "type": "primary_quote", "text": "I am the bone of my sword...", "source": "Archer" },
+  { "type": "map_highlight", "regions": ["persia", "greece"], "year": -480 },
+  { "type": "comparison_table", "columns": [...] }
+]
+```
+
+- **용도**: 시프트 페이지의 인터랙티브 위젯 (지도 하이라이트, 비교표, 인용구 등)
+- **렌더링**: `registerWidget('type', Component)` → `WidgetRenderer`가 타입별 컴포넌트 매칭
+- **확장**: 위젯 추가 = 파일 1개 + import 1줄 (`CLAUDE.md` Widget System 참조)
+
+### 차이점 요약
+
+| | portal_items.sections | chain_segments.widgets |
+|---|---|---|
+| 성격 | 읽기 전용 텍스트 | 인터랙티브 컴포넌트 |
+| 구조 | `{ title, content }` (단순) | `{ type, ...data }` (타입별 스키마) |
+| 렌더러 | 단순 map → HTML | WidgetRenderer + 등록 시스템 |
+| 다국어 | `title_ko`, `content_ko` 직접 포함 | `text_ko`, `caption_ko` 위젯별 |
+| 엔티티 링크 | content 안에 `[Name](entity:type:id)` | 위젯 데이터에 entity_id 직접 참조 |
+| 편집 | ArticleEditor (CRUD) | 스크립트 생성 (AI 큐레이션) |
+
+**교차점**: 포털 아이템이 시프트를 참조할 수 있고 (collection_entries를 통해), 시프트 본문에서 포털 아이템으로 엔티티 링크할 수 있다. 하지만 렌더링 시스템은 각자 독립.
+
+---
+
 ## 관련 문서
 
 | 문서 | 내용 |
@@ -483,4 +594,5 @@ frontend/src/
 | `PORTAL_02_MAGAZINE_HOME.md` | 매거진 홈 5개 섹션 상세 |
 | `PORTAL_03_COLLECTIONS.md` | 컬렉션 + 아이템 상세 |
 | `PORTAL_04_RECOMMENDATIONS.md` | 추천 엔진 + "이런 것도 좋아하실 걸요" |
+| `PORTAL_05_ARTICLES.md` | 아티클 엔티티 링크 (6종, resolve/suggest-links API) |
 | `TRISMEGISTOS.md` | 상위 컨셉 문서 |

@@ -491,14 +491,15 @@ const { data: relatedShifts } = useQuery({
 ### CTA 버튼
 
 ```typescript
-// 글로브에서 보기 — year과 location 기반
+// 글로브에서 보기 — 기존 데이터 체인으로 좌표 해결
+// portal_item → related_event_ids[0] → event_locations → locations.lat/lng
+const coords = useItemCoordinates(item)  // 아래 "좌표 해결" 섹션 참조
+
 function handleViewOnGlobe() {
-  if (!item?.year) return
+  if (!item?.year || !coords) return
   usePortalStore.getState().close()
-  // location에서 lat/lng를 추출해야 함
-  // → portal_items에 lat/lng 컬럼 추가 필요 (또는 locations 테이블 조회)
+  props.onFlyToLocation(coords.lat, coords.lng)
   props.onSetCurrentYear(item.year)
-  // TODO: lat/lng를 events에서 찾거나 location 문자열로 geocode
 }
 
 // 시프트로 체험 — 관련 시프트의 첫 번째
@@ -611,60 +612,223 @@ const servantColumns = entries
 
 ---
 
-## 백엔드 API 변경 필요
+## 백엔드 API 상세
 
-### 1. CollectionDetail에 entry 상세 정보 포함
+### 1. CollectionDetail — entry 상세 정보 joinedload
 
-현재 `GET /api/v1/portal/collections/{slug}` 응답의 entries에
-shift/person/event의 기본 정보가 부족할 수 있음.
+현재 `GET /api/v1/portal/collections/{slug}`는 portal_item만 joinedload.
+shift/person/event 엔트리는 ID만 반환되어 프론트에서 이름을 모름.
 
-**필요한 정보**:
-- `shift` entry → shift의 title, title_ko, year_start, year_end, page_count, chain_type
-- `person` entry → person의 name, name_ko, birth_year, death_year
-- `event` entry → event의 title, title_ko, date_start
+**구현**: `portal.py`의 `get_collection()` 쿼리에 모든 관계를 joinedload.
 
-**방법 1**: API에서 joinedload로 가져오기 (현재 portal_item만 joinedload)
-**방법 2**: 별도 API 호출 (비효율적)
-
-→ 방법 1 권장. `portal.py` API에서:
 ```python
-# 현재: joinedload(CollectionEntry.portal_item)만 있음
-# 추가: joinedload(CollectionEntry.shift), .person, .event
-
-entries = (
-    db.query(CollectionEntry)
-    .filter(CollectionEntry.collection_id == collection.id)
+collection = (
+    db.query(Collection)
     .options(
-        joinedload(CollectionEntry.portal_item),
-        joinedload(CollectionEntry.shift),
-        joinedload(CollectionEntry.person),
-        joinedload(CollectionEntry.event),
+        joinedload(Collection.entries)
+            .joinedload(CollectionEntry.portal_item),
+        joinedload(Collection.entries)
+            .joinedload(CollectionEntry.shift),
+        joinedload(Collection.entries)
+            .joinedload(CollectionEntry.person),
+        joinedload(Collection.entries)
+            .joinedload(CollectionEntry.event),
     )
-    .order_by(CollectionEntry.sort_order)
+    .filter(Collection.slug == slug)
+    .first()
+)
+```
+
+**응답 스키마** (CollectionEntrySummary 확장):
+```typescript
+interface CollectionEntrySummary {
+  id: number
+  entry_type: 'shift' | 'portal_item' | 'person' | 'event' | 'period'
+  sort_order: number
+  is_highlighted: boolean
+  note?: string
+  note_ko?: string
+
+  // entry_type에 따라 하나만 채워짐
+  portal_item?: PortalItemSummary
+  shift_summary?: {           // 신규
+    id: number
+    title: string
+    title_ko?: string
+    chain_type: string
+    year_start: number
+    year_end?: number
+    segment_count: number     // 페이지 수
+  }
+  person_summary?: {          // 신규
+    id: number
+    name: string
+    name_ko?: string
+    birth_year?: number
+    death_year?: number
+    importance_score?: number
+  }
+  event_summary?: {           // 신규
+    id: number
+    title: string
+    title_ko?: string
+    date_start?: number
+    importance?: number
+  }
+}
+```
+
+### 2. 컬렉션 목록 — 타입별 엔트리 카운트
+
+`GET /api/v1/portal/collections` 응답에 타입별 카운트 추가:
+
+```python
+# 쿼리: entry_type별 GROUP BY
+counts = (
+    db.query(
+        CollectionEntry.entry_type,
+        func.count(CollectionEntry.id)
+    )
+    .filter(CollectionEntry.collection_id == c.id)
+    .group_by(CollectionEntry.entry_type)
     .all()
 )
 ```
 
-### 2. entry_counts by type
-
-컬렉션 목록(`GET /api/v1/portal/collections`)에서 타입별 카운트:
-
-```python
-# 응답에 추가
-"entry_counts": {
-    "shift": 42,
-    "portal_item": 12,
-    "person": 150,
-    "event": 200
+```typescript
+interface CollectionSummary {
+  // ... 기존 필드
+  entry_count: number                // 총 수
+  entry_counts?: {                    // 타입별 (신규)
+    shift?: number
+    portal_item?: number
+    person?: number
+    event?: number
+  }
 }
 ```
 
-### 3. 관련 시프트 검색
+### 3. 관련 시프트 검색 — 연도 범위 필터
 
-`GET /api/v1/shifts` 에 연도 범위 필터 추가:
+`GET /api/v1/shifts`에 연도 범위 파라미터 추가:
+
 ```
 GET /api/v1/shifts?year_start_lte=-400&year_end_gte=-500&limit=5
 ```
+
+```python
+# shifts.py에 추가할 필터
+if year_start_lte is not None:
+    q = q.filter(HistoricalChain.year_start <= year_start_lte)
+if year_end_gte is not None:
+    q = q.filter(HistoricalChain.year_end >= year_end_gte)
+```
+
+---
+
+## 좌표 해결: "글로브에서 보기"
+
+### 문제
+
+portal_items에 `location` 컬럼이 있지만 문자열("France", "Fuyuki, Japan")이지 좌표가 아님.
+"글로브에서 보기" CTA를 누르면 flyTo(lat, lng)가 필요.
+
+### 해결 방식: 기존 데이터 체인 활용 (새 컬럼 불필요)
+
+```
+portal_item
+  → related_event_ids (JSONB 배열)
+    → events.primary_location_id
+      → locations.latitude / longitude
+```
+
+```typescript
+// 프론트엔드: 좌표 해결 훅
+function useItemCoordinates(item: PortalItemDetail | null) {
+  const eventIds = item?.related_event_ids || []
+
+  const { data: coords } = useQuery({
+    queryKey: ['item-coords', eventIds[0]],
+    queryFn: async () => {
+      if (!eventIds[0]) return null
+      const res = await eventsApi.getLocations(eventIds[0])
+      const locs = res.data || []
+      if (locs.length > 0) {
+        return { lat: locs[0].latitude, lng: locs[0].longitude }
+      }
+      return null
+    },
+    enabled: eventIds.length > 0,
+    staleTime: Infinity,
+  })
+
+  return coords
+}
+```
+
+**시프트의 경우**: chain_segments[0]에 lat/lng가 이미 있음.
+
+```typescript
+// shift → 첫 페이지 좌표
+function useShiftCoordinates(shiftId: number | null) {
+  const { data: coords } = useQuery({
+    queryKey: ['shift-coords', shiftId],
+    queryFn: async () => {
+      const res = await shiftsApi.getPage(shiftId!, 1)
+      const page = res.data
+      if (page?.lat && page?.lng) {
+        return { lat: page.lat, lng: page.lng }
+      }
+      return null
+    },
+    enabled: !!shiftId,
+    staleTime: Infinity,
+  })
+
+  return coords
+}
+```
+
+### 미래: 백엔드에서 좌표 프리캐시
+
+portal_items 시딩 시 related_event_ids → locations 체인을 미리 해결하여
+`portal_items`에 `lat`/`lng` 컬럼 추가도 가능. 하지만 Phase 1에서는 불필요.
+
+---
+
+## 현재 데이터 현황 (2026-02-28)
+
+### 컬렉션 엔트리
+
+| 컬렉션 | 엔트리 수 | 타입 | 비고 |
+|--------|-----------|------|------|
+| fgo-main-story | 5 | 전부 portal_item | singularity(3) + lostbelt(2) |
+| greece-rome | 3 | 전부 portal_item | servant_column(3) |
+| arts-culture | 2 | 전부 portal_item | literature(1) + music(1) |
+
+> **문제**: shift/person/event 타입 엔트리가 하나도 없음.
+> 위 와이어프레임에 보이는 "시프트 42개, 인물 150+, 이벤트 200+"는 미래 시딩 목표.
+
+### 시딩 로드맵
+
+**Phase 1**: 기존 3개 컬렉션에 shift 엔트리 추가
+```sql
+-- greece-rome 컬렉션에 그리스-페르시아 전쟁 시프트 추가
+INSERT INTO collection_entries (collection_id, entry_type, shift_id, sort_order, is_highlighted, note_ko)
+SELECT c.id, 'shift', hc.id, 0, true, '마라톤 전투 시프트부터 시작해보세요.'
+FROM collections c, historical_chains hc
+WHERE c.slug = 'greece-rome'
+  AND hc.title ILIKE '%Greco-Persian%'
+LIMIT 1;
+```
+
+**Phase 2**: 컬렉션별 person/event 엔트리 자동 추가
+- event_participants → 특정 시대/지역 인물 자동 매핑
+- events.date_start 범위 → 관련 이벤트 자동 매핑
+
+**Phase 3**: AI 큐레이션
+- gpt-5.2로 컬렉션별 추천 인물/이벤트 목록 생성
+- 수동 검수 후 시딩
 
 ---
 
@@ -672,6 +836,7 @@ GET /api/v1/shifts?year_start_lte=-400&year_end_gte=-500&limit=5
 
 | 문서 | 내용 |
 |------|------|
-| `PORTAL_01_ARCHITECTURE.md` | 중첩 모달 스택, z-index |
+| `PORTAL_01_ARCHITECTURE.md` | 중첩 모달 스택, z-index, 글로브 연결 |
 | `PORTAL_02_MAGAZINE_HOME.md` | 매거진 홈에서 컬렉션 진입 |
 | `PORTAL_04_RECOMMENDATIONS.md` | "이런 것도 좋아하실 걸요" 로직 |
+| `PORTAL_05_ARTICLES.md` | 엔티티 링크 6종 (컬렉션 내 아티클에서 사용) |

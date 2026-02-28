@@ -87,93 +87,124 @@ const { data: collections } = useQuery({
 
 ---
 
-## Section 1: TodayHero — 오늘의 역사
+## Section 1: TodayHero — 오늘의 히어로
 
 ### 목적
 
-"매번 같은 화면"을 깨는 핵심. 매일 다른 이벤트가 최상단에.
+"매번 같은 화면"을 깨는 핵심. 열 때마다 다른 콘텐츠가 최상단에.
 
 ### 와이어프레임
 
 ```
 ┌──────────────────────────────────────────────────────┐
 │                                                      │
-│  ▷ 오늘의 역사 — 2월 28일                            │
+│  ▷ 오늘의 역사                                       │
 │                                                      │
 │  ┌────────────────────────────────────────────────┐  │
 │  │                                                │  │
-│  │  「228 사건」                                   │  │
-│  │  1947 · 타이완                                 │  │
+│  │  「그리스-페르시아 전쟁」                        │  │
+│  │  -499 ~ -449 · 그리스, 페르시아                 │  │
 │  │                                                │  │
-│  │  일본 식민지에서 해방된 지 불과 2년,             │  │
-│  │  국민당 정부의 폭정에 맞선 타이완 민중의          │  │
-│  │  항쟁이 시작되었다.                              │  │
+│  │  마라톤에서 시작된 작은 반란이                    │  │
+│  │  서양 문명의 운명을 결정짓는                      │  │
+│  │  대전쟁으로 번져나갔다.                          │  │
 │  │                                                │  │
 │  │  [🌍 글로브에서 보기]    [▶ 시프트로 체험]       │  │
 │  │                                                │  │
 │  └────────────────────────────────────────────────┘  │
 │                                                      │
-│  내일 예고: 3월 1일 — 3·1 운동 (1919)                │
-│                                                      │
 └──────────────────────────────────────────────────────┘
 ```
 
-### 데이터 소스
+### 데이터 소스: 3단계 접근
 
-**우선순위**:
-1. 오늘 날짜(월/일) 매칭 이벤트 — `GET /api/v1/portal/today`
-2. is_featured=true인 portal_items 중 랜덤
-3. 아무 이벤트 없으면: 정적 환영 메시지
+> **현실**: events 테이블의 `date_start`는 **연도 정수**만 저장.
+> `date_precision`도 전부 'year'. 월/일 매칭 데이터가 없음.
 
-### 백엔드 API (신규)
+#### Phase 1 (현재): 결정론적 일별 로테이션
 
+월/일 데이터 없으므로, **오늘 날짜의 해시로 콘텐츠를 결정**.
+
+```typescript
+// 프론트엔드에서 계산 (API 호출 불필요)
+function getTodayHeroIndex(itemCount: number): number {
+  const today = new Date()
+  const dayOfYear = Math.floor(
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000
+  )
+  return dayOfYear % itemCount
+}
 ```
-GET /api/v1/portal/today
+
+**로테이션 풀**:
+1. `is_featured=true`인 portal_items (현재 15개)
+2. `globe_importance >= 7`인 shifts (상위 ~50개)
+3. 두 풀을 합쳐서 인덱스로 선택
+
+```typescript
+const heroPool = [
+  ...featuredItems.map(i => ({ kind: 'item' as const, data: i })),
+  ...topShifts.map(s => ({ kind: 'shift' as const, data: s })),
+]
+const todayHero = heroPool[getTodayHeroIndex(heroPool.length)]
+```
+
+#### Phase 2 (미래): `portal_calendar` 테이블
+
+월/일별 큐레이션 데이터. AI 배치 또는 수동 시딩.
+
+```sql
+CREATE TABLE portal_calendar (
+  id SERIAL PRIMARY KEY,
+  month INTEGER NOT NULL,          -- 1~12
+  day INTEGER NOT NULL,            -- 1~31
+  title VARCHAR(300) NOT NULL,     -- "228 사건"
+  title_ko VARCHAR(300),
+  description TEXT,
+  description_ko TEXT,
+  -- 참조 (하나만 NOT NULL)
+  event_id INTEGER REFERENCES events(id),
+  person_id INTEGER REFERENCES persons(id),
+  shift_id INTEGER REFERENCES historical_chains(id),
+  portal_item_id INTEGER REFERENCES portal_items(id),
+  -- 표시
+  lat FLOAT,
+  lng FLOAT,
+  year INTEGER,                    -- 대표 연도
+  importance INTEGER DEFAULT 5,
+  UNIQUE(month, day, COALESCE(event_id,0), COALESCE(person_id,0))
+);
+-- 약 200~365개 시딩 (1일 1~3개)
+```
+
+API:
+```
+GET /api/v1/portal/today?month=2&day=28
 Response:
 {
-  "event": {
-    "id": 12345,
-    "title": "February 28 Incident",
-    "title_ko": "228 사건",
-    "year": 1947,
-    "month": 2,
-    "day": 28,
-    "lat": 25.0330,
-    "lng": 121.5654,
-    "description_ko": "일본 식민지에서 해방된 지 불과 2년...",
-    "importance": 7
-  },
-  "shift_id": 456,           // 관련 시프트 (nullable)
-  "tomorrow_preview": {       // 내일 예고 (nullable)
+  "date": { "month": 2, "day": 28 },
+  "entries": [
+    {
+      "title": "February 28 Incident",
+      "title_ko": "228 사건",
+      "year": 1947,
+      "lat": 25.033, "lng": 121.565,
+      "event_id": 12345,
+      "shift_id": 456,
+      "description_ko": "일본 식민지에서 해방된 지..."
+    }
+  ],
+  "tomorrow_preview": {
     "title_ko": "3·1 운동",
     "year": 1919
   }
 }
 ```
 
-**쿼리 로직 (백엔드)**:
-```sql
-SELECT e.id, e.title, e.title_ko, e.date_start as year,
-       ed.description_ko, e.importance,
-       l.latitude as lat, l.longitude as lng
-FROM events e
-LEFT JOIN event_details ed ON ed.event_id = e.id
-LEFT JOIN event_locations el ON el.event_id = e.id
-LEFT JOIN locations l ON l.id = el.location_id
-WHERE EXTRACT(MONTH FROM make_date(2000,
-    COALESCE(e.date_month, 1), COALESCE(e.date_day, 1)))
-    = EXTRACT(MONTH FROM CURRENT_DATE)
-  AND EXTRACT(DAY FROM make_date(2000,
-    COALESCE(e.date_month, 1), COALESCE(e.date_day, 1)))
-    = EXTRACT(DAY FROM CURRENT_DATE)
-  AND e.importance >= 5
-ORDER BY e.importance DESC
-LIMIT 1
-```
+#### Phase 3 (미래): 자동 매칭
 
-> 참고: events 테이블에 date_month, date_day 컬럼이 없을 수 있음.
-> 그 경우 date_start (연도 정수)만으로는 월/일 매칭 불가 →
-> event_details나 별도 매핑 테이블 필요. 아니면 수동 큐레이션 JSON fallback.
+events 테이블에 `date_month`, `date_day` 컬럼을 추가하고,
+Wikidata에서 정확한 날짜를 가진 이벤트(선언, 전투, 조약 등)를 역추출.
 
 ### CTA 버튼 동작
 
@@ -182,18 +213,15 @@ LIMIT 1
 | 🌍 글로브에서 보기 | `portalStore.close()` → `onFlyToLocation(lat, lng)` → `onSetCurrentYear(year)` |
 | ▶ 시프트로 체험 | `portalStore.close()` → `onOpenShift(shift_id)`. shift_id 없으면 숨김 |
 
-### 내일 예고
-
-히어로 하단에 작은 텍스트:
-```
-내일 예고: 3월 1일 — 3·1 운동 (1919)
-```
-클릭 불가. 재방문 동기 부여용. API에서 tomorrow도 같이 보내줌.
+**좌표 해결** (Phase 1):
+- portal_item → `related_event_ids[0]` → events → event_locations → locations.lat/lng
+- shift → `chain_segments[0]` → segment.lat/lng
+- 좌표 없으면 "글로브에서 보기" 버튼 숨김
 
 ### 폴백
 
-- 오늘 매칭 이벤트 없음 → featured portal_items 중 랜덤 1개를 히어로로
-- API 에러 → 정적 환영 메시지: "역사의 바다에 오신 것을 환영합니다"
+- 로테이션 풀 비어있음 → 정적 환영 메시지: "역사의 바다에 오신 것을 환영합니다"
+- API 에러 → 동일 폴백
 
 ---
 
@@ -752,6 +780,20 @@ API 로딩 중 표시할 스켈레톤:
 
 | 문서 | 내용 |
 |------|------|
-| `PORTAL_01_ARCHITECTURE.md` | 중첩 모달 스택, portalStore |
-| `PORTAL_03_COLLECTIONS.md` | CollectionPage, PortalItemDetail |
+| `PORTAL_01_ARCHITECTURE.md` | 중첩 모달 스택, portalStore, 글로브 연결 |
+| `PORTAL_03_COLLECTIONS.md` | CollectionPage, PortalItemDetail, 엔트리 joinedload |
 | `PORTAL_04_RECOMMENDATIONS.md` | 추천 로직 상세, "이런 것도" 시스템 |
+| `PORTAL_05_ARTICLES.md` | 엔티티 링크 6종, /resolve, /suggest-links |
+
+---
+
+## 현재 데이터 현황 (2026-02-28 기준)
+
+| 테이블 | 행 수 | 비고 |
+|--------|-------|------|
+| portal_items | 34 | singularity(8), lostbelt(7), servant_column(12), history(3), literature(2), music(2) |
+| collections | 3 | fgo-main-story, greece-rome, arts-culture |
+| collection_entries | 10 | 전부 portal_item 타입 (shift/person/event 미사용) |
+| fgo_servants | 449 | 82개 person 링크, 367개 미링크 |
+| historical_chains | 895 | 시프트 (9,358 페이지) |
+| events | 28,331 | date_precision 전부 'year', date_month/date_day 없음 |
