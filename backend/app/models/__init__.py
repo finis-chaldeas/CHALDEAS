@@ -52,6 +52,9 @@ from app.models.v1 import (
     PendingEntity,
 )
 
+# V2 Models (Portal)
+from app.models.v2.portal import PortalItem, Collection, CollectionEntry
+
 __all__ = [
     # Base
     "Base",
@@ -100,4 +103,8 @@ __all__ = [
     "EntityAlias",
     "ImportBatch",
     "PendingEntity",
+    # V2: Portal
+    "PortalItem",
+    "Collection",
+    "CollectionEntry",
 ]

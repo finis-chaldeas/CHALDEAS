@@ -116,3 +116,6 @@ backups/*.json
 # Large data files (>100MB, GitHub limit)
 backend/scripts/qrank*.csv*
 poc/scripts/wikidata/full_extract.jsonl
+data/compact_export/backup_*/
+data/compact_export/academic_papers/
+*.dump

@@ -1,7 +1,7 @@
 """
 FGO models - Fate/Grand Order servant data and historical comparison.
 """
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, CheckConstraint
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, CheckConstraint
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
@@ -24,6 +24,13 @@ class FGOServant(Base):
     noble_phantasm = Column(String(200))
     attribute = Column(String(50))  # Human, Earth, Sky, Star, Beast
     gender = Column(String(20))
+
+    # Extended metadata
+    name_ko = Column(String(200))
+    dialogue_lines = Column(Integer, default=0)
+    chapter_count = Column(Integer, default=0)
+    is_original = Column(Boolean, default=False)  # FGO-original (not historical/mythological)
+    atlas_id = Column(Integer)
 
     # Image
     portrait_url = Column(String(500))

@@ -3,7 +3,7 @@ API v1 Router - Aggregates all API endpoints.
 """
 from fastapi import APIRouter
 
-from app.api.v1 import events, locations, search, chat, categories, showcases, story, persons, sources, servants, reports, properties, featured, threads, feed, timeline, histories, shifts
+from app.api.v1 import events, locations, search, chat, categories, showcases, story, persons, sources, servants, reports, properties, featured, threads, feed, timeline, histories, shifts, portal
 from app.api.v1_new import explore, globe
 
 api_router = APIRouter()
@@ -61,3 +61,6 @@ api_router.include_router(histories.router, prefix="/histories", tags=["Historie
 
 # History Shifts (page-based event narratives)
 api_router.include_router(shifts.router, prefix="/shifts", tags=["Shifts"])
+
+# Trismegistus Portal (curated content + collections)
+api_router.include_router(portal.router, prefix="/portal", tags=["Portal"])

@@ -34,8 +34,10 @@ CSV_DIR = Path("C:/Projects/Chaldeas/data/compact_export")
 
 # Import order (FK-safe): parents before children
 IMPORT_ORDER = [
-    # 0. Migration tracking (no deps)
-    "alembic_version",
+    # WARNING: alembic_version is EXCLUDED from import.
+    # Importing it resets the migration version and breaks the API.
+    # See: docs/logs/sessions/20260227_db_crisis_recovery.md
+    #
     # 1. Independent tables
     "categories",
     "periods",
