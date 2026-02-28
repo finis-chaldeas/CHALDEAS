@@ -106,7 +106,7 @@ python -m alembic upgrade head   # 마이그레이션 적용
 
 **⚠️ DB 안전 규칙:**
 - **절대 `import_compact.py` 무단 실행 금지** — alembic_version을 200으로 덮어써서 API가 깨짐
-- 현재 alembic HEAD: `601_add_widgets_jsonb` (이 버전이어야 정상 작동)
+- 현재 alembic HEAD: `602_trismegistus_portal` (이 버전이어야 정상 작동)
 - `export_compact.py`는 `period_narratives` 등 핵심 테이블을 내보내지 않음 — CSV 백업으로 불충분
 - **pg_dump 백업**: `data/compact_export/backup_20260227/chaldeas_full_20260227.dump` (988MB)
 - 백업 생성: `pg_dump -h 127.0.0.1 -U chaldeas -Fc chaldeas > backup.dump`
