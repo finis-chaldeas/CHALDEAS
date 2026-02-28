@@ -1,0 +1,179 @@
+/* ═══ ModeBar — Unified Top Navigation (FGO Terminal Style) ═══ */
+
+.mode-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 10000; /* Above portal (9000), below modals */
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 8, 16, 0.92),
+    rgba(5, 8, 16, 0.85)
+  );
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 4px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* ─── Logo ─── */
+.mode-bar__logo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(212, 175, 55, 0.8);
+  text-transform: uppercase;
+  margin-right: 16px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* ─── Tab Container ─── */
+.mode-bar__tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+}
+
+/* ─── Individual Tab ─── */
+.mode-bar__tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: none;
+  background: none;
+  color: rgba(200, 210, 220, 0.45);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s, background 0.2s;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.mode-bar__tab:hover {
+  color: rgba(200, 210, 220, 0.75);
+  background: rgba(0, 212, 255, 0.04);
+}
+
+/* Active tab */
+.mode-bar__tab--active {
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.mode-bar__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: #00d4ff;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.4);
+}
+
+/* Disabled tab (SHIFT with no active shift) */
+.mode-bar__tab--disabled {
+  color: rgba(200, 210, 220, 0.2);
+}
+
+.mode-bar__tab--disabled:hover {
+  color: rgba(200, 210, 220, 0.35);
+}
+
+/* Suspended dot indicator (TRISMEGISTOS has saved state) */
+.mode-bar__tab--suspended::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00d4ff;
+  box-shadow: 0 0 4px #00d4ff;
+}
+
+/* Tab icon */
+.mode-bar__tab-icon {
+  font-size: 0.7rem;
+}
+
+.mode-bar__tab-label {
+  /* inherits font from parent */
+}
+
+/* ─── Action Icons (right side) ─── */
+.mode-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.mode-bar__action {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(0, 212, 255, 0.08);
+  border-radius: 6px;
+  background: rgba(0, 212, 255, 0.03);
+  color: rgba(200, 210, 220, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-bar__action:hover {
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.25);
+  background: rgba(0, 212, 255, 0.06);
+}
+
+/* ═══ Mobile Responsive (≤768px) ═══ */
+@media (max-width: 768px) {
+  .mode-bar {
+    height: 36px;
+    padding: 0 8px;
+  }
+
+  .mode-bar__logo {
+    display: none;
+  }
+
+  .mode-bar__tab {
+    font-size: 0.55rem;
+    padding: 4px 8px;
+    gap: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .mode-bar__tab-icon {
+    font-size: 0.6rem;
+  }
+
+  .mode-bar__actions {
+    gap: 2px;
+  }
+
+  .mode-bar__action {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}

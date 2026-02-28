@@ -1,11 +1,20 @@
 /* === Trismegistus Portal — Layered Modal System === */
 
-/* Backdrop — fullscreen takeover */
+/* Backdrop — fullscreen takeover (below mode bar) */
 .portal-backdrop {
   position: fixed;
-  inset: 0;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 9000;
   background: var(--chaldea-bg);
+}
+
+@media (max-width: 768px) {
+  .portal-backdrop {
+    top: 36px;
+  }
 }
 
 /* Layer container */

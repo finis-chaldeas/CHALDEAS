@@ -15,7 +15,7 @@ import { SourceBrowser } from './components/sources'
 import { loadJourney } from './utils/journeyLoader'
 import WorldBriefing from './components/globe/WorldBriefing'
 import ViewportFeed from './components/globe/ViewportFeed'
-import FloatingButtons from './components/globe/FloatingButtons'
+import ModeBar from './components/navigation/ModeBar'
 import EraFeed from './components/globe/EraFeed'
 import DeepReadModal from './components/navigator/DeepReadModal'
 import type { ShebaEpisode } from './data/shebaEpisodes'
@@ -212,22 +212,11 @@ function App() {
         onEventClick={handleNarrativeEventClick}
         onPersonClick={handleNarrativePersonClick}
       />
-      <FloatingButtons
+      <ModeBar
         onSearchClick={() => setIsSearchOpen(true)}
-        onTrismegistosClick={() => {
-          const { lat, lng } = useGlobeStore.getState().cameraPosition
-          const year = useTimelineStore.getState().currentYear
-          usePortalStore.getState().open({ lat, lng, year })
-        }}
-        onRayshiftClick={() => {
-          if (activeShift) {
-            useGlobeStore.getState().closeShift()
-          } else {
-            setIsShiftBrowserOpen(true)
-          }
-        }}
         onChatClick={() => setIsChatOpen(true)}
         onMenuClick={() => setIsSettingsOpen(true)}
+        onShiftBrowse={() => setIsShiftBrowserOpen(true)}
       />
       <EraFeed
         onEventClick={handleNarrativeEventClick}

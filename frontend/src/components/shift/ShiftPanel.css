@@ -2,7 +2,7 @@
 
 .shift-singularity {
   position: fixed;
-  top: 56px;
+  top: 96px;  /* 40px mode-bar + 56px original offset */
   left: 0;
   z-index: 70;
   pointer-events: auto;
@@ -403,7 +403,7 @@
 /* ═══ Mobile Responsive (≤767px) ═══ */
 @media (max-width: 767px) {
   .shift-singularity {
-    top: 8px;
+    top: 44px;  /* 36px mobile mode-bar + 8px gap */
     max-width: calc(100% - 16px);
     min-width: unset;
     padding: 8px 32px 8px 12px;
@@ -412,7 +412,7 @@
     font-size: 0.85rem;
   }
   .shift-bottom {
-    padding-bottom: 60px; /* FloatingButtons 바 위로 */
+    padding-bottom: 16px;
   }
   .shift-bottom-inner {
     padding: 0 16px;

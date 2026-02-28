@@ -563,6 +563,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 40px;
+  height: calc(100vh - 40px);
+}
+
+@media (max-width: 768px) {
+  .globe-section {
+    margin-top: 36px;
+    height: calc(100vh - 36px);
+  }
 }
 
 
@@ -3348,7 +3357,7 @@ textarea:focus-visible {
 .narrative-panel {
   position: fixed;
   right: 0;
-  top: 0;
+  top: 40px;
   bottom: 64px;
   width: 380px;
   z-index: 40;
@@ -4065,86 +4074,12 @@ textarea:focus-visible {
   gap: 1rem;
 }
 
-/* ─── FloatingButtons ─── */
-.floating-buttons {
-  position: fixed;
-  right: 12px;
-  bottom: 96px;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: flex-end;
-}
-
-.floating-btn-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-direction: row-reverse;
-}
-
-.floating-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--overlay-radius);
-  background: var(--overlay-bg);
-  backdrop-filter: blur(var(--overlay-blur));
-  border: 1px solid var(--overlay-border);
-  color: rgba(0, 212, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.floating-btn:hover {
-  border-color: var(--overlay-border-hover);
-  color: var(--chaldea-cyan);
-  transform: translateY(-1px);
-  animation: glowPulse 2s infinite;
-}
-
-.floating-btn--suspended {
-  position: relative;
-  border-color: rgba(0, 212, 255, 0.4);
-  color: var(--chaldea-cyan);
-}
-
-.floating-btn--suspended::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--chaldea-cyan);
-  box-shadow: 0 0 4px var(--chaldea-cyan);
-}
-
-.floating-btn-label {
-  background: var(--overlay-bg);
-  backdrop-filter: blur(var(--overlay-blur));
-  border: 1px solid var(--overlay-border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: rgba(0, 212, 255, 0.8);
-  white-space: nowrap;
-  animation: fadeInUp 0.15s ease-out;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
+/* FloatingButtons removed — replaced by ModeBar (navigation/ModeBar.css) */
 
 /* ─── WorldBriefing ─── */
 .world-briefing {
   position: fixed;
-  top: 8px;
+  top: 48px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -4571,7 +4506,7 @@ textarea:focus-visible {
 .era-feed {
   position: fixed;
   left: 12px;
-  top: 60px;
+  top: 100px;
   bottom: 100px;
   width: 240px;
   z-index: 25;
@@ -6322,26 +6257,7 @@ textarea:focus-visible {
 /* ═══ Mobile Responsive (≤767px) ═══ */
 @media (max-width: 767px) {
 
-  /* FloatingButtons → 하단 수평 바 */
-  .floating-buttons {
-    flex-direction: row;
-    right: auto;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    justify-content: space-around;
-    padding: 6px 0;
-    background: rgba(5, 8, 16, 0.95);
-    border-top: 1px solid rgba(0, 212, 255, 0.15);
-    gap: 0;
-  }
-  .floating-btn-row { flex-direction: column; align-items: center; }
-  .floating-btn-label { display: none; }
-  .floating-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
+  /* FloatingButtons removed — replaced by ModeBar */
 
   /* NarrativePanel → 전체 화면 */
   .narrative-panel {
@@ -6363,7 +6279,7 @@ textarea:focus-visible {
   /* EraFeed → 상단 한줄 컴팩트 바 */
   .era-feed-tab {
     position: fixed;
-    top: 0;
+    top: 36px;  /* below mobile mode bar */
     left: 0;
     right: 0;
     writing-mode: horizontal-tb;
@@ -6390,7 +6306,7 @@ textarea:focus-visible {
     text-orientation: initial;
   }
   .era-feed {
-    top: 28px;
+    top: 64px;  /* 36px mode-bar + 28px era-feed-tab */
     left: 0;
     right: 0;
     width: 100%;
@@ -6399,8 +6315,8 @@ textarea:focus-visible {
     border-radius: 0 0 8px 8px;
   }
 
-  /* UnifiedTimeline → FloatingButtons 위로 */
+  /* UnifiedTimeline — standard bottom positioning */
   .unified-timeline-wrapper {
-    bottom: 56px;
+    bottom: 12px;
   }
 }

@@ -29,10 +29,10 @@
 /* ========== Main Container ========== */
 .entity-detail-view {
   position: fixed;
-  top: 0;
+  top: 40px;
   right: 0;
   width: 400px;
-  height: 100vh;
+  height: calc(100vh - 40px);
   background: linear-gradient(180deg, #0a0f1e 0%, #0d1526 100%);
   border-left: 1px solid rgba(0, 212, 255, 0.3);
   display: flex;
@@ -537,6 +537,8 @@
 /* ========== Mobile Responsive ========== */
 @media (max-width: 768px) {
   .entity-detail-view {
+    top: 36px;
+    height: calc(100vh - 36px);
     width: 100%;
     left: 0;
     border-left: none;
