@@ -296,6 +296,7 @@ def main():
         time.sleep(DELAY)
 
     # 최종 결과 저장
+    budget_exhausted = (result == 'BUDGET_EXHAUSTED') if 'result' in dir() else False
     output_file = OUTPUT_DIR / f"events_imp{target_imp}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump({
@@ -307,11 +308,12 @@ def main():
             'total_papers': total_papers,
             'total_with_abstract': total_with_abstract,
             'abstract_rate': f"{total_with_abstract/max(total_papers,1)*100:.1f}%",
+            'complete': not budget_exhausted,
             'results': all_results,
         }, f, ensure_ascii=False, indent=2)
 
-    # 체크포인트 정리
-    if checkpoint_file.exists():
+    # 체크포인트 정리: 완전히 끝났을 때만 삭제
+    if not budget_exhausted and checkpoint_file.exists():
         checkpoint_file.unlink()
 
     print(f"\n{'=' * 60}")

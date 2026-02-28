@@ -5,7 +5,7 @@ FGO 스토리 데이터에서 캐릭터별 대사를 추출.
 AI 불필요, 로컬 처리만. 비용 $0.
 
 입력:
-    E:/chaldeas_data/fgo_db/stories/*.json       — 메인 스토리 (build_fgo_db.py로 빌드)
+    E:/chaldeas_data/raw/atlas_academy/scripts_jp/*_jp.json  — 메인 스토리 (Atlas Academy)
     E:/chaldeas_data/raw/atlas_academy/scripts_jp_events/event_*_jp.json  — JP 이벤트
 
 출력:
@@ -43,7 +43,7 @@ if sys.platform == "win32":
 
 # ─── Paths ──────────────────────────────────────────────
 
-STORIES_DIR = Path(r"E:\chaldeas_data\fgo_db\stories")
+STORIES_DIR = Path(r"E:\chaldeas_data\raw\atlas_academy\scripts_jp")
 EVENTS_DIR = Path(r"E:\chaldeas_data\raw\atlas_academy\scripts_jp_events")
 OUTPUT_DIR = Path(r"E:\chaldeas_data\processed\fgo\dialogues")
 
@@ -390,15 +390,17 @@ def load_main_stories(chapter_filter: str | None = None) -> list[tuple[str, int 
         print(f"  WARNING: Stories directory not found: {STORIES_DIR}")
         return stories
 
-    for path in sorted(STORIES_DIR.glob("*.json")):
-        if path.name == "index.json":
+    # lb5_jp = lb5_atlantis_jp (same quests), lb5.5_jp = lb5_olympus_jp (same quests)
+    skip_dupes = {"main_story_jp.json", "lb5_jp.json", "lb5.5_jp.json"}
+    for path in sorted(STORIES_DIR.glob("*_jp.json")):
+        if path.name in skip_dupes:
             continue
         data = load_json(path)
         if not data:
             continue
 
-        slug = data.get("slug", path.stem)
-        war_id = data.get("war_id")
+        slug = data.get("id", path.stem.replace("_jp", ""))
+        war_id = data.get("warId")
 
         if chapter_filter and slug != chapter_filter:
             continue
