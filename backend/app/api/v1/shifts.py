@@ -47,6 +47,8 @@ def _serialize_page(seg: ChainSegment) -> dict:
         "importance": seg.importance or 3,
         "media_url": seg.media_url,
         "widgets": seg.widgets,
+        "camera_altitude": seg.camera_altitude,
+        "highlight_locations": seg.highlight_locations,
         "sub_shift_id": seg.sub_shift_id,
         "event_id": seg.event_id,
         "person_id": seg.person_id,

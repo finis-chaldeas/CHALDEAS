@@ -378,14 +378,18 @@ export function GlobeContainer({
   })
 
   // Fetch smart markers (hero cards + cluster bubbles) for zoom-aware display
+  const showMinorMarkers = useGlobeStore(s => s.showMinorMarkers)
+  const showMinor = showMinorMarkers || currentZoomLevel === 'local'
+
   const { data: smartMarkers } = useQuery<SmartMarkersResponse>({
-    queryKey: ['smart-markers', debouncedYear, currentZoomLevel],
+    queryKey: ['smart-markers', debouncedYear, currentZoomLevel, showMinor],
     queryFn: async () => {
       const timeRange = 100 // Uniform ±100yr across all zoom levels
       const res = await smartMarkersApi.get({
         year_start: debouncedYear - timeRange,
         year_end: debouncedYear + timeRange,
         zoom: currentZoomLevel,
+        show_minor: showMinor || undefined,
       })
       return res.data
     },
@@ -563,6 +567,12 @@ export function GlobeContainer({
         el.className = 'shift-marker shift-marker--inactive'
       }
     })
+
+    // Toggle highlight markers — only show for current page
+    container.querySelectorAll('[data-owner-page]').forEach(el => {
+      const ownerIdx = parseInt((el as HTMLElement).dataset.ownerPage || '-1')
+      ;(el as HTMLElement).style.display = ownerIdx === activePageIndex ? '' : 'none'
+    })
   }, [activeShift, activePageIndex])
 
   // Sync globe markers to store (for Map view to consume)
@@ -639,6 +649,8 @@ export function GlobeContainer({
     if (!activeShift) return null
     const pages = activeShift.pages || []
     const elements: Array<Record<string, unknown>> = []
+
+    // 1. Page markers (existing)
     pages.forEach((page, idx) => {
       if (page.lat == null || page.lng == null) return
       elements.push({
@@ -651,6 +663,24 @@ export function GlobeContainer({
         kind: 'shift-page' as const,
       })
     })
+
+    // 2. Highlight markers — all pages' highlights included,
+    //    visibility toggled via DOM update (not deps) to avoid re-creating elements
+    pages.forEach((page, idx) => {
+      if (!page.highlight_locations) return
+      page.highlight_locations.forEach((hl, hlIdx) => {
+        elements.push({
+          lat: hl.lat,
+          lng: hl.lng,
+          label: hl.label,
+          label_ko: hl.label_ko,
+          owner_page_index: idx,
+          highlight_index: hlIdx,
+          kind: 'shift-highlight' as const,
+        })
+      })
+    })
+
     return elements
   }, [activeShift])
 
@@ -863,6 +893,21 @@ export function GlobeContainer({
         const store = useGlobeStore.getState()
         store.goToPage(sp.page_index)
       }
+    } else if (item.kind === 'shift-highlight') {
+      // Highlight location marker for overview pages (small dot + label)
+      const hl = item as { label?: string; label_ko?: string; owner_page_index: number; highlight_index: number }
+      const lang = getEffectiveLanguage(useSettingsStore.getState().preferredLanguage)
+      const labelText = (lang === 'ko' && hl.label_ko) ? hl.label_ko : (hl.label || '')
+      const safeLabel = labelText.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const isVisible = hl.owner_page_index === activePageIndexRef.current
+      el.setAttribute('data-owner-page', String(hl.owner_page_index))
+      el.className = 'shift-highlight-marker'
+      el.style.display = isVisible ? '' : 'none'
+      el.innerHTML = `
+        <div class="shift-hl-dot"></div>
+        ${safeLabel ? `<span class="shift-hl-label">${safeLabel}</span>` : ''}
+      `
+      el.style.pointerEvents = 'none'
     } else if (item.kind === 'highlight') {
       // SHEBA search highlight (pulsing gold)
       el.innerHTML = `
@@ -1652,6 +1697,7 @@ export function GlobeContainer({
           const item = d as { kind?: string }
           if (item.kind === 'event-panel') return 0.012
           if (item.kind === 'highlight') return 0.01
+          if (item.kind === 'shift-highlight') return 0.006
           if (item.kind === 'shift-page') return 0.008
           if (item.kind === 'hero') return 0.005
           if (item.kind === 'node') return 0.002

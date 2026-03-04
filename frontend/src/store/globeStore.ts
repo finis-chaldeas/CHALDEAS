@@ -143,6 +143,7 @@ interface GlobeState {
   // Filters
   selectedCategories: number[]
   minImportance: number
+  showMinorMarkers: boolean
 
   // Actions
   setEvents: (events: Event[]) => void
@@ -154,6 +155,7 @@ interface GlobeState {
   setAutoRotate: (rotate: boolean) => void
   toggleCategory: (categoryId: number) => void
   setMinImportance: (importance: number) => void
+  toggleMinorMarkers: () => void
   flyToLocation: (lat: number, lng: number) => void
   clearFlyTarget: () => void
   setHighlightedLocations: (locs: HighlightedLocation[]) => void
@@ -201,6 +203,7 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
   shiftMaxAltitude: null,
   selectedCategories: [],
   minImportance: 1,
+  showMinorMarkers: false,
 
   // Actions
   setEvents: (events) => set({ events }),
@@ -234,6 +237,8 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
     }),
 
   setMinImportance: (importance) => set({ minImportance: importance }),
+
+  toggleMinorMarkers: () => set((state) => ({ showMinorMarkers: !state.showMinorMarkers })),
 
   flyToLocation: (lat, lng) =>
     set({
@@ -342,10 +347,15 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
     set({ activePageIndex: clamped })
     const page = shift.pages[clamped]
     if (page?.lat != null && page?.lng != null) {
-      // Keep current altitude — just pan to the page location
-      const currentAlt = get().cameraPosition.altitude
+      // Use page-specific altitude if provided, otherwise keep current
+      const altitude = page.camera_altitude ?? get().cameraPosition.altitude
+      // Raise shiftMaxAltitude if page needs a higher zoom-out
+      const currentMax = get().shiftMaxAltitude
+      if (currentMax != null && altitude > currentMax) {
+        set({ shiftMaxAltitude: altitude })
+      }
       set({
-        flyTarget: { lat: page.lat, lng: page.lng, altitude: currentAlt, ts: Date.now() },
+        flyTarget: { lat: page.lat, lng: page.lng, altitude, ts: Date.now() },
       })
     }
   },

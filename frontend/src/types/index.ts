@@ -585,6 +585,13 @@ export interface ShiftPage {
   media_url?: string
   sub_shift_id?: number
   widgets?: PageWidget[] | null
+  camera_altitude?: number
+  highlight_locations?: Array<{
+    lat: number
+    lng: number
+    label?: string
+    label_ko?: string
+  }>
 }
 
 // Smart Markers (Globe hero cards + cluster bubbles)

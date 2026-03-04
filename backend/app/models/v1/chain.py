@@ -222,6 +222,10 @@ class ChainSegment(Base):
     media_url = Column(String(500))
     widgets = Column(JSONB, nullable=True, default=None)
 
+    # Globe camera control
+    camera_altitude = Column(Float, nullable=True)  # 0.05~3.0 globe zoom level
+    highlight_locations = Column(JSONB, nullable=True)  # [{lat, lng, label, label_ko}]
+
     # Importance within chain context
     importance = Column(
         Integer,
