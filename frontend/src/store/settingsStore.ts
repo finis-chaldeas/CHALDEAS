@@ -16,6 +16,9 @@ interface SettingsState {
   // Experience level (Interest = casual/fun, Expert = data/analysis)
   experienceLevel: ExperienceLevel
 
+  // Card system (Beta)
+  useCardMode: boolean
+
   // API settings
   shebaApiKey: string | null
 
@@ -24,6 +27,7 @@ interface SettingsState {
   setHideEmptyDescriptions: (hide: boolean) => void
   setGlobeStyle: (style: GlobeStyleOption) => void
   setExperienceLevel: (level: ExperienceLevel) => void
+  setUseCardMode: (enabled: boolean) => void
   setShebaApiKey: (key: string | null) => void
   clearShebaApiKey: () => void
   resetSettings: () => void
@@ -34,6 +38,7 @@ const defaultSettings = {
   hideEmptyDescriptions: false,
   globeStyle: 'default' as GlobeStyleOption,
   experienceLevel: 'interest' as ExperienceLevel,
+  useCardMode: false,
   shebaApiKey: null,
 }
 
@@ -54,6 +59,8 @@ export const useSettingsStore = create<SettingsState>()(
       setGlobeStyle: (style) => set({ globeStyle: style }),
 
       setExperienceLevel: (level) => set({ experienceLevel: level }),
+
+      setUseCardMode: (enabled) => set({ useCardMode: enabled }),
 
       setShebaApiKey: (key) => set({ shebaApiKey: key }),
 

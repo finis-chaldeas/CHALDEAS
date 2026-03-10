@@ -1,0 +1,158 @@
+/* ═══ Card System — Common Styles ═══ */
+
+/* ─── Overlay ─── */
+.card-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500; /* Above globe, below ModeBar (10000) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Card Base ─── */
+.card {
+  background: rgba(5, 8, 16, 0.92);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(200, 210, 220, 0.9);
+  font-family: 'Roboto Mono', monospace;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 212, 255, 0.08);
+  overflow: hidden;
+  transition: width 0.25s ease, height 0.25s ease;
+}
+
+/* ─── Compact Mode ─── */
+.card--compact {
+  width: 280px;
+  max-height: 200px;
+}
+
+/* ─── Expanded Mode ─── */
+.card--expanded {
+  width: 420px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* ─── Header ─── */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+}
+
+.card-header__expand,
+.card-header__close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(200, 210, 220, 0.5);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+}
+
+.card-header__expand:hover,
+.card-header__close:hover {
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* ─── Body ─── */
+.card-body {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+/* ─── Meta (importance, role, coordinates) ─── */
+.card-meta {
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.5);
+  border-top: 1px solid rgba(0, 212, 255, 0.06);
+}
+
+/* ─── FGO Section ─── */
+.card-fgo {
+  padding: 8px 12px;
+  border-top: 1px solid rgba(251, 191, 36, 0.15);
+  background: rgba(251, 191, 36, 0.03);
+}
+
+/* ─── Actions ─── */
+.card-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0, 212, 255, 0.06);
+}
+
+.card-actions button {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 4px;
+  background: rgba(0, 212, 255, 0.04);
+  color: rgba(200, 210, 220, 0.7);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.card-actions button:hover {
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.35);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* ═══ Type-specific accents ═══ */
+
+.card--person {
+  border-color: rgba(0, 212, 255, 0.2);
+}
+
+.card--event {
+  border-color: rgba(255, 140, 0, 0.2);
+}
+
+.card--location {
+  border-color: rgba(0, 200, 120, 0.2);
+}
+
+.card--servant {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.card--shift {
+  border-color: rgba(180, 100, 255, 0.2);
+}
+
+/* ═══ Mobile (≤768px) ═══ */
+@media (max-width: 768px) {
+  .card-overlay {
+    align-items: flex-end;
+  }
+
+  .card--compact,
+  .card--expanded {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .card--expanded {
+    max-height: 60vh;
+  }
+}
