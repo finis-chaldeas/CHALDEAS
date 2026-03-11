@@ -1181,7 +1181,7 @@ export function GlobeContainer({
         if (selectedEventRef.current) {
           setSelectedEventRef.current(null)
         }
-        // Open LocationDetailView on the right
+        // Open LocationDetailView (or card in card mode)
         if (onLocationClickRef.current) {
           onLocationClickRef.current(nodeItem.node_id)
         }
@@ -1193,6 +1193,8 @@ export function GlobeContainer({
             600
           )
         }
+        // In card mode, card handles everything — skip cluster panel
+        if (useSettingsStore.getState().useCardMode) return
         // Always fetch events at this location (regardless of importance)
         try {
           const year = debouncedYearRef.current

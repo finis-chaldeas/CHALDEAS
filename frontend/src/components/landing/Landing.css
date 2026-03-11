@@ -245,6 +245,15 @@
     grid-template-columns: 1fr;
   }
 
+  .welcome-paths--three {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-controls-hint {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+
   .welcome-logo {
     font-size: 22px;
     letter-spacing: 6px;
@@ -270,7 +279,32 @@
 
 /* Minimal welcome - more transparent, globe visible behind */
 .welcome-minimal {
-  max-width: 560px;
+  max-width: 700px;
+}
+
+/* Three-column landing layout */
+.welcome-paths--three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Controls hint row */
+.welcome-controls-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.welcome-hint-item {
+  white-space: nowrap;
+}
+
+.welcome-hint-sep {
+  color: rgba(255, 255, 255, 0.15);
 }
 
 @keyframes landing-fade-in {

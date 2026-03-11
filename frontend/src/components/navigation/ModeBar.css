@@ -145,6 +145,13 @@
   background: rgba(0, 212, 255, 0.06);
 }
 
+.mode-bar__action--active {
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.2);
+}
+
 /* ═══ Mobile Responsive (≤768px) ═══ */
 @media (max-width: 768px) {
   .mode-bar {

@@ -88,7 +88,7 @@ export const nodesApi = {
 
 // Smart Markers API (hero cards + cluster bubbles)
 export const smartMarkersApi = {
-  get: (params: { year_start: number; year_end: number; zoom: string; bounds?: string }) =>
+  get: (params: { year_start: number; year_end: number; zoom: string; bounds?: string; show_minor?: boolean }) =>
     api.get('/globe/smart-markers', { params }),
 }
 

@@ -75,21 +75,6 @@
   line-height: 1.5;
 }
 
-/* ─── Meta (importance, role, coordinates) ─── */
-.card-meta {
-  padding: 6px 12px;
-  font-size: 0.7rem;
-  color: rgba(200, 210, 220, 0.5);
-  border-top: 1px solid rgba(0, 212, 255, 0.06);
-}
-
-/* ─── FGO Section ─── */
-.card-fgo {
-  padding: 8px 12px;
-  border-top: 1px solid rgba(251, 191, 36, 0.15);
-  background: rgba(251, 191, 36, 0.03);
-}
-
 /* ─── Actions ─── */
 .card-actions {
   display: flex;
@@ -117,7 +102,187 @@
   background: rgba(0, 212, 255, 0.08);
 }
 
+/* ─── Content Elements ─── */
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(220, 230, 240, 0.95);
+  margin-bottom: 2px;
+}
+
+.card-subtitle {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.55);
+}
+
+.card-date {
+  font-size: 0.7rem;
+  color: rgba(0, 212, 255, 0.7);
+  margin: 2px 0;
+}
+
+.card-location {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.6);
+}
+
+.card-coords {
+  font-size: 0.65rem;
+  color: rgba(200, 210, 220, 0.4);
+  margin: 2px 0;
+}
+
+.card-role {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.55);
+  font-style: italic;
+}
+
+.card-importance {
+  font-size: 0.7rem;
+  color: rgba(251, 191, 36, 0.8);
+  margin: 2px 0;
+}
+
+.card-stars {
+  color: rgba(251, 191, 36, 0.8);
+}
+
+.card-snippet {
+  font-size: 0.75rem;
+  color: rgba(200, 210, 220, 0.7);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.card-meta-row {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.5);
+  margin: 2px 0;
+}
+
+/* ─── Related Entities ─── */
+.card-related {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 212, 255, 0.06);
+}
+
+.card-related-label {
+  font-size: 0.65rem;
+  color: rgba(200, 210, 220, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.card-entity-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: #00d4ff;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-bottom: 2px;
+  transition: color 0.15s;
+}
+
+.card-entity-link:hover {
+  color: #66e5ff;
+  text-decoration: underline;
+}
+
+/* ─── FGO Inline Badge ─── */
+.card-fgo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 4px;
+  background: rgba(251, 191, 36, 0.03);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.card-fgo:hover {
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.card-fgo-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.card-fgo-stars {
+  color: rgba(251, 191, 36, 0.9);
+  font-size: 0.7rem;
+}
+
+.card-fgo-class {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.6);
+}
+
+.card-fgo-name {
+  font-size: 0.75rem;
+  color: rgba(251, 191, 36, 0.8);
+}
+
+/* ─── Servant Portrait ─── */
+.card-portrait {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.card-portrait img {
+  max-width: 120px;
+  max-height: 150px;
+  border-radius: 4px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.card-subtitle-jp {
+  font-size: 0.7rem;
+  color: rgba(200, 210, 220, 0.45);
+}
+
+.card-np {
+  font-size: 0.7rem;
+  color: rgba(180, 100, 255, 0.7);
+  margin: 4px 0;
+}
+
+/* ─── Loading / Error ─── */
+.card-loading {
+  padding: 20px;
+  text-align: center;
+  color: rgba(200, 210, 220, 0.5);
+  font-size: 0.75rem;
+}
+
+.card-error {
+  padding: 20px;
+  text-align: center;
+  color: rgba(255, 100, 100, 0.7);
+  font-size: 0.75rem;
+}
+
 /* ═══ Type-specific accents ═══ */
+
+.card--event .card-title {
+  color: rgba(255, 180, 80, 0.95);
+}
+
+.card--servant .card-title {
+  color: rgba(251, 191, 36, 0.95);
+}
+
+.card--shift .card-title {
+  color: rgba(200, 160, 255, 0.95);
+}
 
 .card--person {
   border-color: rgba(0, 212, 255, 0.2);

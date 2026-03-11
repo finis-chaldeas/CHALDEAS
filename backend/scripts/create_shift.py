@@ -6,6 +6,8 @@ Modes:
   --generate-from-event ID     Use existing aggregate event as seed
   --generate-from-person ID    Use person biography as seed
   --import file.yaml           Insert YAML into DB (with validation)
+  --enhance SHIFT_ID           Enhance pages with narrative + widgets + camera via GPT
+  --batch-camera               Apply heuristic camera_altitude to all pages (no GPT)
   --batch-discover             Find shifts needing enhancement + uncovered events
   --list                       List existing shifts
 
@@ -40,6 +42,16 @@ Usage:
     python scripts/create_shift.py --import scripts/output/shift-greco-persian-wars.yaml
     python scripts/create_shift.py --import scripts/output/shift-greco-persian-wars.yaml --translate
 
+    # Enhance shift with narrative + widgets + camera (GPT)
+    python scripts/create_shift.py --enhance 2687 --force
+
+    # Batch camera altitude (heuristic, no GPT)
+    python scripts/create_shift.py --batch-camera --dry-run
+    python scripts/create_shift.py --batch-camera
+    python scripts/create_shift.py --batch-camera --shift-id 2687
+    python scripts/create_shift.py --batch-camera --force
+    python scripts/create_shift.py --batch-camera --min-importance 4
+
     # Discover enhancement candidates
     python scripts/create_shift.py --batch-discover --min-importance 4
 
@@ -70,6 +82,8 @@ if ENV_PATH.exists():
             os.environ.setdefault(key.strip(), val.strip().strip('"'))
 
 OUTPUT_DIR = Path(__file__).parent / "output"
+
+from scripts.paper_utils import load_paper_index, get_papers_for_events, format_papers_for_prompt
 
 # ─── YAML handling ───
 
@@ -312,18 +326,59 @@ def gather_context(db, topic: str, chain_type: str,
 
     else:
         # Topic search → ILIKE matching
-        events = db.execute(sql_text("""
-            SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
-                   e.importance, e.primary_location_id,
-                   l.latitude, l.longitude, l.name as loc_name, l.name_ko as loc_name_ko,
-                   ed.description
-            FROM events e
-            LEFT JOIN locations l ON l.id = e.primary_location_id
-            LEFT JOIN event_details ed ON ed.event_id = e.id
-            WHERE e.title ILIKE :pat OR e.title_ko ILIKE :pat
-            ORDER BY e.importance DESC NULLS LAST, e.date_start
-            LIMIT :limit
-        """), {"pat": f"%{topic}%", "limit": max_events}).fetchall()
+        # Try full topic first, then fall back to keyword search
+        def _search_events(pattern, limit):
+            return db.execute(sql_text("""
+                SELECT e.id, e.title, e.title_ko, e.date_start, e.date_end,
+                       e.importance, e.primary_location_id,
+                       l.latitude, l.longitude, l.name as loc_name, l.name_ko as loc_name_ko,
+                       ed.description
+                FROM events e
+                LEFT JOIN locations l ON l.id = e.primary_location_id
+                LEFT JOIN event_details ed ON ed.event_id = e.id
+                WHERE e.title ILIKE :pat OR e.title_ko ILIKE :pat
+                ORDER BY e.importance DESC NULLS LAST, e.date_start
+                LIMIT :limit
+            """), {"pat": pattern, "limit": limit}).fetchall()
+
+        def _search_persons(pattern, limit):
+            return db.execute(sql_text("""
+                SELECT p.id, p.name, p.name_ko, p.birth_year, p.death_year,
+                       p.global_score
+                FROM persons p
+                WHERE p.name ILIKE :pat OR p.name_ko ILIKE :pat
+                ORDER BY p.global_score DESC NULLS LAST
+                LIMIT :limit
+            """), {"pat": pattern, "limit": limit}).fetchall()
+
+        # 1) Try full topic
+        events = _search_events(f"%{topic}%", max_events)
+        persons = _search_persons(f"%{topic}%", max_persons)
+
+        # 2) Fallback: split topic into keywords and search each
+        if not events and not persons:
+            import re as _re
+            stop = {"the", "of", "and", "a", "an", "in", "on", "to", "from", "for", "with", "by", "at", "its"}
+            raw_keywords = _re.split(r'[\s—\-:,]+', topic)
+            keywords = [w for w in raw_keywords if len(w) >= 4 and w.lower() not in stop]
+
+            seen_event_ids = set()
+            seen_person_ids = set()
+            for kw in keywords:
+                for ev in _search_events(f"%{kw}%", max_events // max(len(keywords), 1)):
+                    if ev[0] not in seen_event_ids:
+                        events.append(ev)
+                        seen_event_ids.add(ev[0])
+                for p in _search_persons(f"%{kw}%", max_persons // max(len(keywords), 1)):
+                    if p[0] not in seen_person_ids:
+                        persons.append(p)
+                        seen_person_ids.add(p[0])
+
+            # Sort by importance
+            events.sort(key=lambda x: (-(x[5] or 0), x[3] or 0))
+            events = events[:max_events]
+            persons.sort(key=lambda x: -(x[5] or 0))
+            persons = persons[:max_persons]
 
         for ev in events:
             context["events"].append({
@@ -335,16 +390,6 @@ def gather_context(db, topic: str, chain_type: str,
                 "location_name": ev[9], "location_name_ko": ev[10],
                 "description": (ev[11] or "")[:300],
             })
-
-        # Search persons too
-        persons = db.execute(sql_text("""
-            SELECT p.id, p.name, p.name_ko, p.birth_year, p.death_year,
-                   p.global_score
-            FROM persons p
-            WHERE p.name ILIKE :pat OR p.name_ko ILIKE :pat
-            ORDER BY p.global_score DESC NULLS LAST
-            LIMIT :limit
-        """), {"pat": f"%{topic}%", "limit": max_persons}).fetchall()
 
         for p in persons:
             context["persons"].append({
@@ -485,8 +530,9 @@ You write engaging narratives + widget data for shift pages.
 
 For each page, output a JSON object with:
 {
-  "page_narrative_ko": "200~400자 한국어 내러티브. 현장감 있게.",
-  "page_narrative": "",
+  "page_narrative": "English narrative, 150-250 words. Vivid, documentary-style.",
+  "camera_altitude": 0.5,
+  "highlight_locations": null,
   "widgets": [
     {
       "type": "widget_type",
@@ -497,33 +543,46 @@ For each page, output a JSON object with:
   ]
 }
 
-STYLE for page_narrative_ko:
-- 다큐멘터리 내레이션처럼. 현장감 + 인과관계.
-- 구체적 숫자, 인용, 일화 사용.
-- "너라면 어땠을까?" 같은 직접적 질문 OK.
-- 200~400자 (너무 길지 않게).
+CAMERA CONTROL:
+- camera_altitude: float (0.1-0.3: close/battlefield, 0.4-0.8: region, 1.0-1.5: continent, 2.0+: overview)
+- highlight_locations: (optional, for overview pages only) array of up to 5 key locations.
+  Format: [{"lat": 35.1, "lng": 114.3, "label": "English"}]
+  Only include if this page discusses multiple geographic areas. Otherwise null.
+
+STYLE for page_narrative:
+- Documentary narration style. Vivid, cause-and-effect storytelling.
+- Use specific numbers, quotes, anecdotes.
+- Direct questions like "What would you have done?" are OK.
+- **CRITICAL**: page_narrative MUST be 150-250 words. Under 100 words = failure.
+  - Not a dry summary. Write narratively with background, motivations, consequences.
+  - Example: "In January 49 BCE, the Roman Senate ordered Caesar to disband his army. The general who had spent nine years conquering Gaul faced an impossible choice: obey and face political destruction, or march south and ignite civil war. At the banks of the Rubicon..."
 
 WIDGET DATA RULES:
-- All text fields need both English and Korean: "text" + "text_ko", "label" + "label_ko" etc.
+- Widget text fields should be in English only (Korean translations will be added later).
 - Each widget must have: type, slot, priority, data.
 - slot: "left" (default), "right" (faction_vs/battle_stats), "bottom" (era_context).
 - priority: 1 = most important, 5 = least.
 
 AVAILABLE WIDGET TYPES and their data fields:
 
-primary_quote: {text, text_ko, source, source_ko, speaker, speaker_ko, year}
-faction_vs: {left_name, left_name_ko, left_commander, left_commander_ko, left_strength, left_strength_ko, right_name, right_name_ko, right_commander, right_commander_ko, right_strength, right_strength_ko, outcome, outcome_ko}
-dramatic_stat: {number, suffix, label, label_ko, context, context_ko}
-person_card: {name, name_ko, role, role_ko, birth_year, death_year, summary, summary_ko}
-battle_stats: {heading, heading_ko, stats: [{label, label_ko, value, value_ko}], significance, significance_ko}
-mini_timeline: {heading, heading_ko, events: [{year, label, label_ko, highlight?}]}
-era_context: {heading, heading_ko, items: [{region, region_ko, text, text_ko}]}
-narrator_aside: {text, text_ko, tone: "reflective|humorous|dramatic"}
-modern_equivalent: {ancient, ancient_ko, modern, modern_ko, explanation, explanation_ko}
-what_if: {question, question_ko, scenario, scenario_ko}
-historian_note: {claim, claim_ko, source, source_ko, note, note_ko}
-we_dont_know: {question, question_ko, theories: [{theory, theory_ko}]}
-conflicting_accounts: {topic, topic_ko, accounts: [{source, source_ko, claim, claim_ko}]}
+primary_quote: {text, source, speaker, year}
+faction_vs: {left_name, left_commander, left_strength, right_name, right_commander, right_strength, outcome}
+dramatic_stat: {number, suffix, label, context}
+person_card: {name, role, birth_year, death_year, summary}
+battle_stats: {heading, stats: [{label, value}], significance}
+mini_timeline: {heading, events: [{year, label, highlight?}]}
+era_context: {heading, items: [{region, text}]}
+narrator_aside: {text, tone: "reflective|humorous|dramatic"}
+modern_equivalent: {ancient, modern, explanation}
+what_if: {question, scenario}
+historian_note: {claim, source, note}
+we_dont_know: {question, theories: [{theory}]}
+conflicting_accounts: {topic, accounts: [{source, claim}]}
+
+ACADEMIC SOURCES (if provided below):
+- Use these research findings to ground your narrative in scholarship.
+- Cite specific findings, numbers, or arguments from the papers.
+- Do NOT fabricate paper titles or authors not provided.
 
 Output ONLY valid JSON. No markdown code blocks.
 """
@@ -539,7 +598,10 @@ Transition: {transition_type} (strength {transition_strength})
 
 Previous page summary: {prev_summary}
 
-Write the page narrative (200~400자 Korean) and generate {widget_count} widgets.
+Academic sources:
+{academic_papers}
+
+Write the page narrative (150-250 words English, MUST be at least 100 words) and generate {widget_count} widgets.
 Output ONLY valid JSON.
 """
 
@@ -785,6 +847,7 @@ def cmd_generate(args):
                     transition_strength=page.get("transition_strength", 3),
                     prev_summary=prev_summary,
                     widget_count=widget_count,
+                    academic_papers="(none available)",
                 )},
             ],
             max_completion_tokens=4096,
@@ -1798,7 +1861,12 @@ def cmd_enhance(args):
 
     shift_id = args.enhance
     max_pages = args.max_pages or 20
-    content_model = "gpt-5.2-chat-latest"
+    content_model = args.model or "gpt-5.2-chat-latest"
+    # Normalize model name for enhance (outline model names → chat model names)
+    if content_model == "gpt-5.2":
+        content_model = "gpt-5.2-chat-latest"
+    elif content_model == "gpt-5.1":
+        content_model = "gpt-5.1-chat-latest"
     total_cost = 0.0
     t_start = time.time()
 
@@ -1821,11 +1889,12 @@ def cmd_enhance(args):
         print(f"=== Enhance Shift (id={chain_id}) ===")
         print(f"  Title: {shift_title}")
         print(f"  Type: {chain_type}  Pages: {seg_count}  Importance: {g_imp}")
+        print(f"  Model: {content_model}")
 
         # 2. Load segments
         segments = db.execute(sql_text("""
             SELECT id, sequence_number, title, narrative_ko,
-                   page_narrative_ko, widgets,
+                   page_narrative, page_narrative_ko, widgets,
                    event_id, person_id, location_id, period_id,
                    importance, is_keystone, chapter_number, chapter_title,
                    year_start, year_end
@@ -1838,12 +1907,12 @@ def cmd_enhance(args):
         targets = []
         for seg in segments:
             (seg_id, seq, seg_title, narrative_ko,
-             page_narr_ko, widgets,
+             page_narr, page_narr_ko, widgets,
              event_id, person_id, location_id, period_id,
              importance, is_keystone, ch_num, ch_title,
              year_start, year_end) = seg
 
-            needs_narrative = not page_narr_ko or len(page_narr_ko) < 50
+            needs_narrative = not page_narr or len(page_narr or "") < 50
             needs_widgets = not widgets or (isinstance(widgets, list) and len(widgets) == 0)
 
             if args.force or needs_narrative or needs_widgets:
@@ -1898,7 +1967,14 @@ def cmd_enhance(args):
                       f"imp={t['importance']}  needs: {', '.join(flags)}")
             return
 
-        # 6. Generate content for each page
+        # 6. Load academic paper index
+        paper_idx = load_paper_index()
+        event_ids_in_targets = [t["event_id"] for t in targets if t["event_id"]]
+        papers_by_event = get_papers_for_events(event_ids_in_targets, max_per_event=3)
+        n_with_papers = sum(1 for t in targets if t["event_id"] and t["event_id"] in papers_by_event)
+        print(f"  Academic papers: {n_with_papers}/{len(targets)} pages have papers")
+
+        # 7. Generate content for each page
         client = _get_openai_client()
         print(f"\n--- Enhancing {len(targets)} pages ({content_model}) ---")
 
@@ -1920,6 +1996,10 @@ def cmd_enhance(args):
             seg_proxy.location_id = target["location_id"]
             ctx = _gather_segment_context(db, seg_proxy, shift_title)
             ctx_str = _format_segment_context(ctx)
+
+            # Gather academic papers for this page
+            page_papers = papers_by_event.get(target["event_id"], []) if target["event_id"] else []
+            paper_context = format_papers_for_prompt(page_papers, max_chars=3000)
 
             # Determine widget hints from event type
             widget_hints = _pick_widget_hints(
@@ -1951,6 +2031,7 @@ def cmd_enhance(args):
                         transition_strength=3,
                         prev_summary=prev_summary,
                         widget_count=widget_count,
+                        academic_papers=paper_context,
                     )},
                 ],
                 max_completion_tokens=4096,
@@ -1967,17 +2048,47 @@ def cmd_enhance(args):
                 try:
                     content_data = json.loads(json_match.group())
                 except json.JSONDecodeError:
-                    content_data = {"page_narrative_ko": content_raw, "widgets": []}
+                    content_data = {"page_narrative": content_raw, "widgets": []}
             else:
-                content_data = {"page_narrative_ko": content_raw, "widgets": []}
+                content_data = {"page_narrative": content_raw, "widgets": []}
 
-            new_narrative = content_data.get("page_narrative_ko", "")
+            new_narrative = content_data.get("page_narrative", "")
             new_widgets = content_data.get("widgets", [])
+            new_cam_alt = content_data.get("camera_altitude")
+            new_highlights = content_data.get("highlight_locations")
+
+            # Validate camera_altitude
+            if new_cam_alt is not None:
+                try:
+                    new_cam_alt = round(float(new_cam_alt), 2)
+                except (ValueError, TypeError):
+                    new_cam_alt = None
+
+            # Validate highlight_locations (max 5, must have lat/lng)
+            if new_highlights:
+                if isinstance(new_highlights, list):
+                    validated = []
+                    for hl in new_highlights[:5]:
+                        if isinstance(hl, dict) and "lat" in hl and "lng" in hl:
+                            try:
+                                validated.append({
+                                    "lat": round(float(hl["lat"]), 4),
+                                    "lng": round(float(hl["lng"]), 4),
+                                    "label": str(hl.get("label", "")),
+                                })
+                            except (ValueError, TypeError):
+                                pass
+                    new_highlights = validated if validated else None
+                else:
+                    new_highlights = None
 
             char_count = len(new_narrative)
             n_widgets = len(new_widgets)
+            cam_str = f" cam={new_cam_alt}" if new_cam_alt else ""
+            hl_str = f" hl={len(new_highlights)}" if new_highlights else ""
+            papers_str = f" papers={len(page_papers)}" if page_papers else ""
             elapsed = time.time() - t2
-            print(f" {char_count}자, {n_widgets}w | {elapsed:.1f}s | ${cost:.3f}")
+            print(f" {char_count}자, {n_widgets}w{cam_str}{hl_str}{papers_str} | {elapsed:.1f}s | ${cost:.3f}")
 
             # 7. UPDATE in DB
             update_parts = []
@@ -1985,13 +2096,22 @@ def cmd_enhance(args):
 
             if target["needs_narrative"] or args.force:
                 if new_narrative:
-                    update_parts.append("page_narrative_ko = :narr")
+                    update_parts.append("page_narrative = :narr")
                     update_params["narr"] = new_narrative
 
             if target["needs_widgets"] or args.force:
                 if new_widgets:
                     update_parts.append("widgets = CAST(:widgets AS jsonb)")
                     update_params["widgets"] = json.dumps(new_widgets, ensure_ascii=False)
+
+            # Camera altitude + highlight locations (always update if present)
+            if new_cam_alt is not None:
+                update_parts.append("camera_altitude = :cam_alt")
+                update_params["cam_alt"] = new_cam_alt
+
+            if new_highlights:
+                update_parts.append("highlight_locations = CAST(:hl AS jsonb)")
+                update_params["hl"] = json.dumps(new_highlights, ensure_ascii=False)
 
             if update_parts:
                 db.execute(sql_text(
@@ -2009,6 +2129,262 @@ def cmd_enhance(args):
         print(f"  Time: {total_elapsed:.1f}s")
         print(f"  Cost: ~${total_cost:.3f}")
         print(f"  View: http://localhost:8100/api/v1/shifts/{chain_id}")
+
+    except Exception as e:
+        db.rollback()
+        print(f"\n  ERROR: {e}")
+        raise
+    finally:
+        db.close()
+
+
+# ─── Batch enhance (loop through shifts by importance) ───
+
+def cmd_batch_enhance(args):
+    """Enhance all shifts at or above min-importance level."""
+    from sqlalchemy import text as sql_text
+
+    db = _get_db_session()
+    min_importance = args.min_importance or 5
+    limit = args.limit or 999
+
+    try:
+        # Find shifts that need enhancement (no widgets)
+        shifts = db.execute(sql_text("""
+            SELECT hc.id, hc.slug,
+                   COALESCE(hc.title_ko, hc.title) as title,
+                   hc.segment_count, hc.globe_importance,
+                   COUNT(cs.id) as total_pages,
+                   SUM(CASE WHEN cs.widgets IS NOT NULL
+                            AND cs.widgets::text != '[]' THEN 1 ELSE 0 END)
+                   as pages_with_widgets
+            FROM historical_chains hc
+            LEFT JOIN chain_segments cs ON cs.chain_id = hc.id
+            WHERE hc.globe_importance >= :min_imp
+            GROUP BY hc.id, hc.slug, hc.title, hc.title_ko, hc.segment_count, hc.globe_importance
+            HAVING SUM(CASE WHEN cs.widgets IS NOT NULL
+                            AND cs.widgets::text != '[]' THEN 1 ELSE 0 END) = 0
+               OR SUM(CASE WHEN cs.widgets IS NOT NULL
+                            AND cs.widgets::text != '[]' THEN 1 ELSE 0 END) IS NULL
+            ORDER BY hc.globe_importance DESC, hc.segment_count DESC
+            LIMIT :limit
+        """), {"min_imp": min_importance, "limit": limit}).fetchall()
+
+        print(f"\n=== Batch Enhance (imp>={min_importance}) ===")
+        print(f"  Shifts to enhance: {len(shifts)}")
+
+        if not shifts:
+            print("  Nothing to enhance.")
+            return
+
+        total_pages = sum(s[3] or 0 for s in shifts)
+        model = args.model or "gpt-5.2-chat-latest"
+        if model == "gpt-5.2":
+            model = "gpt-5.2-chat-latest"
+        elif model == "gpt-5.1":
+            model = "gpt-5.1-chat-latest"
+
+        est_cost = total_pages * (0.01615 if "5.2" in model else 0.0115)
+        print(f"  Total pages: {total_pages}")
+        print(f"  Model: {model}")
+        print(f"  Estimated cost: ~${est_cost:.2f}")
+        print()
+
+        for i, shift in enumerate(shifts):
+            sid = shift[0]
+            title = shift[2]
+            pages = shift[3] or 0
+            imp = shift[4]
+            print(f"\n{'='*60}")
+            print(f"  [{i+1}/{len(shifts)}] id={sid}  imp={imp}  {pages}p  {title}")
+            print(f"{'='*60}")
+
+            # Reuse cmd_enhance by setting args.enhance
+            args.enhance = sid
+            try:
+                cmd_enhance(args)
+            except Exception as e:
+                print(f"  ERROR on shift {sid}: {e}")
+                print(f"  Skipping...")
+                continue
+
+        print(f"\n{'='*60}")
+        print(f"  Batch enhance complete: {len(shifts)} shifts")
+
+    finally:
+        db.close()
+
+
+# ─── Batch camera altitude (heuristic) ───
+
+def cmd_batch_camera(args):
+    """Apply heuristic camera_altitude to existing shift pages (no GPT calls)."""
+    from sqlalchemy import text as sql_text
+
+    db = _get_db_session()
+    shift_id = args.shift_id
+    dry_run = args.dry_run
+    force = args.force
+    min_importance = args.min_importance or 1
+
+    try:
+        # 1. Load target shifts
+        if shift_id:
+            shifts = db.execute(sql_text("""
+                SELECT id, slug, COALESCE(title_ko, title) as title,
+                       segment_count, globe_importance
+                FROM historical_chains WHERE id = :id
+            """), {"id": shift_id}).fetchall()
+        else:
+            shifts = db.execute(sql_text("""
+                SELECT id, slug, COALESCE(title_ko, title) as title,
+                       segment_count, globe_importance
+                FROM historical_chains
+                WHERE globe_importance >= :min_imp
+                ORDER BY globe_importance DESC, id
+            """), {"min_imp": min_importance}).fetchall()
+
+        if not shifts:
+            print("No shifts found matching criteria.")
+            return
+
+        total_shifts = len(shifts)
+        total_pages_all = sum(s[3] or 0 for s in shifts)
+        print(f"=== Batch Camera Altitude ===")
+        print(f"  Processing {total_shifts} shifts ({total_pages_all} pages)...")
+        if dry_run:
+            print(f"  [DRY RUN — no DB writes]\n")
+        else:
+            print()
+
+        shifts_updated = 0
+        pages_modified = 0
+        stats = {"opening": 0, "closing": 0, "same_loc": 0, "skipped_existing": 0}
+
+        for shift_row in shifts:
+            chain_id, slug, title, seg_count, g_imp = shift_row
+
+            # 2. Load pages with coordinates
+            pages = db.execute(sql_text("""
+                SELECT cs.id, cs.sequence_number,
+                       COALESCE(l.latitude, el.latitude) as lat,
+                       COALESCE(l.longitude, el.longitude) as lng,
+                       COALESCE(cs.location_id, e.primary_location_id) as effective_loc_id,
+                       cs.camera_altitude
+                FROM chain_segments cs
+                LEFT JOIN locations l ON l.id = cs.location_id
+                LEFT JOIN events e ON e.id = cs.event_id
+                LEFT JOIN locations el ON el.id = e.primary_location_id
+                WHERE cs.chain_id = :chain_id
+                ORDER BY cs.sequence_number
+            """), {"chain_id": chain_id}).fetchall()
+
+            if not pages:
+                continue
+
+            # 3. Calculate geographic span from all pages with coordinates
+            lats = [float(p[2]) for p in pages if p[2] is not None]
+            lngs = [float(p[3]) for p in pages if p[3] is not None]
+
+            if lats and lngs:
+                lat_span = max(lats) - min(lats)
+                lng_span = max(lngs) - min(lngs)
+                max_span = max(lat_span, lng_span)
+                overview_alt = max(0.5, min(2.0, 0.3 + max_span * 0.012))
+            else:
+                overview_alt = 1.0
+
+            # 4. Apply heuristic per page
+            updates = []  # list of (seg_id, new_altitude, reason)
+            last_seq = max(p[1] for p in pages)
+
+            for i, page in enumerate(pages):
+                seg_id, seq, lat, lng, eff_loc, existing_alt = page
+
+                # Skip if already has value (unless --force)
+                if existing_alt is not None and not force:
+                    stats["skipped_existing"] += 1
+                    continue
+
+                new_alt = None
+                reason = None
+
+                # Rule 1: First page → overview altitude
+                if seq == 0:
+                    new_alt = round(overview_alt, 2)
+                    reason = f"opening, span={max_span:.1f}°"
+                    stats["opening"] += 1
+
+                # Rule 2: Last page → same overview altitude
+                elif seq == last_seq:
+                    new_alt = round(overview_alt, 2)
+                    reason = "closing"
+                    stats["closing"] += 1
+
+                # Rule 3: Consecutive same location
+                elif eff_loc is not None and i > 0:
+                    # Count consecutive same-location streak ending at this page
+                    streak = 0
+                    for j in range(i - 1, -1, -1):
+                        prev_eff_loc = pages[j][4]
+                        if prev_eff_loc == eff_loc:
+                            streak += 1
+                        else:
+                            break
+
+                    if streak >= 1:
+                        # This is 2nd, 3rd, ... page at same location
+                        if streak == 1:
+                            new_alt = 0.6
+                        else:
+                            new_alt = 0.8
+                        reason = f"same loc={eff_loc} (#{streak + 1})"
+                        stats["same_loc"] += 1
+                    elif i > 0:
+                        # Check if NEXT page is same location (mark first of pair)
+                        # Actually, for the first at a location that repeats,
+                        # we want close-up (0.3)
+                        if i + 1 < len(pages) and pages[i + 1][4] == eff_loc:
+                            new_alt = 0.3
+                            reason = f"same loc={eff_loc} (#1, close-up)"
+                            stats["same_loc"] += 1
+
+                # Rule 4: General page → null (keep as-is)
+                # (no action needed)
+
+                if new_alt is not None:
+                    updates.append((seg_id, new_alt, seq, reason))
+
+            if not updates:
+                continue
+
+            # Print per-shift summary
+            shifts_updated += 1
+            pages_modified += len(updates)
+            print(f"  [{shifts_updated}] {slug} ({len(pages)}p)")
+            for seg_id, alt, seq, reason in updates:
+                print(f"    [{seq:3d}] → alt={alt}  ({reason})")
+            print(f"    Updated: {len(updates)} pages")
+
+            # 5. Write to DB
+            if not dry_run:
+                for seg_id, alt, seq, reason in updates:
+                    db.execute(sql_text(
+                        "UPDATE chain_segments SET camera_altitude = :alt WHERE id = :id"
+                    ), {"alt": alt, "id": seg_id})
+
+        if not dry_run:
+            db.commit()
+
+        print(f"\n=== Summary ===")
+        print(f"  Shifts updated: {shifts_updated}/{total_shifts}")
+        print(f"  Pages modified: {pages_modified}")
+        print(f"  Opening pages: {stats['opening']}")
+        print(f"  Closing pages: {stats['closing']}")
+        print(f"  Same-location pages: {stats['same_loc']}")
+        print(f"  Skipped (existing value): {stats['skipped_existing']}")
+        if dry_run:
+            print(f"  [DRY RUN — no changes written]")
 
     except Exception as e:
         db.rollback()
@@ -2136,6 +2512,13 @@ Examples:
   # List existing shifts
   python scripts/create_shift.py --list
 
+  # Enhance with GPT (narrative + widgets + camera)
+  python scripts/create_shift.py --enhance 2687 --force
+
+  # Batch camera altitude (heuristic, no GPT)
+  python scripts/create_shift.py --batch-camera --dry-run
+  python scripts/create_shift.py --batch-camera --shift-id 2687
+
   # Discover shifts needing enhancement
   python scripts/create_shift.py --batch-discover --min-importance 4
         """,
@@ -2164,11 +2547,21 @@ Examples:
     parser.add_argument("--translate-file", type=str, metavar="FILE",
                         help="Translate empty English fields in YAML file")
 
+    # Batch camera altitude (heuristic)
+    parser.add_argument("--batch-camera", action="store_true",
+                        help="Apply heuristic camera_altitude to all shift pages (no GPT)")
+    parser.add_argument("--shift-id", type=int, metavar="SHIFT_ID",
+                        help="Target specific shift ID (with --batch-camera)")
+
+    # Batch enhance
+    parser.add_argument("--batch-enhance", action="store_true",
+                        help="Enhance all shifts at or above --min-importance (default: 5)")
+
     # Batch discovery
     parser.add_argument("--batch-discover", action="store_true",
                         help="List shifts needing enhancement + aggregate events without shifts")
     parser.add_argument("--min-importance", type=int, default=3,
-                        help="Minimum globe_importance for batch discovery (default: 3)")
+                        help="Minimum globe_importance (for --batch-discover, --batch-camera)")
     parser.add_argument("--limit", type=int, default=50,
                         help="Max results per category in batch discovery (default: 50)")
 
@@ -2202,6 +2595,10 @@ Examples:
         cmd_import(args)
     elif args.translate_file:
         cmd_translate(args)
+    elif args.batch_enhance:
+        cmd_batch_enhance(args)
+    elif args.batch_camera:
+        cmd_batch_camera(args)
     elif args.batch_discover:
         cmd_batch_discover(args)
     elif args.list:

@@ -1,63 +1,53 @@
-import { usePortalStore } from '../../store/portalStore'
-import { useSettingsStore, getLocalizedText } from '../../store/settingsStore'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { PortalItemSummary } from '../../types'
+import { FgoStoryChain } from './FgoStoryChain'
+import { FgoServantGrid } from './FgoServantGrid'
+import { FgoShiftList } from './FgoShiftList'
+
+type FgoView = 'story' | 'servants' | 'shifts'
 
 interface Props {
   items: PortalItemSummary[]
+  onOpenShift: (shiftId: number) => void
 }
 
-const SUBSECTIONS = [
-  { type: 'singularity', label: 'Singularities', colorClass: 'singularity' },
-  { type: 'lostbelt', label: 'Lostbelts', colorClass: 'lostbelt' },
-  { type: 'servant_column', label: 'Servant Columns', colorClass: 'servant_column' },
-] as const
+export function FgoSection({ items, onOpenShift }: Props) {
+  const { t } = useTranslation()
+  const [activeView, setActiveView] = useState<FgoView>('story')
 
-export function FgoSection({ items }: Props) {
-  const openPreview = usePortalStore((s) => s.openPreview)
-  const pushCollection = usePortalStore((s) => s.pushCollection)
-  const { preferredLanguage } = useSettingsStore()
+  const chips: { key: FgoView; label: string }[] = [
+    { key: 'story', label: t('trismegistos.fgo.story') },
+    { key: 'servants', label: t('trismegistos.fgo.servants') },
+    { key: 'shifts', label: t('trismegistos.fgo.shifts') },
+  ]
+
+  const storyItems = items.filter(
+    (i) => i.item_type === 'singularity' || i.item_type === 'lostbelt'
+  )
+  const servantItems = items.filter((i) => i.item_type === 'servant_column')
 
   return (
     <div className="portal-section">
-      <div className="portal-section__title">Fate/Grand Order</div>
-      {SUBSECTIONS.map(({ type, label, colorClass }) => {
-        const filtered = items.filter((item) => item.item_type === type)
-        if (!filtered.length) return null
+      <div className="portal-section__title">{t('trismegistos.tabs.fgo')}</div>
 
-        return (
-          <div key={type} className="portal-fgo-subsection">
-            <div className={`portal-fgo-subsection__title portal-fgo-subsection__title--${colorClass}`}>
-              {label}
-            </div>
-            <div className="portal-fgo-scroll">
-              {filtered.map((item) => {
-                const title = getLocalizedText(item, 'title', preferredLanguage)
-                return (
-                  <div
-                    key={item.slug}
-                    className="portal-fgo-card"
-                    onClick={() => openPreview(item.slug)}
-                  >
-                    {item.chapter && (
-                      <div className="portal-fgo-card__chapter">{item.chapter}</div>
-                    )}
-                    <div className="portal-fgo-card__title">{title}</div>
-                    {item.era && (
-                      <div className="portal-fgo-card__meta">{item.era}</div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )
-      })}
-      <span
-        className="portal-fgo-link"
-        onClick={() => pushCollection('fgo-main-story')}
-      >
-        FGO Main Story Collection {'\u2192'}
-      </span>
+      {/* Chip bar */}
+      <div className="fgo-chip-bar">
+        {chips.map(({ key, label }) => (
+          <button
+            key={key}
+            className={`fgo-chip ${activeView === key ? 'fgo-chip--active' : ''}`}
+            onClick={() => setActiveView(key)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Sub-views */}
+      {activeView === 'story' && <FgoStoryChain items={storyItems} />}
+      {activeView === 'servants' && <FgoServantGrid items={servantItems} />}
+      {activeView === 'shifts' && <FgoShiftList onOpenShift={onOpenShift} />}
     </div>
   )
 }

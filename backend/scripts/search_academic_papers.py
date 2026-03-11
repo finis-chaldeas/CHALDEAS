@@ -1,8 +1,12 @@
 """
 Academic Paper Search via OpenAlex API
-- events importance >= 3 부터 시작
+- events importance >= 3 부터 시작, persons도 지원
 - 초록(abstract) 텍스트로 바로 저장 (PDF 불필요)
 - 품질 스코어링 후 상위 논문만 선별
+
+Usage:
+  python search_academic_papers.py [importance]            # events (default)
+  python search_academic_papers.py persons [importance]    # persons
 """
 
 import sys
@@ -181,56 +185,66 @@ def search_openalex(query: str, max_results: int = 20) -> list:
     return results
 
 
-def search_for_event(event_title: str, event_id: int, importance: int) -> dict | str:
-    """하나의 이벤트에 대해 논문 검색. 'BUDGET_EXHAUSTED' 반환 시 중단."""
-    papers = search_openalex(event_title, max_results=20)
+def search_for_item(name: str, item_id: int, importance: int, search_type: str = 'events') -> dict | str:
+    """하나의 이벤트/인물에 대해 논문 검색. 'BUDGET_EXHAUSTED' 반환 시 중단."""
+    papers = search_openalex(name, max_results=20)
 
     if papers == 'BUDGET_EXHAUSTED':
         return 'BUDGET_EXHAUSTED'
 
-    return {
-        'event_id': event_id,
-        'event_title': event_title,
+    result = {
+        f'{search_type[:-1]}_id': item_id,  # event_id or person_id
+        f'{search_type[:-1]}_name': name,
         'importance': importance,
-        'query': event_title,
+        'query': name,
         'papers_found': len(papers),
         'papers': papers[:10],
         'searched_at': datetime.now().isoformat(),
     }
+    return result
 
 
-def main():
+def run_search(search_type: str, target_imp: int):
+    """events 또는 persons에 대해 학술 논문 검색 실행."""
     import psycopg2
 
+    type_label = 'Events' if search_type == 'events' else 'Persons'
+    id_field = 'event_id' if search_type == 'events' else 'person_id'
+
     print("=" * 60)
-    print("Academic Paper Search - Events (importance >= 3)")
+    print(f"Academic Paper Search - {type_label} (importance={target_imp})")
     print("=" * 60)
 
-    # DB에서 이벤트 가져오기 (importance 5부터)
     conn = psycopg2.connect(
         host='localhost', port=5432,
         dbname='chaldeas', user='chaldeas', password='chaldeas_dev'
     )
     cur = conn.cursor()
 
-    # importance를 커맨드라인 인자로 받기 (기본값 5)
-    target_imp = int(sys.argv[1]) if len(sys.argv) > 1 else 5
+    if search_type == 'events':
+        cur.execute("""
+            SELECT id, title, importance
+            FROM events
+            WHERE importance = %s
+            ORDER BY id
+        """, (target_imp,))
+    else:
+        cur.execute("""
+            SELECT id, name, importance_score
+            FROM persons
+            WHERE importance_score = %s
+            ORDER BY id
+        """, (target_imp,))
 
-    cur.execute("""
-        SELECT id, title, importance
-        FROM events
-        WHERE importance = %s
-        ORDER BY id
-    """, (target_imp,))
-    events = cur.fetchall()
+    items = cur.fetchall()
     cur.close()
     conn.close()
 
-    print(f"\n대상 이벤트: {len(events)}개 (importance={target_imp})")
+    print(f"\n대상 {type_label.lower()}: {len(items)}개 (importance={target_imp})")
     print("-" * 60)
 
     # 체크포인트: 이전 결과 이어서 하기
-    checkpoint_file = OUTPUT_DIR / f"events_imp{target_imp}_checkpoint.json"
+    checkpoint_file = OUTPUT_DIR / f"{search_type}_imp{target_imp}_checkpoint.json"
     all_results = []
     done_ids = set()
 
@@ -238,27 +252,28 @@ def main():
         with open(checkpoint_file, 'r', encoding='utf-8') as f:
             checkpoint = json.load(f)
             all_results = checkpoint.get('results', [])
-            done_ids = {r['event_id'] for r in all_results}
+            done_ids = {r[id_field] for r in all_results}
         print(f"  체크포인트 로드: {len(done_ids)}개 완료, 이어서 진행")
 
-    remaining = [(eid, title, imp) for eid, title, imp in events if eid not in done_ids]
+    remaining = [(item_id, name, imp) for item_id, name, imp in items if item_id not in done_ids]
     total_papers = sum(r['papers_found'] for r in all_results)
     total_with_abstract = sum(
         sum(1 for p in r['papers'] if p['abstract_len'] > 0)
         for r in all_results
     )
-    errors = 0
 
-    print(f"  남은 이벤트: {len(remaining)}개")
+    print(f"  남은 항목: {len(remaining)}개")
     print("-" * 60)
 
-    for i, (eid, title, imp) in enumerate(remaining):
+    budget_exhausted = False
+    for i, (item_id, name, imp) in enumerate(remaining):
         progress = len(done_ids) + i + 1
-        print(f"\n[{progress}/{len(events)}] {title} (imp={imp})")
+        print(f"\n[{progress}/{len(items)}] {name} (imp={imp})")
 
-        result = search_for_event(title, eid, imp)
+        result = search_for_item(name, item_id, imp, search_type)
 
         if result == 'BUDGET_EXHAUSTED':
+            budget_exhausted = True
             print("\n  !!! 일일 한도 소진 — 체크포인트 저장 후 종료 !!!")
             with open(checkpoint_file, 'w', encoding='utf-8') as f:
                 json.dump({
@@ -291,20 +306,19 @@ def main():
                     'results': all_results,
                     'saved_at': datetime.now().isoformat(),
                 }, f, ensure_ascii=False)
-            print(f"\n  >>> 체크포인트 저장 ({progress}/{len(events)})")
+            print(f"\n  >>> 체크포인트 저장 ({progress}/{len(items)})")
 
         time.sleep(DELAY)
 
     # 최종 결과 저장
-    budget_exhausted = (result == 'BUDGET_EXHAUSTED') if 'result' in dir() else False
-    output_file = OUTPUT_DIR / f"events_imp{target_imp}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    output_file = OUTPUT_DIR / f"{search_type}_imp{target_imp}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump({
-            'search_type': 'events',
+            'search_type': search_type,
             'importance_filter': target_imp,
-            'events_searched': len(events),
-            'events_with_papers': sum(1 for r in all_results if r['papers_found'] > 0),
-            'events_no_papers': sum(1 for r in all_results if r['papers_found'] == 0),
+            f'{search_type}_searched': len(items),
+            f'{search_type}_with_papers': sum(1 for r in all_results if r['papers_found'] > 0),
+            f'{search_type}_no_papers': sum(1 for r in all_results if r['papers_found'] == 0),
             'total_papers': total_papers,
             'total_with_abstract': total_with_abstract,
             'abstract_rate': f"{total_with_abstract/max(total_papers,1)*100:.1f}%",
@@ -318,11 +332,27 @@ def main():
 
     print(f"\n{'=' * 60}")
     print(f"결과 요약:")
-    print(f"  이벤트 검색: {len(events)}개")
+    print(f"  {type_label} 검색: {len(items)}개")
     print(f"  논문 발견: {total_papers}편")
     print(f"  초록 있음: {total_with_abstract}편 ({total_with_abstract/max(total_papers,1)*100:.1f}%)")
     print(f"  저장: {output_file}")
     print(f"{'=' * 60}")
+
+
+def main():
+    # 커맨드라인 파싱: [persons] [importance]
+    args = sys.argv[1:]
+    search_type = 'events'
+    target_imp = 5
+
+    if args and args[0] == 'persons':
+        search_type = 'persons'
+        args = args[1:]
+
+    if args:
+        target_imp = int(args[0])
+
+    run_search(search_type, target_imp)
 
 
 if __name__ == '__main__':

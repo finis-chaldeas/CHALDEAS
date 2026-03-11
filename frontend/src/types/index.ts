@@ -752,7 +752,7 @@ export interface PortalItemDetail extends PortalItemSummary {
     content_ko?: string
     content_ja?: string
   }>
-  related_servants: Array<{ name: string; class?: string; rarity?: number }>
+  related_servants: Array<{ name: string; class?: string; rarity?: number; slug?: string }>
   related_event_ids: number[]
   sources: string[]
 }

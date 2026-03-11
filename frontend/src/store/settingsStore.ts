@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { trackEvent, AnalyticsEvents } from '../lib/analytics'
+import i18n from '../i18n'
 
 export type PreferredLanguage = 'auto' | 'ko' | 'ja' | 'en'
 export type GlobeStyleOption = 'default' | 'holo' | 'night'
@@ -52,6 +53,9 @@ export const useSettingsStore = create<SettingsState>()(
       setPreferredLanguage: (lang) => {
         trackEvent(AnalyticsEvents.LANGUAGE_CHANGED, { language: lang })
         set({ preferredLanguage: lang })
+        // Sync with i18next for UI label translations
+        const effectiveLang = lang === 'auto' ? getEffectiveLanguage(lang) : lang
+        i18n.changeLanguage(effectiveLang)
       },
 
       setHideEmptyDescriptions: (hide) => set({ hideEmptyDescriptions: hide }),

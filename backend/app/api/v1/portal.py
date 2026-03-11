@@ -194,6 +194,37 @@ def get_portal_item(slug: str, db: Session = Depends(get_db)):
     item = db.query(PortalItem).filter(PortalItem.slug == slug).first()
     if not item:
         raise HTTPException(status_code=404, detail=f"Portal item '{slug}' not found")
+
+    # Enrich related_servants with portal item slugs for linking
+    if item.related_servants:
+        servant_names = [s.get("name", "") for s in item.related_servants]
+        servant_items = (
+            db.query(PortalItem.slug, PortalItem.title)
+            .filter(
+                PortalItem.item_type == "servant_column",
+                or_(*[PortalItem.title.ilike(f"%{name}%") for name in servant_names if name])
+            )
+            .all()
+        )
+        # Build name→slug lookup (match by checking if servant name appears in title)
+        name_to_slug = {}
+        for s_slug, s_title in servant_items:
+            s_title_lower = s_title.lower()
+            for name in servant_names:
+                if name and name.lower() in s_title_lower:
+                    name_to_slug[name.lower()] = s_slug
+
+        enriched = []
+        for s in item.related_servants:
+            entry = dict(s)
+            entry["slug"] = name_to_slug.get(s.get("name", "").lower())
+            enriched.append(entry)
+
+        # Return enriched copy without mutating the ORM object
+        result = PortalItemDetail.model_validate(item)
+        result.related_servants = enriched
+        return result
+
     return item
 
 

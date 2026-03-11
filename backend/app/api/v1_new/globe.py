@@ -855,10 +855,18 @@ def _select_heroes(candidates: list, max_count: int, min_distance_deg: float, zo
 #   regional:    card ~180px full, ~45px/° → need ~4° separation
 #   local:       card ~180px full, ~150px/° → need ~1.2° separation
 ZOOM_CONFIG = {
-    "cosmic":      {"min_importance": 4, "max_heroes": 10,  "min_distance": 20},
-    "continental": {"min_importance": 4, "max_heroes": 15,  "min_distance": 8},
-    "regional":    {"min_importance": 3, "max_heroes": 25,  "min_distance": 3},
-    "local":       {"min_importance": 2, "max_heroes": 40,  "min_distance": 1.0},
+    "cosmic":      {"min_importance": 4, "max_heroes": 15,  "min_distance": 20},
+    "continental": {"min_importance": 4, "max_heroes": 25,  "min_distance": 8},
+    "regional":    {"min_importance": 3, "max_heroes": 40,  "min_distance": 3},
+    "local":       {"min_importance": 3, "max_heroes": 60,  "min_distance": 1.0},
+}
+
+# show_minor=true: include importance 2 events at local zoom
+ZOOM_CONFIG_FULL = {
+    "cosmic":      {"min_importance": 4, "max_heroes": 15,  "min_distance": 20},
+    "continental": {"min_importance": 4, "max_heroes": 25,  "min_distance": 8},
+    "regional":    {"min_importance": 3, "max_heroes": 40,  "min_distance": 3},
+    "local":       {"min_importance": 2, "max_heroes": 60,  "min_distance": 1.0},
 }
 
 
@@ -867,8 +875,9 @@ async def get_smart_markers(
     year_start: int = Query(..., description="Start year (BCE as negative)"),
     year_end: int = Query(..., description="End year"),
     zoom: str = Query("cosmic", description="Zoom level: cosmic/continental/regional/local"),
+    show_minor: bool = Query(False, description="Include importance ≤2 events"),
     bounds: Optional[str] = Query(None, description="lat1,lng1,lat2,lng2 viewport bounds"),
-    limit_heroes: int = Query(15, ge=1, le=50),
+    limit_heroes: int = Query(40, ge=1, le=80),
     db: Session = Depends(get_db),
 ):
     """
@@ -877,7 +886,8 @@ async def get_smart_markers(
     Returns hero cards (important events) with nearby event stacking.
     Hero selection uses importance-based filtering with overlap prevention.
     """
-    config = ZOOM_CONFIG.get(zoom, ZOOM_CONFIG["cosmic"])
+    zoom_table = ZOOM_CONFIG_FULL if show_minor else ZOOM_CONFIG
+    config = zoom_table.get(zoom, zoom_table["cosmic"])
     min_importance = config["min_importance"]
     min_distance = config["min_distance"]
     max_heroes = min(config["max_heroes"], limit_heroes)

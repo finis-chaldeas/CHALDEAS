@@ -1,0 +1,286 @@
+# ============================================================
+# CHALDEAS History Shift Template
+# ============================================================
+# 이 파일을 복사해서 내용을 채우세요.
+#
+# 사용법:
+#   1. 이 파일을 output/ 폴더에 복사
+#      cp templates/shift_template.yaml output/shift-my-topic.yaml
+#
+#   2. 아래 필드를 채움 (한국어 우선, English는 비워두면 자동번역 가능)
+#
+#   3. DB에 삽입:
+#      python scripts/create_shift.py --import output/shift-my-topic.yaml
+#
+#   4. 영어 번역이 비어있으면 자동 번역:
+#      python scripts/create_shift.py --import output/shift-my-topic.yaml --translate
+#
+# 자동 생성:
+#   python scripts/create_shift.py --generate "마라톤 전투" --type aggregate
+#   → output/ 에 YAML 생성됨 → 검수 후 --import
+#
+# 주의: 모든 페이지에는 event_id, person_id, location_id, period_id 중
+#       최소 1개가 반드시 있어야 합니다 (segment_has_entity 제약).
+# ============================================================
+
+# --- 기본 정보 ---
+
+# URL용 고유 ID (영문 kebab-case)
+slug: ""
+
+# 시프트 타입: aggregate | person_story | place_story | era_story | causal_chain
+chain_type: "aggregate"
+
+# --- 제목 ---
+
+title_ko: ""          # "그리스-페르시아 전쟁"
+title: ""              # "Greco-Persian Wars" (비우면 자동번역)
+
+# --- 요약 ---
+
+summary_ko: ""         # 2~3문장 한국어 요약
+summary: ""            # 영어 요약 (비우면 자동번역)
+
+# --- Focal Entity (시프트의 주체) ---
+# chain_type에 따라 하나만 설정:
+#   aggregate: focal_event_id
+#   person_story: focal_person_id
+#   place_story: focal_location_id
+#   era_story: focal_period_id
+
+focal_event_id: null
+focal_person_id: null
+focal_location_id: null
+focal_period_id: null
+
+# --- 시간 범위 ---
+# BCE는 음수 (-490 = 490 BCE)
+
+year_start: 0
+year_end: null
+
+# --- 표시 설정 ---
+
+globe_importance: 3    # 1~5 (글로브에서의 표시 우선순위)
+display_type: "split"  # split | modal
+status: "user"         # user | cached | featured | system
+
+# --- 생성 메타데이터 ---
+
+is_auto_generated: false
+generation_model: null
+
+# --- 챕터 & 페이지 ---
+# 1개 챕터에 3~8페이지 권장. 긴 시프트는 2~4 챕터.
+#
+# 페이지 구성:
+#   sequence: 전체 시프트에서의 순서 (0부터)
+#   title/title_ko: 페이지 제목
+#   narrative/narrative_ko: 한 줄 요약 (마커에 표시)
+#   page_narrative/page_narrative_ko: 본문 (200~400자)
+#   event_id/person_id/location_id/period_id: DB 엔티티 링크 (최소 1개 필수!)
+#   importance: 1~5
+#   transition_type: causes|follows|parallel|background|consequence|enables|opposes
+#   transition_strength: 1~5
+#   widgets: 위젯 배열 (아래 예시 참조)
+
+chapters:
+  - chapter_number: 1
+    chapter_title: ""
+    chapter_title_ko: ""
+    pages:
+      - sequence: 0
+        title: ""
+        title_ko: ""
+        narrative: ""
+        narrative_ko: ""
+        page_narrative: ""
+        page_narrative_ko: |
+          여기에 한국어 내러티브를 작성.
+          200~400자 권장. 현장감 있게.
+        year_start: null
+        year_end: null
+        event_id: null           # DB events.id
+        person_id: null          # DB persons.id
+        location_id: null        # DB locations.id (좌표 필요)
+        period_id: null          # DB periods.id
+        importance: 3
+        is_keystone: false
+        transition_type: null    # 첫 페이지는 null
+        transition_strength: null
+        widgets: []              # 아래 위젯 예시 참조
+
+      # - sequence: 1
+      #   title: "Next Page"
+      #   title_ko: "다음 페이지"
+      #   ...
+
+# --- Entity Roles (선택) ---
+# 시프트에 등장하는 주요 인물/장소/이벤트의 역할.
+# role: protagonist | antagonist | supporting | setting | catalyst | witness | context | outcome
+
+entity_roles: []
+  # - person_id: 1234
+  #   role: "protagonist"
+  #   importance: 5
+  #   first_appearance: 0       # 처음 등장하는 page sequence
+
+# ============================================================
+# 위젯 예시 (widgets 배열에 넣을 수 있는 타입들)
+# ============================================================
+#
+# --- primary_quote ---
+# - type: "primary_quote"
+#   slot: "left"
+#   priority: 1
+#   data:
+#     text_ko: "왕이시여, 아테네를 기억하소서."
+#     text: "O King, remember the Athenians."
+#     source: "Herodotus, Histories"
+#     source_ko: "헤로도토스, 역사"
+#     speaker: "Servant of Darius I"
+#     speaker_ko: "다리우스 1세의 시종"
+#     year: -490
+#
+# --- faction_vs ---
+# - type: "faction_vs"
+#   slot: "right"
+#   priority: 1
+#   data:
+#     left_name: "Athens"
+#     left_name_ko: "아테네"
+#     left_commander: "Miltiades"
+#     left_commander_ko: "밀티아데스"
+#     left_strength: "10,000 hoplites"
+#     left_strength_ko: "중장보병 1만"
+#     right_name: "Persia"
+#     right_name_ko: "페르시아"
+#     right_commander: "Datis"
+#     right_commander_ko: "다티스"
+#     right_strength: "25,000 infantry"
+#     right_strength_ko: "보병 2만 5천"
+#     outcome: "Athenian victory"
+#     outcome_ko: "아테네 승리"
+#
+# --- dramatic_stat ---
+# - type: "dramatic_stat"
+#   slot: "left"
+#   priority: 2
+#   data:
+#     number: "42"
+#     suffix: "km"
+#     label: "Marathon to Athens"
+#     label_ko: "마라톤에서 아테네까지"
+#     context: "Distance Pheidippides ran"
+#     context_ko: "페이디피데스가 달린 거리"
+#
+# --- person_card ---
+# - type: "person_card"
+#   slot: "left"
+#   priority: 2
+#   data:
+#     name: "Miltiades"
+#     name_ko: "밀티아데스"
+#     role: "Strategos of Athens"
+#     role_ko: "아테네 전략가"
+#     birth_year: -550
+#     death_year: -489
+#     summary: "Architect of the Marathon victory."
+#     summary_ko: "마라톤 승리의 설계자."
+#
+# --- battle_stats ---
+# - type: "battle_stats"
+#   slot: "right"
+#   priority: 2
+#   data:
+#     heading: "Battle Statistics"
+#     heading_ko: "전투 통계"
+#     stats:
+#       - label: "Greek casualties"
+#         label_ko: "그리스 사상자"
+#         value: "~192"
+#         value_ko: "약 192명"
+#     significance: "First major Greek victory"
+#     significance_ko: "그리스 최초의 대승"
+#
+# --- mini_timeline ---
+# - type: "mini_timeline"
+#   slot: "left"
+#   priority: 3
+#   data:
+#     heading: "Key Events"
+#     heading_ko: "주요 사건"
+#     events:
+#       - year: -490
+#         label: "Battle of Marathon"
+#         label_ko: "마라톤 전투"
+#         highlight: true
+#
+# --- era_context ---
+# - type: "era_context"
+#   slot: "bottom"
+#   priority: 5
+#   data:
+#     heading: "Meanwhile in 490 BCE"
+#     heading_ko: "그 무렵, 기원전 490년"
+#     items:
+#       - region: "China"
+#         region_ko: "중국"
+#         text: "Confucius is teaching philosophy."
+#         text_ko: "공자가 철학을 가르치고 있다."
+#
+# --- narrator_aside ---
+# - type: "narrator_aside"
+#   slot: "left"
+#   priority: 3
+#   data:
+#     text_ko: "여기서 잠깐. 생각해보면..."
+#     text: "Pause for a moment. Think about it..."
+#     tone: "reflective"   # reflective | humorous | dramatic
+#
+# --- modern_equivalent ---
+# - type: "modern_equivalent"
+#   slot: "left"
+#   priority: 4
+#   data:
+#     ancient: "Marathon messenger"
+#     ancient_ko: "마라톤 전령"
+#     modern: "Modern marathon race"
+#     modern_ko: "현대 마라톤 경주"
+#     explanation: "The modern marathon race commemorates this run."
+#     explanation_ko: "현대 마라톤 경주는 이 달리기를 기념한다."
+#
+# --- what_if ---
+# - type: "what_if"
+#   slot: "left"
+#   priority: 4
+#   data:
+#     question: "What if Persia won at Marathon?"
+#     question_ko: "만약 페르시아가 마라톤에서 이겼다면?"
+#     scenario: "Democracy might never have developed."
+#     scenario_ko: "민주주의가 발전하지 못했을 수도 있다."
+#
+# --- historian_note ---
+# - type: "historian_note"
+#   slot: "left"
+#   priority: 4
+#   data:
+#     claim: "192 Greek casualties"
+#     claim_ko: "그리스 전사자 192명"
+#     source: "Herodotus"
+#     source_ko: "헤로도토스"
+#     note: "Suspiciously low — may be propaganda."
+#     note_ko: "의심스럽게 적다 — 선전일 수 있다."
+#
+# --- we_dont_know ---
+# - type: "we_dont_know"
+#   slot: "left"
+#   priority: 4
+#   data:
+#     question: "How many Persians were there?"
+#     question_ko: "페르시아군은 몇 명이었을까?"
+#     theories:
+#       - theory: "Herodotus says 600,000"
+#         theory_ko: "헤로도토스는 60만이라 기록"
+#       - theory: "Modern estimates: 25,000-50,000"
+#         theory_ko: "현대 추정: 2만 5천~5만"

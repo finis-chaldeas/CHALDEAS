@@ -1,5 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ErrorBoundary } from './components/common'
+import './components/common/ErrorBoundary.css'
 import { ChatPanel } from './components/chat'
 import { SearchAutocomplete } from './components/search'
 import { UnifiedTimeline } from './components/timeline'
@@ -8,7 +10,7 @@ import { TermsPage, PrivacyPage } from './pages'
 import { FeaturedPersons } from './components/landing'
 import { StoryModal } from './components/story/StoryModal'
 import { TimelineModal } from './components/navigator/TimelineModal'
-import { TourOverlay } from './components/tour'
+import { TourOverlay, TourSelector } from './components/tour'
 import { HistoryViewer, HistoryEditor } from './components/history'
 import { NarrativePanel } from './components/narrative'
 import { SourceBrowser } from './components/sources'
@@ -16,6 +18,7 @@ import { loadJourney } from './utils/journeyLoader'
 import WorldBriefing from './components/globe/WorldBriefing'
 import ViewportFeed from './components/globe/ViewportFeed'
 import ModeBar from './components/navigation/ModeBar'
+import { CardPopupManager, useCardPopup } from './components/cards'
 import EraFeed from './components/globe/EraFeed'
 import DeepReadModal from './components/navigator/DeepReadModal'
 import type { ShebaEpisode } from './data/shebaEpisodes'
@@ -68,8 +71,9 @@ function App() {
   const { t } = useTranslation()
   const { currentYear, setCurrentYear } = useTimelineStore()
   const { setSelectedEvent, flyToLocation, activeShift, openShift } = useGlobeStore()
-  const { globeStyle } = useSettingsStore()
+  const { globeStyle, useCardMode } = useSettingsStore()
   const { recordEventView, recordPersonView } = useObservationStore()
+  const openCard = useCardPopup((s) => s.openCard)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isTermsOpen, setIsTermsOpen] = useState(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
@@ -83,6 +87,7 @@ function App() {
   const [isTimelineOpen, setIsTimelineOpen] = useState(false)
   const [storyPersonId, setStoryPersonId] = useState<number | null>(null)
   const [tourEpisode, setTourEpisode] = useState<ShebaEpisode | null>(null)
+  const [isTourSelectorOpen, setIsTourSelectorOpen] = useState(false)
   const [isHierarchyOpen, setIsHierarchyOpen] = useState(false)
   const [hierarchyEventId] = useState<number | undefined>(undefined)
   const [historyViewId, setHistoryViewId] = useState<number | null>(null)
@@ -100,18 +105,36 @@ function App() {
 
   // Handlers for entity detail views
   const handlePersonClick = (personId: number) => {
+    if (useCardMode) {
+      openCard('person', personId, { mode: 'expanded' })
+      recordPersonView(personId, undefined, getEraFromYear(currentYear))
+      return
+    }
     setLocationDetailId(null)
     setPersonDetailId(personId)
     recordPersonView(personId, undefined, getEraFromYear(currentYear))
   }
 
   const handleLocationClick = (locationId: number) => {
+    if (useCardMode) {
+      openCard('location', locationId, { mode: 'expanded' })
+      return
+    }
     setPersonDetailId(null)
     setLocationDetailId(locationId)
   }
 
   // Narrative panel location click: close event modal + fly to location + open LocationDetailView
   const handleNarrativeLocationClick = async (locationId: number) => {
+    if (useCardMode) {
+      openCard('location', locationId, { mode: 'expanded' })
+      try {
+        const res = await locationsApi.get(locationId)
+        const loc = res.data
+        if (loc?.latitude && loc?.longitude) flyToLocation(loc.latitude, loc.longitude)
+      } catch { /* ignore */ }
+      return
+    }
     try {
       // Close event/person panels
       setNarrativeEventId(null)
@@ -139,6 +162,17 @@ function App() {
 
   const handleEventClick = (event: Event) => {
     const numericId = typeof event.id === 'number' ? event.id : parseInt(String(event.id), 10)
+    if (useCardMode) {
+      openCard('event', numericId, { mode: 'expanded' })
+      setCurrentYear(event.date_start)
+      recordEventView(
+        numericId,
+        typeof event.category === 'string' ? event.category : event.category?.name,
+        undefined,
+        getEraFromYear(event.date_start)
+      )
+      return
+    }
     setNarrativeEventId(numericId)
     setNarrativePersonId(null)
     setPersonDetailId(null)
@@ -165,6 +199,11 @@ function App() {
 
   // Narrative panel: person click
   const handleNarrativePersonClick = (personId: number) => {
+    if (useCardMode) {
+      openCard('person', personId, { mode: 'expanded' })
+      recordPersonView(personId, undefined, getEraFromYear(currentYear))
+      return
+    }
     setNarrativePersonId(personId)
     setNarrativeEventId(null)
     setSelectedEvent(null)
@@ -182,6 +221,7 @@ function App() {
   })
 
   return (
+    <ErrorBoundary>
     <div className="app-container" role="application" aria-label="CHALDEAS Historical Knowledge System">
       {/* Globe (fullscreen) */}
       <main className="globe-section" role="main">
@@ -217,6 +257,7 @@ function App() {
         onChatClick={() => setIsChatOpen(true)}
         onMenuClick={() => setIsSettingsOpen(true)}
         onShiftBrowse={() => setIsShiftBrowserOpen(true)}
+        onTourClick={() => setIsTourSelectorOpen(true)}
       />
       <EraFeed
         onEventClick={handleNarrativeEventClick}
@@ -398,6 +439,11 @@ function App() {
             flyToLocation(37.97, 23.72)
             setCurrentYear(-480)
           }}
+          onGuidedTour={() => {
+            setShowLanding(false)
+            localStorage.setItem('chaldeas-explored', '1')
+            setIsTourSelectorOpen(true)
+          }}
           onReadStories={() => {
             setShowLanding(false)
             localStorage.setItem('chaldeas-explored', '1')
@@ -432,6 +478,17 @@ function App() {
             onPersonClick={handlePersonClick}
           />
         </Suspense>
+      )}
+
+      {/* Tour Episode Selector */}
+      {isTourSelectorOpen && (
+        <TourSelector
+          onSelectEpisode={(ep) => {
+            setIsTourSelectorOpen(false)
+            setTourEpisode(ep)
+          }}
+          onClose={() => setIsTourSelectorOpen(false)}
+        />
       )}
 
       {/* Tour Overlay (Episode Guided Tour) */}
@@ -513,6 +570,42 @@ function App() {
         initialSourceId={sourceBrowserSourceId}
       />
 
+      {/* Card Popup (Beta) */}
+      <CardPopupManager
+        onViewDetail={async (type, entityId) => {
+          // Directly set state — bypass card-mode-aware handlers to avoid reopening card
+          switch (type) {
+            case 'event': {
+              // Fetch event and open NarrativePanel + select on globe
+              const res = await api.get(`/events/${entityId}`)
+              if (res.data) {
+                const ev = res.data
+                const numericId = typeof ev.id === 'number' ? ev.id : parseInt(String(ev.id), 10)
+                setNarrativeEventId(numericId)
+                setNarrativePersonId(null)
+                setPersonDetailId(null)
+                setLocationDetailId(null)
+                setSelectedEvent(ev)
+                setCurrentYear(ev.date_start)
+              }
+              break
+            }
+            case 'person':
+              setLocationDetailId(null)
+              setPersonDetailId(entityId)
+              break
+            case 'location':
+              setPersonDetailId(null)
+              setLocationDetailId(entityId)
+              break
+            case 'servant':
+              setLocationDetailId(null)
+              setPersonDetailId(entityId)
+              break
+          }
+        }}
+      />
+
       {/* Shift Panel Modal */}
       {activeShift && (
         <Suspense fallback={<PanelLoader />}>
@@ -547,6 +640,7 @@ function App() {
         </Suspense>
       )}
     </div>
+    </ErrorBoundary>
   )
 }
 

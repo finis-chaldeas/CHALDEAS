@@ -54,7 +54,8 @@ DB_CONFIG = {
     "host": "localhost",
     "port": 5432,
     "dbname": "chaldeas",
-    "user": "postgres",
+    "user": "chaldeas",
+    "password": "chaldeas_dev",
 }
 
 # ─── Helpers ────────────────────────────────────────────
@@ -750,13 +751,114 @@ def run(dry_run: bool = False, report_only: bool = False):
     print(f"\nDone! Output: {OUTPUT_DIR}")
 
 
+def apply_db(dry_run: bool = False):
+    """Apply confirmed_links.json → fgo_servants.person_id in DB.
+
+    Reads the confirmed links file and updates fgo_servants table
+    for each servant that has a person_id match.
+    """
+    confirmed_path = OUTPUT_DIR / "confirmed_links.json"
+    if not confirmed_path.exists():
+        print(f"ERROR: {confirmed_path} not found. Run matching first.")
+        return
+
+    confirmed = load_json(confirmed_path) or []
+    print(f"=== Apply Confirmed Links → DB ===")
+    print(f"  Source: {confirmed_path}")
+    print(f"  Entries: {len(confirmed)}")
+
+    # Filter to those with valid person_id
+    linkable = [c for c in confirmed if c.get("person_id")]
+    print(f"  With person_id: {len(linkable)}")
+
+    if not linkable:
+        print("  Nothing to apply.")
+        return
+
+    conn = psycopg2.connect(**DB_CONFIG)
+    cur = conn.cursor()
+
+    # Check current state
+    cur.execute("SELECT count(*) FROM fgo_servants WHERE person_id IS NOT NULL")
+    before_count = cur.fetchone()[0]
+    cur.execute("SELECT count(*) FROM fgo_servants")
+    total_count = cur.fetchone()[0]
+    print(f"  Current DB: {before_count}/{total_count} linked")
+
+    updated = 0
+    skipped = 0
+    not_found = 0
+
+    for link in linkable:
+        sid = link["servant_id"]
+        pid = link["person_id"]
+        name = link.get("name_en", "?")
+
+        # Check if servant exists in fgo_servants
+        cur.execute(
+            "SELECT id, person_id FROM fgo_servants WHERE servant_id = %s",
+            (sid,)
+        )
+        row = cur.fetchone()
+
+        if not row:
+            # Try by atlas_id
+            cur.execute(
+                "SELECT id, person_id FROM fgo_servants WHERE atlas_id = %s",
+                (sid,)
+            )
+            row = cur.fetchone()
+
+        if not row:
+            not_found += 1
+            continue
+
+        current_pid = row[1]
+        if current_pid == pid:
+            skipped += 1
+            continue
+
+        if dry_run:
+            status = "NEW" if current_pid is None else f"CHANGE {current_pid}→{pid}"
+            print(f"    [DRY] {name:35s} → person_id={pid} ({status})")
+            updated += 1
+        else:
+            cur.execute(
+                "UPDATE fgo_servants SET person_id = %s, updated_at = NOW() WHERE id = %s",
+                (pid, row[0])
+            )
+            updated += 1
+
+    if not dry_run:
+        conn.commit()
+
+    cur.execute("SELECT count(*) FROM fgo_servants WHERE person_id IS NOT NULL")
+    after_count = cur.fetchone()[0]
+
+    cur.close()
+    conn.close()
+
+    print(f"\n  Results:")
+    print(f"    Updated: {updated}")
+    print(f"    Already correct: {skipped}")
+    print(f"    Not in fgo_servants: {not_found}")
+    print(f"    DB linked: {before_count} → {after_count}")
+    if dry_run:
+        print("  (DRY RUN — no changes written)")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Link FGO servants to historical persons")
     parser.add_argument("--dry-run", action="store_true", help="Preview without DB access")
     parser.add_argument("--report", action="store_true", help="Generate report only (no file output)")
+    parser.add_argument("--apply-db", action="store_true",
+                        help="Apply confirmed_links.json → fgo_servants.person_id")
     args = parser.parse_args()
 
-    run(dry_run=args.dry_run, report_only=args.report)
+    if args.apply_db:
+        apply_db(dry_run=args.dry_run)
+    else:
+        run(dry_run=args.dry_run, report_only=args.report)
 
 
 if __name__ == "__main__":

@@ -103,6 +103,8 @@ def list_shifts(
     status: Optional[str] = Query(None, description="Filter by status"),
     globe_importance_min: Optional[int] = Query(None, description="Minimum globe importance"),
     focal_event_id: Optional[int] = Query(None, description="Filter by focal event ID"),
+    year_start: Optional[int] = Query(None, description="Filter shifts overlapping this year range start"),
+    year_end: Optional[int] = Query(None, description="Filter shifts overlapping this year range end"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
@@ -118,6 +120,10 @@ def list_shifts(
         query = query.filter(HistoricalChain.globe_importance >= globe_importance_min)
     if focal_event_id is not None:
         query = query.filter(HistoricalChain.focal_event_id == focal_event_id)
+    if year_start is not None:
+        query = query.filter(HistoricalChain.year_end >= year_start)
+    if year_end is not None:
+        query = query.filter(HistoricalChain.year_start <= year_end)
 
     total = query.count()
     shifts = (
