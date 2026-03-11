@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, type WidgetProps } from './registry'
 
 interface ContextItem {
@@ -8,9 +9,10 @@ interface ContextItem {
 
 function EraContext({ data, lang }: WidgetProps) {
   const items = data.items as ContextItem[] | undefined
+  const { t } = useTranslation()
   if (!items?.length) return null
 
-  const heading = loc(data, 'heading', lang) || 'Meanwhile...'
+  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.meanwhile')
 
   return (
     <div className="widget-card widget-era">

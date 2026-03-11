@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, type WidgetProps } from './registry'
 
 function ModernEquivalent({ data, lang }: WidgetProps) {
+  const { t } = useTranslation()
   const ancient = loc(data, 'ancient', lang)
   const modern = loc(data, 'modern', lang)
   if (!ancient || !modern) return null
@@ -9,7 +11,7 @@ function ModernEquivalent({ data, lang }: WidgetProps) {
 
   return (
     <div className="widget-card widget-meq">
-      <div className="widget-meq-label">In Today's Terms</div>
+      <div className="widget-meq-label">{loc(data, 'heading', lang) || t('trismegistos.widget.inTodaysTerms')}</div>
       <div className="widget-meq-compare">
         <div className="widget-meq-ancient">{ancient}</div>
         <div className="widget-meq-arrow">&asymp;</div>

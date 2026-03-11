@@ -1,18 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { usePortalStore, type PageKey } from '../../store/portalStore'
 import { portalApi } from '../../api/client'
-import type { PortalFeaturedResponse, PortalItemSummary, CollectionSummary } from '../../types'
+import type { PortalFeaturedResponse, PortalItemSummary } from '../../types'
 import { TodayHero } from './TodayHero'
 import { RecommendationRow } from './RecommendationRow'
 import { FgoSection } from './FgoSection'
-import { ReadingSection } from './ReadingSection'
-import { CollectionGrid } from './CollectionGrid'
+import { HistoryMagazine } from './HistoryMagazine'
+import { EraExplorer } from './EraExplorer'
 
-const PAGES: { key: PageKey; label: string }[] = [
-  { key: 'front', label: 'Front Page' },
-  { key: 'fgo', label: 'Fate/Grand Order' },
-  { key: 'reading', label: 'Reading' },
-  { key: 'collections', label: 'Collections' },
+const TAB_KEYS: { key: PageKey; i18nKey: string }[] = [
+  { key: 'front', i18nKey: 'trismegistos.tabs.frontPage' },
+  { key: 'fgo', i18nKey: 'trismegistos.tabs.fgo' },
+  { key: 'magazine', i18nKey: 'trismegistos.tabs.magazine' },
+  { key: 'eraExplorer', i18nKey: 'trismegistos.tabs.eraExplorer' },
 ]
 
 interface GlobeViewOptions {
@@ -23,9 +24,12 @@ interface GlobeViewOptions {
 interface Props {
   onGlobeView: (opts: GlobeViewOptions) => void
   onOpenShift: (shiftId: number) => void
+  onEventClick?: (eventId: number) => void
+  onPersonClick?: (personId: number) => void
 }
 
-export function MagazineHome({ onGlobeView, onOpenShift }: Props) {
+export function MagazineHome({ onGlobeView, onOpenShift, onEventClick, onPersonClick }: Props) {
+  const { t } = useTranslation()
   const activePage = usePortalStore((s) => s.activePage)
   const setActivePage = usePortalStore((s) => s.setActivePage)
   const close = usePortalStore((s) => s.close)
@@ -52,26 +56,6 @@ export function MagazineHome({ onGlobeView, onOpenShift }: Props) {
     staleTime: 5 * 60 * 1000,
   })
 
-  // Reading items
-  const { data: readingItems } = useQuery<PortalItemSummary[]>({
-    queryKey: ['portal-items-reading'],
-    queryFn: async () => {
-      const res = await portalApi.listItems({ item_type: 'history,literature,music' })
-      return res.data
-    },
-    staleTime: 5 * 60 * 1000,
-  })
-
-  // Collections
-  const { data: collections } = useQuery<CollectionSummary[]>({
-    queryKey: ['portal-collections'],
-    queryFn: async () => {
-      const res = await portalApi.listCollections()
-      return res.data
-    },
-    staleTime: 5 * 60 * 1000,
-  })
-
   return (
     <div className="portal-modal">
       <div className="portal-header">
@@ -84,13 +68,13 @@ export function MagazineHome({ onGlobeView, onOpenShift }: Props) {
       {/* Newspaper section tabs */}
       <div className="portal-tabs-border">
         <div className="portal-tabs">
-          {PAGES.map(({ key, label }) => (
+          {TAB_KEYS.map(({ key, i18nKey }) => (
             <button
               key={key}
               className={`portal-tab ${activePage === key ? 'portal-tab--active' : ''}`}
               onClick={() => setActivePage(key)}
             >
-              {label}
+              {t(i18nKey)}
             </button>
           ))}
         </div>
@@ -130,21 +114,24 @@ export function MagazineHome({ onGlobeView, onOpenShift }: Props) {
           )}
 
           {activePage === 'fgo' && fgoItems && fgoItems.length > 0 && (
-            <FgoSection items={fgoItems} />
+            <FgoSection items={fgoItems} onOpenShift={onOpenShift} />
           )}
 
-          {activePage === 'reading' && readingItems && readingItems.length > 0 && (
-            <div className="portal-section">
-              <div className="portal-section__title">Reading</div>
-              <ReadingSection items={readingItems} />
-            </div>
+          {activePage === 'magazine' && (
+            <HistoryMagazine
+              onGlobeView={onGlobeView}
+              onOpenShift={onOpenShift}
+              onPersonClick={onPersonClick}
+            />
           )}
 
-          {activePage === 'collections' && collections && collections.length > 0 && (
-            <div className="portal-section">
-              <div className="portal-section__title">Collections</div>
-              <CollectionGrid collections={collections} />
-            </div>
+          {activePage === 'eraExplorer' && (
+            <EraExplorer
+              onGlobeView={onGlobeView}
+              onOpenShift={onOpenShift}
+              onEventClick={onEventClick}
+              onPersonClick={onPersonClick}
+            />
           )}
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, type WidgetProps } from './registry'
 
 interface StatRow {
@@ -28,9 +29,10 @@ function BattleStats({ data, lang }: WidgetProps) {
     }
   }
 
+  const { t } = useTranslation()
   if (rows.length === 0) return null
 
-  const heading = loc(data, 'heading', lang) || 'Battle Statistics'
+  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.battleStats')
   const significance = loc(data, 'significance', lang)
 
   return (

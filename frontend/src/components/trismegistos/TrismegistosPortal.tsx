@@ -74,6 +74,8 @@ export default function TrismegistosPortal({
                 <MagazineHome
                   onGlobeView={onGlobeView}
                   onOpenShift={onOpenShift}
+                  onEventClick={onEventClick}
+                  onPersonClick={onPersonClick}
                 />
               )}
               {layer.type === 'collection' && layer.slug && (
@@ -89,6 +91,7 @@ export default function TrismegistosPortal({
                   slug={layer.slug}
                   onFlyToLocation={onFlyToLocation}
                   onGlobeView={onGlobeView}
+                  onOpenShift={onOpenShift}
                 />
               )}
             </div>

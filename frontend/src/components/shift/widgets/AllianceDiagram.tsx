@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, locArray, type WidgetProps } from './registry'
 
 interface AllianceGroup {
@@ -9,9 +10,10 @@ interface AllianceGroup {
 
 function AllianceDiagram({ data, lang }: WidgetProps) {
   const groups = data.groups as AllianceGroup[] | undefined
+  const { t } = useTranslation()
   if (!groups?.length) return null
 
-  const heading = loc(data, 'heading', lang) || 'Alliances'
+  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.alliances')
 
   const COLORS = [
     'var(--chaldea-cyan)',

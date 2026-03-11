@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, type WidgetProps } from './registry'
 
 interface ChangeItem {
@@ -9,9 +10,10 @@ interface ChangeItem {
 
 function TerritoryChange({ data, lang }: WidgetProps) {
   const changes = data.changes as ChangeItem[] | undefined
+  const { t } = useTranslation()
   if (!changes?.length) return null
 
-  const heading = loc(data, 'heading', lang) || 'Territory Change'
+  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.territoryChange')
 
   return (
     <div className="widget-card widget-terr">

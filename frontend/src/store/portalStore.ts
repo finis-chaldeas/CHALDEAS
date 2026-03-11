@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { PortalLayer } from '../types'
 
-export type PageKey = 'front' | 'fgo' | 'reading' | 'collections'
+export type PageKey = 'front' | 'fgo' | 'reading' | 'collections' | 'magazine' | 'eraExplorer'
 
 interface PortalStore {
   isOpen: boolean
@@ -18,11 +18,15 @@ interface PortalStore {
   // Globe context passed on open
   globeContext: GlobeContext | null
 
+  // Cross-tab navigation context (magazine → era explorer)
+  eraContext: string | null
+
   open: (context?: GlobeContext) => void
   close: () => void
   suspend: () => void
   resume: () => void
   setActivePage: (page: PageKey) => void
+  navigateToEra: (eraId: string) => void
   pushCollection: (slug: string) => void
   pushDetail: (slug: string) => void
   pop: () => void
@@ -56,6 +60,7 @@ export const usePortalStore = create<PortalStore>((set, get) => ({
   suspendedPreview: null,
 
   globeContext: null,
+  eraContext: null,
 
   open: (context?: GlobeContext) => {
     const { isSuspended } = get()
@@ -83,6 +88,7 @@ export const usePortalStore = create<PortalStore>((set, get) => ({
     suspendedPage: 'front',
     suspendedPreview: null,
     globeContext: null,
+    eraContext: null,
   }),
 
   suspend: () => {
@@ -112,6 +118,8 @@ export const usePortalStore = create<PortalStore>((set, get) => ({
   },
 
   setActivePage: (page: PageKey) => set({ activePage: page }),
+
+  navigateToEra: (eraId: string) => set({ activePage: 'eraExplorer', eraContext: eraId }),
 
   pushCollection: (slug: string) => {
     const { layers } = get()

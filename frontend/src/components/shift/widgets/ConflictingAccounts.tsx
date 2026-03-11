@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { registerWidget, loc, type WidgetProps } from './registry'
 
 interface Account {
@@ -8,9 +9,10 @@ interface Account {
 
 function ConflictingAccounts({ data, lang }: WidgetProps) {
   const accounts = data.accounts as Account[] | undefined
+  const { t } = useTranslation()
   if (!accounts?.length || accounts.length < 2) return null
 
-  const heading = loc(data, 'heading', lang) || 'Conflicting Accounts'
+  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.conflictingAccounts')
   const verdict = loc(data, 'verdict', lang)
 
   return (
