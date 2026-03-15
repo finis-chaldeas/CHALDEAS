@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { MeshBasicMaterial, TextureLoader, SRGBColorSpace, Color } from 'three'
 import { TileCache } from '../utils/tileCache'
 import {
-  getVisibleTiles, tileUrl, altitudeToTileZoom,
+  getVisibleTiles, getAllTilesAtZoom, tileUrl, altitudeToTileZoom,
   type TileStyle, type TileInfo,
 } from '../utils/tilemath'
 
@@ -10,7 +10,7 @@ import {
 // default: darken + slight blue to match Blue Marble aesthetic
 // holo/night: already dark tiles, no adjustment needed
 const TILE_TINT: Record<string, Color> = {
-  default: new Color(0.52, 0.54, 0.58),  // slightly warm blue-grey, closer to Blue Marble
+  default: new Color(0.44, 0.48, 1.00),  // blue tint to match Blue Marble base texture
   holo: new Color(1, 1, 1),
   night: new Color(1, 1, 1),
 }
@@ -22,17 +22,67 @@ export interface TileData {
   heightDeg: number
   material: MeshBasicMaterial
   key: string
+  altitude: number
 }
 
-const MAX_CONCURRENT_LOADS = 8
-const DEBOUNCE_MS = 30
+const MAX_CONCURRENT_LOADS = 16
+const PRELOAD_CONCURRENT = 8
+const DEBOUNCE_MS = 10
 const RETRY_DELAY_MS = 2000
 const FALLBACK_COLOR = 0x1a1e2e
-// How often (ms) the RAF altitude monitor checks for zoom changes
-const ALTITUDE_POLL_MS = 60
+const ALTITUDE_POLL_MS = 30
+const PRELOAD_ZOOM = 4
+const BASE_TILE_ALT = 0.00001   // z=4 permanent base layer (on globe surface)
+const OVERLAY_TILE_ALT = 0.001   // higher zoom overlay well above base to prevent z-fighting
+
+// Memoized z=4 tile list (256 tiles, computed once)
+let _z4TilesCache: TileInfo[] | null = null
+function getZ4Tiles(): TileInfo[] {
+  if (!_z4TilesCache) _z4TilesCache = getAllTilesAtZoom(PRELOAD_ZOOM)
+  return _z4TilesCache
+}
 
 function createFallbackMaterial(): MeshBasicMaterial {
   return new MeshBasicMaterial({ color: FALLBACK_COLOR })
+}
+
+/**
+ * Preload all tiles at PRELOAD_ZOOM (z=4, 256 tiles, ~9MB).
+ * Fires once per style, loads in background with limited concurrency.
+ */
+const preloadedStyles = new Set<string>()
+function preloadZ4(cache: TileCache, loader: TextureLoader, style: TileStyle): void {
+  if (preloadedStyles.has(style)) return
+  preloadedStyles.add(style)
+
+  const allTiles = getAllTilesAtZoom(PRELOAD_ZOOM)
+  const tint = TILE_TINT[style] || TILE_TINT.default
+  let idx = 0
+  let active = 0
+
+  function next() {
+    while (idx < allTiles.length && active < PRELOAD_CONCURRENT) {
+      const tile = allTiles[idx++]
+      const key = `${tile.z}/${tile.x}/${tile.y}/${style}`
+      if (cache.has(key)) continue
+
+      active++
+      const url = tileUrl(tile.x, tile.y, tile.z, style)
+      loader.load(
+        url,
+        (texture) => {
+          texture.colorSpace = SRGBColorSpace
+          const material = new MeshBasicMaterial({ map: texture, color: tint })
+          cache.set(key, material)
+          active--
+          next()
+        },
+        undefined,
+        () => { active--; next() },
+      )
+    }
+  }
+  next()
 }
 
 /**
@@ -52,7 +102,7 @@ export function useGlobeTiles(
   const [tilesData, setTilesData] = useState<TileData[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const cacheRef = useRef(new TileCache(512))
+  const cacheRef = useRef(new TileCache(2048))
   const loaderRef = useRef(new TextureLoader())
   const activeLoadsRef = useRef(0)
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -75,6 +125,13 @@ export function useGlobeTiles(
 
   // Incrementing counter to force re-evaluation when RAF detects zoom change
   const [rafTick, setRafTick] = useState(0)
+
+  // Preload z=4 tiles on first enable (and when style changes)
+  useEffect(() => {
+    if (enabled) {
+      preloadZ4(cacheRef.current, loaderRef.current, globeStyle as TileStyle)
+    }
+  }, [enabled, globeStyle])
 
   // Clear cache when style changes
   useEffect(() => {
@@ -106,7 +163,7 @@ export function useGlobeTiles(
     if (!enabled) return
     let rafId: number
     let lastCheck = 0
-    const lastZoomRef = { current: altitudeToTileZoom(altitude) }
+    const lastZoomRef = { current: altitudeToTileZoom(altitudeRef.current) }
 
     const poll = (time: number) => {
       if (!mountedRef.current) return
@@ -127,24 +184,47 @@ export function useGlobeTiles(
 
     rafId = requestAnimationFrame(poll)
     return () => cancelAnimationFrame(rafId)
-  }, [enabled, altitude])
+  // altitude is tracked via altitudeRef — no need in deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled])
 
-  /** Build TileData[] from cache for current viewport at a specific zoom */
+  /** Build TileData[] — z=4 permanent base + higher-res overlay */
   const buildTilesForZoom = useCallback((camLat: number, camLng: number, camAlt: number, style: TileStyle): TileData[] => {
     const cache = cacheRef.current
-    const visibleTiles = getVisibleTiles(camLat, camLng, camAlt)
+    const z = altitudeToTileZoom(camAlt)
     const data: TileData[] = []
-    for (const tile of visibleTiles) {
-      const key = `${tile.z}/${tile.x}/${tile.y}/${style}`
+
+    // z=4 permanent base layer — ALL 256 preloaded tiles, always visible at ANY altitude
+    for (const tile of getZ4Tiles()) {
+      const key = `4/${tile.x}/${tile.y}/${style}`
       const material = cache.get(key)
       if (material) {
         data.push({
           lat: tile.lat, lng: tile.lng,
           widthDeg: tile.widthDeg, heightDeg: tile.heightDeg,
-          material, key,
+          material, key: `base-${key}`,
+          altitude: BASE_TILE_ALT,
         })
       }
     }
+
+    // Higher-res overlay (z > 4 only)
+    if (z > 4) {
+      const visibleTiles = getVisibleTiles(camLat, camLng, camAlt)
+      for (const tile of visibleTiles) {
+        const key = `${tile.z}/${tile.x}/${tile.y}/${style}`
+        const material = cache.get(key)
+        if (material) {
+          data.push({
+            lat: tile.lat, lng: tile.lng,
+            widthDeg: tile.widthDeg, heightDeg: tile.heightDeg,
+            material, key,
+            altitude: OVERLAY_TILE_ALT,
+          })
+        }
+      }
+    }
+
     return data
   }, [])
 
@@ -276,7 +356,9 @@ export function useGlobeTiles(
       const newZoom = altitudeToTileZoom(camAlt)
 
       if (newZoom === 0) {
-        setTilesData([])
+        // Cosmic view — still show z=4 base layer
+        const data = buildTilesForZoom(camLat, camLng, camAlt, style)
+        setTilesData(data)
         prevZoomRef.current = 0
         pendingBatchRef.current = null
         return
@@ -318,6 +400,8 @@ export function useGlobeTiles(
       if (zoomChanged) {
         // Zoom changed: keep old tiles visible, batch-load new zoom
         // DON'T clear tilesData — old tiles stay on screen
+        // Cancel any in-flight queue from previous zoom change
+        loadQueueRef.current = []
         pendingBatchRef.current = {
           z: newZoom,
           total: visibleTiles.length,

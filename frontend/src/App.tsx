@@ -31,6 +31,9 @@ import { api, locationsApi, shiftsApi } from './api/client'
 import { usePortalStore } from './store/portalStore'
 import type { Event } from './types'
 
+// Tile test page — access via ?tile-test query param
+const TileTestPage = lazy(() => import('./components/test/TileTestPage').then(m => ({ default: m.TileTestPage })))
+
 // Lazy load heavy components (Three.js/Globe, panels)
 const GlobeContainer = lazy(() => import('./components/globe/GlobeContainer').then(m => ({ default: m.GlobeContainer })))
 // MapView removed — 2D map view disabled (no proper support yet)
@@ -68,6 +71,11 @@ export function useIsMobile(breakpoint = 768) {
 }
 
 function App() {
+  // Standalone test pages via query params
+  if (window.location.search.includes('tile-test')) {
+    return <Suspense fallback={<div style={{ background: '#0a0c14', width: '100vw', height: '100vh', color: '#888', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading tile test...</div>}><TileTestPage /></Suspense>
+  }
+
   const { t } = useTranslation()
   const { currentYear, setCurrentYear } = useTimelineStore()
   const { setSelectedEvent, flyToLocation, activeShift, openShift } = useGlobeStore()

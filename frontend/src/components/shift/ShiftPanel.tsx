@@ -86,12 +86,17 @@ export default function ShiftPanel() {
 
   const pageWidgets = currentPage.widgets || []
 
-  // Language-aware narrative: prefer _ko fields when language is Korean
-  const narrativeText = lang === 'ko'
-    ? (currentPage.page_narrative_ko || currentPage.narrative_ko || currentPage.page_narrative || currentPage.narrative || '')
-    : (currentPage.page_narrative || currentPage.narrative || '')
-  const shiftTitle = (lang === 'ko' && activeShift.title_ko)
-    ? activeShift.title_ko : activeShift.title
+  // Language-aware narrative: prefer localized fields, fall back to English
+  const narrativeText = (() => {
+    if (lang === 'ko') return currentPage.page_narrative_ko || currentPage.narrative_ko || currentPage.page_narrative || currentPage.narrative || ''
+    if (lang === 'ja') return currentPage.page_narrative_ja || currentPage.narrative_ja || currentPage.page_narrative || currentPage.narrative || ''
+    return currentPage.page_narrative || currentPage.narrative || ''
+  })()
+  const shiftTitle = (() => {
+    if (lang === 'ko' && activeShift.title_ko) return activeShift.title_ko
+    if (lang === 'ja' && activeShift.title_ja) return activeShift.title_ja
+    return activeShift.title
+  })()
   const showDots = pages.length <= 25
   const era = getEraName(activeShift.year_start)
   const yearRange = activeShift.year_end
@@ -138,7 +143,9 @@ export default function ShiftPanel() {
             )}
             {currentPage.title && (
               <h3 className="shift-page-title">
-                {(lang === 'ko' && currentPage.title_ko) ? currentPage.title_ko : currentPage.title}
+                {(lang === 'ko' && currentPage.title_ko) ? currentPage.title_ko
+                  : (lang === 'ja' && currentPage.title_ja) ? currentPage.title_ja
+                  : currentPage.title}
               </h3>
             )}
             {narrativeText && (

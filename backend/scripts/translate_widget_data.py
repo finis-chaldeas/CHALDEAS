@@ -65,7 +65,7 @@ WIDGET_FIELDS = {
         'array_objects': {'items': ['text', 'region']},
     },
     'what_if': {
-        'flat': ['hypothesis', 'consequence'],
+        'flat': ['hypothesis', 'consequence', 'question', 'scenario'],
     },
     'narrator_aside': {
         'flat': ['text'],
@@ -96,7 +96,7 @@ WIDGET_FIELDS = {
         'array_objects': {'events': ['label']},
     },
     'conflicting_accounts': {
-        'flat': ['heading', 'verdict'],
+        'flat': ['heading', 'verdict', 'topic'],
         'array_objects': {'accounts': ['source', 'claim']},
     },
     'alliance_diagram': {

@@ -8,53 +8,35 @@ import * as Sentry from '@sentry/react'
 
 export function initSentry() {
   const dsn = import.meta.env.VITE_SENTRY_DSN
-  const enabled = import.meta.env.VITE_SENTRY_ENABLED === 'true'
 
   if (!dsn) {
-    console.log('[Sentry] DSN not configured, error tracking disabled')
-    return
-  }
-
-  if (!enabled) {
-    console.log('[Sentry] Disabled via VITE_SENTRY_ENABLED, error tracking disabled')
+    if (import.meta.env.DEV) {
+      console.log('[Sentry] DSN not configured, error tracking disabled')
+    }
     return
   }
 
   Sentry.init({
     dsn,
     environment: import.meta.env.MODE,
-    enabled: import.meta.env.PROD && enabled,
+    enabled: import.meta.env.PROD,
 
-    // Performance monitoring (optional)
+    // Performance monitoring
     integrations: [
       Sentry.browserTracingIntegration(),
     ],
 
-    // Sample rate for performance monitoring (0.0 to 1.0)
     tracesSampleRate: 0.1,
-
-    // Don't send errors in development
-    beforeSend(event) {
-      if (import.meta.env.DEV) {
-        console.log('[Sentry] Would send event:', event)
-        return null
-      }
-      return event
-    },
 
     // Ignore common non-actionable errors
     ignoreErrors: [
-      // Network errors
       'Network Error',
       'Failed to fetch',
       'NetworkError',
       'Load failed',
-      // Browser extension errors
       /^chrome-extension:\/\//,
       /^moz-extension:\/\//,
-      // Resize observer (benign)
       'ResizeObserver loop',
-      // WebGL context lost (Three.js)
       'WebGL context lost',
     ],
   })

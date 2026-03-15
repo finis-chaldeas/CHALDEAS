@@ -32,7 +32,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from pydantic import ValidationError
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import logging
+import uuid
 
 from app.config import get_settings
 
@@ -41,6 +45,9 @@ from app.api.v1.router import api_router
 from app.api.v1_new import router as v1_new_router
 
 settings = get_settings()
+
+# Rate limiter — keyed by client IP
+limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
 
 app = FastAPI(
     title=settings.project_name,
@@ -64,10 +71,14 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Rate limiting
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.backend_cors_origins,
+    allow_origins=settings.effective_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -80,42 +91,51 @@ app.include_router(v1_new_router)  # V1 New (Historical Chain) - already has /ap
 
 # ============== Global Exception Handlers ==============
 
+def _trace_id() -> str:
+    """Generate a short trace ID for error correlation."""
+    return uuid.uuid4().hex[:8]
+
+
 @app.exception_handler(SQLAlchemyError)
 async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
     """Handle database errors."""
-    logger.error(f"Database error: {exc}")
+    tid = _trace_id()
+    logger.error(f"[{tid}] Database error on {request.method} {request.url.path}: {exc}")
     return JSONResponse(
         status_code=500,
-        content={"detail": "Database error occurred", "type": "database_error"}
+        content={"detail": "Database error occurred", "type": "database_error", "trace_id": tid}
     )
 
 
 @app.exception_handler(IntegrityError)
 async def integrity_exception_handler(request: Request, exc: IntegrityError):
     """Handle database integrity errors (duplicates, FK violations)."""
-    logger.warning(f"Integrity error: {exc}")
+    tid = _trace_id()
+    logger.warning(f"[{tid}] Integrity error on {request.method} {request.url.path}: {exc}")
     return JSONResponse(
         status_code=409,
-        content={"detail": "Data conflict - duplicate or invalid reference", "type": "integrity_error"}
+        content={"detail": "Data conflict - duplicate or invalid reference", "type": "integrity_error", "trace_id": tid}
     )
 
 
 @app.exception_handler(ValidationError)
 async def validation_exception_handler(request: Request, exc: ValidationError):
     """Handle Pydantic validation errors."""
+    tid = _trace_id()
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors(), "type": "validation_error"}
+        content={"detail": exc.errors(), "type": "validation_error", "trace_id": tid}
     )
 
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
     """Catch-all for unhandled exceptions."""
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    tid = _trace_id()
+    logger.error(f"[{tid}] Unhandled exception on {request.method} {request.url.path}: {exc}", exc_info=True)
     return JSONResponse(
         status_code=500,
-        content={"detail": "Internal server error", "type": "internal_error"}
+        content={"detail": "Internal server error", "type": "internal_error", "trace_id": tid}
     )
 
 

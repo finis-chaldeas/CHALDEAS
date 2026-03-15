@@ -8,7 +8,7 @@ export class TileCache {
   private cache = new Map<string, MeshBasicMaterial>()
   private maxSize: number
 
-  constructor(maxSize = 256) {
+  constructor(maxSize = 1024) {
     this.maxSize = maxSize
   }
 
@@ -56,10 +56,15 @@ export class TileCache {
   private evict(key: string): void {
     const material = this.cache.get(key)
     if (material) {
-      if (material.map) {
-        material.map.dispose()
+      try {
+        if (material.map) {
+          material.map.dispose()
+          material.map = null
+        }
+        material.dispose()
+      } catch {
+        // GPU disposal can fail silently if context is lost — ignore
       }
-      material.dispose()
       this.cache.delete(key)
     }
   }

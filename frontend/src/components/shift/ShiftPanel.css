@@ -139,9 +139,9 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(5, 8, 16, 0.15) 15%,
-    rgba(5, 8, 16, 0.75) 50%,
-    rgba(5, 8, 16, 0.95) 100%
+    rgba(5, 8, 16, 0.4) 15%,
+    rgba(5, 8, 16, 0.88) 45%,
+    rgba(5, 8, 16, 0.98) 100%
   );
   padding: 60px 0 14px;
 }
@@ -446,6 +446,7 @@
   }
   .shift-bottom-inner {
     padding: 0 16px;
+    max-width: 100%;
   }
   .shift-page-info {
     max-height: 120px;
@@ -453,5 +454,32 @@
   .shift-page-text {
     font-size: 0.75rem;
     line-height: 1.5;
+  }
+  /* Bigger touch targets */
+  .shift-nav-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shift-dot {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+  }
+  .shift-dot.active {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+  }
+  .shift-dots { gap: 5px; }
+  /* Close button bigger for touch */
+  .shift-singularity-close {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
   }
 }

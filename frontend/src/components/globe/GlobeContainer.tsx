@@ -206,8 +206,8 @@ export function GlobeContainer({
   const setClusterPanelRef = useRef(setClusterPanel)
   setClusterPanelRef.current = setClusterPanel
 
-  // High-resolution tile loading from CONTINENTAL zoom onwards
-  const tilesEnabled = currentZoomLevel === 'continental' || currentZoomLevel === 'regional' || currentZoomLevel === 'local'
+  // Tile loading — z=4 base layer always active, overlay at CONTINENTAL+
+  const tilesEnabled = true
   const { tilesData: globeTilesData } = useGlobeTiles(
     cameraPosition.lat, cameraPosition.lng, cameraPosition.altitude,
     globeStyle, tilesEnabled,
@@ -1863,16 +1863,16 @@ export function GlobeContainer({
         tileLng={(d: object) => (d as TileData).lng}
         tileWidth={(d: object) => (d as TileData).widthDeg}
         tileHeight={(d: object) => (d as TileData).heightDeg}
-        tileAltitude={0.0001}
+        tileAltitude={(d: object) => (d as TileData).altitude || 0.0001}
         tileMaterial={(d: object) => (d as TileData).material}
         tileCurvatureResolution={(d: object) => {
           // Degrees per segment — lower = more segments = smoother sphere conformance
-          // Large tiles (z=2, ~90°) need very fine resolution; small tiles (z=9+) can be coarser
           const w = (d as TileData).widthDeg
-          if (w > 45) return 0.3   // z=2: ~90° tiles, need many segments
-          if (w > 20) return 0.5   // z=3-4: ~45° tiles
-          if (w > 5) return 1      // z=5-6: ~10-20 segments
-          return 2                  // z=7+: tiles small enough
+          if (w > 45) return 0.3   // z=2: ~90° tiles
+          if (w > 20) return 0.5   // z=3-4
+          if (w > 5) return 1      // z=5-6
+          if (w > 1) return 2      // z=7-9
+          return 5                  // z=10+: tiles small, minimal curvature needed
         }}
         tileUseGlobeProjection={true}
         tilesTransitionDuration={0}

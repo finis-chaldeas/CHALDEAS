@@ -1,8 +1,27 @@
-import axios from 'axios'
+import axios, { type AxiosError } from 'axios'
+import * as Sentry from '@sentry/react'
 
 // Production backend URL (fallback from env var)
 const API_URL = import.meta.env.VITE_API_URL ||
   (import.meta.env.PROD ? 'https://chaldeas-backend-951004107180.asia-northeast3.run.app' : 'http://localhost:8100')
+
+/** Structured API error with classification */
+export class ApiError extends Error {
+  status: number
+  code: string
+  traceId: string | null
+
+  constructor(status: number, code: string, message: string, traceId: string | null = null) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.code = code
+    this.traceId = traceId
+  }
+
+  get isClientError() { return this.status >= 400 && this.status < 500 }
+  get isServerError() { return this.status >= 500 }
+}
 
 export const api = axios.create({
   baseURL: `${API_URL}/api/v1`,
@@ -22,18 +41,38 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response interceptor for error handling
+// Response interceptor — classify errors and report 5xx to Sentry
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  (error: AxiosError<{ detail?: string; type?: string; trace_id?: string }>) => {
     if (error.response) {
-      console.error(
-        `[API Error] ${error.response.status}: ${error.response.data?.detail || error.message}`
-      )
-    } else {
+      const { status, data } = error.response
+      const detail = typeof data?.detail === 'string' ? data.detail : error.message
+      const code = data?.type || 'unknown'
+      const traceId = data?.trace_id || null
+
+      const apiError = new ApiError(status, code, detail, traceId)
+
+      if (import.meta.env.DEV) {
+        console.error(`[API Error] ${status} (${code}) ${detail}${traceId ? ` [${traceId}]` : ''}`)
+      }
+
+      // Only report 5xx to Sentry — 4xx are client/expected errors
+      if (apiError.isServerError) {
+        Sentry.captureException(apiError, {
+          tags: { trace_id: traceId || undefined, api_status: status },
+          extra: { url: error.config?.url, method: error.config?.method },
+        })
+      }
+
+      return Promise.reject(apiError)
+    }
+
+    // Network error (no response)
+    if (import.meta.env.DEV) {
       console.error('[API Error] Network error:', error.message)
     }
-    return Promise.reject(error)
+    return Promise.reject(new ApiError(0, 'network_error', error.message || 'Network error'))
   }
 )
 

@@ -81,8 +81,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Three.js and globe rendering - largest chunk
-          'three-globe': ['three', 'react-globe.gl'],
+          // Three.js core — shared renderer, math, loaders
+          'three-core': ['three'],
+          // Globe rendering — depends on three-core
+          'three-globe': ['react-globe.gl'],
           // React core
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           // Data fetching and state

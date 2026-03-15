@@ -94,9 +94,10 @@ export function useHeroOverlapResolver(enabled: boolean) {
       }
 
       // 1. Collect all hero cards, recover base rects (subtract current offset)
-      const cards: CardInfo[] = Array.from(
-        container.querySelectorAll('[data-hero-id]'),
-      )
+      // Cap at 30 cards to prevent O(n²) blowup on mobile
+      const MAX_RESOLVE_CARDS = 30
+      const allElements = container.querySelectorAll('[data-hero-id]')
+      const cards: CardInfo[] = Array.from(allElements)
         .map((el) => {
           const htmlEl = el as HTMLElement
           const id = el.getAttribute('data-hero-id') || ''
@@ -117,6 +118,7 @@ export function useHeroOverlapResolver(enabled: boolean) {
         })
         .filter((c): c is CardInfo => c !== null)
         .sort((a, b) => b.importance - a.importance)
+        .slice(0, MAX_RESOLVE_CARDS)
 
       if (cards.length === 0) {
         rafId = requestAnimationFrame(resolve)

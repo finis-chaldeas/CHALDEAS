@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { Event, Location, Category, HistoryShift } from '../types'
 
 // Camera mode types
@@ -179,7 +180,9 @@ interface GlobeState {
   prevPage: () => void
 }
 
-export const useGlobeStore = create<GlobeState>((set, get) => ({
+export const useGlobeStore = create<GlobeState>()(
+  persist(
+    (set, get) => ({
   // Initial state
   events: [],
   locations: [],
@@ -374,4 +377,13 @@ export const useGlobeStore = create<GlobeState>((set, get) => ({
       get().goToPage(activePageIndex - 1)
     }
   },
-}))
+    }),
+    {
+      name: 'chaldeas-globe',
+      partialize: (state) => ({
+        cameraPosition: state.cameraPosition,
+        cameraMode: state.cameraMode,
+      }),
+    }
+  )
+)

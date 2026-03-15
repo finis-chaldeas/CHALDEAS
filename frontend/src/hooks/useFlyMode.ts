@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useGlobeStore } from '../store/globeStore'
 import type { GlobeMethods } from 'react-globe.gl'
 
@@ -14,6 +14,9 @@ const toRad = (deg: number) => (deg * Math.PI) / 180
 const WASD_KEYS = new Set(['w', 'a', 's', 'd', 'q', 'e',
                             'W', 'A', 'S', 'D', 'Q', 'E'])
 
+const BASE_SPEED = 0.5
+const TURN_SPEED = 2
+
 /**
  * WASD navigation for the globe (integrated into orbit mode)
  * WASD: Move forward/backward/left/right
@@ -21,69 +24,9 @@ const WASD_KEYS = new Set(['w', 'a', 's', 'd', 'q', 'e',
  * Shift: Speed boost
  */
 export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
-  const { cameraPosition, setCameraPosition, flyState, updateFlyState } = useGlobeStore()
+  const { flyState, updateFlyState } = useGlobeStore()
   const keysPressed = useRef<Set<string>>(new Set())
   const animationFrame = useRef<number | null>(null)
-
-  const BASE_SPEED = 0.5
-  const TURN_SPEED = 2
-
-  const updatePosition = useCallback(() => {
-    if (!enabled || !globeRef.current) return
-
-    const keys = keysPressed.current
-    if (keys.size === 0) {
-      animationFrame.current = requestAnimationFrame(updatePosition)
-      return
-    }
-
-    const speedMultiplier = keys.has('Shift') ? 2.5 : 1.0
-    const moveSpeed = BASE_SPEED * speedMultiplier * flyState.speed
-
-    let { lat, lng, altitude } = cameraPosition
-    let { heading } = flyState
-
-    // Turn left/right (Q/E)
-    if (keys.has('q') || keys.has('Q')) {
-      heading = (heading - TURN_SPEED * speedMultiplier + 360) % 360
-      updateFlyState({ heading })
-    }
-    if (keys.has('e') || keys.has('E')) {
-      heading = (heading + TURN_SPEED * speedMultiplier) % 360
-      updateFlyState({ heading })
-    }
-
-    // Forward/backward (W/S)
-    const moveForward = keys.has('w') || keys.has('W')
-    const moveBackward = keys.has('s') || keys.has('S')
-
-    if (moveForward || moveBackward) {
-      const direction = moveForward ? 1 : -1
-      const headingRad = toRad(heading)
-      lat += direction * moveSpeed * Math.cos(headingRad)
-      lng += direction * moveSpeed * Math.sin(headingRad) / Math.cos(toRad(lat))
-      lat = Math.max(-85, Math.min(85, lat))
-      lng = ((lng + 180) % 360 + 360) % 360 - 180
-    }
-
-    // Strafe left/right (A/D)
-    const strafeLeft = keys.has('a') || keys.has('A')
-    const strafeRight = keys.has('d') || keys.has('D')
-
-    if (strafeLeft || strafeRight) {
-      const direction = strafeRight ? 1 : -1
-      const strafeHeading = toRad(heading + 90)
-      lat += direction * moveSpeed * 0.7 * Math.cos(strafeHeading)
-      lng += direction * moveSpeed * 0.7 * Math.sin(strafeHeading) / Math.cos(toRad(lat))
-      lat = Math.max(-85, Math.min(85, lat))
-      lng = ((lng + 180) % 360 + 360) % 360 - 180
-    }
-
-    setCameraPosition({ lat, lng, altitude })
-    globeRef.current.pointOfView({ lat, lng, altitude }, 50)
-
-    animationFrame.current = requestAnimationFrame(updatePosition)
-  }, [enabled, cameraPosition, flyState, setCameraPosition, updateFlyState, globeRef])
 
   useEffect(() => {
     if (!enabled) return
@@ -104,6 +47,70 @@ export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
       keysPressed.current.clear()
     }
 
+    const updatePosition = () => {
+      if (!globeRef.current) {
+        animationFrame.current = requestAnimationFrame(updatePosition)
+        return
+      }
+
+      const keys = keysPressed.current
+      if (keys.size === 0) {
+        animationFrame.current = requestAnimationFrame(updatePosition)
+        return
+      }
+
+      // Read current state from store directly (avoid stale closures)
+      const store = useGlobeStore.getState()
+      const { cameraPosition, flyState: currentFlyState } = store
+
+      const speedMultiplier = keys.has('Shift') ? 2.5 : 1.0
+      const moveSpeed = BASE_SPEED * speedMultiplier * currentFlyState.speed
+
+      let { lat, lng, altitude } = cameraPosition
+      let { heading } = currentFlyState
+
+      // Turn left/right (Q/E)
+      if (keys.has('q') || keys.has('Q')) {
+        heading = (heading - TURN_SPEED * speedMultiplier + 360) % 360
+        store.updateFlyState({ heading })
+      }
+      if (keys.has('e') || keys.has('E')) {
+        heading = (heading + TURN_SPEED * speedMultiplier) % 360
+        store.updateFlyState({ heading })
+      }
+
+      // Forward/backward (W/S)
+      const moveForward = keys.has('w') || keys.has('W')
+      const moveBackward = keys.has('s') || keys.has('S')
+
+      if (moveForward || moveBackward) {
+        const direction = moveForward ? 1 : -1
+        const headingRad = toRad(heading)
+        lat += direction * moveSpeed * Math.cos(headingRad)
+        lng += direction * moveSpeed * Math.sin(headingRad) / Math.cos(toRad(lat))
+        lat = Math.max(-85, Math.min(85, lat))
+        lng = ((lng + 180) % 360 + 360) % 360 - 180
+      }
+
+      // Strafe left/right (A/D)
+      const strafeLeft = keys.has('a') || keys.has('A')
+      const strafeRight = keys.has('d') || keys.has('D')
+
+      if (strafeLeft || strafeRight) {
+        const direction = strafeRight ? 1 : -1
+        const strafeHeading = toRad(heading + 90)
+        lat += direction * moveSpeed * 0.7 * Math.cos(strafeHeading)
+        lng += direction * moveSpeed * 0.7 * Math.sin(strafeHeading) / Math.cos(toRad(lat))
+        lat = Math.max(-85, Math.min(85, lat))
+        lng = ((lng + 180) % 360 + 360) % 360 - 180
+      }
+
+      store.setCameraPosition({ lat, lng, altitude })
+      globeRef.current.pointOfView({ lat, lng, altitude }, 50)
+
+      animationFrame.current = requestAnimationFrame(updatePosition)
+    }
+
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
     window.addEventListener('blur', handleBlur)
@@ -116,7 +123,7 @@ export function useFlyMode({ globeRef, enabled }: UseFlyModeOptions) {
       window.removeEventListener('blur', handleBlur)
       if (animationFrame.current) cancelAnimationFrame(animationFrame.current)
     }
-  }, [enabled, updatePosition])
+  }, [enabled, globeRef])
 
   return {
     heading: flyState.heading,

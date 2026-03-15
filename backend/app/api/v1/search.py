@@ -5,15 +5,18 @@ Search API endpoints.
 - /search/basic: BM25 키워드 검색 (무료, 비공개)
 - /search/advanced: BM25 + AI (마스터 번호 부여, 검색 기록 공개)
 """
-from fastapi import APIRouter, Query, Header, HTTPException
+from fastapi import APIRouter, Query, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.services.json_data import get_data_service
 from app.services.hybrid_search import get_hybrid_search_service
 from app.services.master_service import get_master_service
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 
 class AdvancedSearchRequest(BaseModel):
@@ -48,7 +51,9 @@ class AdvancedSearchResponse(BaseModel):
 # ============================================================
 
 @router.get("/basic")
+@limiter.limit("20/minute")
 async def basic_search(
+    request: Request,
     q: str = Query(..., min_length=1, description="Search query"),
     limit: int = Query(20, ge=1, le=100),
     type_filter: Optional[str] = Query(None, description="Filter by type: event, person, location, all"),
@@ -78,7 +83,9 @@ async def basic_search(
 
 
 @router.get("")
+@limiter.limit("20/minute")
 async def search(
+    request: Request,
     q: str = Query(..., min_length=1, description="Search query"),
     limit: int = Query(20, ge=1, le=100),
 ):

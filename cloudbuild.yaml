@@ -10,6 +10,19 @@ substitutions:
 
 steps:
   # ============================================
+  # Step 0: Frontend Typecheck (fast fail)
+  # ============================================
+  - name: 'node:20-alpine'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd frontend
+        npm ci
+        npx tsc --noEmit
+    id: 'typecheck-frontend'
+
+  # ============================================
   # Step 1: Build Backend with Data
   # ============================================
   - name: 'gcr.io/cloud-builders/docker'
@@ -22,6 +35,7 @@ steps:
         cd backend
         docker build -t ${_AR_REPO}/${_BACKEND_SERVICE}:latest .
     id: 'build-backend'
+    waitFor: ['-']
 
   # ============================================
   # Step 2: Push Backend
@@ -94,7 +108,7 @@ steps:
           -t ${_AR_REPO}/${_FRONTEND_SERVICE}:latest \
           -f Dockerfile.prod .
     id: 'build-frontend'
-    waitFor: ['get-backend-url']
+    waitFor: ['get-backend-url', 'typecheck-frontend']
 
   # ============================================
   # Step 6: Push Frontend

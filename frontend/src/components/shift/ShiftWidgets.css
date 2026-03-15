@@ -49,18 +49,33 @@
   align-items: center;
 }
 
-/* Hide side slots on narrow screens */
+/* Reposition side slots on narrow screens */
 @media (max-width: 900px) {
   .widget-slot--left,
   .widget-slot--right {
-    display: none;
+    /* Move from side to top-right, stacked vertically */
+    position: fixed;
+    left: auto;
+    right: 8px;
+    top: 120px;
+    transform: none;
+    max-width: 200px;
+    gap: 6px;
+    max-height: calc(100vh - 320px);
+    overflow-y: auto;
+    opacity: 0.92;
+  }
+  .widget-slot--right {
+    top: auto;
+    bottom: 200px;
+    right: 8px;
   }
 }
 
 /* ═══ Widget Card (base) ═══ */
 
 .widget-card {
-  background: var(--overlay-bg);
+  background: rgba(5, 8, 16, 0.94);
   backdrop-filter: blur(var(--overlay-blur));
   border: 1px solid var(--overlay-border);
   border-radius: var(--overlay-radius);
@@ -823,4 +838,87 @@
   font-style: italic;
   color: var(--chaldea-text);
   line-height: 1.6;
+}
+
+/* ═══ Mobile Responsive (≤767px) ═══ */
+@media (max-width: 767px) {
+  /* Widget slots — reposition for mobile */
+  .widget-slot--bottom {
+    bottom: 140px;
+    max-width: calc(100% - 24px);
+    width: calc(100% - 24px);
+  }
+
+  .widget-slot--overlay {
+    max-width: calc(100% - 24px);
+    width: calc(100% - 24px);
+  }
+
+  /* Base card — tighter padding */
+  .widget-card {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+  }
+
+  /* DramaticStat — scale down */
+  .widget-stat { padding: 12px 10px; }
+  .widget-stat-number { font-size: 1.6rem; }
+  .widget-stat-affix { font-size: 0.95rem; }
+  .widget-stat-label { font-size: 0.72rem; }
+  .widget-stat-context { font-size: 0.68rem; }
+
+  /* FactionVs — stack on narrow screens */
+  .widget-fvs-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: center;
+  }
+  .widget-fvs-left, .widget-fvs-right { text-align: center; }
+  .widget-fvs-vs {
+    font-size: 0.72rem;
+    padding: 2px 0;
+  }
+  .widget-fvs-name { font-size: 0.82rem; }
+
+  /* PrimaryQuote */
+  .widget-quote-text { font-size: 0.8rem; }
+
+  /* PersonCard */
+  .widget-person-name { font-size: 0.88rem; }
+  .widget-person-summary { font-size: 0.72rem; }
+
+  /* MiniTimeline */
+  .widget-tl-label { font-size: 0.72rem; }
+  .widget-tl-year { font-size: 0.6rem; }
+
+  /* BattleStats */
+  .widget-bstat-label { font-size: 0.66rem; }
+  .widget-bstat-value { font-size: 0.72rem; }
+
+  /* ModernEquivalent — stack comparison */
+  .widget-meq-compare {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .widget-meq-arrow { font-size: 0.8rem; }
+
+  /* Reduce heading sizes globally */
+  .widget-tl-heading,
+  .widget-era-heading,
+  .widget-bstat-heading,
+  .widget-terr-heading,
+  .widget-ally-heading,
+  .widget-conf-heading {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+}
+
+/* ═══ Small phones (≤480px) ═══ */
+@media (max-width: 480px) {
+  .widget-slot--bottom { bottom: 130px; }
+  .widget-card { padding: 8px 10px; font-size: 0.75rem; }
+  .widget-stat-number { font-size: 1.3rem; }
+  .widget-quote-text { font-size: 0.75rem; }
 }

@@ -12,7 +12,7 @@ function ConflictingAccounts({ data, lang }: WidgetProps) {
   const { t } = useTranslation()
   if (!accounts?.length || accounts.length < 2) return null
 
-  const heading = loc(data, 'heading', lang) || t('trismegistos.widget.conflictingAccounts')
+  const heading = loc(data, 'heading', lang) || loc(data, 'topic', lang) || t('trismegistos.widget.conflictingAccounts')
   const verdict = loc(data, 'verdict', lang)
 
   return (

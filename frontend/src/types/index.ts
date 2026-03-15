@@ -548,8 +548,10 @@ export interface HistoryShift {
   chain_type: 'person_story' | 'place_story' | 'era_story' | 'causal_chain' | 'aggregate'
   title: string
   title_ko?: string
+  title_ja?: string
   summary?: string
   summary_ko?: string
+  summary_ja?: string
   year_start: number
   year_end?: number
   globe_importance: number
@@ -566,12 +568,15 @@ export interface ShiftPage {
   sequence_number: number
   title?: string
   title_ko?: string
+  title_ja?: string
   chapter_number: number
   chapter_title?: string
   page_narrative?: string
   page_narrative_ko?: string
+  page_narrative_ja?: string
   narrative?: string
   narrative_ko?: string
+  narrative_ja?: string
   year_start?: number
   year_end?: number
   lat?: number
@@ -591,6 +596,7 @@ export interface ShiftPage {
     lng: number
     label?: string
     label_ko?: string
+    label_ja?: string
   }>
 }
 
